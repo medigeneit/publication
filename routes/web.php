@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PublisherController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,5 +44,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'authors'       => AuthorController::class,
         'products'      => ProductController::class,
         'publishers'    => PublisherController::class,
+        'sales'         => SaleController::class
     ]);
 });

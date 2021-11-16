@@ -17,6 +17,9 @@
     <nav-link :href="route('publishers.index')" :active="route().current('publishers.*')">
         Publisher
     </nav-link>
+    <nav-link :href="route('sales.index')" :active="route().current('sales.*')">
+        Sales
+    </nav-link>
 </template>
 
 <script>
