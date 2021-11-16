@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -37,5 +38,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resources([
         'users'         => UserController::class,
         'categories'    => CategoryController::class,
+        'authors'       => AuthorController::class,
     ]);
 });
