@@ -3,7 +3,7 @@
 
     <app-layout>
         <template #header>
-            User List
+            Category List
         </template>
 
         <add-new-button :href="route('categories.create')" />
