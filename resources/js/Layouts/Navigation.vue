@@ -5,6 +5,12 @@
     <nav-link :href="route('users.index')" :active="route().current('users.*')">
         Users
     </nav-link>
+    <nav-link :href="route('categories.index')" :active="route().current('categories.*')">
+        Categories
+    </nav-link>
+    <nav-link :href="route('authors.index')" :active="route().current('authors.*')">
+        Authors
+    </nav-link>
 </template>
 
 <script>
