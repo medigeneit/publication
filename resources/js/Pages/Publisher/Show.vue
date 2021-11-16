@@ -1,35 +1,35 @@
 <template>
-    <Head title="author" />
+    <Head title="Publisher" />
 
     <app-layout>
         <template #header>
-            {{ author.name }}
+            {{ publisher.name }}
         </template>
 
-        <add-new-button :href="route('authors.create')" class="mb-4" />
+        <add-new-button :href="route('publishers.create')" class="mb-4" />
         
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
-                <show-table-row heading="ID">{{ author.id }}</show-table-row>
+                <show-table-row heading="ID">{{ publisher.id }}</show-table-row>
 
-                <show-table-row heading="Name">{{ author.name }}</show-table-row>
+                <show-table-row heading="Name">{{ publisher.name }}</show-table-row>
 
                 <show-table-row heading="Active">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-300' : author.active, 'bg-red-300' : !author.active }">
-                        {{ author.active ? 'Yes' : 'No' }}
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-300' : publisher.active, 'bg-red-300' : !publisher.active }">
+                        {{ publisher.active ? 'Yes' : 'No' }}
                     </span>
                 </show-table-row>
 
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
-                        <action-button-edit :href="route('authors.edit', author.id)" />
+                        <action-button-edit :href="route('publishers.edit', publisher.id)" />
                     </div>
                 </show-table-row>
             </table>
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('authors.index')"/>
+            <go-to-list :href="route('publishers.index')"/>
         </div>
     </app-layout>
 </template>
@@ -53,7 +53,7 @@ export default {
         AddNewButton,
     },
     props: {
-        author: { type: Object, default: {} },
+        publisher: { type: Object, default: {} },
     },
 };
 </script>
