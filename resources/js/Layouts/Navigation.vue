@@ -20,6 +20,9 @@
     <nav-link :href="route('sales.index')" :active="route().current('sales.*')">
         Sales
     </nav-link>
+    <nav-link :href="route('outlets.index')" :active="route().current('outlets.*')">
+        Outlets
+    </nav-link>
 </template>
 
 <script>
