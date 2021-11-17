@@ -1,33 +1,35 @@
 <template>
-    <Head title="User" />
+    <Head title="author" />
 
     <app-layout>
         <template #header>
-            {{ category.name }}
+            {{ author.name }}
         </template>
 
-        <add-new-button :href="route('categories.create')" class="mb-4" />
+        <add-new-button :href="route('authors.create')" class="mb-4" />
         
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
-                <show-table-row heading="ID">{{ category.id }}</show-table-row>
+                <show-table-row heading="ID">{{ author.id }}</show-table-row>
 
-                <show-table-row heading="Name">{{ category.name }}</show-table-row>
+                <show-table-row heading="Name">{{ author.name }}</show-table-row>
 
-                <show-table-row heading="Parent">{{ category.parentName }}</show-table-row>
-
-                <show-table-row heading="Active">{{ category.active ? "Yes" : "No" }}</show-table-row>
+                <show-table-row heading="Active">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-300' : author.active, 'bg-red-300' : !author.active }">
+                        {{ author.active ? 'Yes' : 'No' }}
+                    </span>
+                </show-table-row>
 
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
-                        <action-button-edit :href="route('categories.edit', category.id)" />
+                        <action-button-edit :href="route('authors.edit', author.id)" />
                     </div>
                 </show-table-row>
             </table>
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('users.index')"/>
+            <go-to-list :href="route('authors.index')"/>
         </div>
     </app-layout>
 </template>
@@ -51,7 +53,7 @@ export default {
         AddNewButton,
     },
     props: {
-        category: { type: Object, default: {} },
+        author: { type: Object, default: {} },
     },
 };
 </script>

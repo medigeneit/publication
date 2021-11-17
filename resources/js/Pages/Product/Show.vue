@@ -1,26 +1,26 @@
 <template>
-    <Head title="User" />
+    <Head title="Product" />
 
     <app-layout>
         <template #header>
-            {{ category.name }}
+            {{ product.name }}
         </template>
 
-        <add-new-button :href="route('categories.create')" class="mb-4" />
+        <add-new-button :href="route('products.create')" class="mb-4" />
         
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
-                <show-table-row heading="ID">{{ category.id }}</show-table-row>
-
-                <show-table-row heading="Name">{{ category.name }}</show-table-row>
-
-                <show-table-row heading="Parent">{{ category.parentName }}</show-table-row>
-
-                <show-table-row heading="Active">{{ category.active ? "Yes" : "No" }}</show-table-row>
-
+                <show-table-row heading="ID">{{ product.id }}</show-table-row>
+                <show-table-row heading="Name">{{ product.name }}</show-table-row>
+                <show-table-row heading="Type">{{ product.type }}</show-table-row>
+                <show-table-row heading="Publisher Name">{{ product.publisherId ?? '' }}</show-table-row>
+                <show-table-row heading="Author Percentage">{{ product.authorPercentage }}%</show-table-row>
+                <show-table-row heading="MRP ">{{ product.mrp }}</show-table-row>
+                <show-table-row heading="Wholesale Price">{{ product.wholesalePrice }}</show-table-row>
+                <show-table-row heading="Retail Price">{{ product.retailPrice }}</show-table-row>
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
-                        <action-button-edit :href="route('categories.edit', category.id)" />
+                        <action-button-edit :href="route('products.edit', product.id)" />
                     </div>
                 </show-table-row>
             </table>
@@ -51,7 +51,7 @@ export default {
         AddNewButton,
     },
     props: {
-        category: { type: Object, default: {} },
+        product: { type: Object, default: {} },
     },
 };
 </script>

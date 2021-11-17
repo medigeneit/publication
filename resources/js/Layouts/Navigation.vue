@@ -8,6 +8,18 @@
     <nav-link :href="route('categories.index')" :active="route().current('categories.*')">
         Categories
     </nav-link>
+    <nav-link :href="route('authors.index')" :active="route().current('authors.*')">
+        Authors
+    </nav-link>
+    <nav-link :href="route('products.index')" :active="route().current('products.*')">
+        Products
+    </nav-link>
+    <nav-link :href="route('publishers.index')" :active="route().current('publishers.*')">
+        Publisher
+    </nav-link>
+    <nav-link :href="route('sales.index')" :active="route().current('sales.*')">
+        Sales
+    </nav-link>
 </template>
 
 <script>
