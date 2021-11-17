@@ -88,12 +88,12 @@ export default {
         return {
             form: this.$inertia.form({
                 outlet_id: this.data.sale.outlet_id,
-                cusmoter_name: this.data.sale.cusmoter_name,
+                customer_name: this.data.sale.customer_name,
                 customer_phone: this.data.sale.customer_phone,
                 customer_address: this.data.sale.customer_address,
                 subtotal: this.data.sale.subtotal,
                 discount: this.data.sale.discount,
-                amount: this.data.sale.amount
+                amount: this.data.sale.amount,
             })
         }
 

@@ -21,7 +21,7 @@
                 <th class="py-3 px-2 text-center">Action</th>
             </template>
             <template #default="{ item: sale }">
-                <td class="py-3 px-2 text-left">{{ sale.id }}</td>
+                <td class="py-3 px-2 text-left">{{ sale.id}}</td>
                 <td class="py-3 px-2 text-left">{{ sale.outletId }}</td>
                 <td class="py-3 px-2 text-left">{{ sale.customerName }}</td>
                 <td class="py-3 px-2 text-left">{{ sale.customerPhone }}</td>

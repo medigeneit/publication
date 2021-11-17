@@ -21270,7 +21270,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       form: this.$inertia.form({
         outlet_id: this.data.sale.outlet_id,
-        cusmoter_name: this.data.sale.cusmoter_name,
+        customer_name: this.data.sale.customer_name,
         customer_phone: this.data.sale.customer_phone,
         customer_address: this.data.sale.customer_address,
         subtotal: this.data.sale.subtotal,
@@ -26171,7 +26171,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_add_new_button, {
-        href: _ctx.route('categories.create'),
+        href: _ctx.route('sales.create'),
         "class": "mb-4"
       }, null, 8
       /* PROPS */

@@ -11,14 +11,12 @@ use Inertia\Inertia;
 
 class SaleController extends Controller
 {
-    use DateFilter;
 
     public function index()
     {
 
         $sales = $this->setQuery(Sale::query())
             ->search()->filter()
-            //->dateFilter()
             ->getQuery();
 
         return Inertia::render('Sale/Index', [
@@ -36,7 +34,6 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
         $sale = Sale::create($this->validateData($request));
 
         return redirect()

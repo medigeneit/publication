@@ -15,6 +15,7 @@ class SaleResource extends JsonResource
     public function toArray($request)
     {
         return [
+            "id"                => (int) ($this->id),
             'outletId'          => (int) ($this->outlet_id ?? ''),
             'customerName'      => (string) ($this->customer_name ?? ''),
             'customerPhone'     => (int) ($this->customer_phone ?? ''),

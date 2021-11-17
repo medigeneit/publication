@@ -6,7 +6,7 @@
             {{ sale.name }}
         </template>
 
-        <add-new-button :href="route('categories.create')" class="mb-4" />
+        <add-new-button :href="route('sales.create')" class="mb-4" />
 
 
         <div class="overflow-auto bg-white border">
