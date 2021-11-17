@@ -13,12 +13,14 @@
                 <th class="py-3 px-2 text-left">ID</th>
                 <th class="py-3 px-2 text-left">Name</th>
                 <th class="py-3 px-2 text-left">Parent</th>
+                <th class="py-3 px-2 text-left">Active</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template>
             <template #default="{ item: category }">
                 <td class="py-3 px-2 text-left">{{ category.id }}</td>
                 <td class="py-3 px-2 text-left">{{ category.name }}</td>
                 <td class="py-3 px-2 text-left">{{ category.parentName }}</td>
+                <td class="py-3 px-2 text-left">{{ category.active ? "Active" : "InActive" }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('categories.show', category.id)" />
