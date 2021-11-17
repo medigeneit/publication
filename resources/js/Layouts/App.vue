@@ -47,7 +47,7 @@
         </header>
 
         <div class="w-full flex z-30 overflow-hidden">
-            <nav class="bg-white shadow w-full sm:w-auto sm:max-w-max fixed sm:static top-16 left-0 overflow-hidden z-30">
+            <nav class="bg-white shadow w-full sm:max-w-max fixed sm:static top-16 left-0 overflow-hidden z-30">
                 <!-- Navigation Menu -->
                 <div :class="{'block sm:hidden': showingNavigationDropdown, 'hidden sm:block': ! showingNavigationDropdown}" class="h-screen -mt-16 pt-16 overflow-auto">
                     <navigation />
