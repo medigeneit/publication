@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
+use App\Models\CategoryProduct;
 use App\Models\Product;
+use App\Models\Publisher;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -30,6 +33,9 @@ class ProductController extends Controller
     {
         return Inertia::render('Product/Create', [
             'product' => new Product(),
+            'publisherList' => Publisher::pluck('name', 'id'),
+            'categoryList' => Category::pluck('name', 'id'),
+            'productType'  => Product::$type,
         ]);
     }
 
@@ -55,6 +61,10 @@ class ProductController extends Controller
     {
         return Inertia::render('Product/Edit', [
             'product' => $product,
+            'productCategories' => $product->categories,
+            'publisherList' => Publisher::pluck('name', 'id'),
+            'categoryList' => Category::pluck('name', 'id'),
+            'productType'  => Product::$type,
         ]);
     }
 
@@ -106,13 +116,14 @@ class ProductController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            'name' => ['required'],
-            'type'  => ['required'],
-            'publisher_id' => ['required'],
-            'author_percentage' => ['required'],
-            'mrp' => ['required'],
-            'wholesale_price' => ['required'],
-            'retail_price' => ['required'],
+            'name'              => ['required'],
+            'type'              => ['required'],
+            'publisher_id'      => ['required'],
+            'production_cost'   => ['required'],
+            'mrp'               => ['required'],
+            'wholesale_rate'    => ['required'],
+            'retail_rate'       => ['required'],
+            'alert_quantity'    => '',
 
         ]);
     }

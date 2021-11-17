@@ -23,6 +23,7 @@ class CreateSalesTable extends Migration
             $table->float('discount')->nullable();
             $table->float('amount')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

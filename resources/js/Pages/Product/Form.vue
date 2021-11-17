@@ -11,27 +11,31 @@
 
             <div class="mb-4">
                 <Label for="type" value="Type" />
-                <Select id="type" class="mt-1 block w-full" v-model="form.type">
-                    <option value=""> -- Select -- </option>
-                    <option value="1"> Book </option>
-                    <option value="2"> Package </option>
+                <Select name="type" class="mt-1 block w-full" v-model="form.type" required>
+                     <option value="0"> -- Select Type -- </option>
+                    <option :value="type" v-for="(typeName, type) in data.productType" :key="type">{{ typeName }}</option>
                 </Select>
             </div>
 
             <div class="mb-4">
                 <Label for="publisher_id" value="Publisher Name" />
                 <Select id="publisher_id" class="mt-1 block w-full" v-model="form.publisher_id">
-                    <option value="">-- Select --</option>
-                    <option value="1">Saiful Isalm</option>
-                    <option value="2">Saif Uddin</option>
-                    <!-- <option :v-for="(publisher, index) in publishers" :value="index" :key="index" >{{ publisher }}</option> -->
+                    <option value="0"> -- Select Publisher -- </option>
+                    <option :value="publisherId" v-for="(publisherName, publisherId) in data.publisherList" :key="publisherId">
+                        {{ publisherName }}
+                    </option>
                 </Select>
             </div>
 
-            <div class="mb-4">
-                <Label for="author_percentage" value="Author Percentage" />
-                <Input id="author_percentage" name="author_percentage" step="0.01" type="number" class="mt-1 block w-full" v-model="form.author_percentage"/>
-            </div>
+            <!-- <div class="mb-4">
+                <Label for="category_id" value="Category" />
+                <Select id="category_id" class="mt-1 block w-full" v-model="form.category_id">
+                    <option value="0"> -- Select Category -- </option>
+                    <option :value="categoryId" v-for="(categoryName, categoryId) in data.categoryList" :key="categoryId">
+                        {{ categoryName }}
+                    </option>
+                </Select>
+            </div> -->
 
             <div class="mb-4">
                 <Label for="mrp" value="MRP ." />
@@ -39,13 +43,23 @@
             </div>
 
             <div class="mb-4">
-                <Label for="wholesale" value="Wholesale Price" />
-                <Input id="wholesale" name="wholesale_price" step="0.01" type="number" class="mt-1 block w-full" v-model="form.wholesale_price" required />
+                <Label for="production_cost" value="Production Cost" />
+                <Input id="production_cost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.production_cost" required />
             </div>
 
             <div class="mb-4">
-                <Label for="retail_price" value="Retail Price" />
-                <Input id="retail_price" name="retail_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.retail_price" required />
+                <Label for="wholesale" value="Wholesale Rate" />
+                <Input id="wholesale" name="wholesale_rate" step="0.01" type="number" class="mt-1 block w-full" v-model="form.wholesale_rate" required />
+            </div>
+
+            <div class="mb-4">
+                <Label for="retail_rate" value="Retail Rate" />
+                <Input id="retail_rate" name="retail_rate" type="number" step="0.01" class="mt-1 block w-full" v-model="form.retail_rate" required />
+            </div>
+
+            <div class="mb-4">
+                <Label for="alert_quantity" value="Alert Quantity" />
+                <Input id="alert_quantity" name="alert_quantity" type="number" class="mt-1 block w-full" v-model="form.alert_quantity" required />
             </div>
 
             <hr class="w-full my-4">
@@ -96,12 +110,14 @@ export default {
         return {
             form: this.$inertia.form({
                 name: this.data.product.name,
-                type: this.data.product.type,
-                publisher_id: this.data.product.publisher_id,
-                author_percentage: this.data.product.author_percentage,
+                type: this.data.product.type || 0,
+                publisher_id: this.data.product.publisher_id || 0,
+                // category_id: this.data.product.category_id || 0,
+                production_cost: this.data.product.production_cost,
                 mrp: this.data.product.mrp,
-                wholesale_price: this.data.product.wholesale_price,
-                retail_price: this.data.product.retail_price,
+                wholesale_rate: this.data.product.wholesale_rate,
+                retail_rate: this.data.product.retail_rate,
+                alert_quantity: this.data.product.alert_quantity
             })
         }
     },

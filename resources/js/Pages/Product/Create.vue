@@ -6,7 +6,7 @@
             Create Product
         </template>
         
-        <form-component :data="data" module-action="store" />
+        <form-component :data="{ product, productList, publisherList, productType, productCategories }" module-action="store" />
     </app-layout>
 </template>
 
@@ -28,6 +28,9 @@ export default {
             data: {
                 product: this.product,
                 productList: this.productList,
+                publisherList: this.publisherList,
+                categoryList: this.categoryList,
+                productType: this.productType
             }
         }
     },
@@ -40,6 +43,18 @@ export default {
         productList: {
             type: Object,
             default: {}
+        },
+        publisherList: {
+            type: Object,
+            default: {}
+        },
+        // categoryList: {
+        //     type: Object,
+        //     default: {}
+        // },
+        productType: { 
+            type: Object, 
+            default: {} 
         },
     },
 };
