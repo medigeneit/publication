@@ -18,11 +18,13 @@ class CreateProductsTable extends Migration
             $table->string('name')->nullable();
             $table->tinyInteger('type')->nullable();
             $table->unsignedBigInteger('publisher_id')->nullable();
-            $table->float('author_percentage')->nullable();
+            $table->float('production_cost')->nullable();
             $table->float('mrp')->nullable();
-            $table->float('wholesale_price')->nullable();
-            $table->float('retail_price')->nullable();
+            $table->float('wholesale_rate')->nullable();
+            $table->float('retail_rate')->nullable();
+            $table->tinyInteger('alert_quantity')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

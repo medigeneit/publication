@@ -15,14 +15,17 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                => (int) $this->id,
-            'name'              => (string) ($this->name ?? ''),
-            'type'              => (int) ($this->type ?? ''),
-            'publisherId'      => (int) ($this->publisher_id ?? ''),
-            'authorPercentage' => (float) ($this->author_percentage ?? ''),
-            'mrp'               => (float) ($this->mrp ?? ''),
-            'wholesalePrice'   => (float) ($this->wholesale_price ?? ''),
-            'retailPrice'    => (float) ($this->retail_price ?? ''),
+            'id'                    => (int) $this->id,
+            'name'                  => (string) ($this->name ?? ''),
+            'type'                  => (int) ($this->type ?? 0),
+            'typeName'              => (string) ($this->type_name ?? ''),
+            'publisherId'           => (int) ($this->publisher_id ?? 0),
+            'publisherName'         => (string) ($this->publisher->name ?? ''),
+            'productionCost'        => (float) ($this->production_cost ?? 0),
+            'mrp'                   => (float) ($this->mrp ?? ''),
+            'wholesaleRate'         => (float) ($this->wholesale_rate ?? 0),
+            'retailRate'            => (float) ($this->retail_rate ?? 0),
+            'alertQuantity'         => (int) ($this->alert_quantity ?? 0)
         ];
     }
 }
