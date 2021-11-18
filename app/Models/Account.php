@@ -6,16 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Outlet extends Model
+class Account extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public $timestamps = false;
-
     protected $guarded = [];
 
-    public function accounts()
+    public function accountable()
     {
-        return $this->morphMany('App\Account', 'accountable');
+        return $this->morphTo();
+    }
+
+    public function scopeOnlyPublisher($query)
+    {
+        return $query->where('accountable_type', 'App\Models\Publisher');
     }
 }

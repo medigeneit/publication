@@ -11,4 +11,9 @@ class Publisher extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function accounts()
+    {
+        return $this->morphMany(Account::class, 'accountable');
+    }
 }

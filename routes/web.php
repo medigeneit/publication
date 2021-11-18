@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OutletController;
@@ -50,5 +51,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'sales'         => SaleController::class,
         'outlets'       => OutletController::class,
         'storages'      => StorageController::class,
+        'accounts'      => AccountController::class
     ]);
 });

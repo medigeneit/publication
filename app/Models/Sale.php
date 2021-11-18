@@ -11,4 +11,9 @@ class Sale extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class);
+    }
 }

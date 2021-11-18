@@ -26,6 +26,9 @@
     <nav-link :href="route('storages.index')" :active="route().current('storages.*')">
         Storages
     </nav-link>
+    <nav-link :href="route('accounts.index')" :active="route().current('accounts.*')">
+        Account
+    </nav-link>
 </template>
 
 <script>

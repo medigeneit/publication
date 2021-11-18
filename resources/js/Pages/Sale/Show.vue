@@ -12,7 +12,7 @@
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
                 <show-table-row heading="ID">{{ sale.id }}</show-table-row>
-                <show-table-row heading="Name">{{ sale.outletId }}</show-table-row>
+                <show-table-row heading="Name">{{ sale.outletName }}</show-table-row>
                 <show-table-row heading="Parent">{{ sale.customerName }}</show-table-row>
                 <show-table-row heading="Parent">{{ sale.customerPhone }}</show-table-row>
                 <show-table-row heading="Parent">{{ sale.customerAddress }}</show-table-row>

@@ -17,12 +17,13 @@ class SaleResource extends JsonResource
         return [
             "id"                => (int) ($this->id),
             'outletId'          => (int) ($this->outlet_id ?? ''),
+            'outletName'        => (string) ($this->outlet->name ?? ''),
             'customerName'      => (string) ($this->customer_name ?? ''),
             'customerPhone'     => (int) ($this->customer_phone ?? ''),
             'customerAddress'   => (string) ($this->customer_address ?? ''),
             'subTotal'          => (float) ($this->subtotal ?? ''),
             'discount'          => (float) ($this->discount ?? ''),
-            'discountPurpose'  => (string) ($this->discount_purpose ?? ''),
+            'discountPurpose'   => (string) ($this->discount_purpose ?? ''),
             'amount'            => (float) ($this->amount ?? ''),
         ];
     }
