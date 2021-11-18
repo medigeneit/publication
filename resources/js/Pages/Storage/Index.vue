@@ -1,32 +1,30 @@
 <template>
-    <Head title="Outlet" />
+    <Head title="Storage" />
 
     <app-layout>
         <template #header>
-            Outlet List
+            Storage List
         </template>
 
-        <add-new-button :href="route('outlets.create')" />
+        <add-new-button :href="route('storages.create')" />
 
-        <data-table :collections="outlets" :filters="filters" :dateFilter="true">
+        <data-table :collections="storages" :filters="filters" :dateFilter="true">
             <template #head>
                 <th class="py-3 px-2 text-left">ID</th>
-                <th class="py-3 px-2 text-left">Name</th>
-                <th class="py-3 px-2 text-center">Address</th>
-                <th class="py-3 px-2 text-center">Phone</th>
-                <th class="py-3 px-2 text-center">Email</th>
+                <th class="py-3 px-2 text-left">Outlet Name</th>
+                <th class="py-3 px-2 text-center">Product Name</th>
+                <th class="py-3 px-2 text-center">Quantity</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template>
-            <template #default="{ item: outlet }">
-                <td class="py-3 px-2 text-left">{{ outlet.id }}</td>
-                <td class="py-3 px-2 text-left">{{ outlet.name }}</td>
-                <td class="py-3 px-2 text-left">{{ outlet.address }}</td>
-                <td class="py-3 px-2 text-left">{{ outlet.phone }}</td>
-                <td class="py-3 px-2 text-left">{{ outlet.email }}</td>
+            <template #default="{ item: storage }">
+                <td class="py-3 px-2 text-left">{{ storage.id }}</td>
+                <td class="py-3 px-2 text-left">{{ storage.outletName }}</td>
+                <td class="py-3 px-2 text-left">{{ storage.productName }}</td>
+                <td class="py-3 px-2 text-left">{{ storage.quantity }}</td>
                 <td class="py-2.5 px-2"> 
                     <div class="flex justify-center items-center gap-1 md:gap-2">
-                        <action-button-show :href="route('outlets.show', outlet.id)" />
-                        <action-button-edit :href="route('outlets.edit', outlet.id)" />
+                        <action-button-show :href="route('storages.show', storage.id)" />
+                        <action-button-edit :href="route('storages.edit', storage.id)" />
                     </div>
                 </td>
             </template>
@@ -53,7 +51,7 @@ export default {
         AddNewButton,
     },
     props: {
-        outlets: { type: Object, default: {} },
+        storages: { type: Object, default: {} },
         filters: { type: Object, default: {} },
     },
 };

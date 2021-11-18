@@ -23,6 +23,9 @@
     <nav-link :href="route('outlets.index')" :active="route().current('outlets.*')">
         Outlets
     </nav-link>
+    <nav-link :href="route('storages.index')" :active="route().current('storages.*')">
+        Storages
+    </nav-link>
 </template>
 
 <script>

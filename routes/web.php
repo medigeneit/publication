@@ -6,6 +6,7 @@ use App\Http\Controllers\OutletController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Models\Outlet;
 use Illuminate\Foundation\Application;
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'products'      => ProductController::class,
         'publishers'    => PublisherController::class,
         'sales'         => SaleController::class,
-        'outlets'       => OutletController::class
+        'outlets'       => OutletController::class,
+        'storages'      => StorageController::class,
     ]);
 });
