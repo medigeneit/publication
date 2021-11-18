@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Traits\ActiveFilter;
+use App\Traits\ActiveTrait;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,13 +14,14 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    use DateFilter;
+    use DateFilter, ActiveFilter;
 
     public function index()
     {
         $users = $this->setQuery(User::query())
             ->search()->filter()
             ->dateFilter()
+            ->activeFilter()
             ->getQuery();
 
         return Inertia::render('User/Index', [
@@ -31,7 +34,7 @@ class UserController extends Controller
     {
         return Inertia::render('User/Create', [
             'user'      => new User(),
-            'userType'  => User::$type,
+            'userType'  => User::getTypes(),
         ]);
     }
 
@@ -59,7 +62,7 @@ class UserController extends Controller
     {
         return Inertia::render('User/Edit', [
             'user'      => $user,
-            'userType'  => User::$type,
+            'userType'  => User::getTypes(),
         ]);
     }
 
@@ -106,7 +109,8 @@ class UserController extends Controller
     protected function getFilterProperty()
     {
         return [
-            'type' => User::$type,
+            'type' => User::getTypes(),
+            'active' => User::getActiveProperties(),
         ];
     }
     
@@ -131,7 +135,8 @@ class UserController extends Controller
             'type' => [
                 'required',
                 'numeric',
-            ]
+            ],
+            'active' => ['required'],
         ]);
     }
 }

@@ -10,7 +10,7 @@
             </div>
 
             <div class="mb-4">
-                <Label for="parent" value="Type" />
+                <Label for="parent" value="Parent" />
                 <Select id="parent" class="mt-1 block w-full" v-model="form.parent_id">
                     <option value="0"> -- Select Parent -- </option>
                     <option :value="categoryId" v-for="(categoryName, categoryId) in data.categoryList" :key="categoryId">{{ categoryName }}</option>

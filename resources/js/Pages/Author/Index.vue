@@ -19,7 +19,7 @@
                 <td class="py-3 px-2 text-left">{{ author.id }}</td>
                 <td class="py-3 px-2 text-left">{{ author.name }}</td>
                 <td class="py-2 px-2 text-center">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-300' : author.active, 'bg-red-300' : !author.active }">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : author.active, 'bg-red-500' : !author.active }">
                         {{ author.active ? 'Yes' : 'No' }}
                     </span>
                 </td>

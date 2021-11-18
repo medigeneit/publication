@@ -7,6 +7,7 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -34,7 +35,9 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $category = Category::create($this->validateData($request));
+        $category = Category::create($this->validateData($request) + [
+            'user_id'  => Auth::id(),
+        ]);
 
         return redirect()
             ->route('categories.show', $category->id)
@@ -91,7 +94,10 @@ class CategoryController extends Controller
 
     protected function filter()
     {
-        $this->getQuery();
+        $this->getQuery()
+            ->when(isset(request()->active), function ($query) {
+            $query->where('active', request()->active);
+        });
 
         return $this;
     }
@@ -99,7 +105,7 @@ class CategoryController extends Controller
     protected function getFilterProperty()
     {
         return [
-            //
+            'active' => Category::getActiveProperties(),
         ];
     }
 

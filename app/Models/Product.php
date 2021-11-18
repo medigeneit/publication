@@ -18,6 +18,15 @@ class Product extends Model
         3 => 'Lecture',
     ];
 
+    protected static function getTypes(){
+        return [
+            1 => 'Package',
+            2 => 'Book',
+            3 => 'Lecture',
+        ];
+    }
+
+
     public function getTypeNameAttribute()
     {
         return (Self::$type)[$this->type] ?? '';

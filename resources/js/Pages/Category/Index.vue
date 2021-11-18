@@ -20,7 +20,11 @@
                 <td class="py-3 px-2 text-left">{{ category.id }}</td>
                 <td class="py-3 px-2 text-left">{{ category.name }}</td>
                 <td class="py-3 px-2 text-left">{{ category.parentName }}</td>
-                <td class="py-3 px-2 text-left">{{ category.active ? "Active" : "InActive" }}</td>
+                <td class="py-3 px-2 text-center">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : category.active, 'bg-red-500' : !category.active }">
+                        {{ category.activeValue }}
+                    </span>
+                    </td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('categories.show', category.id)" />

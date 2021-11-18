@@ -19,7 +19,7 @@
                 <td class="py-3 px-2 text-left">{{ publisher.id }}</td>
                 <td class="py-3 px-2 text-left">{{ publisher.name }}</td>
                 <td class="py-2 px-2 text-center">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-300' : publisher.active, 'bg-red-300' : !publisher.active }">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : publisher.active, 'bg-red-500' : !publisher.active }">
                         {{ publisher.active ? 'Yes' : 'No' }}
                     </span>
                 </td>
