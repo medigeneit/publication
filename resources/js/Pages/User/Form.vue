@@ -22,6 +22,7 @@
             <div class="mb-4">
                 <Label for="type" value="Type" />
                 <Select name="type" class="mt-1 block w-full" v-model="form.type" required>
+                    <option value="0"> --Select Type-- </option>
                     <option :value="type" v-for="(typeName, type) in userType" :key="type">{{ typeName }}</option>
                 </Select>
             </div>
@@ -71,7 +72,7 @@ export default {
                 name: this.user.name,
                 email: this.user.email,
                 phone: this.user.phone,
-                type: this.user.type,
+                type: this.user.type || 0,
             })
         }
     },
