@@ -17,6 +17,7 @@
                 <th class="py-3 px-2 text-left">Customer Address</th>
                 <th class="py-3 px-2 text-left">Subtotal</th>
                 <th class="py-3 px-2 text-left">Discount</th>
+                <th class="py-3 px-2 text-left">Discount Purpose</th>
                 <th class="py-3 px-2 text-left">Amount</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template>
@@ -28,6 +29,7 @@
                 <td class="py-3 px-2 text-left">{{ sale.customerAddress }}</td>
                 <td class="py-3 px-2 text-left">{{ sale.subTotal }}</td>
                 <td class="py-3 px-2 text-left">{{ sale.discount }}</td>
+                <td class="py-3 px-2 text-left">{{ sale.discountPurpose }}</td>
                 <td class="py-3 px-2 text-left">{{ sale.amount }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">

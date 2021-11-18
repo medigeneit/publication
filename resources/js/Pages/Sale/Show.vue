@@ -18,6 +18,7 @@
                 <show-table-row heading="Parent">{{ sale.customerAddress }}</show-table-row>
                 <show-table-row heading="Parent">{{ sale.subTotal }}</show-table-row>
                 <show-table-row heading="Parent">{{ sale.discount }}</show-table-row>
+                <show-table-row heading="Parent">{{ sale.discountPurpose }}</show-table-row>
                 <show-table-row heading="Parent">{{ sale.amount }}</show-table-row>
 
                 <show-table-row heading="Action">

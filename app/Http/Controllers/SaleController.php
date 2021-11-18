@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SaleResource;
+use App\Models\Outlet;
 use App\Models\Sale;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
@@ -29,11 +30,13 @@ class SaleController extends Controller
     {
         return Inertia::render('Sale/Create', [
             'sale' => new Sale(),
+            'outlets' => Outlet::pluck('name', 'id')
         ]);
     }
 
     public function store(Request $request)
     {
+
         $sale = Sale::create($this->validateData($request));
 
         return redirect()
@@ -110,6 +113,7 @@ class SaleController extends Controller
             'customer_address'  => ['required'],
             'subtotal'          => ['required'],
             'discount'          => ['required'],
+            'discount_purpose'  => ['required'],
             'amount'            => ['required']
         ]);
     }
