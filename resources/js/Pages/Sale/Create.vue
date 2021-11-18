@@ -27,7 +27,7 @@ export default {
         return {
             data: {
                 sale: this.sale,
-                saleList: this.saleList,
+                outlets: this.outlets,
             }
         }
     },
@@ -37,7 +37,7 @@ export default {
             type: Object,
             default: {}
         },
-        saleList: {
+        outlets: {
             type: Object,
             default: {}
         },

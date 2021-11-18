@@ -7,7 +7,10 @@
 
             <div class="mb-4">
                 <Label for="outlet_id" value="Outlet Name" />
-                <Input id="outlet_id" type="text" class="mt-1 block w-full" v-model="form.outlet_id" required autofocus />
+                <Select id="outlet_id" type="text" class="mt-1 block w-full" v-model="form.outlet_id">
+                    <option value="0">-- Select --</option>
+                    <option :value="outletId" v-for="outletname, outletId in data.outlets" :key="outletId">{{ outletname }}</option>
+                </Select>
             </div>
             
             <div class="mb-4">
@@ -36,6 +39,11 @@
             </div>
 
             <div class="mb-4">
+                <Label for="discount_purpose" value="Discount Purpose" /> 
+                <Textarea id="discount_purpose"  class="mt-1 block w-full" v-model="form.discount_purpose" />
+            </div>
+
+            <div class="mb-4">
                 <Label for="amount" value="Amount" />
                 <Input id="amount" type="number" class="mt-1 block w-full" v-model="form.amount"  />
             </div>
@@ -61,17 +69,18 @@ import Label from '@/Components/Label.vue';
 import ValidationErrors from '@/Components/ValidationErrors.vue';
 import GoToList from '@/Components/GoToList.vue';
 import Select from '@/Components/Select.vue';
+import Textarea from '@/Components/Textarea.vue';
 
 export default {
     components: {
         Button,
         Input,
+        Textarea,
         Label,
         ValidationErrors,
         GoToList,
         Select,
     },
-
     props: {
         moduleAction: String,
         buttonValue: { 
@@ -85,6 +94,7 @@ export default {
     },
 
     data() {
+        
         return {
             form: this.$inertia.form({
                 outlet_id: this.data.sale.outlet_id,
@@ -93,6 +103,7 @@ export default {
                 customer_address: this.data.sale.customer_address,
                 subtotal: this.data.sale.subtotal,
                 discount: this.data.sale.discount,
+                discount_purpose: this.data.sale.discount_purpose,
                 amount: this.data.sale.amount,
             })
         }

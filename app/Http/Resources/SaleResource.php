@@ -22,6 +22,7 @@ class SaleResource extends JsonResource
             'customerAddress'   => (string) ($this->customer_address ?? ''),
             'subTotal'          => (float) ($this->subtotal ?? ''),
             'discount'          => (float) ($this->discount ?? ''),
+            'discountPurpose'  => (string) ($this->discount_purpose ?? ''),
             'amount'            => (float) ($this->amount ?? ''),
         ];
     }
