@@ -7,8 +7,10 @@ use App\Http\Resources\StorageResource;
 use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\Storage;
+use App\Models\User;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class StorageController extends Controller
@@ -19,7 +21,8 @@ class StorageController extends Controller
     {
         $storages = $this->setQuery(Storage::query())
             ->search()->filter()
-            ->getQuery();
+            ->getQuery()
+            ->with('user');
 
         return Inertia::render('Storage/Index', [
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -32,13 +35,15 @@ class StorageController extends Controller
         return Inertia::render('Storage/Create', [
             'storage'   => new Storage(),
             'outlets'   => Outlet::pluck('name', 'id'),
-            'products'  => Product::pluck('name', 'id')
+            'products'  => Product::pluck('name', 'id'),
         ]);
     }
 
     public function store(Request $request)
     {
-        $storage = Storage::create($this->validateData($request));
+        $storage = Storage::create($this->validateData($request) + [
+            'user_id' => Auth::id(),
+        ]);
 
         return redirect()
             ->route('storages.show', $storage->id)

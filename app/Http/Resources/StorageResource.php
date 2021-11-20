@@ -21,7 +21,8 @@ class StorageResource extends JsonResource
                 'outletName' => (string) ($this->outlet->name ?? ''),
                 'productId' => (int) ($this->product_id ?? 0),
                 'productName' => (string) ($this->product->name ?? ''),
-                'quantity'  => (int) ($this->quantity ?? 0)
+                'quantity'  => (int) ($this->quantity ?? 0),
+                'createdBy'  => (string) ($this->user->name ?? ''),
             ];
     }
 }

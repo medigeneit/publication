@@ -18,6 +18,8 @@
 
                 <show-table-row heading="Quantity">{{ storage.quantity }}</show-table-row>
 
+                <show-table-row heading="Created By">{{ storage.createdBy }}</show-table-row>
+
 
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">

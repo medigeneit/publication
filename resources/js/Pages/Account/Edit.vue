@@ -28,6 +28,7 @@ export default {
             data:{
                 account: this.account,
                 publishers: this.publishers,
+                accountType: this.accountType,
             }
         }
     },
@@ -40,6 +41,10 @@ export default {
         publishers: { 
             type: Object,
             default: {}
+        },
+         accountType: { 
+            type: Object, 
+            default: {} 
         },
     },
 };

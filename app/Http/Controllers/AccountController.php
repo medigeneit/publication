@@ -9,6 +9,7 @@ use App\Models\Outlet;
 use App\Models\Publisher;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -20,7 +21,6 @@ class AccountController extends Controller
     {
         $accounts = $this->setQuery(Account::query())
             ->search()->filter()
-            //->dateFilter()
             ->getQuery();
 
         return Inertia::render('Account/Index', [
@@ -33,17 +33,19 @@ class AccountController extends Controller
     {
         return Inertia::render('Account/Create', [
             'account'  => new Account(),
-            'publishers'  => Publisher::pluck('name', 'id')
+            'publishers'  => Publisher::pluck('name', 'id'),
+            'accountType'  => Account::getTypes(),
         ]);
     }
 
     public function store(Request $request)
     {
-        // return $request;
 
         $publisher = Publisher::findOrFail($request->publisher_id);
 
-        $account = $publisher->accounts()->create($this->validateData($request));
+        $account = $publisher->accounts()->create($this->validateData($request) + [
+            'user_id' => Auth::id()
+        ]);
 
         // $account = Account::create($this->validateData($request, $publisher));
 
@@ -66,7 +68,8 @@ class AccountController extends Controller
         // return $account;
         return Inertia::render('Account/Edit', [
             'account' => $account,
-            'publishers'  => Publisher::pluck('name', 'id')
+            'publishers'  => Publisher::pluck('name', 'id'),
+            'accountType'  => Account::getTypes(),
         ]);
     }
 

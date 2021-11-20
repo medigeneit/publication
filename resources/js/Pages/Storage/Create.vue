@@ -28,16 +28,15 @@ export default {
             data: {
                 storage: this.storage,
                 outlets: this.outlets,
-                products: this.products
+                products: this.products,
             }
         }
     },
 
     props: {
         storage: { type: Object, default: {} },
-        // storageType: { type: Object, default: {} },
         outlets: { type: Object, default: {} },
-        products: { type: Object, default: {} }
+        products: { type: Object, default: {} },
     },
 };
 </script>

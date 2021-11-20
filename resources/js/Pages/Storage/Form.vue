@@ -74,8 +74,9 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                outlet_id: this.data.storage.outlet_id,
-                product_id: this.data.storage.product_id,
+                outlet_id: this.data.storage.outlet_id || 0,
+                user_id: this.data.storage.user_id || 0,
+                product_id: this.data.storage.product_id || 0,
                 quantity: this.data.storage.quantity,
             })
         }

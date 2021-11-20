@@ -18,9 +18,12 @@ class AccountResource extends JsonResource
             'id' => (int) $this->id,
             'accountableType'   => (string)($this->accountable_type ?? ''),
             'accountableId'     => (int) ($this->accountable_id ?? ''),
+            'publisherName'     => (string) ($this->publisher->name ?? ''),
             'purpose'           => (string) ($this->purpose ?? ''),
             'amount'            => (int) ($this->amount ?? ''),
-            'type'              => (int) ($this->type ?? ''),
+            'type'              => (int) ($this->type ?? 0),
+            'typeName'          => (string) ($this->value_of_type ?? ''),
+            'createdBy'         => (string) ($this->user->name ?? ''),
         ];
     }
 }

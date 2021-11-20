@@ -16,15 +16,15 @@
                 <th class="py-3 px-2 text-left">Purpose</th>
                 <th class="py-3 px-2 text-left">Amount</th>
                 <th class="py-3 px-2 text-left">Type</th>
-                <th class="py-3 px-2 text-left">Action</th>
+                <th class="py-3 px-2 text-center">Action</th>
             </template>
             <template #default="{ item: account }">
                 <td class="py-3 px-2 text-left">{{ account.id }}</td>
                 <td class="py-3 px-2 text-left">{{ account.accountableType }}</td>
-                <td class="py-3 px-2 text-left">{{ account.accountableId }}</td>
+                <td class="py-3 px-2 text-left">{{ account.publisherName }}</td>
                 <td class="py-3 px-2 text-left">{{ account.purpose }}</td>
                 <td class="py-3 px-2 text-left">{{ account.amount }}</td>
-                <td class="py-3 px-2 text-left">{{ account.type }}</td>
+                <td class="py-3 px-2 text-left">{{ account.typeName }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('accounts.show', account.id)" />

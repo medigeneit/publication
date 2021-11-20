@@ -25,8 +25,7 @@
                 <Label for="type" value="Type" />
                 <Select name="type" class="mt-1 block w-full" v-model="form.type" required>
                      <option value="0"> -- Select Type -- </option>
-                     <option value="1">  type1 </option>
-                     <option value="2"> type2 </option>
+                    <option :value="type" v-for="(typeName, type) in data.accountType" :key="type">{{ typeName }}</option>
                 </Select>
             </div>
             <hr class="w-full my-4">

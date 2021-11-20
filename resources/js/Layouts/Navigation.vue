@@ -11,17 +11,21 @@
     <nav-link :href="route('authors.index')" :active="route().current('authors.*')">
         Authors
     </nav-link>
-    <nav-link :href="route('products.index')" :active="route().current('products.*')">
-        Products
-    </nav-link>
+
     <nav-link :href="route('publishers.index')" :active="route().current('publishers.*')">
         Publisher
     </nav-link>
-    <nav-link :href="route('sales.index')" :active="route().current('sales.*')">
-        Sales
+
+    <nav-link :href="route('products.index')" :active="route().current('products.*')">
+        Products
     </nav-link>
+
     <nav-link :href="route('outlets.index')" :active="route().current('outlets.*')">
         Outlets
+    </nav-link>
+    
+    <nav-link :href="route('sales.index')" :active="route().current('sales.*')">
+        Sales
     </nav-link>
     <nav-link :href="route('storages.index')" :active="route().current('storages.*')">
         Storages

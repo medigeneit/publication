@@ -21,10 +21,10 @@
             <template #default="{ item: outlet }">
                 <td class="py-3 px-2 text-left">{{ outlet.id }}</td>
                 <td class="py-3 px-2 text-left">{{ outlet.name }}</td>
-                <td class="py-3 px-2 text-left">{{ outlet.address }}</td>
-                <td class="py-3 px-2 text-left">{{ outlet.phone }}</td>
-                <td class="py-3 px-2 text-left">{{ outlet.email }}</td>
-                <td class="py-3 px-2 text-left">
+                <td class="py-3 px-2 text-center">{{ outlet.address }}</td>
+                <td class="py-3 px-2 text-center">{{ outlet.phone }}</td>
+                <td class="py-3 px-2 text-center">{{ outlet.email }}</td>
+                <td class="py-3 px-2 text-center">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': outlet.active, 'bg-red-500': !outlet.active }">
                         {{ outlet.activeValue }}
                     </span>
