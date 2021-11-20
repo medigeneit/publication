@@ -6,7 +6,7 @@
             Edit Account
         </template>
         
-        <form-component :account="account" :publishers="publishers" module-action="update" />
+        <form-component :data="data" module-action="update" />
     </app-layout>
 </template>
 
@@ -21,6 +21,15 @@ export default {
         Head,
         Link,
         FormComponent,
+    },
+
+    data() {
+        return {
+            data:{
+                account: this.account,
+                publishers: this.publishers,
+            }
+        }
     },
 
     props: {

@@ -63,6 +63,7 @@ class AccountController extends Controller
 
     public function edit(Account $account)
     {
+        // return $account;
         return Inertia::render('Account/Edit', [
             'account' => $account,
             'publishers'  => Publisher::pluck('name', 'id')
@@ -73,7 +74,7 @@ class AccountController extends Controller
     {
         $publisher = Publisher::findOrFail($request->publisher_id);
 
-        $account = $publisher->accounts()->create($this->validateData($request));
+        $account = $publisher->accounts()->create($this->validateData($request, $account->id));
 
         // $account->update($this->validateData($request, $account->id));
 
