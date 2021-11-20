@@ -32,11 +32,15 @@
                 <td class="py-3 px-2 text-left">{{ product.wholesaleRate }}</td>
                 <td class="py-3 px-2 text-left">{{ product.retailRate }}</td>
                 <td class="py-3 px-2 text-left">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-red-500': product.storages <= product.alertQuantity, 'bg-green-500': !(product.storages <= product.alertQuantity)  }">
+                        {{ product.alertQuantity }}
+                    </span>
+                </td>
+                <td class="py-3 px-2 text-left">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
                         {{ product.activeValue }}
                     </span>
                 </td>
-                <td class="py-3 px-2 text-left">{{ product.alertQuantity }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('products.show', product.id)" />
@@ -68,7 +72,7 @@ export default {
     },
     props: {
         products: { type: Object, default: {} },
-        filters: { type: Object, default: {} },
+        filters: { type: Object, default: {} }
     },
 };
 </script>

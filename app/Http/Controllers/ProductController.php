@@ -24,9 +24,16 @@ class ProductController extends Controller
             //->dateFilter()
             ->getQuery();
 
+        // foreach($products->get() as $product)
+        // {
+        //     $storages = $product->storages->where('product_id', $product->id)->pluck('quantity')->toArray();
+        //     $store_count[] = array_sum($storages);
+        // }
+        // return var_dump($store_count);
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
+            // 'store_court' => $store_count
         ]);
     }
 

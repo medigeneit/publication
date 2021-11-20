@@ -28,7 +28,8 @@ class ProductResource extends JsonResource
             'alertQuantity'         => (int) ($this->alert_quantity ?? 0),
             'active'                => (int) ($this->active),
             'activeValue'           => (string) ($this->value_of_active),
-            'createdBy'             => (string) ($this->user->name ?? '')
+            'createdBy'             => (string) ($this->user->name ?? ''),
+            'storages'              => (int) ($this->storages->count() ?? '')
         ];
     }
 }
