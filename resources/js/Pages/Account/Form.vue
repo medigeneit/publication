@@ -78,7 +78,7 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                publisher_id: this.data.account.publisher_id || 0,
+                publisher_id: this.moduleAction == 'store' ? 0 : this.data.account.accountable_id,
                 purpose: this.data.account.purpose,
                 amount: this.data.account.amount,
                 type: this.data.account.type || 0,
