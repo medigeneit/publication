@@ -18,14 +18,17 @@ class ProductResource extends JsonResource
             'id'                    => (int) $this->id,
             'name'                  => (string) ($this->name ?? ''),
             'type'                  => (int) ($this->type ?? 0),
-            'typeName'              => (string) ($this->type_name ?? ''),
+            'typeName'              => (string) ($this->value_of_type ?? ''),
             'publisherId'           => (int) ($this->publisher_id ?? 0),
             'publisherName'         => (string) ($this->publisher->name ?? ''),
             'productionCost'        => (float) ($this->production_cost ?? 0),
             'mrp'                   => (float) ($this->mrp ?? ''),
             'wholesaleRate'         => (float) ($this->wholesale_rate ?? 0),
             'retailRate'            => (float) ($this->retail_rate ?? 0),
-            'alertQuantity'         => (int) ($this->alert_quantity ?? 0)
+            'alertQuantity'         => (int) ($this->alert_quantity ?? 0),
+            'active'                => (int) ($this->active),
+            'activeValue'           => (string) ($this->value_of_active),
+            'createdBy'             => (string) ($this->user->name ?? '')
         ];
     }
 }

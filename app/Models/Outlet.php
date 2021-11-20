@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\ActiveProperty;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Outlet extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ActiveProperty;
 
     public $timestamps = false;
 
@@ -17,5 +18,10 @@ class Outlet extends Model
     public function accounts()
     {
         return $this->morphMany('App\Account', 'accountable');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

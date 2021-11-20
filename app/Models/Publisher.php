@@ -13,8 +13,18 @@ class Publisher extends Model
 
     protected $guarded = [];
 
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
     public function accounts()
     {
         return $this->morphMany(Account::class, 'accountable');
+    }
+
+    public function user() 
+    {
+        return $this->belongsTo(User::class);
     }
 }

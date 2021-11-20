@@ -6,7 +6,7 @@
             Create Author
         </template>
         
-        <form-component :author="author" :author-type="authorType" module-action="store" />
+        <form-component :data="{ author, authorType }" module-action="store" />
     </app-layout>
 </template>
 

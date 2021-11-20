@@ -21,6 +21,14 @@
                 <Input id="email" type="email" class="mt-1 block w-full" v-model="form.email" />
             </div>
 
+            <div class="mb-4">
+                <Label for="active" value="Active" />
+                <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </Select>
+            </div>
+
             <hr class="w-full my-4">
             
             <div class="flex items-center justify-between">
@@ -67,6 +75,7 @@ export default {
                 address: this.outlet.address,
                 phone: this.outlet.phone,
                 email: this.outlet.email,
+                active: this.moduleAction == 'store' ? 1 : this.outlet.active,
             })
         }
     },    

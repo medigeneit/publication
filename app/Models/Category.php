@@ -12,9 +12,19 @@ class Category extends Model
     use HasFactory, SoftDeletes, ActiveProperty;
     
     protected $guarded = [];
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
     
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

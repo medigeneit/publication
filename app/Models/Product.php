@@ -2,21 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\ActiveProperty;
+use App\Traits\TypeProperty;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ActiveProperty, TypeProperty;
 
     protected $guarded = [];
-
-    public static $type = [
-        1 => 'Package',
-        2 => 'Book',
-        3 => 'Lecture',
-    ];
 
     protected static function getTypes(){
         return [
@@ -26,14 +22,13 @@ class Product extends Model
         ];
     }
 
-
-    public function getTypeNameAttribute()
-    {
-        return (Self::$type)[$this->type] ?? '';
-    }
-
     public function publisher() 
     {
         return $this->belongsTo(Publisher::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

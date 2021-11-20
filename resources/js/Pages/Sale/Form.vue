@@ -97,7 +97,7 @@ export default {
         
         return {
             form: this.$inertia.form({
-                outlet_id: this.data.sale.outlet_id,
+                outlet_id: this.data.sale.outlet_id || 0,
                 customer_name: this.data.sale.customer_name,
                 customer_phone: this.data.sale.customer_phone,
                 customer_address: this.data.sale.customer_address,

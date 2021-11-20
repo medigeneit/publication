@@ -21,7 +21,9 @@ class CreateSalesTable extends Migration
             $table->bigInteger('customer_phone')->nullable();
             $table->float('subtotal')->nullable();
             $table->float('discount')->nullable();
+            $table->text('discount_purpose')->nullable();
             $table->float('amount')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
         });

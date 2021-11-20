@@ -62,6 +62,14 @@
                 <Input id="alert_quantity" name="alert_quantity" type="number" class="mt-1 block w-full" v-model="form.alert_quantity" required />
             </div>
 
+           <div class="mb-4">
+                <Label for="active" value="Active" />
+                <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </Select>
+            </div>
+
             <hr class="w-full my-4">
             
             <div class="flex items-center justify-between">
@@ -117,7 +125,8 @@ export default {
                 mrp: this.data.product.mrp,
                 wholesale_rate: this.data.product.wholesale_rate,
                 retail_rate: this.data.product.retail_rate,
-                alert_quantity: this.data.product.alert_quantity
+                alert_quantity: this.data.product.alert_quantity,
+                active: this.moduleAction == 'store' ? 1 : this.data.product.active
             })
         }
     },

@@ -7,6 +7,7 @@ use App\Http\Resources\OutletResource;
 use App\Models\Outlet;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class OutletController extends Controller
@@ -35,7 +36,9 @@ class OutletController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        $outlet = Outlet::create($this->validateData($request));
+        $outlet = Outlet::create($this->validateData($request) + [
+            'user_id' => Auth::id()
+        ]);
 
         return redirect()
             ->route('outlets.show', $outlet->id)
@@ -105,10 +108,11 @@ class OutletController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            'name' => ['required'],
-            'address' => ['required'],
-            'phone' => ['required'],
-            'email' => ['required'],
+            'name'      => ['required'],
+            'address'   => ['required'],
+            'phone'     => ['required'],
+            'email'     => ['required'],
+            'active'    => ['required'],
         ]);
     }
 }

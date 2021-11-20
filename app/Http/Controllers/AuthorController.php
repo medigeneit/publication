@@ -7,6 +7,7 @@ use App\Http\Resources\AuthorResource;
 use App\Models\Author;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AuthorController extends Controller
@@ -35,7 +36,9 @@ class AuthorController extends Controller
 
     public function store(Request $request)
     {
-        $author = Author::create($this->validateData($request));
+        $author = Author::create($this->validateData($request) + [
+            'user_id'  => Auth::id(),
+        ]);
 
         return redirect()
             ->route('authors.show', $author->id)
@@ -101,7 +104,7 @@ class AuthorController extends Controller
     protected function getFilterProperty()
     {
         return [
-            "active" => $this::getActiveProperties()
+            "active" => Author::getActiveProperties()
         ];
     }
 

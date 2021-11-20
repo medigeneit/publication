@@ -19,6 +19,7 @@
                 <th class="py-3 px-2 text-left">Wholesale Price</th>
                 <th class="py-3 px-2 text-left">Retail Price</th>
                 <th class="py-3 px-2 text-left">Alert</th>
+                <th class="py-3 px-2 text-left">Active</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template>
             <template #default="{ item: product }">
@@ -30,6 +31,11 @@
                 <td class="py-3 px-2 text-left">{{ product.mrp }}</td>
                 <td class="py-3 px-2 text-left">{{ product.wholesaleRate }}</td>
                 <td class="py-3 px-2 text-left">{{ product.retailRate }}</td>
+                <td class="py-3 px-2 text-left">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
+                        {{ product.activeValue }}
+                    </span>
+                </td>
                 <td class="py-3 px-2 text-left">{{ product.alertQuantity }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">

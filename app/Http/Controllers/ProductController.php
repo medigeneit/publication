@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Publisher;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -33,15 +34,17 @@ class ProductController extends Controller
     {
         return Inertia::render('Product/Create', [
             'product' => new Product(),
-            'publisherList' => Publisher::pluck('name', 'id'),
-            'categoryList' => Category::pluck('name', 'id'),
-            'productType'  => Product::$type,
+            'publisherList' => Publisher::active()->pluck('name', 'id'),
+            'categoryList' => Category::active()->pluck('name', 'id'),
+            'productType'  => Product::getTypes(),
         ]);
     }
 
     public function store(Request $request)
     {
-        $product = Product::create($this->validateData($request));
+        $product = Product::create($this->validateData($request) + [
+            'user_id' => Auth::id()
+        ]);
 
         return redirect()
             ->route('products.show', $product->id)
@@ -64,7 +67,7 @@ class ProductController extends Controller
             'productCategories' => $product->categories,
             'publisherList' => Publisher::pluck('name', 'id'),
             'categoryList' => Category::pluck('name', 'id'),
-            'productType'  => Product::$type,
+            'productType'  => Product::getTypes(),
         ]);
     }
 
@@ -104,6 +107,9 @@ class ProductController extends Controller
         $this->getQuery()
             ->when(request()->type, function($query) {
                 $query->where('type', request()->type);
+            })
+            ->when(request()->active, function($query) {
+                $query->where('active', request()->active);
             });
 
         return $this;
@@ -112,7 +118,8 @@ class ProductController extends Controller
     protected function getFilterProperty()
     {
         return [
-            'type' => Product::$type
+            'type' => Product::getTypes(),
+            'active' => Product::getActiveProperties(),
         ];
     }
 
@@ -127,6 +134,7 @@ class ProductController extends Controller
             'wholesale_rate'    => ['required'],
             'retail_rate'       => ['required'],
             'alert_quantity'    => '',
+            'active'            => ['required'],
 
         ]);
     }

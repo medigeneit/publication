@@ -20,6 +20,13 @@
 
                 <show-table-row heading="Name">{{ outlet.email }}</show-table-row>
 
+                <show-table-row heading="Name">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': outlet.active, 'bg-red-500': !outlet.active }">
+                        {{ outlet.activeValue }}
+                    </span>
+                </show-table-row>
+
+                <show-table-row heading="Created By">{{ outlet.createdBy }}</show-table-row>
 
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">

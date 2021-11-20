@@ -22,6 +22,7 @@ class CategoryResource extends JsonResource
             'active'        => (boolean) ($this->active),
             'activeValue'   => (string) ($this->value_of_active ?? ''),
             'parentName'    => (string) ($this->parent->name ?? ''),
+            'createdBy'     => (string) ($this->user->name ?? '')
         ];
     }
 }

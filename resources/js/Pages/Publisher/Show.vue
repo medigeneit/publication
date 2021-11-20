@@ -20,6 +20,8 @@
                     </span>
                 </show-table-row>
 
+                <show-table-row heading="Created By">{{ publisher.createdBy }}</show-table-row>
+
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
                         <action-button-edit :href="route('publishers.edit', publisher.id)" />

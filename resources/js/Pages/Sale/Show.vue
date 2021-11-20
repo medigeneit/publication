@@ -13,13 +13,14 @@
             <table class="table-auto">
                 <show-table-row heading="ID">{{ sale.id }}</show-table-row>
                 <show-table-row heading="Name">{{ sale.outletName }}</show-table-row>
-                <show-table-row heading="Parent">{{ sale.customerName }}</show-table-row>
-                <show-table-row heading="Parent">{{ sale.customerPhone }}</show-table-row>
-                <show-table-row heading="Parent">{{ sale.customerAddress }}</show-table-row>
-                <show-table-row heading="Parent">{{ sale.subTotal }}</show-table-row>
-                <show-table-row heading="Parent">{{ sale.discount }}</show-table-row>
-                <show-table-row heading="Parent">{{ sale.discountPurpose }}</show-table-row>
-                <show-table-row heading="Parent">{{ sale.amount }}</show-table-row>
+                <show-table-row heading="Customer Name">{{ sale.customerName }}</show-table-row>
+                <show-table-row heading="Phone">{{ sale.customerPhone }}</show-table-row>
+                <show-table-row heading="Customer Adress">{{ sale.customerAddress }}</show-table-row>
+                <show-table-row heading="Sub Total">{{ sale.subTotal }}</show-table-row>
+                <show-table-row heading="Discount">{{ sale.discount }}</show-table-row>
+                <show-table-row heading="Disount Purpose">{{ sale.discountPurpose }}</show-table-row>
+                <show-table-row heading="Amount">{{ sale.amount }}</show-table-row>
+                <show-table-row heading="Created By">{{ sale.createdBy }}</show-table-row>
 
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">

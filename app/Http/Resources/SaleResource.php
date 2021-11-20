@@ -25,6 +25,7 @@ class SaleResource extends JsonResource
             'discount'          => (float) ($this->discount ?? ''),
             'discountPurpose'   => (string) ($this->discount_purpose ?? ''),
             'amount'            => (float) ($this->amount ?? ''),
+            'createdBy'         => (string) ($this->user->name ?? '')
         ];
     }
 }

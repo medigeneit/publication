@@ -16,4 +16,9 @@ class Sale extends Model
     {
         return $this->belongsTo(Outlet::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

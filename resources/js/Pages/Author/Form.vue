@@ -49,8 +49,7 @@ export default {
     },
 
     props: {
-        author: { type: Object, default: {} },
-        authorType: { type: Object, default: {} },
+        data: { type: Object, default: {} },
         moduleAction: String,
         buttonValue: { type: String, default: 'Submit' },
     },
@@ -58,8 +57,8 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                name: this.author.name,
-                active: this.author.active || 1,
+                name: this.data.author.name,
+                active: this.moduleAction == 'store' ? 1 : this.data.author.active,
             })
         }
     },    
@@ -71,7 +70,7 @@ export default {
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('authors.update', this.author.id));
+                return this.form.put(this.route('authors.update', this.data.author.id));
             }
         }
     }

@@ -15,6 +15,7 @@
                 <th class="py-3 px-2 text-center">Address</th>
                 <th class="py-3 px-2 text-center">Phone</th>
                 <th class="py-3 px-2 text-center">Email</th>
+                <th class="py-3 px-2 text-center">Active</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template>
             <template #default="{ item: outlet }">
@@ -23,6 +24,11 @@
                 <td class="py-3 px-2 text-left">{{ outlet.address }}</td>
                 <td class="py-3 px-2 text-left">{{ outlet.phone }}</td>
                 <td class="py-3 px-2 text-left">{{ outlet.email }}</td>
+                <td class="py-3 px-2 text-left">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': outlet.active, 'bg-red-500': !outlet.active }">
+                        {{ outlet.activeValue }}
+                    </span>
+                </td>
                 <td class="py-2.5 px-2"> 
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('outlets.show', outlet.id)" />

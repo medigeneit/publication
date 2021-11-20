@@ -6,7 +6,7 @@
             Edit Author
         </template>
         
-        <form-component :author="author" :author-type="authorType" module-action="update" />
+        <form-component :data="{ author, authorType }" module-action="update" />
     </app-layout>
 </template>
 

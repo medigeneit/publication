@@ -8,6 +8,7 @@ use App\Models\Outlet;
 use App\Models\Sale;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class SaleController extends Controller
@@ -37,7 +38,9 @@ class SaleController extends Controller
     public function store(Request $request)
     {
 
-        $sale = Sale::create($this->validateData($request));
+        $sale = Sale::create($this->validateData($request) + [
+            'user_id' => Auth::id()
+        ]);
 
         return redirect()
             ->route('sales.show', $sale->id)

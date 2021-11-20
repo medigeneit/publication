@@ -73,7 +73,7 @@ export default {
         return {
             form: this.$inertia.form({
                 name: this.data.category.name,
-                parent_id: this.data.category.parentId || 0,
+                parent_id: this.moduleAction == 'store'? 0 : this.data.category.parent_id ,
                 active: this.moduleAction == 'store' ? 1 : this.data.category.active,
             })
         }

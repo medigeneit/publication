@@ -24,7 +24,7 @@
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : category.active, 'bg-red-500' : !category.active }">
                         {{ category.activeValue }}
                     </span>
-                    </td>
+                </td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('categories.show', category.id)" />

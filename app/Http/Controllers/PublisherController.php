@@ -7,6 +7,7 @@ use App\Http\Resources\PublisherResource;
 use App\Models\Publisher;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class PublisherController extends Controller
@@ -35,7 +36,9 @@ class PublisherController extends Controller
 
     public function store(Request $request)
     {
-        $publisher = Publisher::create($this->validateData($request));
+        $publisher = Publisher::create($this->validateData($request) + [
+            'user_id' => Auth::id()
+        ]);
 
         return redirect()
             ->route('publishers.show', $publisher->id)
