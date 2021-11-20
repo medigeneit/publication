@@ -15,7 +15,7 @@
                 <show-table-row heading="Name">{{ author.name }}</show-table-row>
 
                 <show-table-row heading="Active">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-300' : author.active, 'bg-red-300' : !author.active }">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : author.active, 'bg-red-500' : !author.active }">
                         {{ author.active ? 'Yes' : 'No' }}
                     </span>
                 </show-table-row>

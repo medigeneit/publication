@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\ActiveProperty;
+use App\Traits\TypeProperty;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,18 +13,15 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, ActiveProperty, TypeProperty;
 
     protected $guarded = [];
 
-    public static $type = [
-        1 => 'Admin',
-        2 => 'User',
-    ];
-
-    public function getTypeNameAttribute()
-    {
-        return (Self::$type)[$this->type] ?? '';
+    protected static function getTypes(){
+        return [
+            1 => 'Admin',
+            2 => 'User',
+        ];
     }
 
     protected $hidden = [

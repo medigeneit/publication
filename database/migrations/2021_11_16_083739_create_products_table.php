@@ -23,6 +23,8 @@ class CreateProductsTable extends Migration
             $table->float('wholesale_rate')->nullable();
             $table->float('retail_rate')->nullable();
             $table->tinyInteger('alert_quantity')->nullable();
+            $table->tinyInteger('active')->default(1);
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -90,7 +90,10 @@ class AuthorController extends Controller
 
     protected function filter()
     {
-        $this->getQuery();
+        $this->getQuery()
+            ->when(isset(request()->active), function($query) {
+                $query->where("active", request()->active);
+            });
 
         return $this;
     }
@@ -98,7 +101,7 @@ class AuthorController extends Controller
     protected function getFilterProperty()
     {
         return [
-            //
+            "active" => $this::getActiveProperties()
         ];
     }
 

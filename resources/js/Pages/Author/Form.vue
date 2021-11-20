@@ -59,7 +59,7 @@ export default {
         return {
             form: this.$inertia.form({
                 name: this.author.name,
-                active: this.author.active,
+                active: this.author.active || 1,
             })
         }
     },    

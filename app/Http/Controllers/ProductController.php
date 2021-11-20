@@ -101,7 +101,10 @@ class ProductController extends Controller
 
     protected function filter()
     {
-        $this->getQuery();
+        $this->getQuery()
+            ->when(request()->type, function($query) {
+                $query->where('type', request()->type);
+            });
 
         return $this;
     }
@@ -109,7 +112,7 @@ class ProductController extends Controller
     protected function getFilterProperty()
     {
         return [
-            //
+            'type' => Product::$type
         ];
     }
 

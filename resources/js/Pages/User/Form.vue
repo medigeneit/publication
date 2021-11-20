@@ -27,6 +27,14 @@
                 </Select>
             </div>
 
+            <div class="mb-4">
+                <Label for="active" value="Active" />
+                <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </Select>
+            </div>
+
             <hr class="w-full my-4">
             
             <div class="flex items-center justify-between">
@@ -73,6 +81,7 @@ export default {
                 email: this.user.email,
                 phone: this.user.phone,
                 type: this.user.type || 0,
+                active: this.user.active || 1,
             })
         }
     },

@@ -20,6 +20,7 @@ class CategoryResource extends JsonResource
             'isMainParent'  => (boolean) (! $this->parent_id),
             'parentId'      => (int) ($this->parent_id ?? 0),
             'active'        => (boolean) ($this->active),
+            'activeValue'   => (string) ($this->value_of_active ?? ''),
             'parentName'    => (string) ($this->parent->name ?? ''),
         ];
     }
