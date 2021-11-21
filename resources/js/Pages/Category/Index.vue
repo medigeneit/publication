@@ -1,5 +1,5 @@
 <template>
-    <Head title="User" />
+    <Head title="Category" />
 
     <app-layout>
         <template #header>
