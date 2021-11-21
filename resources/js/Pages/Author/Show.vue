@@ -14,6 +14,8 @@
 
                 <show-table-row heading="Name">{{ author.name }}</show-table-row>
 
+                <show-table-row heading="Honorarium">{{ author.honorarium }} tk.</show-table-row>
+
                 <show-table-row heading="Active">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : author.active, 'bg-red-500' : !author.active }">
                         {{ author.activeValue }}

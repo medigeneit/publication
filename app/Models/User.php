@@ -20,7 +20,7 @@ class User extends Authenticatable
     protected static function getTypes(){
         return [
             1 => 'Admin',
-            2 => 'User',
+            // 2 => 'User',
         ];
     }
 

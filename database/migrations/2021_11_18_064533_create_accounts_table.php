@@ -18,7 +18,9 @@ class CreateAccountsTable extends Migration
             $table->morphs('accountable');
             $table->string('purpose')->nullable();
             $table->tinyInteger('type')->default(0);
+            $table->unsignedFloat('amount')->default(0);
             $table->unsignedBigInteger('user_id');
+            $table->timestamps();
             $table->softDeletes();
         });
     }

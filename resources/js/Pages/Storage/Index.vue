@@ -12,9 +12,9 @@
             <template #head>
                 <th class="py-3 px-2 text-left">ID</th>
                 <th class="py-3 px-2 text-left">Outlet Name</th>
-                <th class="py-3 px-2 text-center">Product Name</th>
-                <th class="py-3 px-2 text-center">Quantity</th>
-                <th class="py-3 px-2 text-center">Action</th>
+                <th class="py-3 px-2 text-left">Product Name</th>
+                <th class="py-3 px-2 text-left">Quantity</th>
+                <th class="py-3 px-2 text-left">Action</th>
             </template>
             <template #default="{ item: storage }">
                 <td class="py-3 px-2 text-left">{{ storage.id }}</td>

@@ -17,6 +17,7 @@ class AuthorResource extends JsonResource
         return [
             'id'            => (int) $this->id,
             'name'          => (string) ($this->name ?? ''),
+            'honorarium'    => (float) ($this->honorarium ?? 0.00),
             'active'        => (bool) ($this->active ?? ''),
             'activeValue'   => (string) ($this->value_of_active ?? ''),
             'createdBy'     => (string) ($this->user->name ?? '')
