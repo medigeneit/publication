@@ -9,7 +9,7 @@
                 <Label for="outlet_id" value="Outlet Name" />
                 <Select id="outlet_id" type="text" class="mt-1 block w-full" v-model="form.outlet_id">
                     <option value="0">-- Select --</option>
-                    <option :value="outletId" v-for="outletname, outletId in data.outlets" :key="outletId">{{ outletname }}</option>
+                    <option :value="outletId" v-for="(outletname, outletId) in data.outlets" :key="outletId">{{ outletname }}</option>
                 </Select>
             </div>
             

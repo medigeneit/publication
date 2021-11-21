@@ -31,7 +31,7 @@ class SaleController extends Controller
     {
         return Inertia::render('Sale/Create', [
             'sale' => new Sale(),
-            'outlets' => Outlet::pluck('name', 'id')
+            'outlets' => Outlet::active()->pluck('name', 'id')
         ]);
     }
 
@@ -60,6 +60,7 @@ class SaleController extends Controller
     {
         return Inertia::render('Sale/Edit', [
             'sale' => $sale,
+            'outlets' => Outlet::active()->pluck('name', 'id')
         ]);
     }
 

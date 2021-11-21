@@ -33,7 +33,7 @@ class AccountController extends Controller
     {
         return Inertia::render('Account/Create', [
             'account'  => new Account(),
-            'publishers'  => Publisher::pluck('name', 'id'),
+            'publishers'  => Publisher::active()->pluck('name', 'id'),
             'accountType'  => Account::getTypes(),
         ]);
     }
@@ -68,7 +68,7 @@ class AccountController extends Controller
         // return $account;
         return Inertia::render('Account/Edit', [
             'account' => $account,
-            'publishers'  => Publisher::pluck('name', 'id'),
+            'publishers'  => Publisher::active()->pluck('name', 'id'),
             'accountType'  => Account::getTypes(),
         ]);
     }

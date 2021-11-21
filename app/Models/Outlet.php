@@ -15,6 +15,11 @@ class Outlet extends Model
 
     protected $guarded = [];
 
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
     public function accounts()
     {
         return $this->morphMany('App\Account', 'accountable');

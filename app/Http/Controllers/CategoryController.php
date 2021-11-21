@@ -29,7 +29,7 @@ class CategoryController extends Controller
     {
         return Inertia::render('Category/Create', [
             'category' => new Category(),
-            'categoryList' => Category::pluck('name', 'id'),
+            'categoryList' => Category::active()->pluck('name', 'id'),
         ]);
     }
 
@@ -57,7 +57,7 @@ class CategoryController extends Controller
     {
         return Inertia::render('Category/Edit', [
             'category' => $category,
-            'categoryList' => Category::pluck('name', 'id'),
+            'categoryList' => Category::active()->pluck('name', 'id'),
         ]);
     }
 
