@@ -32,7 +32,7 @@
                 <td class="py-3 px-2 text-left">{{ product.wholesaleRate }}</td>
                 <td class="py-3 px-2 text-left">{{ product.retailRate }}</td>
                 <td class="py-3 px-2 text-left">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-red-500': product.storages <= product.alertQuantity, 'bg-green-500': !(product.storages <= product.alertQuantity)  }">
+                    <span class="py-1 px-3 rounded-full text-white font-bold bg-gray-500">
                         {{ product.alertQuantity }}
                     </span>
                 </td>
