@@ -133,15 +133,23 @@ class ProductController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            'name'              => ['required'],
-            'type'              => ['required'],
-            'publisher_id'      => ['required'],
-            'production_cost'   => ['required'],
-            'mrp'               => ['required'],
-            'wholesale_rate'    => ['required'],
-            'retail_rate'       => ['required'],
-            'alert_quantity'    => '',
-            'active'            => ['required'],
+            'name'                  => ['required'],
+            'type'                  => ['required'],
+            'publisher_id'          => ['required'],
+            'production_cost'       => ['required'],
+            'mrp'                   => ['required'],
+            'wholesale_price'       => ['required'],
+            'retail_price'          => ['required'],
+            'distribute_price'      => ['required'],
+            'special_price'         => '',
+            'outside_dhaka_price'   => '',
+            'ecom_distribute_price' => '',
+            'ecom_wholesale_price'  => '',
+            'edition'               => '',
+            'isbn'                  => '',
+            'crl'                   => '',
+            'alert_quantity'        => '',
+            'active'                => ['required'],
 
         ]);
     }

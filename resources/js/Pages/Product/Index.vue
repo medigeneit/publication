@@ -18,6 +18,11 @@
                 <th class="py-3 px-2 text-left">MRP</th>
                 <th class="py-3 px-2 text-left">Wholesale Price</th>
                 <th class="py-3 px-2 text-left">Retail Price</th>
+                <th class="py-3 px-2 text-left">Distribute Price</th>
+                <th class="py-3 px-2 text-left">Special Price</th>
+                <th class="py-3 px-2 text-left">Outside Dhaka Price</th>
+                <th class="py-3 px-2 text-left">Ecom Distribution Price</th>
+                <th class="py-3 px-2 text-left">Ecom Wholesale Price</th>
                 <th class="py-3 px-2 text-left">Alert</th>
                 <th class="py-3 px-2 text-left">Active</th>
                 <th class="py-3 px-2 text-center">Action</th>
@@ -27,10 +32,15 @@
                 <td class="py-3 px-2 text-left">{{ product.name }}</td>
                 <td class="py-3 px-2 text-left">{{ product.typeName }}</td>
                 <td class="py-3 px-2 text-left">{{ product.publisherName ?? '' }}</td>
-                <td class="py-3 px-2 text-left">{{ product.productionCost }}%</td>
+                <td class="py-3 px-2 text-left">{{ product.productionCost }}</td>
                 <td class="py-3 px-2 text-left">{{ product.mrp }}</td>
-                <td class="py-3 px-2 text-left">{{ product.wholesaleRate }}</td>
-                <td class="py-3 px-2 text-left">{{ product.retailRate }}</td>
+                <td class="py-3 px-2 text-left">{{ product.wholesalePrice }}</td>
+                <td class="py-3 px-2 text-left">{{ product.retailPrice }}</td>
+                <td class="py-3 px-2 text-left">{{ product.distributePrice }}</td>
+                <td class="py-3 px-2 text-left">{{ product.specialPrice }}</td>
+                <td class="py-3 px-2 text-left">{{ product.outsideDhakaPrice }}</td>
+                <td class="py-3 px-2 text-left">{{ product.ecomDistributePrice }}</td>
+                <td class="py-3 px-2 text-left">{{ product.ecomWholesalePrice }}</td>
                 <td class="py-3 px-2 text-left">
                     <!-- <span class="py-1 px-3 rounded-full text-white font-bold bg-gray-500"> -->
                         {{ product.alertQuantity }}
