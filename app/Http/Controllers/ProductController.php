@@ -42,6 +42,7 @@ class ProductController extends Controller
         return Inertia::render('Product/Create', [
             'product' => new Product(),
             'publisherList' => Publisher::active()->pluck('name', 'id'),
+            'productList' => Product::pluck('name', 'id'),
             'categoryList' => Category::active()->pluck('name', 'id'),
             'productType'  => Product::getTypes(),
         ]);
