@@ -1,5 +1,5 @@
 <template>
-    <Head title="distributor" />
+    <Head title="Distributor" />
 
     <app-layout>
         <template #header>
