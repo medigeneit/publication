@@ -1,9 +1,9 @@
 <template>
-    <Head title="outlet" />
+    <Head title="distributor" />
 
     <app-layout>
         <template #header>
-            Create outlet
+            Create Distributor
         </template>
         
         <form-component :data="{distribution, distributionType}"  module-action="store" />

@@ -1,12 +1,12 @@
 <template>
-    <Head title="Outlet" />
+    <Head title="distributor" />
 
     <app-layout>
         <template #header>
-            Edit Outlet
+            Edit Distributor
         </template>
         
-        <form-component :outlet="outlet" :outletType="outletType" module-action="update" />
+        <form-component :data="{ distribution, distributionType }" module-action="update" />
     </app-layout>
 </template>
 
@@ -24,8 +24,8 @@ export default {
     },
 
     props: {
-        outlet: { type: Object, default: {} },
-        outletType: { type: Object, default: {} },
+        distribution: { type: Object, default: {} },
+        distributionType : {type: Object, default: {}},
     },
 };
 </script>

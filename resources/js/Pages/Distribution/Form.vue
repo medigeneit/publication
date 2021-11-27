@@ -82,8 +82,8 @@ export default {
                 address: this.data.distribution.address,
                 phone: this.data.distribution.phone,
                 email: this.data.distribution.email,
-                type: this.data.distributionType.type || 0,
-                active: this.moduleAction == 'store' ? 1 : this.distribution.active,
+                type: this.data.distribution.type || 0,
+                active: this.moduleAction == 'store' ? 1 : this.data.distribution.active,
             })
         }
     },    
@@ -95,7 +95,7 @@ export default {
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('distributions.update', this.distribution.id));
+                return this.form.put(this.route('distributions.update', this.data.distribution.id));
             }
         }
     }

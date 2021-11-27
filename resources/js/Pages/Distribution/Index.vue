@@ -1,9 +1,9 @@
 <template>
-    <Head title="Outlet" />
+    <Head title="distributor" />
 
     <app-layout>
         <template #header>
-            Outlet List
+            Distributor List
         </template>
 
         <add-new-button :href="route('distributions.create')" />
@@ -15,6 +15,7 @@
                 <th class="py-3 px-2 text-center">Address</th>
                 <th class="py-3 px-2 text-center">Phone</th>
                 <th class="py-3 px-2 text-center">Email</th>
+                <th class="py-3 px-2 text-center">Type</th>
                 <th class="py-3 px-2 text-center">Active</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template>
@@ -24,6 +25,7 @@
                 <td class="py-3 px-2 text-center">{{ distribution.address }}</td>
                 <td class="py-3 px-2 text-center">{{ distribution.phone }}</td>
                 <td class="py-3 px-2 text-center">{{ distribution.email }}</td>
+                <td class="py-3 px-2 text-center">{{ distribution.typeName }}</td>
                 <td class="py-3 px-2 text-center">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': distribution.active, 'bg-red-500': !distribution.active }">
                         {{ distribution.activeValue }}
