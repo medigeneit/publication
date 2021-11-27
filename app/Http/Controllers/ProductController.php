@@ -74,6 +74,7 @@ class ProductController extends Controller
             'product' => $product,
             'productCategories' => $product->categories,
             'publisherList' => Publisher::active()->pluck('name', 'id'),
+            'productList' => Product::pluck('name', 'id'),
             'categoryList' => Category::active()->pluck('name', 'id'),
             'productType'  => Product::getTypes(),
         ]);

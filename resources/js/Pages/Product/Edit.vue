@@ -36,6 +36,10 @@ export default {
             type: Object,
             default: {}
         },
+        productList: {
+            type: Object,
+            default: {}
+        },
         // categoryList: {
         //     type: Object,
         //     default: {}
