@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PublisherController;
@@ -50,6 +51,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'publishers'    => PublisherController::class,
         'sales'         => SaleController::class,
         'outlets'       => OutletController::class,
+        'distributions' => DistributionController::class,
         'storages'      => StorageController::class,
         'accounts'      => AccountController::class
     ]);

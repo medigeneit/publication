@@ -23,13 +23,19 @@
     <nav-link :href="route('outlets.index')" :active="route().current('outlets.*')">
         Outlets
     </nav-link>
+
+    <nav-link :href="route('distributions.index')" :active="route().current('distributions.*')">
+        Distributions
+    </nav-link>
     
     <nav-link :href="route('sales.index')" :active="route().current('sales.*')">
         Sales
     </nav-link>
+
     <nav-link :href="route('storages.index')" :active="route().current('storages.*')">
         Storages
     </nav-link>
+
     <nav-link :href="route('accounts.index')" :active="route().current('accounts.*')">
         Account
     </nav-link>
