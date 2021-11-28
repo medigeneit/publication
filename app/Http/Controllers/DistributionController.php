@@ -95,7 +95,13 @@ class DistributionController extends Controller
 
     protected function filter()
     {
-        $this->getQuery();
+        $this->getQuery()
+            ->when(request()->type, function($query) {
+                $query->where('type', request()->type);
+            })
+            ->when(isset(request()->active), function($query) {
+                $query->where('active', request()->active);
+            });
 
         return $this;
     }
@@ -103,7 +109,8 @@ class DistributionController extends Controller
     protected function getFilterProperty()
     {
         return [
-            //
+            'type'      => Distribution::getTypes(),
+            'active'    => Distribution::getActiveProperties(),
         ];
     }
 

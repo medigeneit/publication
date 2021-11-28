@@ -117,7 +117,7 @@ class ProductController extends Controller
             ->when(request()->type, function($query) {
                 $query->where('type', request()->type);
             })
-            ->when(request()->active, function($query) {
+            ->when(isset(request()->active), function($query) {
                 $query->where('active', request()->active);
             });
 

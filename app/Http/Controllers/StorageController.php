@@ -63,6 +63,8 @@ class StorageController extends Controller
     {
         return Inertia::render('Storage/Edit', [
             'storage' => $storage,
+            'outlets'   => Outlet::pluck('name', 'id'),
+            'products'  => Product::pluck('name', 'id'),
         ]);
     }
 

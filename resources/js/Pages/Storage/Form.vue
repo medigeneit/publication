@@ -89,7 +89,7 @@ export default {
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('storages.update', this.storage.id));
+                return this.form.put(this.route('storages.update', this.data.storage.id));
             }
         }
     }
