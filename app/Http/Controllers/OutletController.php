@@ -30,6 +30,7 @@ class OutletController extends Controller
     {
         return Inertia::render('Outlet/Create', [
             'outlet' => new Outlet(),
+            'outletType'  => Outlet::getTypes(),
         ]);
     }
 
@@ -58,6 +59,7 @@ class OutletController extends Controller
     {
         return Inertia::render('Outlet/Edit', [
             'outlet' => $outlet,
+            'outletType'  => Outlet::getTypes(),
         ]);
     }
 
@@ -112,6 +114,7 @@ class OutletController extends Controller
             'address'   => ['required'],
             'phone'     => ['required'],
             'email'     => ['required'],
+            'type'      => ['required'],
             'active'    => ['required'],
         ]);
     }

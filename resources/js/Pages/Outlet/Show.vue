@@ -14,13 +14,15 @@
 
                 <show-table-row heading="Name">{{ outlet.name }}</show-table-row>
 
-                <show-table-row heading="Name">{{ outlet.address }}</show-table-row>
+                <show-table-row heading="Address">{{ outlet.address }}</show-table-row>
 
-                <show-table-row heading="Name">{{ outlet.phone }}</show-table-row>
+                <show-table-row heading="Phone">{{ outlet.phone }}</show-table-row>
 
-                <show-table-row heading="Name">{{ outlet.email }}</show-table-row>
+                <show-table-row heading="Email">{{ outlet.email }}</show-table-row>
 
-                <show-table-row heading="Name">
+                <show-table-row heading="Type">{{ outlet.typeName }}</show-table-row>
+
+                <show-table-row heading="Active">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': outlet.active, 'bg-red-500': !outlet.active }">
                         {{ outlet.activeValue }}
                     </span>

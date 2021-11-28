@@ -15,6 +15,7 @@
                 <th class="py-3 px-2 text-center">Address</th>
                 <th class="py-3 px-2 text-center">Phone</th>
                 <th class="py-3 px-2 text-center">Email</th>
+                <th class="py-3 px-2 text-center">Type</th>
                 <th class="py-3 px-2 text-center">Active</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template>
@@ -24,6 +25,7 @@
                 <td class="py-3 px-2 text-center">{{ outlet.address }}</td>
                 <td class="py-3 px-2 text-center">{{ outlet.phone }}</td>
                 <td class="py-3 px-2 text-center">{{ outlet.email }}</td>
+                <td class="py-3 px-2 text-center">{{ outlet.typeName }}</td>
                 <td class="py-3 px-2 text-center">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': outlet.active, 'bg-red-500': !outlet.active }">
                         {{ outlet.activeValue }}
