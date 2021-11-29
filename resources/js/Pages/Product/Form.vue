@@ -76,14 +76,19 @@
                     <Input id="crl" name="crl" type="text" step="0.01" class="mt-1 block w-full" v-model="form.crl" />
                 </div>
 
+                <div class="mb-4">
+                    <Label for="production_cost" value="Production Cost" />
+                    <Input id="production_cost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.production_cost" required />
+                </div>
+
                 <div class="mb-4 col-start-1">
                     <Label for="mrp" value="MRP ." />
                     <Input id="mrp" name="mrp" type="number" step="0.01" class="mt-1 block w-full" v-model="form.mrp" required />
                 </div>
 
                 <div class="mb-4">
-                    <Label for="production_cost" value="Production Cost" />
-                    <Input id="production_cost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.production_cost" required />
+                    <Label for="distribute_price" value="Distribute Price" />
+                    <Input id="distribute_price" name="distribute_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.distribute_price" required />
                 </div>
 
                 <div class="mb-4">
@@ -94,11 +99,6 @@
                 <div class="mb-4">
                     <Label for="retail_price" value="Retail Price" />
                     <Input id="retail_price" name="retail_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.retail_price" required />
-                </div>
-
-                <div class="mb-4">
-                    <Label for="distribute_price" value="Distribute Price" />
-                    <Input id="distribute_price" name="distribute_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.distribute_price" required />
                 </div>
 
                 <div class="mb-4">
