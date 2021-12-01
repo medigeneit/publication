@@ -38,7 +38,7 @@
                     </Select>
                 </div>
 
-                <!-- <div class="mb-4">
+                <div class="mb-4">
                     <Label for="category_id" value="Category" />
                     <Select id="category_id" class="mt-1 block w-full" v-model="form.category_id">
                         <option value="0"> -- Select Category -- </option>
@@ -46,7 +46,7 @@
                             {{ categoryName }}
                         </option>
                     </Select>
-                </div> -->
+                </div>
 
                 <div class="mb-4">
                     <Label for="alert_quantity" value="Alert Quantity" />
@@ -173,7 +173,7 @@ export default {
                 type: this.data.product.type || 0,
                 publisher_id: this.data.product.publisher_id || 0,
                 product_id: this.data.product.id || 0,
-                // category_id: this.data.product.category_id || 0,
+                category_id: this.data.categoryProduct || 0,
                 production_cost: this.data.product.production_cost,
                 mrp: this.data.product.mrp,
                 wholesale_price: this.data.product.wholesale_price,

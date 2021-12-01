@@ -44,6 +44,7 @@ class ProductController extends Controller
             'publisherList' => Publisher::active()->pluck('name', 'id'),
             'productList' => Product::pluck('name', 'id'),
             'categoryList' => Category::active()->pluck('name', 'id'),
+            'categoryProduct' => new CategoryProduct,
             'productType'  => Product::getTypes(),
         ]);
     }
@@ -53,6 +54,8 @@ class ProductController extends Controller
         $product = Product::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
+
+        $this->categpryInsert($request, $product);
 
         return redirect()
             ->route('products.show', $product->id)
@@ -71,12 +74,13 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return Inertia::render('Product/Edit', [
-            'product' => $product,
-            'productCategories' => $product->categories,
-            'publisherList' => Publisher::active()->pluck('name', 'id'),
-            'productList' => Product::pluck('name', 'id'),
-            'categoryList' => Category::active()->pluck('name', 'id'),
-            'productType'  => Product::getTypes(),
+            'product'               => $product,
+            'productCategories'     => $product->categories,
+            'publisherList'         => Publisher::active()->pluck('name', 'id'),
+            'productList'           => Product::pluck('name', 'id'),
+            'categoryList'          => Category::active()->pluck('name', 'id'),
+            'categoryProduct'       => CategoryProduct::where('product_id', $product->id)->pluck('category_id'),
+            'productType'           => Product::getTypes(),
         ]);
     }
 
@@ -84,10 +88,29 @@ class ProductController extends Controller
     {
 
         $product->update($this->validateData($request, $product->id));
+        
+        $this->categoryInsert($request, $product);
 
         return redirect()
             ->route('products.show', $product->id)
             ->with('status', 'The record has been update successfully.');
+    }
+
+    protected function categpryInsert($request, $product)
+    {
+        if($request->category_id) {
+            
+            CategoryProduct::where(['product_id' => $product->id])->delete();
+
+
+            CategoryProduct::withTrashed()->updateOrCreate(
+                ['product_id'       => $product->id],
+                [   
+                    'category_id'   => $request->category_id,
+                    'deleted_at'    => null
+                ]
+            );
+        }
     }
 
     public function destroy(Product $product)

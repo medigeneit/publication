@@ -19,6 +19,7 @@ class ProductResource extends JsonResource
             'name'                  => (string) ($this->name ?? ''),
             'type'                  => (int) ($this->type ?? 0),
             'typeName'              => (string) ($this->value_of_type ?? ''),
+            'categoryName'          => (string) ($this->category_product->category->name ?? ''),
             'publisherId'           => (int) ($this->publisher_id ?? 0),
             'publisherName'         => (string) ($this->publisher->name ?? ''),
             'productionCost'        => (float) ($this->production_cost ?? 0),

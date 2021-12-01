@@ -36,4 +36,9 @@ class Product extends Model
     {
         return $this->hasMany(Storage::class);
     }
+
+    public function category_product()
+    {
+        return $this->hasOne(CategoryProduct::class, 'product_id');
+    }
 }
