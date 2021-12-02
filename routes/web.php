@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountCategoryController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
@@ -43,15 +44,16 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::resources([
-        'users'         => UserController::class,
-        'categories'    => CategoryController::class,
-        'authors'       => AuthorController::class,
-        'products'      => ProductController::class,
-        'publishers'    => PublisherController::class,
-        'sales'         => SaleController::class,
-        'outlets'       => OutletController::class,
-        'distributions' => DistributionController::class,
-        'storages'      => StorageController::class,
-        'accounts'      => AccountController::class
+        'users'                     => UserController::class,
+        'categories'                => CategoryController::class,
+        'authors'                   => AuthorController::class,
+        'products'                  => ProductController::class,
+        'publishers'                => PublisherController::class,
+        'sales'                     => SaleController::class,
+        'outlets'                   => OutletController::class,
+        'distributions'             => DistributionController::class,
+        'storages'                  => StorageController::class,
+        'account-categories'        => AccountCategoryController::class,
+        'accounts'                  => AccountController::class
     ]);
 });

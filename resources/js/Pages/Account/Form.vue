@@ -7,10 +7,27 @@
             <div class="mb-4">
                 <Label for="publisher" value="Publisher" />
                 <Select id="publisher" class="mt-1 block w-full" v-model="form.publisher_id">
-                    <option value="0">--Select --</option>
+                    <option value="">--Select --</option>
                     <option :value="publisherId" v-for="publisherName, publisherId in data.publishers" :key="publisherId">{{ publisherName }}</option>
                 </Select>
             </div>
+
+            <div class="mb-4">
+                <Label for="type" value="Type" />
+                <Select name="type" class="mt-1 block w-full" v-model="form.type" required @change="accountCategoryHandler">
+                     <option value=""> -- Select Type -- </option>
+                    <option :value="type" v-for="(typeName, type) in data.accountType" :key="type">{{ typeName }}</option>
+                </Select>
+            </div>
+
+            <div class="mb-4">
+                <Label for="account_category" value="Category" />
+                <Select name="account_category" class="mt-1 block w-full" v-model="form.account_category_id" required>
+                    <option value=""> -- Select Category -- </option>
+                    <option :value="type" v-for="(typeName, type) in accountCategoryList" :key="type">{{ typeName }}</option>
+                </Select>
+            </div>
+
             <div class="mb-4">
                 <Label for="purpose" value="Purpose"/>
                 <Textarea name="purpose" type="text" class="mt-1 block w-full" v-model="form.purpose" />
@@ -21,13 +38,6 @@
                 <Input name="amount" type="number" class="mt-1 block w-full" v-model="form.amount"/>
             </div>
 
-            <div class="mb-4">
-                <Label for="type" value="Type" />
-                <Select name="type" class="mt-1 block w-full" v-model="form.type" required>
-                     <option value="0"> -- Select Type -- </option>
-                    <option :value="type" v-for="(typeName, type) in data.accountType" :key="type">{{ typeName }}</option>
-                </Select>
-            </div>
             <hr class="w-full my-4">
             
             <div class="flex items-center justify-between">
@@ -74,15 +84,21 @@ export default {
         },
     },
 
+    created() {
+        this.accountCategoryHandler();
+    },
+
     data() {
         return {
             form: this.$inertia.form({
-                publisher_id: this.moduleAction == 'store' ? 0 : this.data.account.accountable_id,
+                publisher_id: this.moduleAction == 'store' ? '' : this.data.account.accountable_id,
                 purpose: this.data.account.purpose,
                 amount: this.data.account.amount,
-                type: this.data.account.type || 0,
-
-            })
+                type: this.data.account.type || '',
+                account_category_id: this.moduleAction == 'store' ? '' : this.data.account.account_category_id
+            }),
+            // accountCategoryList: this.data.account.type == 1 ? this.data.incomeCategoryList : this.moduleAction == 'store' ? {}
+            accountCategoryList: {},
         }
     },
 
@@ -94,6 +110,19 @@ export default {
 
             if(this.moduleAction == 'update') {
                 return this.form.put(this.route('accounts.update', this.data.account.id));
+            }
+        },
+        accountCategoryHandler() {
+            const type = parseInt(this.form.type);
+            console.log(typeof type)
+            this.accountCategoryList = {};
+
+            if(type === 1) {
+                this.accountCategoryList = this.data.incomeCategoryList;
+            }
+
+            if(type === 2) {
+                this.accountCategoryList = this.data.expenseCategoryList;
             }
         }
     }

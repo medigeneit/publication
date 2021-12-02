@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
+use App\Models\AccountCategory;
 use App\Models\Outlet;
 use App\Models\Publisher;
 use App\Traits\DateFilter;
@@ -35,6 +36,8 @@ class AccountController extends Controller
             'account'  => new Account(),
             'publishers'  => Publisher::active()->pluck('name', 'id'),
             'accountType'  => Account::getTypes(),
+            'incomeCategoryList' => AccountCategory::where('type', 1)->pluck('name', 'id'),
+            'expenseCategoryList' => AccountCategory::where('type', 2)->pluck('name', 'id'),
         ]);
     }
 
@@ -70,16 +73,17 @@ class AccountController extends Controller
             'account' => $account,
             'publishers'  => Publisher::active()->pluck('name', 'id'),
             'accountType'  => Account::getTypes(),
+            'incomeCategoryList' => AccountCategory::where('type', 1)->pluck('name', 'id'),
+            'expenseCategoryList' => AccountCategory::where('type', 2)->pluck('name', 'id'),
         ]);
     }
 
     public function update(Request $request, Account $account)
     {
-        $publisher = Publisher::findOrFail($request->publisher_id);
 
-        $account = $publisher->accounts()->create($this->validateData($request, $account->id));
-
-        // $account->update($this->validateData($request, $account->id));
+        $account->update($this->validateData($request, $account->id) + [
+            'accountable_id' => $request->publisher_id
+        ]);
 
         return redirect()
             ->route('accounts.show', $account->id)
@@ -124,9 +128,10 @@ class AccountController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            'purpose'       => ['required'],
-            'amount'        => ['required'],
-            'type'          => ['required']
+            'purpose'               => ['required'],
+            'amount'                => ['required'],
+            'type'                  => ['required'],
+            'account_category_id'   => ['required'],
         ]);
     }
 }

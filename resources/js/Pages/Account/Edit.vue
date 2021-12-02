@@ -29,6 +29,8 @@ export default {
                 account: this.account,
                 publishers: this.publishers,
                 accountType: this.accountType,
+                incomeCategoryList: this.incomeCategoryList,
+                expenseCategoryList: this.expenseCategoryList,
             }
         }
     },
@@ -43,6 +45,14 @@ export default {
             default: {}
         },
          accountType: { 
+            type: Object, 
+            default: {} 
+        },
+        incomeCategoryList: { 
+            type: Object, 
+            default: {} 
+        },
+        expenseCategoryList: { 
             type: Object, 
             default: {} 
         },

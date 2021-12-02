@@ -36,6 +36,10 @@
         Storages
     </nav-link>
 
+    <nav-link :href="route('account-categories.index')" :active="route().current('account-categories.*')">
+        Account Category
+    </nav-link>
+
     <nav-link :href="route('accounts.index')" :active="route().current('accounts.*')">
         Account
     </nav-link>
