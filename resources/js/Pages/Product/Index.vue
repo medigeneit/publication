@@ -13,6 +13,7 @@
                 <th class="py-3 px-2 text-left">ID</th>
                 <th class="py-3 px-2 text-left">Name</th>
                 <th class="py-3 px-2 text-left">Type</th>
+                <th class="py-3 px-2 text-left">Category</th>
                 <th class="py-3 px-2 text-left">Publisher Name</th>
                 <th class="py-3 px-2 text-left">Production Cost</th>
                 <th class="py-3 px-2 text-left">MRP</th>
@@ -31,6 +32,7 @@
                 <td class="py-3 px-2 text-left">{{ product.id }}</td>
                 <td class="py-3 px-2 text-left">{{ product.name }}</td>
                 <td class="py-3 px-2 text-left">{{ product.typeName }}</td>
+                <td class="py-3 px-2 text-left">{{ product.categoryName }}</td>
                 <td class="py-3 px-2 text-left">{{ product.publisherName ?? '' }}</td>
                 <td class="py-3 px-2 text-left">{{ product.productionCost }}</td>
                 <td class="py-3 px-2 text-left">{{ product.mrp }}</td>
