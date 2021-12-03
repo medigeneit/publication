@@ -17,6 +17,16 @@ class Category extends Model
     {
         return $query->where('active', 1);
     }
+
+    public function scopeMainCategory($query)
+    {
+        return $query->where('parent_id', 0);
+    }
+
+    public function subcategories()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
     
     public function parent()
     {

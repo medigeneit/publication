@@ -19,10 +19,24 @@ class CategoryController extends Controller
             ->search()->filter()
             ->getQuery();
 
+        if(request()->view == 'tree') {
+            // return
+            $categories = Category::query()->with('subcategories.subcategories.subcategories.subcategories')->mainCategory()->get();
+            
+            return Inertia::render('Category/Tree', [
+                'categories' => $categories,
+            ]);
+        }
+
         return Inertia::render('Category/Index', [
             'categories' => CategoryResource::collection($categories->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
+    }
+
+    private function checkSubcategories($category)
+    {
+        return $category->subcategories->count();
     }
 
     public function create()

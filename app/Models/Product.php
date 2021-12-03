@@ -44,6 +44,6 @@ class Product extends Model
 
     public function categories()
     {
-        return $this->belongsToMany('App\Category')->whereNull('deleted_at');
+        return $this->belongsToMany(Category::class)->whereNull('deleted_at');
     }
 }
