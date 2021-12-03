@@ -55,7 +55,15 @@ class ProductController extends Controller
             'user_id' => Auth::id()
         ]);
 
-        $this->categpryInsert($request, $product);
+        return $request->category_id;
+        // $this->categoryInsert($request, $product);
+        if($request->category_id) {
+            CategoryProduct::where(['product_id' => $product->id])->delete();
+    
+            foreach ($request->category_id as $category_id) {
+                $this->saveCategory($product->id, $category_id);
+            }
+        }
 
         return redirect()
             ->route('products.show', $product->id)
@@ -96,7 +104,16 @@ class ProductController extends Controller
             ->with('status', 'The record has been update successfully.');
     }
 
-    protected function categpryInsert($request, $product)
+    
+    private function saveCategory($id, $category_id)
+    {
+        CategoryProduct::onlyTrashed()->updateOrCreate(
+            ['product_id' => $id],
+            ['category_id' => $category_id, 'deleted_at' => null]
+        );
+    }
+
+    protected function categoryInsert($request, $product)
     {
         if($request->category_id) {
             

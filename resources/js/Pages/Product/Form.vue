@@ -8,7 +8,7 @@
                 <div class="mb-4 col-span-2">
                     <Label for="type" value="Type" />
                     <Select name="type" class="mt-1 block w-full" @change="typeChange(parseInt(form.type))" v-model="form.type" required>
-                        <option value="0"> -- Select Type -- </option>
+                        <option value=""> -- Select Type -- </option>
                         <option :value="type" v-for="(typeName, type) in data.productType" :key="type">{{ typeName }}</option>
                     </Select>
                 </div>
@@ -21,7 +21,7 @@
                 <div class="mb-4 col-span-2" id="publisherWrapper">
                     <Label for="publisher_id" value="Publisher Name" />
                     <Select id="publisher_id" class="mt-1 block w-full" v-model="form.publisher_id">
-                        <option value="0"> -- Select Publisher -- </option>
+                        <option value=""> -- Select Publisher -- </option>
                         <option :value="publisherId" v-for="(publisherName, publisherId) in data.publisherList" :key="publisherId">
                             {{ publisherName }}
                         </option>
@@ -31,7 +31,7 @@
                 <div class="mb-4 hidden col-span-2" id="productWrapper">
                     <Label for="product_id" value="Product Name" />
                     <Select id="product_id" class="mt-1 block w-full" v-model="form.product_id">
-                        <option value="0"> -- Select Product -- </option>
+                        <option value=""> -- Select Product -- </option>
                         <option :value="productId" v-for="(productName, productId) in data.productList" :key="productId">
                             {{ productName }}
                         </option>
@@ -40,8 +40,8 @@
 
                 <div class="mb-4">
                     <Label for="category_id" value="Category" />
-                    <Select id="category_id" class="mt-1 block w-full" v-model="form.category_id">
-                        <option value="0"> -- Select Category -- </option>
+                    <Select id="category_id" class="mt-1 block w-full" v-model="form.category_id" multiple>
+                        <option value=""> -- Select Category -- </option>
                         <option :value="categoryId" v-for="(categoryName, categoryId) in data.categoryList" :key="categoryId">
                             {{ categoryName }}
                         </option>
@@ -170,10 +170,10 @@ export default {
         return {
             form: this.$inertia.form({
                 name: this.data.product.name,
-                type: this.data.product.type || 0,
-                publisher_id: this.data.product.publisher_id || 0,
-                product_id: this.data.product.id || 0,
-                category_id: this.data.categoryProduct || 0,
+                type: this.data.product.type || '',
+                publisher_id: this.data.product.publisher_id || '',
+                product_id: this.data.product.id || '',
+                category_id: this.data.categoryList.id || '',
                 production_cost: this.data.product.production_cost,
                 mrp: this.data.product.mrp,
                 wholesale_price: this.data.product.wholesale_price,
@@ -209,6 +209,7 @@ export default {
 
         submit() {
             if(this.moduleAction == 'store') {
+                console.log(this.data.categoryList.id)
                 return this.form.post(this.route('products.store'));
             }
 

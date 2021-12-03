@@ -27,4 +27,8 @@ class Category extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function products(){
+        return $this->belongsToMany(Product::class)->whereNull('category_product.deleted_at');
+    }
 }
