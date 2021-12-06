@@ -89,6 +89,8 @@ class ProductController extends Controller
             'publisherList'         => Publisher::active()->pluck('name', 'id'),
             'productList'           => Product::pluck('name', 'id'),
             'categoryList'          => Category::active()->pluck('name', 'id'),
+            'category_ids'          => $product->categories()->get()->pluck('id')->toArray(),
+            'categories'            => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
             'categoryProduct'       => CategoryProduct::where('product_id', $product->id)->pluck('category_id'),
             'productType'           => Product::getTypes(),
         ]);
@@ -96,7 +98,6 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-
         $product->update($this->validateData($request, $product->id));
         
         $this->categoryInsert($request, $product);
@@ -117,18 +118,20 @@ class ProductController extends Controller
 
     protected function categoryInsert($request, $product)
     {
-        if($request->category_id) {
-            
-            CategoryProduct::where(['product_id' => $product->id])->delete();
-
-
-            CategoryProduct::withTrashed()->updateOrCreate(
-                ['product_id'       => $product->id],
-                [   
-                    'category_id'   => $request->category_id,
-                    'deleted_at'    => null
-                ]
-            );
+        CategoryProduct::where(['product_id' => $product->id])->delete();
+        
+        if(is_array($request->category_ids)) {
+            foreach($request->category_ids as $category_id) {
+                CategoryProduct::onlyTrashed()->updateOrCreate(
+                    [
+                        'product_id' => $product->id
+                    ],
+                    [   
+                        'category_id'   => $category_id,
+                        'deleted_at'    => null
+                    ]
+                );
+            }
         }
     }
 

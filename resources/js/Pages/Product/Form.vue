@@ -1,6 +1,6 @@
 <template>
-    <div class="grid grid-cols-2">
-        <div class="w-full max-w-2xl mx-auto p-4 bg-white border shadow rounded">
+    <div class="w-full flex gap-4">
+        <div class="w-full max-w-2xl p-4 bg-white border shadow rounded">
 
             <ValidationErrors class="mb-4" />
 
@@ -142,15 +142,65 @@
                 </div>
             </form>
         </div>
-        <div class="w-full max-w-2xl mx-auto p-4 bg-white border shadow rounded hidden" id="addMoreCategory">
-            <div class="mb-4 w-full">
-                    <Label for="alert_quantity" value="Category List" />
-                    <div class="border-2" :value="categoryId" v-for="(categoryName, categoryId) in data.categoryList" :key="categoryId">
-                        <button class="p-2">
-                            {{ categoryName }}
-                        </button>
-                        <span class="float-right pr-3" style="cursor: pointer" @click="clickCheck"> &check; </span>
-                    </div>    
+        <div class="w-full max-w-2xl" v-if="!categoryShow">
+            <div class="mb-4 w-full bg-white border shadow rounded">
+                <div class="px-4 py-3 text-lg font-bold">Category &amp; Subcategory</div>
+                <hr>
+                <div class="p-4">
+                    <ul class="">
+                        <li v-for="(category, index) in data.categories" :key="index" class="my-1 relative">
+                            <div class="parent flex items-center gap-1 shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(category.id), 'bg-white' : form.category_ids.includes(category.id) }" draggable="true" >
+                                <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700 cursor-pointer transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                                </svg>
+                                <div class="w-full flex justify-between items-center">
+                                    <div class="">{{ category.name }}</div>
+                                    <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(category.id)" :checked="form.category_ids.includes(category.id)" />
+                                </div>
+                            </div>
+                            <ul class="ml-4 md:ml-8 relative">
+                                <li v-for="(subcategory, index) in category.subcategories" :key="index" class="my-1 relative">
+                                    <div class="parent flex items-center gap-1 bg-white shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(subcategory.id), 'bg-white' : form.category_ids.includes(subcategory.id) }" draggable="true">
+                                        <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700 cursor-pointer transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                                        </svg>
+                                        <div class="w-full flex justify-between items-center">
+                                            <div class="">{{ subcategory.name }}</div>
+                                            <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(subcategory.id)" :checked="form.category_ids.includes(subcategory.id)" />
+                                        </div>
+                                    </div>
+                                    <ul class="ml-4 md:ml-8 relative">
+                                        <li v-for="(subcategory, index) in subcategory.subcategories" :key="index" class="my-1 relative">
+                                            <div class="parent flex items-center gap-1 bg-white shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(subcategory.id), 'bg-white' : form.category_ids.includes(subcategory.id) }" draggable="true">
+                                                <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700 cursor-pointer transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                                                </svg>
+                                                <div class="w-full flex justify-between items-center">
+                                                    <div class="">{{ subcategory.name }}</div>
+                                                    <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(subcategory.id)" :checked="form.category_ids.includes(subcategory.id)" />
+                                                </div>
+                                            </div>
+                                            <ul class="ml-4 md:ml-8 relative">
+                                                <li v-for="(subcategory, index) in subcategory.subcategories" :key="index" class="my-1 relative">
+                                                    <div class="w-full flex justify-between items-center gap-1 bg-white shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(subcategory.id), 'bg-white' : form.category_ids.includes(subcategory.id) }" draggable="true">
+                                                        <div>{{ subcategory.name }}</div>
+                                                        <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(subcategory.id)" :checked="form.category_ids.includes(subcategory.id)" />
+                                                    </div>
+                                                    <div class="absolute -left-2 md:-left-4 w-2 md:w-4 h-7 -top-1 border-l-2 border-b-2 rounded-bl-3xl"></div>
+                                                </li>
+                                                <div class="absolute -left-2 md:-left-4 -top-1 bottom-11 border-l-2"></div>
+                                            </ul>
+                                            <div class="absolute -left-2 md:-left-4 w-2 md:w-4 h-7 -top-1 border-l-2 border-b-2 rounded-bl-3xl"></div>
+                                        </li>
+                                        <div class="absolute -left-2 md:-left-4 -top-1 bottom-11 border-l-2"></div>
+                                    </ul>
+                                    <div class="absolute -left-2 md:-left-4 w-2 md:w-4 h-7 -top-1 border-l-2 border-b-2 rounded-bl-3xl"></div>
+                                </li>
+                                <div class="absolute -left-2 md:-left-4 -top-1 bottom-11 border-l-2"></div>
+                            </ul>
+                        </li>
+                    </ul>    
+                </div>    
             </div>
         </div>
     </div>
@@ -207,8 +257,10 @@ export default {
                 isbn: this.data.product.isbn,
                 crl: this.data.product.crl,
                 alert_quantity: this.data.product.alert_quantity,
-                active: this.moduleAction == 'store' ? 1 : this.data.product.active
-            })
+                active: this.moduleAction == 'store' ? 1 : this.data.product.active,
+                category_ids: this.data.category_ids || [],
+            }),
+            categoryShow: false,
         }
     },
 
@@ -227,12 +279,8 @@ export default {
             }
         },
 
-        clickCheck() {
-            console.log("clicked")
-        },
-
-        multipleCategory(event) {
-            document.getElementById('addMoreCategory').classList.remove('hidden')
+        multipleCategory() {
+            this.categoryShow = ! this.categoryShow;
         },
 
         submit() {
@@ -243,6 +291,26 @@ export default {
 
             if(this.moduleAction == 'update') {
                 return this.form.put(this.route('products.update', this.data.product.id));
+            }
+        },
+
+        itemClickHandler(event) {
+            const category = event.target.closest('.parent');
+
+            const subcategoryContainer = category.nextElementSibling;
+
+            if(subcategoryContainer) {
+                subcategoryContainer.classList.toggle('hidden');
+            }
+
+            category.firstElementChild.classList.toggle('rotate-180');
+        },
+
+        categorySelectHandler(categoryId) {
+            if (this.form.category_ids.includes(categoryId)) {
+                this.form.category_ids.splice(this.form.category_ids.indexOf(categoryId), 1);
+            } else {
+                this.form.category_ids.push(categoryId);
             }
         }
     }
