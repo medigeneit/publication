@@ -13,7 +13,11 @@
                 <show-table-row heading="ID">{{ product.id }}</show-table-row>
                 <show-table-row heading="Name">{{ product.name }}</show-table-row>
                 <show-table-row heading="Type">{{ product.typeName }}</show-table-row>
-                <show-table-row heading="Category">{{ product.categoryName }}</show-table-row>
+                <show-table-row heading="Category">
+                    <div v-for="(categoryName, index) of categories" :key="index">
+                        {{ categoryName }}
+                    </div>
+                </show-table-row>
                 <show-table-row heading="Publisher Name">{{ product.publisherName ?? '' }}</show-table-row>
                 <show-table-row heading="Product Cost">{{ product.productionCost }}</show-table-row>
                 <show-table-row heading="MRP ">{{ product.mrp }}</show-table-row>
@@ -68,6 +72,7 @@ export default {
     },
     props: {
         product: { type: Object, default: {} },
+        categories: { type: Object, default: {} },
     },
 };
 </script>

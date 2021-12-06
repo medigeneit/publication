@@ -18,12 +18,12 @@
                     <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                 </div>
                 <div class="flex justify-between">
-                    <button class="px-2 py-0.5 border rounded bg-red-600 text-white" @click="openForm = false">Cancle</button>
+                    <button class="px-2 py-0.5 border rounded bg-red-600 text-white" @click="openForm = false">Cancel</button>
                     <button class="px-2 py-0.5 border rounded bg-blue-600 text-white" type="submit">Submit</button>
                 </div>
             </form>
             <ul class="" v-show="!openForm">
-                <button class="px-2 py-0.5 border rounded bg-gray-600 text-white mb-4" @click="addNewCategory">+ Add New Category</button>
+                <button class="px-2 py-0.5 border rounded bg-gray-600 text-white mb-4" @click="addNewCategory(0)">+ Add New Category</button>
                 <li v-for="(category, index) in categories.data" :key="index" class="mb-4 relative">
                     <div class="parent flex gap-1 bg-white shadow rounded border p-2" draggable="true">
                         <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700 cursor-pointer transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">

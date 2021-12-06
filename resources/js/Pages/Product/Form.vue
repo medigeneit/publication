@@ -31,29 +31,16 @@
 
                     <div class="mb-4 hidden col-span-2" id="productWrapper">
                         <Label for="product_id" value="Product Name" />
-                        <Select id="product_id" class="mt-1 block w-full" v-model="form.product_id">
-                            <option value=""> -- Select Product -- </option>
-                            <option :value="productId" v-for="(productName, productId) in data.productList" :key="productId">
-                                {{ productName }}
-                            </option>
-                        </Select>
+                        <button type="button" class="mt-1 block w-full px-3 py-2 border rounded bg-gray-600 text-white" @click="productShow = !productShow">
+                            {{ 0 }} selected | Show Products
+                        </button>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-4 col-span-2">
                         <Label for="category_id" value="Category" />
-                        <div class="flex-col">
-                            <Select id="category_id" class="mt-1 w-full" v-model="form.category_id">
-                                <option value=""> -- Select Category -- </option>
-                                <option :value="categoryId" v-for="(categoryName, categoryId) in data.categoryList" :key="categoryId">
-                                    {{ categoryName }}
-                                </option>
-                            </Select>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="alert_quantity" value="" />
-                        <button type="button" class="px-2 py-0.5 border rounded bg-gray-600 text-white" @click="multipleCategory">+ Add more</button>    
+                        <button type="button" class="mt-1 block w-full px-3 py-2 border rounded bg-gray-600 text-white" @click="categoryShow = !categoryShow">
+                            {{ form.category_ids.length || 0 }} selected | Show Categories
+                        </button>
                     </div>
                     
                     <div class="mb-4">
@@ -142,7 +129,7 @@
                 </div>
             </form>
         </div>
-        <div class="w-full max-w-2xl" v-if="!categoryShow">
+        <div class="w-full max-w-md" v-if="categoryShow">
             <div class="mb-4 w-full bg-white border shadow rounded">
                 <div class="px-4 py-3 text-lg font-bold">Category &amp; Subcategory</div>
                 <hr>
@@ -203,6 +190,15 @@
                 </div>    
             </div>
         </div>
+        <div class="w-full max-w-md" v-if="productShow">
+            <div class="mb-4 w-full bg-white border shadow rounded">
+                <div class="px-4 py-3 text-lg font-bold">Products</div>
+                <hr>
+                <div class="p-4">
+                    Product List  Coming Soon...   
+                </div>    
+            </div>
+        </div>
     </div>
 </template>
 
@@ -243,7 +239,6 @@ export default {
                 type: this.data.product.type || '',
                 publisher_id: this.data.product.publisher_id || '',
                 product_id: this.data.product.id || '',
-                category_id: this.data.categoryList.id || '',
                 production_cost: this.data.product.production_cost,
                 mrp: this.data.product.mrp,
                 wholesale_price: this.data.product.wholesale_price,
@@ -258,9 +253,10 @@ export default {
                 crl: this.data.product.crl,
                 alert_quantity: this.data.product.alert_quantity,
                 active: this.moduleAction == 'store' ? 1 : this.data.product.active,
-                category_ids: this.data.category_ids || [],
+                category_ids: this.data.category_ids || [1, 2, 3],
             }),
             categoryShow: false,
+            productShow: false,
         }
     },
 
@@ -285,7 +281,6 @@ export default {
 
         submit() {
             if(this.moduleAction == 'store') {
-                console.log(this.data.categoryList.id)
                 return this.form.post(this.route('products.store'));
             }
 

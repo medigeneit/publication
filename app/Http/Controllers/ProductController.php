@@ -45,8 +45,7 @@ class ProductController extends Controller
             'product' => new Product(),
             'publisherList' => Publisher::active()->pluck('name', 'id'),
             'productList' => Product::pluck('name', 'id'),
-            'categoryList' => Category::active()->pluck('name', 'id'),
-            'categoryProduct' => new CategoryProduct,
+            'categories'  => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
             'productType'  => Product::getTypes(),
         ]);
     }
@@ -56,16 +55,7 @@ class ProductController extends Controller
         $product = Product::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
-
-        return $request->category_id;
-        // $this->categoryInsert($request, $product);
-        if($request->category_id) {
-            CategoryProduct::where(['product_id' => $product->id])->delete();
-    
-            foreach ($request->category_id as $category_id) {
-                $this->saveCategory($product->id, $category_id);
-            }
-        }
+        $this->categoryInsert($request, $product);
 
         return redirect()
             ->route('products.show', $product->id)
@@ -78,6 +68,7 @@ class ProductController extends Controller
 
         return Inertia::render('Product/Show', [
             'product' => new ProductResource($product),
+            'categories' => $product->categories()->pluck('name')
         ]);
     }
 
@@ -88,10 +79,8 @@ class ProductController extends Controller
             'productCategories'     => $product->categories,
             'publisherList'         => Publisher::active()->pluck('name', 'id'),
             'productList'           => Product::pluck('name', 'id'),
-            'categoryList'          => Category::active()->pluck('name', 'id'),
             'category_ids'          => $product->categories()->get()->pluck('id')->toArray(),
             'categories'            => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
-            'categoryProduct'       => CategoryProduct::where('product_id', $product->id)->pluck('category_id'),
             'productType'           => Product::getTypes(),
         ]);
     }
@@ -105,15 +94,6 @@ class ProductController extends Controller
         return redirect()
             ->route('products.show', $product->id)
             ->with('status', 'The record has been update successfully.');
-    }
-
-    
-    private function saveCategory($id, $category_id)
-    {
-        CategoryProduct::onlyTrashed()->updateOrCreate(
-            ['product_id' => $id],
-            ['category_id' => $category_id, 'deleted_at' => null]
-        );
     }
 
     protected function categoryInsert($request, $product)
@@ -182,7 +162,7 @@ class ProductController extends Controller
         return $request->validate([
             'name'                  => ['required'],
             'type'                  => ['required'],
-            'publisher_id'          => ['required'],
+            'publisher_id'          => '',
             'production_cost'       => ['required'],
             'mrp'                   => ['required'],
             'wholesale_price'       => ['required'],
