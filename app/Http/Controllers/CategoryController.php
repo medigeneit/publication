@@ -19,12 +19,27 @@ class CategoryController extends Controller
             ->search()->filter()
             ->getQuery();
 
-        if(request()->view == 'tree') {
-            // return
-            $categories = Category::query()->with('subcategories.subcategories.subcategories.subcategories')->mainCategory()->get();
-            
+        $categories = Category::query()
+        ->with('subcategories.subcategories.subcategories.subcategories')
+        ->mainCategory()
+        ->get();
+
+        // CategoryResource::withoutWrapping();
+
+        return Inertia::render('Category/Tree', [
+            'categories' => CategoryResource::collection($categories),
+        ]);
+
+        if (request()->view == 'tree') {
+            $categories = Category::query()
+                ->with('subcategories.subcategories.subcategories.subcategories')
+                ->mainCategory()
+                ->get();
+
+            // CategoryResource::withoutWrapping();
+
             return Inertia::render('Category/Tree', [
-                'categories' => $categories,
+                'categories' => CategoryResource::collection($categories),
             ]);
         }
 
@@ -49,9 +64,13 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        // return $request;
         $category = Category::create($this->validateData($request) + [
             'user_id'  => Auth::id(),
         ]);
+
+        return redirect()
+            ->route('categories.index');
 
         return redirect()
             ->route('categories.show', $category->id)
@@ -110,8 +129,8 @@ class CategoryController extends Controller
     {
         $this->getQuery()
             ->when(isset(request()->active), function ($query) {
-            $query->where('active', request()->active);
-        });
+                $query->where('active', request()->active);
+            });
 
         return $this;
     }
@@ -135,15 +154,8 @@ class CategoryController extends Controller
                     })
                     ->ignore($id),
             ],
-            'parent_id' => [
-                'required',
-                'numeric',
-            ],
-            'active' => [
-                'required',
-                'numeric',
-            ]
+            'parent_id' => '',
+            'active' => '',
         ]);
     }
-
 }

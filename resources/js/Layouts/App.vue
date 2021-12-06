@@ -56,7 +56,7 @@
 
             <!-- Page Content -->
             <main class="w-full h-screen -mt-16 pt-16 overflow-hidden">
-                <div class="h-full p-2 sm:p-4 overflow-auto">
+                <div class="h-full p-2 sm:p-4 overflow-x-auto overflow-y-scroll">
                     <slot />
                 </div>
             </main>

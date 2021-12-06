@@ -13,6 +13,12 @@ class Category extends Model
     
     protected $guarded = [];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function scopeActive($query)
     {
         return $query->where('active', 1);
@@ -39,6 +45,6 @@ class Category extends Model
     }
 
     public function products(){
-        return $this->belongsToMany(Product::class)->whereNull('category_product.deleted_at');
+        return $this->belongsToMany(Product::class)->orderBy('categories.priority')->whereNull('category_product.deleted_at');
     }
 }

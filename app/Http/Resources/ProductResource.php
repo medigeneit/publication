@@ -19,7 +19,6 @@ class ProductResource extends JsonResource
             'name'                  => (string) ($this->name ?? ''),
             'type'                  => (int) ($this->type ?? 0),
             'typeName'              => (string) ($this->value_of_type ?? ''),
-            'categoryName'          => (string) ($this->category_product->category->name ?? ''),
             'publisherId'           => (int) ($this->publisher_id ?? 0),
             'publisherName'         => (string) ($this->publisher->name ?? ''),
             'productionCost'        => (float) ($this->production_cost ?? 0),
@@ -38,7 +37,9 @@ class ProductResource extends JsonResource
             'active'                => (int) ($this->active),
             'activeValue'           => (string) ($this->value_of_active),
             'createdBy'             => (string) ($this->user->name ?? ''),
-            'storages'              => (int) ($this->storages->count() ?? '')
+            'storages'              => (int) ($this->storages->count() ?? ''),
+            'categories'            => (object) ($this->categories),
+            'categoryCount'         => (int) ($this->categories->count()),
         ];
     }
 }

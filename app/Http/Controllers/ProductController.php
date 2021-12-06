@@ -24,6 +24,8 @@ class ProductController extends Controller
             //->dateFilter()
             ->getQuery();
 
+        // return $products->with('categories')->get();
+
         // foreach($products->get() as $product)
         // {
         //     $storages = $product->storages->where('product_id', $product->id)->pluck('quantity')->toArray();

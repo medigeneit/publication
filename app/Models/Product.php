@@ -14,7 +14,8 @@ class Product extends Model
 
     protected $guarded = [];
 
-    protected static function getTypes(){
+    protected static function getTypes()
+    {
         return [
             1 => 'Package',
             2 => 'Book',
@@ -22,7 +23,7 @@ class Product extends Model
         ];
     }
 
-    public function publisher() 
+    public function publisher()
     {
         return $this->belongsTo(Publisher::class);
     }
@@ -44,6 +45,7 @@ class Product extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class)->whereNull('deleted_at');
+        return $this->belongsToMany(Category::class, 'category_products', 'product_id', 'category_id')
+            ->whereNull('category_products.deleted_at');
     }
 }
