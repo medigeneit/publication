@@ -52,8 +52,8 @@
                     </div>
 
                     <div class="mb-4">
-                        <Label for="alert_quantity" value="Add More" />
-                        <button type="button" class="px-2 py-0.5 border rounded bg-gray-600 text-white" @click="multipleCategory">+</button>    
+                        <Label for="alert_quantity" value="" />
+                        <button type="button" class="px-2 py-0.5 border rounded bg-gray-600 text-white" @click="multipleCategory">+ Add more</button>    
                     </div>
                     
                     <div class="mb-4">
@@ -142,14 +142,14 @@
                 </div>
             </form>
         </div>
-        <div class="w-full max-w-2xl mx-auto p-4 bg-white border shadow rounded" id="addMoreCategory">
+        <div class="w-full max-w-2xl mx-auto p-4 bg-white border shadow rounded hidden" id="addMoreCategory">
             <div class="mb-4 w-full">
                     <Label for="alert_quantity" value="Category List" />
                     <div class="border-2" :value="categoryId" v-for="(categoryName, categoryId) in data.categoryList" :key="categoryId">
                         <button class="p-2">
                             {{ categoryName }}
                         </button>
-                        <span class="float-right pr-3"> &check; </span>
+                        <span class="float-right pr-3" style="cursor: pointer" @click="clickCheck"> &check; </span>
                     </div>    
             </div>
         </div>
@@ -225,6 +225,10 @@ export default {
                 publisherWrapper.classList.remove('hidden');
                 productWrapper.classList.add('hidden');
             }
+        },
+
+        clickCheck() {
+            console.log("clicked")
         },
 
         multipleCategory(event) {
