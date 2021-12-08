@@ -40,6 +40,8 @@ class ProductResource extends JsonResource
             'storages'              => (int) ($this->storages->count() ?? ''),
             'categories'            => (object) ($this->categories),
             'categoryCount'         => (int) ($this->categories->count()),
+            'packageProducts'       => (object) ($this->package_products),
+            'packageProductCount'   => (int) ($this->package_products->count()),
         ];
     }
 }

@@ -25,7 +25,7 @@
     </nav-link>
 
     <nav-link :href="route('distributions.index')" :active="route().current('distributions.*')">
-        Distributions
+        Distributor
     </nav-link>
     
     <nav-link :href="route('sales.index')" :active="route().current('sales.*')">

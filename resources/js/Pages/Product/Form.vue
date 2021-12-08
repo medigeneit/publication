@@ -137,9 +137,10 @@
                     <ul class="">
                         <li v-for="(category, index) in data.categories" :key="index" class="my-1 relative">
                             <div class="parent flex items-center gap-1 shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(category.id), 'bg-white' : form.category_ids.includes(category.id) }" draggable="true" >
-                                <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700 cursor-pointer transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer transform" :class="{'text-blue-700' : category.subcategories.length, 'text-gray-300' : !(category.subcategories.length)}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                                 </svg>
+                                <!-- <div class="h-6 w-6 text-blue-700 cursor-pointer border border-blue-700 rounded-full flex justify-center items-center" @click="itemClickHandler" > {{ category.subcategories.length  }}</div> -->
                                 <div class="w-full flex justify-between items-center">
                                     <div class="">{{ category.name }}</div>
                                     <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(category.id)" :checked="form.category_ids.includes(category.id)" />
@@ -148,7 +149,7 @@
                             <ul class="ml-4 md:ml-8 relative">
                                 <li v-for="(subcategory, index) in category.subcategories" :key="index" class="my-1 relative">
                                     <div class="parent flex items-center gap-1 bg-white shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(subcategory.id), 'bg-white' : form.category_ids.includes(subcategory.id) }" draggable="true">
-                                        <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700 cursor-pointer transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer transform" :class="{'text-blue-700' : subcategory.subcategories.length, 'text-gray-300' : !(subcategory.subcategories.length)}"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                                         </svg>
                                         <div class="w-full flex justify-between items-center">
@@ -159,7 +160,7 @@
                                     <ul class="ml-4 md:ml-8 relative">
                                         <li v-for="(subcategory, index) in subcategory.subcategories" :key="index" class="my-1 relative">
                                             <div class="parent flex items-center gap-1 bg-white shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(subcategory.id), 'bg-white' : form.category_ids.includes(subcategory.id) }" draggable="true">
-                                                <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700 cursor-pointer transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer transform" :class="{'text-blue-700' : subcategory.subcategories.length, 'text-gray-300' : !(subcategory.subcategories.length)}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                                                 </svg>
                                                 <div class="w-full flex justify-between items-center">
