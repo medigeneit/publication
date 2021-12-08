@@ -79,6 +79,7 @@ class ProductController extends Controller
             'productCategories'     => $product->categories,
             'publisherList'         => Publisher::active()->pluck('name', 'id'),
             'productList'           => Product::pluck('name', 'id'),
+            'product_ids'           => Product::pluck('id')->toArray(),
             'category_ids'          => $product->categories()->get()->pluck('id')->toArray(),
             'categories'            => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
             'productType'           => Product::getTypes(),

@@ -194,9 +194,15 @@
             <div class="mb-4 w-full bg-white border shadow rounded">
                 <div class="px-4 py-3 text-lg font-bold">Products</div>
                 <hr>
-                <div class="p-4">
-                    Product List  Coming Soon...   
+                <div class="p-4" v-for="(productName, id) in data.productList" :key="id">
+                    <div class="w-full flex justify-between items-center">
+                        <div class="">{{ productName }}</div>
+                        <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(category.id)" :checked="form.product_ids.includes(id)" />
+                    </div>
                 </div>    
+                <!-- <div class="p-4">
+                    Product List  Coming Soon...   
+                </div>     -->
             </div>
         </div>
     </div>
@@ -273,10 +279,6 @@ export default {
                 publisherWrapper.classList.remove('hidden');
                 productWrapper.classList.add('hidden');
             }
-        },
-
-        multipleCategory() {
-            this.categoryShow = ! this.categoryShow;
         },
 
         submit() {
