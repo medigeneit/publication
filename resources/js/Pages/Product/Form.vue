@@ -197,7 +197,7 @@
                 <div class="p-4" v-for="(productName, id) in data.productList" :key="id">
                     <div class="w-full flex justify-between items-center">
                         <div class="">{{ productName }}</div>
-                        <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(category.id)" :checked="form.product_ids.includes(id)" />
+                        <Input type="checkbox" class="cursor-pointer" @change="productSelectHandler(id)" :checked="form.product_ids.includes(id)" />
                     </div>
                 </div>    
                 <!-- <div class="p-4">
@@ -259,16 +259,18 @@ export default {
                 crl: this.data.product.crl,
                 alert_quantity: this.data.product.alert_quantity,
                 active: this.moduleAction == 'store' ? 1 : this.data.product.active,
-                category_ids: this.data.category_ids || [1, 2, 3],
+                category_ids: this.data.category_ids || [],
+                product_ids: this.data.product_ids || [],
             }),
             categoryShow: false,
-            productShow: false,
+            productShow: (this.data.product.type === 1) ? true : false,
         }
     },
 
     methods: {
 
         typeChange(type) {
+            console.log(this.data.product.type === 1)
             let publisherWrapper = document.getElementById('publisherWrapper');
             let productWrapper = document.getElementById('productWrapper');
 
@@ -308,6 +310,13 @@ export default {
                 this.form.category_ids.splice(this.form.category_ids.indexOf(categoryId), 1);
             } else {
                 this.form.category_ids.push(categoryId);
+            }
+        },
+        productSelectHandler(productId) {
+            if (this.form.product_ids.includes(productId)) {
+                this.form.product_ids.splice(this.form.category_ids.indexOf(productId), 1);
+            } else {
+                this.form.product_ids.push(productId);
             }
         }
     }
