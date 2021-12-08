@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\Publisher;
+use App\Models\PackageProduct;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,14 +25,6 @@ class ProductController extends Controller
             //->dateFilter()
             ->getQuery();
 
-        // return $products->with('categories')->get();
-
-        // foreach($products->get() as $product)
-        // {
-        //     $storages = $product->storages->where('product_id', $product->id)->pluck('quantity')->toArray();
-        //     $store_count[] = array_sum($storages);
-        // }
-        // return var_dump($store_count);
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
@@ -56,6 +49,7 @@ class ProductController extends Controller
             'user_id' => Auth::id()
         ]);
         $this->categoryInsert($request, $product);
+        $this->packageInsert($request, $product);
 
         return redirect()
             ->route('products.show', $product->id)
@@ -78,8 +72,8 @@ class ProductController extends Controller
             'product'               => $product,
             'productCategories'     => $product->categories,
             'publisherList'         => Publisher::active()->pluck('name', 'id'),
-            'productList'           => Product::pluck('name', 'id'),
-            'product_ids'           => Product::pluck('id')->toArray(),
+            'productList'           => Product::where('id', '!=', $product->id)->pluck('name', 'id'),
+            'product_ids'           => $product->package_products()->get()->pluck('id')->toArray(),
             'category_ids'          => $product->categories()->get()->pluck('id')->toArray(),
             'categories'            => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
             'productType'           => Product::getTypes(),
@@ -91,6 +85,8 @@ class ProductController extends Controller
         $product->update($this->validateData($request, $product->id));
         
         $this->categoryInsert($request, $product);
+
+        $this->packageInsert($request, $product);
 
         return redirect()
             ->route('products.show', $product->id)
@@ -111,6 +107,20 @@ class ProductController extends Controller
                         'category_id'   => $category_id,
                         'deleted_at'    => null
                     ]
+                );
+            }
+        }
+    }
+
+    protected function packageInsert($request, $product)
+    {
+        PackageProduct::where(['package_id' => $product->id])->delete();
+        
+        if(is_array($request->product_ids)) {
+            foreach($request->product_ids as $package_id) {
+                PackageProduct::onlyTrashed()->updateOrCreate(
+                    ['package_id' => $product->id],
+                    ['product_id' => $package_id, 'deleted_at' => null]
                 );
             }
         }

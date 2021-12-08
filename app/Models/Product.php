@@ -48,4 +48,9 @@ class Product extends Model
         return $this->belongsToMany(Category::class, 'category_products', 'product_id', 'category_id')
             ->whereNull('category_products.deleted_at');
     }
+
+    public function package_products()
+    {
+        return $this->belongsToMany(Product::class, 'package_product', 'package_id', 'product_id')->whereNull('package_product.deleted_at');
+    }
 }

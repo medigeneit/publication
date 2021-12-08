@@ -19,7 +19,7 @@
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                     </div>
 
-                    <div class="mb-4 col-span-2" id="publisherWrapper">
+                    <div class="mb-4 col-span-2" id="publisherWrapper" :class="{'hidden' : form.type === 1}">
                         <Label for="publisher_id" value="Publisher Name" />
                         <Select id="publisher_id" class="mt-1 block w-full" v-model="form.publisher_id">
                             <option value=""> -- Select Publisher -- </option>
@@ -29,10 +29,10 @@
                         </Select>
                     </div>
 
-                    <div class="mb-4 hidden col-span-2" id="productWrapper">
+                    <div class="mb-4 col-span-2" id="productWrapper" :class="{'hidden' : form.type !== 1}">
                         <Label for="product_id" value="Product Name" />
                         <button type="button" class="mt-1 block w-full px-3 py-2 border rounded bg-gray-600 text-white" @click="productShow = !productShow">
-                            {{ 0 }} selected | Show Products
+                            {{ form.product_ids.length || 0 }} selected | Show Products
                         </button>
                     </div>
 
@@ -194,10 +194,10 @@
             <div class="mb-4 w-full bg-white border shadow rounded">
                 <div class="px-4 py-3 text-lg font-bold">Products</div>
                 <hr>
-                <div class="p-4" v-for="(productName, id) in data.productList" :key="id">
-                    <div class="w-full flex justify-between items-center">
+                <div class="p-2 mb-2 border" v-for="(productName, productId) in data.productList" :key="productId" :class="{ 'bg-green-200' : form.product_ids.includes(parseInt(productId)), 'bg-white' : form.product_ids.includes(parseInt(productId)) }">
+                    <div class="w-full flex justify-between items-center" >
                         <div class="">{{ productName }}</div>
-                        <Input type="checkbox" class="cursor-pointer" @change="productSelectHandler(id)" :checked="form.product_ids.includes(id)" />
+                        <Input type="checkbox" class="cursor-pointer" @change="productSelectHandler(productId)" :checked="form.product_ids.includes(parseInt(productId))" />
                     </div>
                 </div>    
                 <!-- <div class="p-4">
@@ -263,7 +263,7 @@ export default {
                 product_ids: this.data.product_ids || [],
             }),
             categoryShow: false,
-            productShow: (this.data.product.type === 1) ? true : false,
+            productShow: false,
         }
     },
 
@@ -306,15 +306,20 @@ export default {
         },
 
         categorySelectHandler(categoryId) {
+            categoryId = parseInt(categoryId);
+
             if (this.form.category_ids.includes(categoryId)) {
                 this.form.category_ids.splice(this.form.category_ids.indexOf(categoryId), 1);
             } else {
                 this.form.category_ids.push(categoryId);
             }
         },
+        
         productSelectHandler(productId) {
+            productId = parseInt(productId);
+
             if (this.form.product_ids.includes(productId)) {
-                this.form.product_ids.splice(this.form.category_ids.indexOf(productId), 1);
+                this.form.product_ids.splice(this.form.product_ids.indexOf(productId), 1);
             } else {
                 this.form.product_ids.push(productId);
             }
