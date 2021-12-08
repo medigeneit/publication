@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DistributionController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PublisherController;
@@ -54,6 +56,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'distributions'             => DistributionController::class,
         'storages'                  => StorageController::class,
         'account-categories'        => AccountCategoryController::class,
-        'accounts'                  => AccountController::class
+        'accounts'                  => AccountController::class,
+        'incomes'                   => IncomeController::class,
+        'expenses'                  => ExpenseController::class,
     ]);
 });

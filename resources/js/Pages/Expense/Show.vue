@@ -1,32 +1,32 @@
 <template>
-    <Head title="Account" />
+    <Head title="Expense" />
 
     <app-layout>
         <template #header>
-            {{ account.name }}
+            {{ expense.name }}
         </template>
 
         <add-new-button :href="route('accounts.create')" class="mb-4" />
         
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
-                <show-table-row heading="ID">{{ account.id }}</show-table-row>
-                <show-table-row heading="Account Type">{{ account.accountableType }}</show-table-row>
-                <show-table-row heading="Account Id">{{ account.publisherName }}</show-table-row>
-                <show-table-row heading="Purpose">{{ account.purpose ?? '' }}</show-table-row>
-                <show-table-row heading="Amount">{{ account.amount }}</show-table-row>
-                <show-table-row heading="Type ">{{ account.typeName }}</show-table-row>
-                <show-table-row heading="Created By ">{{ account.createdBy }}</show-table-row>
+                <show-table-row heading="ID">{{ expense.id }}</show-table-row>
+                <show-table-row heading="Account Type">{{ expense.accountableType }}</show-table-row>
+                <show-table-row heading="Account Id">{{ expense.publisherName }}</show-table-row>
+                <show-table-row heading="Purpose">{{ expense.purpose ?? '' }}</show-table-row>
+                <show-table-row heading="Amount">{{ expense.amount }}</show-table-row>
+                <show-table-row heading="Type ">{{ expense.typeName }}</show-table-row>
+                <show-table-row heading="Created By ">{{ expense.createdBy }}</show-table-row>
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
-                        <action-button-edit :href="route('accounts.edit', account.id)" />
+                        <action-button-edit :href="route('expenses.edit', expense.id)" />
                     </div>
                 </show-table-row>
             </table>
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('accounts.index')"/>
+            <go-to-list :href="route('expenses.index')"/>
         </div>
     </app-layout>
 </template>
@@ -50,7 +50,7 @@ export default {
         AddNewButton,
     },
     props: {
-        account: { type: Object, default: {} },
+        income: { type: Object, default: {} },
     },
 };
 </script>

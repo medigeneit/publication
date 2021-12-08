@@ -47,7 +47,7 @@
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('users.index')"/>
+            <go-to-list :href="route('products.index')"/>
         </div>
     </app-layout>
 </template>

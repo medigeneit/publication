@@ -43,6 +43,14 @@
     <nav-link :href="route('accounts.index')" :active="route().current('accounts.*')">
         Account
     </nav-link>
+
+    <nav-link :href="route('incomes.index')" :active="route().current('incomes.*')">
+        Income
+    </nav-link>
+
+    <nav-link :href="route('expenses.index')" :active="route().current('expenses.*')">
+        Expense
+    </nav-link>
 </template>
 
 <script>

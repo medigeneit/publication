@@ -33,7 +33,7 @@
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('users.index')"/>
+            <go-to-list :href="route('categories.index')"/>
         </div>
     </app-layout>
 </template>
