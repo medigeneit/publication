@@ -1,39 +1,25 @@
 <template>
-    <div class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded">
+    <div class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded mb-4">
 
         <ValidationErrors class="mb-4" />
 
-        <form @submit.prevent="submit" class="">
-            <div class="mb-4">
-                <Label for="name" value="Name" />
-                <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
-            </div>
-
-            <div class="mb-4">
-                <Label for="parent" value="Parent" />
-                <Select id="parent" class="mt-1 block w-full" v-model="form.parent_id">
-                    <option value="0"> -- Select Parent -- </option>
-                    <option :value="categoryId" v-for="(categoryName, categoryId) in data.categoryList" :key="categoryId">{{ categoryName }}</option>
-                </Select>
-            </div>
-
-            <div class="mb-4">
-                <Label for="active" value="Active" />
-                <Select id="select" name="active" class="mt-1 block w-full" v-model="form.active" required>
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                </Select>
-            </div>
-
-            <hr class="w-full my-4">
-            
-            <div class="flex items-center justify-between">
-                <div class="">
-                    <go-to-list :href="route('categories.index')"/>
+        <form @submit.prevent="submit">
+            <div class="mb-4" v-if="parentName">
+                <Label for="parent_name" value="Parent Name" />
+                <div class="px-3 py-2 border border-gray-300 rounded-md shadow-sm mt-1 block w-full">
+                    {{ parentName }}
                 </div>
-                <Button class="" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    {{ buttonValue }}
-                </Button>
+            </div>
+            <div class="mb-4">
+                <Label v-if="!parentName" for="name" value="Category Name" />
+                <Label v-else for="name" value="Subcategory Name" />
+                <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required />
+            </div>
+            <div class="flex justify-between">
+                <slot name="footer">
+                    <Link :href="route('categories.index')" class="px-2 py-0.5 border rounded bg-red-600 text-white">Cancel</Link>
+                </slot>
+                <button class="px-2 py-0.5 border rounded bg-blue-600 text-white" type="submit">Submit</button>
             </div>
         </form>
     </div>
@@ -46,6 +32,7 @@ import Label from '@/Components/Label.vue';
 import ValidationErrors from '@/Components/ValidationErrors.vue';
 import GoToList from '@/Components/GoToList.vue';
 import Select from '@/Components/Select.vue';
+import { Link } from '@inertiajs/inertia-vue3';
 
 export default {
     components: {
@@ -55,8 +42,8 @@ export default {
         ValidationErrors,
         GoToList,
         Select,
+        Link,
     },
-
     props: {
         moduleAction: String,
         buttonValue: { 
@@ -68,19 +55,22 @@ export default {
             default: {}
         },
     },
-
+    created() {
+        this.form.parent_id = this.data.parent.id || 0
+    },
     data() {
         return {
+            parentName: this.data.parent.name || '',
             form: this.$inertia.form({
-                name: this.data.category.name,
-                parent_id: this.moduleAction == 'store'? 0 : this.data.category.parent_id ,
-                active: this.moduleAction == 'store' ? 1 : this.data.category.active,
-            })
+                name: '',
+                parent_id: this.data.parent.id || 0,
+            }),
         }
     },
-
     methods: {
         submit() {
+            return this.form.post(this.route('categories.store'));
+
             if(this.moduleAction == 'store') {
                 return this.form.post(this.route('categories.store'));
             }

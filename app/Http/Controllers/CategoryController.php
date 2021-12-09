@@ -57,8 +57,8 @@ class CategoryController extends Controller
     public function create()
     {
         return Inertia::render('Category/Create', [
-            'category' => new Category(),
-            'categoryList' => Category::active()->pluck('name', 'id'),
+            'category'  => new Category(),
+            'parent'    => Category::where('id', request()->parent_id)->first() ?? [],
         ]);
     }
 
