@@ -93,19 +93,18 @@ export default {
                 type: 2,
                 account_category_id: this.moduleAction == 'store' ? '' : this.data.expense.account_category_id
             }),
-            // accountCategoryList: this.data.expense.type == 1 ? this.data.incomeCategoryList : this.moduleAction == 'store' ? {}
-            accountCategoryList: this.data.incomeCategoryList,
+            accountCategoryList: this.data.expenseCategoryList,
         }
     },
 
     methods: {
         submit() {
             if(this.moduleAction == 'store') {
-                return this.form.post(this.route('incomes.store'));
+                return this.form.post(this.route('expenses.store'));
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('incomes.update', this.data.expense.id));
+                return this.form.put(this.route('expenses.update', this.data.expense.id));
             }
         },
     }

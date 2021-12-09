@@ -48,10 +48,6 @@ export default {
             type: Object, 
             default: {} 
         },
-        incomeCategoryList: { 
-            type: Object, 
-            default: {} 
-        },
         expenseCategoryList: { 
             type: Object, 
             default: {} 

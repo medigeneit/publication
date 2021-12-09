@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AccountResource;
 use App\Http\Resources\ExpenseResource;
-use App\Http\Resources\IncomeResource;
 use App\Models\Account;
 use App\Models\AccountCategory;
 use App\Models\Publisher;
@@ -38,7 +36,6 @@ class ExpenseController extends Controller
             'expense' => new Account(),
             'publishers'  => Publisher::active()->pluck('name', 'id'),
             'accountType'  => Account::getTypes(),
-            'incomeCategoryList' => AccountCategory::where('type', 1)->pluck('name', 'id'),
             'expenseCategoryList' => AccountCategory::where('type', 2)->pluck('name', 'id'),
         ]);
     }
@@ -61,7 +58,7 @@ class ExpenseController extends Controller
         ExpenseResource::withoutWrapping();
 
         return Inertia::render('Expense/Show', [
-            'expense' => new AccountResource($expense),
+            'expense' => new ExpenseResource($expense),
         ]);
     }
 
@@ -71,7 +68,6 @@ class ExpenseController extends Controller
             'expense' => $expense,
             'publishers'  => Publisher::active()->pluck('name', 'id'),
             'accountType'  => Account::getTypes(),
-            'incomeCategoryList' => AccountCategory::where('type', 1)->pluck('name', 'id'),
             'expenseCategoryList' => AccountCategory::where('type', 2)->pluck('name', 'id'),
         ]);
     }

@@ -6,7 +6,7 @@
             {{ expense.name }}
         </template>
 
-        <add-new-button :href="route('accounts.create')" class="mb-4" />
+        <add-new-button :href="route('expenses.create')" class="mb-4" />
         
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
@@ -50,7 +50,7 @@ export default {
         AddNewButton,
     },
     props: {
-        income: { type: Object, default: {} },
+        expense: { type: Object, default: {} },
     },
 };
 </script>

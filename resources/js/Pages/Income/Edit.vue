@@ -30,7 +30,6 @@ export default {
                 publishers: this.publishers,
                 accountType: this.accountType,
                 incomeCategoryList: this.incomeCategoryList,
-                expenseCategoryList: this.expenseCategoryList,
             }
         }
     },
@@ -49,10 +48,6 @@ export default {
             default: {} 
         },
         incomeCategoryList: { 
-            type: Object, 
-            default: {} 
-        },
-        expenseCategoryList: { 
             type: Object, 
             default: {} 
         },
