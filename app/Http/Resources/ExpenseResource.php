@@ -14,9 +14,10 @@ class ExpenseResource extends JsonResource
      */
     public function toArray($request)
     {
+        $model = explode('\\',$this->accountable_type)[2];
         return [
             'id' => (int) $this->id,
-            'accountableType'   => (string)($this->accountable_type ?? ''),
+            'accountableType'   => (string)($model ?? ''),
             'accountableId'     => (int) ($this->accountable_id ?? ''),
             'publisherName'     => (string) ($this->publisher->name ?? ''),
             'purpose'           => (string) ($this->purpose ?? ''),
