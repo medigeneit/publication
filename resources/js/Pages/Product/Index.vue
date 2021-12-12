@@ -8,27 +8,7 @@
 
         <add-new-button :href="route('products.create')" />
 
-        <data-table :collections="products" :filters="filters">
-            <template #head>
-                <th class="py-3 px-2 text-center">Action</th>
-                <th class="py-3 px-2 text-left">ID</th>
-                <th class="py-3 px-2 text-left">Name</th>
-                <th class="py-3 px-2 text-left">Type</th>
-                <th class="py-3 px-2 text-left">Active</th>
-                <th class="py-3 px-2 text-center">Categories</th>
-                <th class="py-3 px-2 text-center">Package</th>
-                <th class="py-3 px-2 text-left">Publisher Name</th>
-                <th class="py-3 px-2 text-right">Cost</th>
-                <th class="py-3 px-2 text-right">MRP</th>
-                <th class="py-3 px-2 text-right">Wholesale</th>
-                <th class="py-3 px-2 text-right">Retail</th>
-                <th class="py-3 px-2 text-right">Distributor</th>
-                <th class="py-3 px-2 text-right">Special</th>
-                <th class="py-3 px-2 text-right">Outside Dhaka</th>
-                <th class="py-3 px-2 text-right">Ecom Distribution</th>
-                <th class="py-3 px-2 text-right">Ecom Wholesale</th>
-                <th class="py-3 px-2 text-left">Alert</th>
-            </template>
+        <data-table :collections="products" :filters="filters" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: product }">
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
@@ -103,7 +83,7 @@
                 <td class="py-3 px-2 text-right">{{ product.outsideDhakaPrice }}</td>
                 <td class="py-3 px-2 text-right">{{ product.ecomDistributePrice }}</td>
                 <td class="py-3 px-2 text-right">{{ product.ecomWholesalePrice }}</td>
-                <td class="py-3 px-2 text-left">
+                <td class="py-3 px-2 text-right">
                     <!-- <span class="py-1 px-3 rounded-full text-white font-bold bg-gray-500"> -->
                         {{ product.alertQuantity }}
                     <!-- </span> -->
@@ -142,6 +122,30 @@ export default {
         closeModal(event) {
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         }
-    }
+    },
+    data() {
+        return {
+           columns: [
+                    {title: 'Action', align: 'center'},
+                    {title: 'ID', align: 'left', sortable: 'id'},
+                    {title: 'Name', align: 'left', sortable: 'name'},
+                    {title: 'Type', align: 'left'},
+                    {title: 'Active', align: 'left'},
+                    {title: 'Categrories', align: 'center'},
+                    {title: 'Package', align: 'center'},
+                    {title: 'Publisher Name', align: 'left', sortable:'publisher.name'},
+                    {title: 'Production Cost', align: 'right', sortable:'production_cost'},
+                    {title: 'MRP', align: 'right', sortable: 'mrp'},
+                    {title: 'Wholesale', align: 'right', sortable: 'wholesale_price'},
+                    {title: 'Retail', align: 'right', sortable: 'retail_price'},
+                    {title: 'Distributor', align: 'right', sortable: 'distributor_price'},
+                    {title: 'Special', align: 'right', sortable: 'special_price'},
+                    {title: 'Outside Dhaka', align: 'right', sortable: 'outside_dhaka_price'},
+                    {title: 'Ecom Distribution', align: 'right', sortable: 'ecom_distribution_price'},
+                    {title: 'Ecom Wholesale', align: 'right', sortable: 'ecom_wholesale_price'},
+                    {title: 'Alert', align: 'right', sortable: 'alert_quantity'},
+                ],
+        }
+    },
 };
 </script>

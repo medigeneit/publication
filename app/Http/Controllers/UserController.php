@@ -18,11 +18,13 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = $this->setQuery(User::query())
-            ->search()->filter()
+        $users = User::query()
+            ->filter()
             ->dateFilter()
-            ->activeFilter()
-            ->getQuery();
+            ->search(['id', 'name', 'email', 'phone'], ['medical_college:name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc')
+            ->isAdmin(1);
+
 
         return Inertia::render('User/Index', [
             'users' => UserResource::collection($users->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -91,16 +93,6 @@ class UserController extends Controller
                     $query->where('name', 'regexp', $search)
                         ->orWhere('email', 'regexp', $search);
                 });
-            });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery()
-            ->when(isset(request()->type), function ($query) {
-                $query->where('type', request()->type);
             });
 
         return $this;

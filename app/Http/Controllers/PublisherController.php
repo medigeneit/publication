@@ -16,10 +16,11 @@ class PublisherController extends Controller
 
     public function index()
     {
-        $publishers = $this->setQuery(Publisher::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
+        $publishers = Publisher::query()
+                ->filter()
+                ->dateFilter()
+                ->search(['id', 'name'])
+                ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Publisher/Index', [
             'publishers' => PublisherResource::collection($publishers->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -86,16 +87,6 @@ class PublisherController extends Controller
                 $query->where(function ($query) use ($search) {
                     $query->where('id', 'regexp', $search);
                 });
-            });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery()
-            ->when(isset(request()->active), function($query) {
-                $query->where("active", request()->active);
             });
 
         return $this;

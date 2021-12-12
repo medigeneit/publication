@@ -8,8 +8,8 @@
 
         <add-new-button :href="route('users.create')" />
 
-        <data-table :collections="users" :filters="filters" :dateFilter="true">
-            <template #head>
+        <data-table :collections="users" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
+            <!-- <template #head>
                 <th class="py-3 px-2 text-left">ID</th>
                 <th class="py-3 px-2 text-left">Name</th>
                 <th class="py-3 px-2 text-left">Email</th>
@@ -17,7 +17,7 @@
                 <th class="py-3 px-2 text-left">Type</th>
                 <th class="py-3 px-2 text-left">Active</th>
                 <th class="py-3 px-2 text-center">Action</th>
-            </template>
+            </template> -->
             <template #default="{ item: user }">
                 <td class="py-3 px-2 text-left">{{ user.id }}</td>
                 <td class="py-3 px-2 text-left">{{ user.name }}</td>
@@ -61,6 +61,19 @@ export default {
     props: {
         users: { type: Object, default: {} },
         filters: { type: Object, default: {} },
+    },
+    data() {
+        return {
+            columns: [
+                {title: 'ID', align: 'left', sortable: 'id'},
+                {title: 'Name', align: 'left', sortable: 'name'},
+                {title: 'Email', align: 'left', sortable: 'email'},
+                {title: 'Phone', align: 'left', sortable: 'phone'},
+                {title: 'Type', align: 'left'},
+                {title: 'Active', align: 'center'},
+                {title: 'Action', align: 'center'},
+            ],
+        }
     },
 };
 </script>

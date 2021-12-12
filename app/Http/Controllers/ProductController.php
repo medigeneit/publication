@@ -20,10 +20,12 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = $this->setQuery(Product::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
+        $products = Product::query()
+        ->with('categories', 'publisher')
+        ->filter()
+        ->dateFilter()
+        ->search(['id', 'name'], ['publisher:name'])
+        ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -142,19 +144,6 @@ class ProductController extends Controller
                 $query->where(function ($query) use ($search) {
                     $query->where('id', 'regexp', $search);
                 });
-            });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery()
-            ->when(request()->type, function($query) {
-                $query->where('type', request()->type);
-            })
-            ->when(isset(request()->active), function($query) {
-                $query->where('active', request()->active);
             });
 
         return $this;

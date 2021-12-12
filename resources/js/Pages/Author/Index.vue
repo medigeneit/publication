@@ -8,14 +8,7 @@
 
         <add-new-button :href="route('authors.create')" />
 
-        <data-table :collections="authors" :filters="filters" :dateFilter="true">
-            <template #head>
-                <th class="py-2 px-2 text-left">ID</th>
-                <th class="py-2 px-2 text-left">Name</th>
-                <th class="py-2 px-2 text-center">Active</th>
-                <th class="py-2 px-2 text-right w-8">Honorarium</th>
-                <th class="py-2 px-2 text-center">Action</th>
-            </template>
+        <data-table :collections="authors" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: author }">
                 <td class="py-2 px-2 text-left">{{ author.id }}</td>
                 <td class="py-2 px-2 text-left">{{ author.name }}</td>
@@ -57,6 +50,17 @@ export default {
     props: {
         authors: { type: Object, default: {} },
         filters: { type: Object, default: {} },
+    },
+        data() {
+        return {
+            columns: [
+                {title: 'ID', align: 'left', sortable: 'id'},
+                {title: 'Name', align: 'left', sortable: 'name'},
+                {title: 'Active', align: 'center'},
+                {title: 'Honorarium', align: 'right', sortable: 'honorarium'},
+                {title: 'Action', align: 'center'},
+            ],
+        }
     },
 };
 </script>
