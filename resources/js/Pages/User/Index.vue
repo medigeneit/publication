@@ -69,8 +69,8 @@ export default {
                 {title: 'Name', align: 'left', sortable: 'name'},
                 {title: 'Email', align: 'left', sortable: 'email'},
                 {title: 'Phone', align: 'left', sortable: 'phone'},
-                {title: 'Type', align: 'left'},
-                {title: 'Active', align: 'center'},
+                {title: 'Type', align: 'left', sortable : 'type'},
+                {title: 'Active', align: 'center', sortable : 'active'},
                 {title: 'Action', align: 'center'},
             ],
         }

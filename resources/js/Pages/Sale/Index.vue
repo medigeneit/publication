@@ -64,7 +64,7 @@ export default {
                 {title: 'Discount', align : 'left', sortable : 'discount'},
                 {title: 'Discount Purpose', align : 'left', sortable : 'discount_purpose'},
                 {title: 'Amount', align : 'left', sortable : 'amount'},
-                {title: 'AAction', align : 'center'},
+                {title: 'Action', align : 'center'},
             ]
         }
     },

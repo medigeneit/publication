@@ -62,8 +62,8 @@ export default {
                     {title: 'Address', align: 'center', sortable: 'address'},
                     {title: 'Phone', align: 'center', sortable: 'phone'},
                     {title: 'Email', align: 'center', sortable: 'email'},
-                    {title: 'Type', align: 'center'},
-                    {title: 'Active', align: 'center'},
+                    {title: 'Type', align: 'center', sortable: 'type'},
+                    {title: 'Active', align: 'center', sortable: 'active'},
                     {title: 'Action', align: 'center'},
                 ],
         }

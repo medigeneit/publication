@@ -55,7 +55,7 @@ export default {
            columns: [
                     {title: 'ID', align: 'left', sortable: 'id'},
                     {title: 'Name', align: 'left', sortable: 'name'},
-                    {title: 'Active', align: 'center'},
+                    {title: 'Active', align: 'center', sortable: 'active'},
                     {title: 'Action', align: 'center'},
                 ],
         }
