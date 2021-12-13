@@ -20,9 +20,12 @@ class AccountController extends Controller
 
     public function index()
     {
-        $accounts = $this->setQuery(Account::query())
-            ->search()->filter()
-            ->getQuery();
+        $accounts = Account::query()
+                ->with('publisher')
+                ->filter()
+                ->dateFilter()
+                ->search(['id', 'name'])
+                ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Account/Index', [
             'accounts' => AccountResource::collection($accounts->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),

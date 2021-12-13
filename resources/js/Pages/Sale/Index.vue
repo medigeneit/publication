@@ -8,19 +8,7 @@
 
         <add-new-button :href="route('sales.create')" />
 
-        <data-table :collections="sales" :filters="filters">
-            <template #head>
-                <th class="py-3 px-2 text-left">ID</th>
-                <th class="py-3 px-2 text-left">Outlet</th>
-                <th class="py-3 px-2 text-left">Customer Name</th>
-                <th class="py-3 px-2 text-left">Customer Phone</th>
-                <th class="py-3 px-2 text-left">Customer Address</th>
-                <th class="py-3 px-2 text-left">Subtotal</th>
-                <th class="py-3 px-2 text-left">Discount</th>
-                <th class="py-3 px-2 text-left">Discount Purpose</th>
-                <th class="py-3 px-2 text-left">Amount</th>
-                <th class="py-3 px-2 text-center">Action</th>
-            </template>
+        <data-table :collections="sales" :filters="filters" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: sale }">
                 <td class="py-3 px-2 text-left">{{ sale.id}}</td>
                 <td class="py-3 px-2 text-left">{{ sale.outletName }}</td>
@@ -63,6 +51,22 @@ export default {
     props: {
         sales: { type: Object, default: {} },
         filters: { type: Object, default: {} },
+    },
+    data() {
+        return {
+            columns : [
+                {title: 'ID', align : 'left', sortable : 'id'},
+                {title: 'Outlet', align : 'left', sortable : 'outlet.name'},
+                {title: 'Customer Name', align : 'left', sortable : 'customer_name'},
+                {title: 'Customer Phone', align : 'left', sortable : 'customer_phone'},
+                {title: 'Customer Address', align : 'left', sortable : 'customer_address'},
+                {title: 'Subtotal', align : 'left', sortable : 'subtotal'},
+                {title: 'Discount', align : 'left', sortable : 'discount'},
+                {title: 'Discount Purpose', align : 'left', sortable : 'discount_purpose'},
+                {title: 'Amount', align : 'left', sortable : 'amount'},
+                {title: 'AAction', align : 'center'},
+            ]
+        }
     },
 };
 </script>

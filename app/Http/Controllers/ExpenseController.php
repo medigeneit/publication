@@ -18,11 +18,13 @@ class ExpenseController extends Controller
 
     public function index()
     {
-        $expenses = $this->setQuery(Account::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery()
-            ->where('type', 2);
+        $expenses = Account::query()
+            ->with('publisher')
+            ->where('type', 2)
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Expense/Index', [
             'expenses' => ExpenseResource::collection($expenses->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),

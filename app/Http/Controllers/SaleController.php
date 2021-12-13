@@ -16,10 +16,11 @@ class SaleController extends Controller
 
     public function index()
     {
-
-        $sales = $this->setQuery(Sale::query())
-            ->search()->filter()
-            ->getQuery();
+        $sales = Sale::query()
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Sale/Index', [
             'sales' => SaleResource::collection($sales->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -90,13 +91,6 @@ class SaleController extends Controller
                     $query->where('id', 'regexp', $search);
                 });
             });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery();
 
         return $this;
     }

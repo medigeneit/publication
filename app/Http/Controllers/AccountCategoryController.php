@@ -16,10 +16,11 @@ class AccountCategoryController extends Controller
 
     public function index()
     {
-        $accountCategories = $this->setQuery(AccountCategory::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
+        $accountCategories = AccountCategory::query()
+                        ->filter()
+                        ->dateFilter()
+                        ->search(['id', 'name'])
+                        ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
         
         return Inertia::render('AccountCategory/Index', [
             'accountCategories' => AccountCategoryResource::collection($accountCategories->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -93,19 +94,6 @@ class AccountCategoryController extends Controller
         return $this;
     }
 
-    protected function filter()
-    {
-        $this->getQuery()
-            ->when(isset(request()->type), function ($query) {
-                $query->where('type', request()->type);
-            })
-            ->when(isset(request()->active), function ($query) {
-                $query->where('active', request()->active);
-            })
-            ;
-
-        return $this;
-    }
 
     protected function getFilterProperty()
     {

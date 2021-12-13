@@ -16,10 +16,11 @@ class DistributionController extends Controller
 
     public function index()
     {
-        $distributions = $this->setQuery(Distribution::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
+        $distributions = Distribution::query()
+                ->filter()
+                ->dateFilter()
+                ->search(['id', 'name', 'address', 'phone'])
+                ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Distribution/Index', [
             'distributions' => DistributionResource::collection($distributions->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),

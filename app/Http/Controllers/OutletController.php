@@ -16,9 +16,12 @@ class OutletController extends Controller
 
     public function index()
     {
-        $outlets = $this->setQuery(Outlet::query())
-            ->search()->filter()
-            ->getQuery();
+        $outlets = Outlet::query()
+            ->with('accounts')
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name', 'address', 'phone'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Outlet/Index', [
             'outlets' => OutletResource::collection($outlets->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -88,16 +91,6 @@ class OutletController extends Controller
                 $query->where(function ($query) use ($search) {
                     $query->where('id', 'regexp', $search);
                 });
-            });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery()
-            ->when(isset(request()->active), function($query) {
-                $query->where('active', request()->active);
             });
 
         return $this;

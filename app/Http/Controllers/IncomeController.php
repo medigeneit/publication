@@ -18,11 +18,13 @@ class IncomeController extends Controller
 
     public function index()
     {
-        $incomes = $this->setQuery(Account::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery()
-            ->where('type', 1);
+        $incomes = Account::query()
+            ->with('publisher')
+            ->where('type', 1)
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Income/Index', [
             'incomes' => IncomeResource::collection($incomes->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),

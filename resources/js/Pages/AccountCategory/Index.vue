@@ -8,14 +8,7 @@
 
         <add-new-button :href="route('account-categories.create')" />
 
-        <data-table :collections="accountCategories" :filters="filters" :dateFilter="true">
-            <template #head>
-                <th class="py-3 px-2 text-left">ID</th>
-                <th class="py-3 px-2 text-left">Name</th>
-                <th class="py-3 px-2 text-left">Type</th>
-                <th class="py-3 px-2 text-left">Active</th>
-                <th class="py-3 px-2 text-center">Action</th>
-            </template>
+        <data-table :collections="accountCategories" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: accountCategory }">
                 <td class="py-3 px-2 text-left">{{ accountCategory.id }}</td>
                 <td class="py-3 px-2 text-left">{{ accountCategory.name }}</td>
@@ -57,6 +50,17 @@ export default {
     props: {
         accountCategories: { type: Object, default: {} },
         filters: { type: Object, default: {} },
+    },
+    data() {
+        return {
+            columns : [
+                {title: 'ID', align : 'left', sortable : 'id'},
+                {title: 'Name', align : 'left', sortable : 'name'},
+                {title: 'Type', align : 'left'},
+                {title: 'Active', align : 'left'},
+                {title: 'Action', align : 'center'},
+            ]
+        }
     },
 };
 </script>
