@@ -56,7 +56,7 @@ export default {
         return {
             columns : [
                 {title: 'ID', align : 'left', sortable : 'id'},
-                {title: 'Outlet', align : 'left', sortable : 'outlet.name'},
+                {title: 'Outlet', align : 'left', sortable : 'outlet.outlet_id'},
                 {title: 'Customer Name', align : 'left', sortable : 'customer_name'},
                 {title: 'Customer Phone', align : 'left', sortable : 'customer_phone'},
                 {title: 'Customer Address', align : 'left', sortable : 'customer_address'},
