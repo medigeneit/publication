@@ -3,8 +3,8 @@
         Dashboard
     </nav-link>
 
-    <nav-link-wrapper title="Publication" :active="false"> 
-        <nav-link :href="route('users.index')" :active="route().current('users.*')" v-show="true">
+    <nav-link-wrapper title="Publication" :active="route().current('(users|categories|authors|publishers|products).*')"> 
+        <nav-link :href="route('users.index')" :active="route().current('users.*')">
             Users
         </nav-link>
         <nav-link :href="route('categories.index')" :active="route().current('categories.*')">
@@ -21,7 +21,7 @@
         </nav-link>
     </nav-link-wrapper>
 
-    <nav-link-wrapper title="Stock & Circulation" :active="false"> 
+    <nav-link-wrapper title="Stock & Circulation" :active="route().current('(outlets|distributions|storages).*')"> 
         <nav-link :href="route('outlets.index')" :active="route().current('outlets.*')">
             Outlets
         </nav-link>
@@ -34,13 +34,13 @@
         </nav-link>
     </nav-link-wrapper>
 
-    <nav-link-wrapper title="Sales" :active="false">
+    <nav-link-wrapper title="Sales" :active="route().current('sales.*')">
         <nav-link :href="route('sales.index')" :active="route().current('sales.*')">
             Sales
         </nav-link>
     </nav-link-wrapper>
 
-    <nav-link-wrapper title="Accounts" :active="false">
+    <nav-link-wrapper title="Accounts" :active="route().current('(account-categories|accounts|incomes|expenses).*')">
         <nav-link :href="route('account-categories.index')" :active="route().current('account-categories.*')">
             Account Category
         </nav-link>
@@ -55,7 +55,7 @@
 
         <nav-link :href="route('expenses.index')" :active="route().current('expenses.*')">
             Expense
-        </nav-link>
+        </nav-link> 
     </nav-link-wrapper>
 </template>
 
