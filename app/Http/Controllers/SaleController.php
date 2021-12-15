@@ -30,6 +30,8 @@ class SaleController extends Controller
 
     public function create()
     {
+        return Inertia::render('Sale/SaleMemo');
+        
         return Inertia::render('Sale/Create', [
             'sale' => new Sale(),
             'outlets' => Outlet::active()->pluck('name', 'id')
