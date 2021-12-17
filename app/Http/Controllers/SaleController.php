@@ -33,7 +33,14 @@ class SaleController extends Controller
 
     public function create()
     { 
-        $productList = [];
+        $productList[0] = [
+            'name'          => 'Select Product',
+            'maxQuantity'   => 0,
+            'unitPrice'     => [
+                0 => 0
+            ],
+        ];
+
         $products = Product::get();
         foreach($products as $product)
         {
@@ -51,7 +58,7 @@ class SaleController extends Controller
     
             ];
         
-                $productList[$product->id] = $property;
+            $productList[$product->id] = $property;
         }
         
         return Inertia::render('Sale/SaleMemo', [
