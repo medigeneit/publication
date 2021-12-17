@@ -71,6 +71,7 @@ class SaleController extends Controller
     public function store(Request $request)
     {
 
+        return $request;
         $sale = Sale::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
