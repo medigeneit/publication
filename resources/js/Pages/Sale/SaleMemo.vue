@@ -126,40 +126,51 @@ export default {
         AddNewButton,
         Select,
     },
+    props: {
+        buttonValue: { 
+            type: String,
+            default: 'Submit'
+        },
+        productList: {
+            type: Object,
+            default: {}
+        },
+    },
     data() {
         return {
-            products: {
-                5: {
-                    name: "Last Hour",
-                    maxQuantity: 15,
-                    unitPrice: {
-                        1: 790,
-                        2: 740,
-                        3: 730,
-                        4: 680,
-                    },
-                },
-                15: {
-                    name: "SBA",
-                    maxQuantity: 10,
-                    unitPrice: {
-                        1: 560,
-                        2: 520,
-                        3: 500,
-                        4: 450,
-                    },
-                },
-                30: {
-                    name: "Last Hour + SBA",
-                    maxQuantity: 10,
-                    unitPrice: {
-                        1: 1250,
-                        2: 1210,
-                        3: 1200,
-                        4: 1130,
-                    },
-                },
-            },
+            // products: {
+            //     5: {
+            //         name: "Last Hour",
+            //         maxQuantity: 15,
+            //         unitPrice: {
+            //             1: 790,
+            //             2: 740,
+            //             3: 730,
+            //             4: 680,
+            //         },
+            //     },
+            //     15: {
+            //         name: "SBA",
+            //         maxQuantity: 10,
+            //         unitPrice: {
+            //             1: 560,
+            //             2: 520,
+            //             3: 500,
+            //             4: 450,
+            //         },
+            //     },
+            //     30: {
+            //         name: "Last Hour + SBA",
+            //         maxQuantity: 10,
+            //         unitPrice: {
+            //             1: 1250,
+            //             2: 1210,
+            //             3: 1200,
+            //             4: 1130,
+            //         },
+            //     },
+            // },
+            products : this.productList,
             saleableProducts: {},
             priceType: 1,
         }

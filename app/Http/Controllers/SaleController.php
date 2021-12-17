@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\SaleProductResource;
 use App\Http\Resources\SaleResource;
 use App\Models\Outlet;
+use App\Models\Product;
 use App\Models\Sale;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
@@ -29,8 +32,33 @@ class SaleController extends Controller
     }
 
     public function create()
-    {
-        return Inertia::render('Sale/SaleMemo');
+    { 
+        $productList = [];
+        $products = Product::get();
+        foreach($products as $product)
+        {
+            $unit_price = (object )[
+                1 => (float) ($product->wholesale_price ?? 0),
+                2 => (float) ($product->retail_price ?? 0),
+                3 => (float) ($product->distribute_price ?? 0),
+                4 => (float) ($product->special_price ?? 0),
+            ];
+    
+            $property = (object)[
+                'name'          => (string) ($product->name ?? ''),
+                'maxQuantity'   => (int) rand(10,20),
+                'unitPrice'     => (object) $unit_price,
+    
+            ];
+        
+                $productList[$product->id] = $property;
+        }
+        
+        return Inertia::render('Sale/SaleMemo', [
+            'sale' => new Sale(),
+            'outlets' => Outlet::active()->pluck('name', 'id'),
+            'productList' => $productList
+        ]);
         
         return Inertia::render('Sale/Create', [
             'sale' => new Sale(),
