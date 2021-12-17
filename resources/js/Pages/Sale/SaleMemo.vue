@@ -220,7 +220,7 @@ export default {
                 selectedProduct ? selectedProduct.disabled = true : '';
             });
 
-            this.products[0]['disabled'] = true;
+            this.products[0]['disabled'] = false;
         }
     }
 };
