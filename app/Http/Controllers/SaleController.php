@@ -66,11 +66,6 @@ class SaleController extends Controller
             'outlets' => Outlet::active()->pluck('name', 'id'),
             'productList' => $productList
         ]);
-        
-        return Inertia::render('Sale/Create', [
-            'sale' => new Sale(),
-            'outlets' => Outlet::active()->pluck('name', 'id')
-        ]);
     }
 
     public function store(Request $request)
