@@ -33,15 +33,17 @@ class SaleController extends Controller
 
     public function create()
     { 
-        $productList[0] = [
-            'name'          => 'Select Product',
-            'maxQuantity'   => 0,
-            'unitPrice'     => [
-                0 => 0
-            ],
-        ];
+        $productList = [];
 
-        $products = Product::get();
+        $products = Product::query()
+            ->when(isset(request()->search), function ($query) {
+                $query->where('name', 'regexp', request()->search)
+                    ->orWhere('id', request()->search)
+                    ->orWhereIn('id', explode(',', request()->selected));
+            })
+            ->orderBy('name')
+            ->get();
+
         foreach($products as $product)
         {
             $unit_price = (object )[
@@ -60,18 +62,20 @@ class SaleController extends Controller
         
             $productList[$product->id] = $property;
         }
-        
+
         return Inertia::render('Sale/SaleMemo', [
             'sale' => new Sale(),
             'outlets' => Outlet::active()->pluck('name', 'id'),
-            'productList' => $productList
+            'products' => $productList,
+            // 'showProductList' => request()->search,
+            'search' => request()->search,
         ]);
     }
 
     public function store(Request $request)
     {
-
         return $request;
+
         $sale = Sale::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
