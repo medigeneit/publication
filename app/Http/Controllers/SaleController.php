@@ -74,12 +74,11 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
-
+        // return $request;
+        
         $sale = Sale::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
-
         return redirect()
             ->route('sales.show', $sale->id)
             ->with('status', 'The record has been added successfully.');
@@ -146,10 +145,10 @@ class SaleController extends Controller
             'customer_name'     => ['required'],
             'customer_phone'    => ['required'],
             'customer_address'  => ['required'],
-            'subtotal'          => ['required'],
-            'discount'          => ['required'],
-            'discount_purpose'  => ['required'],
-            'amount'            => ['required']
+            'subtotal'          => '',
+            'discount'          => '',
+            'discount_purpose'  => '',
+            'amount'            => ''
         ]);
     }
 }

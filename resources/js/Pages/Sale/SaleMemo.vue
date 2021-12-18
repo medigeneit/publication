@@ -30,6 +30,14 @@
                         </select>
                     </div>
                     <div class="flex items-center gap-2">
+                        <Select id="outlet_id" class="mt-1 block w-full" v-model="form.outlet_id">
+                            <option value=""> -- Select Salepoint -- </option>
+                            <option :value="outletId" v-for="(outletName, outletId) in outlets" :key="outletId">
+                                {{ outletName }}
+                            </option>
+                        </Select>
+                    </div>
+                    <div class="flex items-center gap-2">
                         <label for="">Date:</label>
                         <input type="date" />
                     </div>
@@ -41,7 +49,7 @@
                         <input
                             id="name"
                             type="text"
-                            v-model="form.name"
+                            v-model="form.customer_name"
                             class="
                                 border-0 border-dotted border-b-2 border-black
                                 focus:ring-0 focus:outline-none
@@ -54,7 +62,7 @@
                         <input
                             id="address"
                             type="text"
-                            v-model="form.address"
+                            v-model="form.customer_address"
                             class="
                                 border-0 border-dotted border-b-2 border-black
                                 focus:ring-0 focus:outline-none
@@ -68,7 +76,7 @@
                             <input
                                 id="address"
                                 type="number"
-                                v-model="form.phone"
+                                v-model="form.customer_phone"
                                 class="
                                     border-0
                                     border-dotted
@@ -322,6 +330,10 @@ export default {
             type: Object,
             default: {},
         },
+        outlets: {
+            type: Object,
+            default: {},
+        },
         search: {
             type: String,
             default: "",
@@ -335,11 +347,12 @@ export default {
             selected: [],
             showProductList: false,
             form: this.$inertia.form({
-                phone: "",
+                customer_name: "",
+                customer_address: "",
+                customer_phone: "",
                 email: "",
-                name: "",
-                address: "",
                 products: [],
+                outlet_id: this.outlet_id,
             }),
         };
     },
