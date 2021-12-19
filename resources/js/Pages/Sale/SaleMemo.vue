@@ -19,27 +19,47 @@
                     <p>Mobile: 01404432517, 01404432518</p>
                 </div>
 
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <select v-model="priceType">
+                <div
+                    class="
+                        flex flex-col
+                        md:flex-row
+                        justify-between
+                        items-start
+                        md:items-center
+                        gap-4
+                    "
+                >
+                    <div class="w-full flex items-center gap-2">
+                        <Select
+                            class="block w-full"
+                            v-model="form.price_type"
+                            @change="subtotalCalculation"
+                        >
                             <option value="">-- Price Type --</option>
                             <option value="1">Retail</option>
                             <option value="2">Distributor</option>
                             <option value="3">Wholesale</option>
                             <option value="4">Special (Genesis)</option>
-                        </select>
+                        </Select>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <Select id="outlet_id" class="mt-1 block w-full" v-model="form.outlet_id">
-                            <option value=""> -- Select Salepoint -- </option>
-                            <option :value="outletId" v-for="(outletName, outletId) in outlets" :key="outletId">
+                    <div class="w-full flex items-center gap-2">
+                        <Select
+                            id="outlet_id"
+                            class="block w-full"
+                            v-model="form.outlet_id"
+                        >
+                            <option value="">-- Select Salepoint --</option>
+                            <option
+                                :value="outletId"
+                                v-for="(outletName, outletId) in outlets"
+                                :key="outletId"
+                            >
                                 {{ outletName }}
                             </option>
                         </Select>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <label for="">Date:</label>
-                        <input type="date" />
+                    <div class="hidden w-full flex items-center gap-2">
+                        <Input type="date" class="block w-full" />
                     </div>
                 </div>
 
@@ -106,7 +126,7 @@
                     </div>
                 </div>
 
-                <div v-show="priceType" class="py-2 text-right">
+                <div v-show="form.price_type && form.outlet_id" class="py-2 text-right">
                     <button
                         type="button"
                         @click="showProductList = !showProductList"
@@ -117,7 +137,7 @@
                 </div>
 
                 <div
-                    v-show="priceType"
+                    v-show="form.price_type && form.outlet_id"
                     class="pb-2 flex flex-col justify-center items-center gap-1"
                 >
                     <span
@@ -143,96 +163,220 @@
                     </span>
                 </div>
 
-                <table v-show="priceType" class="w-full border-b">
-                    <thead>
-                        <tr class="border-t">
-                            <th
-                                class="
-                                    text-center
-                                    px-2
-                                    py-2
-                                    w-8
-                                    border-l border-r
-                                "
-                            >
-                                SL
-                            </th>
-                            <th class="text-left px-2 py-2 border-r">
-                                Description
-                            </th>
-                            <th class="text-right px-2 py-2 w-20 border-r">
-                                Quantity
-                            </th>
-                            <th class="text-right px-2 py-2 w-24 border-r">
-                                Unit Price
-                            </th>
-                            <th class="text-right px-2 py-2 w-28 border-r">
-                                Amount
-                            </th>
-                            <th class="text-center px-2 py-2 w-8 border-r"></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr
-                            class="border-t"
-                            v-for="(saleableProduct, index) in saleableProducts"
-                            :key="index"
-                        >
-                            <td class="text-right px-2 py-1 border-r border-l">
-                                {{ parseInt(index) + 1 }}
-                            </td>
-                            <td class="text-left px-2 py-1 border-r">
-                                {{ products[saleableProduct.productId].name }}
-                            </td>
-                            <td class="text-right border-r">
-                                <input
-                                    v-show="saleableProduct.productId"
-                                    type="number"
-                                    class="w-20 ml-auto text-center border-0"
-                                    @change="checkQuantity(index)"
-                                    v-model="saleableProduct.quantity"
-                                />
-                            </td>
-                            <td class="text-right px-2 py-1 border-r">
-                                <span v-show="saleableProduct.productId">
-                                    {{ saleableProduct.unitPrice[priceType] }}
-                                </span>
-                            </td>
-                            <td class="text-right px-2 py-1 border-r">
-                                <span v-show="saleableProduct.productId">
-                                    {{
-                                        saleableProduct.quantity *
-                                            saleableProduct.unitPrice[
-                                                priceType
-                                            ] || 0
-                                    }}
-                                </span>
-                            </td>
-                            <td class="border-r">
-                                <div
+                <div class="overflow-auto">
+                    <table v-show="form.price_type && form.outlet_id" class="w-full min-w-max">
+                        <thead>
+                            <tr class="border-t border-b bg-gray-50">
+                                <th
                                     class="
-                                        flex
-                                        justify-center
-                                        items-center
-                                        py-1
+                                        text-center
+                                        px-2
+                                        py-2
+                                        w-8
+                                        border-l border-r
                                     "
                                 >
-                                    <button
-                                        class="text-red-500 text-2xl"
-                                        @click="removeProduct(index)"
-                                        type="button"
+                                    SL
+                                </th>
+                                <th class="text-left px-2 py-2 border-r">
+                                    Description
+                                </th>
+                                <th class="text-right px-2 py-2 w-20 border-r">
+                                    Quantity
+                                </th>
+                                <th class="text-right px-2 py-2 w-24 border-r">
+                                    Unit Price
+                                </th>
+                                <th class="text-right px-2 py-2 w-28 border-r">
+                                    Amount
+                                </th>
+                                <th
+                                    class="text-center px-2 py-2 w-8 border-r"
+                                ></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr
+                                class="border-b"
+                                v-for="(
+                                    saleableProduct, index
+                                ) in saleableProducts"
+                                :key="index"
+                            >
+                                <td
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-r border-l
+                                    "
+                                >
+                                    {{ parseInt(index) + 1 }}
+                                </td>
+                                <td class="text-left px-2 py-1 border-r">
+                                    {{
+                                        products[saleableProduct.productId].name
+                                    }}
+                                </td>
+                                <td class="border-r">
+                                    <input
+                                        v-show="saleableProduct.productId"
+                                        type="number"
+                                        class="
+                                            w-20
+                                            ml-auto
+                                            text-center
+                                            border-0
+                                        "
+                                        @input="checkQuantity(index)"
+                                        v-model="saleableProduct.quantity"
+                                    />
+                                </td>
+                                <td class="text-right px-2 py-1 border-r">
+                                    <span v-show="saleableProduct.productId">
+                                        {{
+                                            saleableProduct.unitPrice[form.price_type]
+                                        }}
+                                    </span>
+                                </td>
+                                <td class="text-right px-2 py-1 border-r">
+                                    <span v-show="saleableProduct.productId">
+                                        {{
+                                            saleableProduct.quantity *
+                                                saleableProduct.unitPrice[
+                                                    form.price_type
+                                                ] || 0
+                                        }}
+                                    </span>
+                                </td>
+                                <td class="border-r">
+                                    <div
+                                        class="
+                                            flex
+                                            justify-center
+                                            items-center
+                                            py-1
+                                        "
                                     >
-                                        &times;
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                        <button
+                                            class="text-red-500 text-2xl"
+                                            @click="removeProduct(index)"
+                                            type="button"
+                                        >
+                                            &times;
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td
+                                    colspan="2"
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-l border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    Subtotal
+                                </td>
+                                <td
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    {{ subtotal }}
+                                </td>
+                                <td
+                                    class="
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                ></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td
+                                    colspan="2"
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-l border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    Discount
+                                </td>
+                                <td class="border-b border-r bg-gray-50">
+                                    <input
+                                        type="number"
+                                        class="w-full text-right border-0 px-2"
+                                        @input="applyDiscount()"
+                                        v-model="discount"
+                                    />
+                                </td>
+                                <td
+                                    class="
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                ></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td
+                                    colspan="2"
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-l border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    Payable Amount
+                                </td>
+                                <td
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    {{ subtotal - discount }}
+                                </td>
+                                <td
+                                    class="
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                ></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
 
                 <div
-                    v-show="priceType"
+                    v-show="form.price_type && form.outlet_id"
                     class="flex items-center justify-between mt-4"
                 >
                     <div class="">
@@ -244,20 +388,44 @@
 
             <ul
                 v-if="showProductList"
-                class="w-full max-w-xs shadow-lg rounded border bg-white p-4"
+                class="
+                    fixed
+                    md:static
+                    inset-0
+                    overflow-auto
+                    w-full
+                    max-w-sm
+                    rounded
+                    border
+                    bg-white
+                    p-4
+                    z-50
+                "
             >
+                <li class="text-right mb-2">
+                    <span
+                        class="
+                            text-red-500
+                            cursor-pointer
+                            text-3xl
+                            inline-block
+                        "
+                        @click="showProductList = false"
+                    >
+                        &times;
+                    </span>
+                </li>
                 <li>
                     <input
                         placeholder="Search..."
                         @input="searchProduct"
                         class="
-                            border
-                            rounded
-                            border-gray-500
                             px-2
                             py-2
                             w-full
-                            focus:ring-0 focus:outline-none
+                            rounded
+                            border border-gray-500
+                            focus:outline-none focus:ring-0
                         "
                     />
                 </li>
@@ -342,7 +510,6 @@ export default {
     data() {
         return {
             saleableProducts: [],
-            priceType: 1,
             messages: [],
             selected: [],
             showProductList: false,
@@ -352,8 +519,11 @@ export default {
                 customer_phone: "",
                 email: "",
                 products: [],
-                outlet_id: this.outlet_id,
+                outlet_id: '',
+                price_type: '',
             }),
+            subtotal: 0,
+            discount: "",
         };
     },
     methods: {
@@ -369,6 +539,8 @@ export default {
             }
 
             this.selectedProductHandler();
+
+            this.subtotalCalculation();
         },
         selectedProductHandler() {
             this.selected = [];
@@ -381,6 +553,8 @@ export default {
             this.saleableProducts.splice(numberOfIndex, 1);
 
             this.selectedProductHandler();
+
+            this.subtotalCalculation();
         },
         searchProduct(event) {
             let url = this.route(this.routeName || this.route().current(), {
@@ -411,6 +585,32 @@ export default {
                     `${product.name} has ${product.maxQuantity} copies in stock.`
                 );
             }
+
+            this.subtotalCalculation();
+        },
+        applyDiscount() {
+            this.discount > this.subtotal
+                ? (this.discount = this.subtotal)
+                : "";
+
+            this.discount
+                ? (this.discount = parseInt(this.discount))
+                : (this.discount = "");
+
+            this.payable = this.subtotal - (this.discount || 0);
+        },
+        subtotalCalculation() {
+            let subtotal = 0;
+
+            this.saleableProducts.forEach((saleableProduct) => {
+                subtotal +=
+                    saleableProduct.unitPrice[this.form.price_type] *
+                    saleableProduct.quantity;
+            });
+
+            this.subtotal = subtotal;
+
+            this.applyDiscount();
         },
         submit() {
             this.form.products = this.saleableProducts;

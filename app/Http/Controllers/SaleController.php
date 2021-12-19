@@ -37,7 +37,7 @@ class SaleController extends Controller
 
         $products = Product::query()
             ->when(isset(request()->search), function ($query) {
-                $query->where('name', 'regexp', request()->search)
+                $query->where('name', 'regexp', "/" . str_replace(" ", "|", request()->search) . "/")
                     ->orWhere('id', request()->search)
                     ->orWhereIn('id', explode(',', request()->selected));
             })
@@ -74,7 +74,7 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
+        return $request;
         
         $sale = Sale::create($this->validateData($request) + [
             'user_id' => Auth::id()
