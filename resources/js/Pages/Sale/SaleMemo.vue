@@ -307,7 +307,9 @@
                                 ></td>
                             </tr>
                             <tr>
-                                <td colspan="2"></td>
+                                <td colspan="2" class="px-2 py-1">
+                                    <textarea class="w-full" type="text" rows="3" placeholder="Discount Purpose" v-model="form.discount_purpose"></textarea>
+                                </td>
                                 <td
                                     colspan="2"
                                     class="
@@ -464,6 +466,7 @@ import AddNewButton from "@/Components/AddNewButton.vue";
 import Select from "@/Components/Select.vue";
 import Button from "@/Components/Button.vue";
 import GoToList from "@/Components/GoToList.vue";
+import Textarea from '@/Components/Textarea.vue';
 
 export default {
     components: {
@@ -479,6 +482,7 @@ export default {
         Select,
         Button,
         GoToList,
+        Textarea,
     },
     created() {
         this.saleableProducts.forEach((saleableProduct) => {
@@ -521,6 +525,9 @@ export default {
                 products: [],
                 outlet_id: '',
                 price_type: '',
+                subtotal: 0,
+                discount: 0,
+                discount_purpose: ''
             }),
             subtotal: 0,
             discount: "",
@@ -614,6 +621,8 @@ export default {
         },
         submit() {
             this.form.products = this.saleableProducts;
+            this.form.subtotal = this.subtotal;
+            this.form.discount = this.discount;
 
             return this.form.post(this.route("sales.store"));
         },
