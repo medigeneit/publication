@@ -4,7 +4,7 @@
             <div class="border rounded shadow p-4">
                 <div
                     id="word-section"
-                    class="flex flex-wrap text-2xl h-80 overflow-y-auto"
+                    class="flex flex-wrap text-xl"
                 >
                     <div class="waiting">⌛</div>
                 </div>
@@ -616,7 +616,7 @@ export default {
             let wordSection = document.getElementById("word-section");
             this.typedWord = "";
             wordSection.innerHTML = "";
-            for (let i = 300; i > 0; i--) {
+            for (let i = 200; i > 0; i--) {
                 let words = this.shuffle(this.wordList);
                 let wordSpan = `<span class="px-1">${words[i]}</span>`;
                 wordSection.innerHTML += wordSpan;
@@ -661,10 +661,6 @@ export default {
             }
             this.wordData.total =
                 this.wordData.correct + this.wordData.incorrect;
-
-            if(current.offsetTop > 100) {
-                document.getElementById("word-section").scrollTop = current.offsetTop - 150;
-            }
 
             current.nextSibling.classList.add("current-word");
         },
