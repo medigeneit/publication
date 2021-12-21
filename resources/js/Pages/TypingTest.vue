@@ -563,15 +563,15 @@ export default {
         this.addWords();
     },
     methods: {
-        typingTest(e) {
+        typingTest(event) {
             // Char:        Key Code:
             // <space>      32
             // <backspace>  8
             // <shift>      16
             // [A-Z]        65-90
             // [' "]        222
-            e = e || window.event;
-            let kCode = e.keyCode;
+            event = event || window.event;
+            let kCode = event.keyCode;
             if (this.typedWord.match(/^\s/g)) {
                 this.typedWord = "";
                 return false;
@@ -583,7 +583,7 @@ export default {
                     this.clearLine();
                     this.typedWord = "";
                 }
-                this.wordData.typed += 1;
+
                 if (this.wordData.typed === 30) {
                     let element = document.getElementById("word-section");
                     let currentScroll = element.scrollTop;
@@ -648,6 +648,7 @@ export default {
             if (this.checkWord(word)) {
                 current.classList.remove("current-word");
                 current.classList.add("correct-word-c");
+                this.wordData.typed += word.length;
                 this.wordData.correct += 1;
             } else {
                 current.classList.remove("current-word", "incorrect-word-bg");
@@ -678,7 +679,7 @@ export default {
         calculateWPM() {
             let { seconds, correct, incorrect, total, typed } = this.wordData;
             let minutes = seconds / 60;
-            let wpm = Math.ceil(typed / 5 - incorrect / minutes);
+            let wpm = Math.ceil((typed / 5 - incorrect) / minutes);
             let accuracy = Math.ceil((correct / total) * 100);
             if (wpm < 0) {
                 wpm = 0;
