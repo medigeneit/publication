@@ -37,7 +37,7 @@ class SaleController extends Controller
 
         $products = Product::query()
             ->when(isset(request()->search), function ($query) {
-                $query->where('name', 'regexp', "/" . str_replace(" ", "|", request()->search) . "/")
+                $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
                     ->orWhere('id', request()->search)
                     ->orWhereIn('id', explode(',', request()->selected));
             })
@@ -46,7 +46,7 @@ class SaleController extends Controller
 
         foreach($products as $product)
         {
-            $unit_price = (object )[
+            $unit_price = (object ) [
                 1 => (float) ($product->wholesale_price ?? 0),
                 2 => (float) ($product->retail_price ?? 0),
                 3 => (float) ($product->distribute_price ?? 0),

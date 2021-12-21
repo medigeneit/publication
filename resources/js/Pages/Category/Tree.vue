@@ -11,7 +11,7 @@
                 </template>
             </Form>
 
-            <button v-show="!openForm" class="px-2 py-0.5 border rounded bg-gray-600 text-white mb-4" @click="openForm = ! openForm">
+            <button v-show="!openForm" class="px-2 py-0.5 border rounded bg-gray-600 text-white mb-4" @click="addNewSubcategory(0)">
                 + Add New Category
             </button>
 

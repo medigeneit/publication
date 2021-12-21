@@ -16,9 +16,11 @@ class CreateSalesTable extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('outlet_id')->nullable();
-            $table->string('customer_name')->nullable();
-            $table->string('customer_address')->nullable();
-            $table->bigInteger('customer_phone')->nullable();
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
+            $table->bigInteger('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->tinyInteger('price_type')->nullable()->comment('1= Retail, 2 = Distributor, 3 = Wholesale, 4 =Special');
             $table->float('subtotal')->nullable();
             $table->float('discount')->nullable();
             $table->text('discount_purpose')->nullable();

@@ -64,7 +64,6 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
         $category = Category::create($this->validateData($request) + [
             'user_id'  => Auth::id(),
         ]);
