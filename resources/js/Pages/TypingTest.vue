@@ -2,7 +2,10 @@
     <app-layout>
         <div class="w-full mx-auto max-w-4xl p-4">
             <div class="border rounded shadow p-4">
-                <div id="word-section" class="flex flex-wrap text-2xl">
+                <div
+                    id="word-section"
+                    class="flex flex-wrap text-2xl h-80 overflow-y-auto"
+                >
                     <div class="waiting">⌛</div>
                 </div>
 
@@ -584,7 +587,7 @@ export default {
                     this.typedWord = "";
                 }
 
-                if (this.wordData.typed === 30) {
+                if (this.wordData.typed > 100) {
                     let element = document.getElementById("word-section");
                     let currentScroll = element.scrollTop;
                     element.scrollTop = currentScroll + 20;
@@ -613,9 +616,9 @@ export default {
             let wordSection = document.getElementById("word-section");
             this.typedWord = "";
             wordSection.innerHTML = "";
-            for (let i = 120; i > 0; i--) {
+            for (let i = 300; i > 0; i--) {
                 let words = this.shuffle(this.wordList);
-                let wordSpan = `<span class="px-2">${words[i]}</span>`;
+                let wordSpan = `<span class="px-1">${words[i]}</span>`;
                 wordSection.innerHTML += wordSpan;
             }
             wordSection.firstChild.classList.add("current-word");
@@ -624,12 +627,13 @@ export default {
             let wordLength = word.length;
             let current = document.getElementsByClassName("current-word")[0];
             let currentSubstring = current.innerHTML.substring(0, wordLength);
-            if (word.trim() !== currentSubstring) {
-                current.classList.add("incorrect-word-bg");
-                return false;
+            if (word.trim() === currentSubstring && wordLength) {
+                current.classList.remove("incorrect-word-bg");
+                return true;
             }
-            current.classList.remove("incorrect-word-bg");
-            return true;
+
+            current.classList.add("incorrect-word-bg");
+            return false;
         },
         shuffle(array) {
             let m = array.length,
@@ -657,10 +661,11 @@ export default {
             }
             this.wordData.total =
                 this.wordData.correct + this.wordData.incorrect;
-            if (this.wordData.total % 7 === 0) {
-                document.getElementById("word-section").scrollTop =
-                    current.nextSibling.offsetTop;
+
+            if(current.offsetTop > 100) {
+                document.getElementById("word-section").scrollTop = current.offsetTop - 150;
             }
+
             current.nextSibling.classList.add("current-word");
         },
         clearLine() {
