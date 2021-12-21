@@ -38,7 +38,10 @@
                             </template>
 
                             <template #content>
-                                <dropdown-link :href="route('logout')" method="post" as="button">
+                                <dropdown-link :href="route('typing-test')">
+                                    Typing Test
+                                </dropdown-link>
+                                <dropdown-link :href="route('logout')" method="post" as="button" class="text-red-600">
                                     Log Out
                                 </dropdown-link>
                             </template>

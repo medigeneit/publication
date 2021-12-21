@@ -1,6 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -9,6 +9,24 @@ input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
-input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+@layer components {
+    .current-word {
+        @apply bg-gray-300 rounded;
+    }
+
+    .incorrect-word-bg {
+        @apply bg-red-400;
+    }
+
+    .correct-word-c {
+        @apply text-green-600;
+    }
+
+    .incorrect-word-c {
+        @apply text-red-600;
+    }
 }
