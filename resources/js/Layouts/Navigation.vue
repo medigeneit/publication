@@ -3,7 +3,7 @@
         Dashboard
     </nav-link>
 
-    <nav-link-wrapper title="Publication" :active="route().current('(users|categories|authors|publishers|products).*')"> 
+    <nav-link-wrapper title="Publication" :active="route().current('(users|categories|authors|publishers|productions|versions|products).*')"> 
         <nav-link :href="route('users.index')" :active="route().current('users.*')">
             Users
         </nav-link>
@@ -15,6 +15,12 @@
         </nav-link>
         <nav-link :href="route('publishers.index')" :active="route().current('publishers.*')">
             Publisher
+        </nav-link>
+        <nav-link :href="route('productions.index')" :active="route().current('productions.*')">
+            Productions
+        </nav-link>
+        <nav-link :href="route('versions.index')" :active="route().current('versions.*')">
+            Versions
         </nav-link>
         <nav-link :href="route('products.index')" :active="route().current('products.*')">
             Products

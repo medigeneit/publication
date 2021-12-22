@@ -10,10 +10,12 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VersionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -42,7 +44,7 @@ Route::get('/dashboard',[ DashboardController::class, 'dashboard'])->middleware(
 
 Route::get('/typing-test', function() {
     return Inertia::render('TypingTest');
-})->name('typing-test');
+})->middleware(['auth', 'admin'])->name('typing-test');
 
 require __DIR__ . '/auth.php';
 
@@ -52,6 +54,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'users'                     => UserController::class,
         'categories'                => CategoryController::class,
         'authors'                   => AuthorController::class,
+        'productions'               => ProductionController::class,
+        'versions'                  => VersionController::class,
         'products'                  => ProductController::class,
         'publishers'                => PublisherController::class,
         'sales'                     => SaleController::class,

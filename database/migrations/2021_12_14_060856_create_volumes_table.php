@@ -15,9 +15,11 @@ class CreateVolumesTable extends Migration
     {
         Schema::create('volumes', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->unsignedBigInteger('version_id');
             $table->string('link');
-            $table->string('volume');
+            $table->string('volume_no');
+            $table->double('cost')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('active');
             $table->timestamps();

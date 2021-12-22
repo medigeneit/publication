@@ -16,11 +16,7 @@ class CreateProductionsTable extends Migration
         Schema::create('productions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->tinyInteger('type');
-            $table->string('isbn')->nullable();
-            $table->string('crl')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->tinyInteger('active');
             $table->timestamps();
             $table->softDeletes();
         });

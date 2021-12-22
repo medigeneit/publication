@@ -15,11 +15,16 @@ class CreateVersionsTable extends Migration
     {
         Schema::create('versions', function (Blueprint $table) {
             $table->id();
+            $table->tinyInteger('type')->comment('1=Package, 2=Book, 3=Lecture Sheet');
+            $table->unsignedBigInteger('production_id')->nullable();
             $table->string('edition');
-            $table->unsignedBigInteger('author_id')->nullable();
-            $table->unsignedBigInteger('editor_id')->nullable();
+            $table->string('isbn')->nullable();
+            $table->string('crl')->nullable();
+            $table->double('cost')->nullable();
+            $table->string('link')->nullable();
             $table->double('production_cost')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->tinyInteger('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
