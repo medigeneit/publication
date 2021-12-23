@@ -33,6 +33,9 @@
     <nav-link :href="route('accounts.index')" :active="route().current('accounts.*')">
         Account
     </nav-link>
+    <nav-link :href="route('price-categories.index')" :active="route().current('price-categories.*')">
+        Price Category
+    </nav-link>
 </template>
 
 <script>
