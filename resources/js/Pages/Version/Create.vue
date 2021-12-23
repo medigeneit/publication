@@ -36,10 +36,14 @@ export default {
             type: Object,
             default: {}
         },
-        categories: {
+        productList: {
             type: Object,
             default: {}
         },
+        // categories: {
+        //     type: Object,
+        //     default: {}
+        // },
     },
 };
 </script>

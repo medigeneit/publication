@@ -1,41 +1,59 @@
 <template>
     <div class="w-full flex gap-4">
-        <div class="w-full max-w-2xl p-4 bg-white border shadow rounded">
+        <div class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded">
 
             <ValidationErrors class="mb-4" />
 
             <form @submit.prevent="submit">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4">
-                    <div class="mb-4 col-span-2">
-                        <Label for="type" value="Type" />
-                        <Select name="type" class="mt-1 block w-full" @change="typeChange(parseInt(form.type))" v-model="form.type" required>
-                            <option value=""> -- Select Type -- </option>
-                            <option :value="type" v-for="(typeName, type) in data.versionType" :key="type">{{ typeName }}</option>
-                        </Select>
-                    </div>
+                <div class="mb-4">
+                    <Label for="production_id" value="Production Name" />
+                    <Select id="production_id" class="mt-1 block w-full" v-model="form.production_id" required>
+                        <option value=""> -- Select Production -- </option>
+                        <option :value="productionId" v-for="(productionName, productionId) in data.productionList" :key="productionId">
+                            {{ productionName }}
+                        </option>
+                    </Select>
+                </div>
 
-                    <div class="mb-4 col-span-2" id="productWrapper">
-                        <Label for="product_id" value="Product Name" />
-                        <Select id="publisher_id" class="mt-1 block w-full" v-model="form.publisher_id">
-                            <option value=""> -- Select Production -- </option>
-                            <option :value="publisherId" v-for="(productionName, productionId) in data.productionList" :key="productionId">
-                                {{ productionName }}
-                            </option>
-                        </Select>
-                    </div>
+                <div class="mb-4">
+                    <Label for="type" value="Type" />
+                    <Select name="type" class="mt-1 block w-full" @change="typeChange(parseInt(form.type))" v-model="form.type" required>
+                        <option value=""> -- Select Type -- </option>
+                        <option :value="type" v-for="(typeName, type) in data.versionType" :key="type">{{ typeName }}</option>
+                    </Select>
+                </div>
 
-                    <div class="mb-4">
-                        <Label for="active" value="Active" />
-                        <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </Select>
-                    </div>
+                <div class="mb-4">
+                    <Label for="active" value="Active" />
+                    <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </Select>
+                </div>
 
-                    <div class="mb-4 col-start-1">
-                        <Label for="edition" value="Edition" />
-                        <Input id="edition" name="edition" type="text" step="0.01" class="mt-1 block w-full" v-model="form.edition" />
-                    </div>
+                <div class="mb-4 col-start-1">
+                    <Label for="edition" value="Edition" />
+                    <Input id="edition" name="edition" type="number" step="0.01" class="mt-1 block w-full" v-model="form.edition" />
+                </div>
+
+                <div class="mb-4 col-start-1">
+                    <Label for="isbn" value="ISBN" />
+                    <Input id="isbn" name="isbn" type="text" step="0.01" class="mt-1 block w-full" v-model="form.isbn" />
+                </div>
+
+                <div class="mb-4 col-start-1">
+                    <Label for="crl" value="CRL" />
+                    <Input id="crl" name="crl" type="text" step="0.01" class="mt-1 block w-full" v-model="form.crl" />
+                </div>
+
+                <div class="mb-4 col-start-1">
+                    <Label for="productionCost" value="Production Cost" />
+                    <Input id="production_cost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.productionCost" />
+                </div>
+
+                <div class="mb-4 col-start-1">
+                    <Label for="link" value="Link" />
+                    <Input id="link" name="link" type="text" step="0.01" class="mt-1 block w-full" v-model="form.link" />
                 </div>
 
                 <hr class="w-full my-4">
@@ -49,6 +67,51 @@
                     </Button>
                 </div>
             </form>
+        </div>
+        
+        <div id="volumeWrapper" class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded" :class="{'hidden' : form.type !== 4 && (form.type !== 2 || form.type !== 3) }">
+            <div class="mb-4 col-start-1">
+                <Label for="volume_no" value="Volume No" />
+                <Input id="volumeNo" name="volume_no" type="text" step="0.01" class="mt-1 block w-full" v-model="form.volumeNo" />
+            </div>
+            <div class="mb-4 col-start-1">
+                <Label for="volume_link" value="Volume Link" />
+                <Input id="volumeLink" name="volume_link" type="text" step="0.01" class="mt-1 block w-full" v-model="form.volumeLink" />
+            </div>
+            <div class="mb-4 col-start-1">
+                <Label for="volume_cost" value="Volume Cost" />
+                <Input id="volumeCost" name="volume_cost" type="text" step="0.01" class="mt-1 block w-full" v-model="form.volumeCost" />
+            </div>
+        </div>
+        
+        <div id="productWrapper" class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded" :class="{'hidden' : form.type !== 1 && (form.type !== 2 || form.type !== 3) }" >
+            <input placeholder="Search..." @input="searchProduct" class=" px-2 py-2 w-full rounded border border-gray-500 focus:outline-none focus:ring-0"/>
+            <div class="p-2 mb-2 border">
+               
+                <div class="w-full flex justify-between items-center overflow-auto" >
+                    <table class="min-w-max w-full table-auto">
+                        <thead>
+                            <tr class="text-gray-600 text-sm font-light bg-white">
+                                <th class="text-left">Name</th>
+                                <th class="text-left">Cost</th>
+                                <th>Mrp</th>
+                                <th>Estimation</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm font-light bg-white">
+                            <tr class="border" v-for="(product) in data.productList" :key="product.id" :class="{ 'bg-green-200' : form.product_ids.includes(parseInt(product.id)), 'bg-white' : form.product_ids.includes(parseInt(product.id)) }">
+                                <td class="w-40">{{ product.name }}</td>
+                                <td>{{ product.production_cost }}</td>
+                                <td>{{ product.mrp }}</td>
+                                <td>
+                                    <input type="number" class="cursor-pointer w-20 ml-auto text-center" v-model="form.packageProductPrice[product.id]" >
+                                </td>
+                                <td><Input type="checkbox" class="cursor-pointer" @change="productSelectHandler(product.id)" :checked="form.product_ids.includes(parseInt(product.id))" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>   
         </div>
     </div>
 </template>
@@ -87,28 +150,43 @@ export default {
         return {
             form: this.$inertia.form({
                 type: this.data.version.type || '',
-                production_id: this.data.production_id || '',
+                production_id: this.data.version.production_id || '',
+                edition: this.data.edition || '',
+                isbn: this.data.isbn || '',
+                crl: this.data.crl || '',
+                productionCost: this.data.production_cost || '',
+                link: this.data.link || '',
                 active: this.moduleAction == 'store' ? 1 : this.data.version.active,
+                volumeNo: '',
+                volumeLink: '',
+                volumeCost: '',
                 product_ids: this.data.product_ids || [],
+                packageProductPrice:  {},
             }),
             categoryShow: false,
             productShow: false,
+            selected: [],
         }
     },
 
     methods: {
 
         typeChange(type) {
-            console.log(this.data.version.type === 1)
-            let publisherWrapper = document.getElementById('publisherWrapper');
+            let volumeWrapper = document.getElementById('volumeWrapper');
             let productWrapper = document.getElementById('productWrapper');
-
-            if(type === 1) {
-                publisherWrapper.classList.add('hidden');
-                productWrapper.classList.remove('hidden');
-            } else {
-                publisherWrapper.classList.remove('hidden');
-                productWrapper.classList.add('hidden');
+            
+            switch(type) {
+                case 4:
+                    volumeWrapper.classList.remove('hidden');
+                    productWrapper.classList.add('hidden');
+                    break;
+                case 1:
+                    volumeWrapper.classList.add('hidden');
+                    productWrapper.classList.remove('hidden');
+                    break;
+                default:
+                    productWrapper.classList.add('hidden');
+                    volumeWrapper.classList.add('hidden');
             }
         },
 
@@ -121,29 +199,6 @@ export default {
                 return this.form.put(this.route('versions.update', this.data.version.id));
             }
         },
-
-        itemClickHandler(event) {
-            const category = event.target.closest('.parent');
-
-            const subcategoryContainer = category.nextElementSibling;
-
-            if(subcategoryContainer) {
-                subcategoryContainer.classList.toggle('hidden');
-            }
-
-            category.firstElementChild.classList.toggle('rotate-180');
-        },
-
-        categorySelectHandler(categoryId) {
-            categoryId = parseInt(categoryId);
-
-            if (this.form.category_ids.includes(categoryId)) {
-                this.form.category_ids.splice(this.form.category_ids.indexOf(categoryId), 1);
-            } else {
-                this.form.category_ids.push(categoryId);
-            }
-        },
-        
         productSelectHandler(productId) {
             productId = parseInt(productId);
 
@@ -152,7 +207,15 @@ export default {
             } else {
                 this.form.product_ids.push(productId);
             }
-        }
+        },
+        searchProduct(event) {
+            let url = this.route(this.routeName || this.route().current(), {
+                selected: this.selected.toString(),
+                search: !event.target.value.includes('\\') ? event.target.value : '',
+            });
+
+            this.$inertia.get(url, {}, { preserveState: true });
+        },
     }
 };
 </script>

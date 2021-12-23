@@ -23,6 +23,7 @@ class Version extends Model
             1 => 'Package',
             2 => 'Book',
             3 => 'Lecture',
+            4 => 'Volume',
         ];
     }
 }

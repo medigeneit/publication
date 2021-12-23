@@ -7,6 +7,7 @@ use App\Http\Resources\VersionResource;
 use App\Models\Product;
 use App\Models\Production;
 use App\Models\Version;
+use App\Models\PackageProduct;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -30,17 +31,27 @@ class VersionController extends Controller
 
     public function create()
     {
+        $products =Product::query()
+                ->when(isset(request()->search), function ($query) {
+                    $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
+                        ->orWhere('id', request()->search)
+                        ->orWhereIn('id', explode(',', request()->selected));
+                })
+                ->get(['id', 'name', 'production_cost', 'mrp']);
+
         return Inertia::render('Version/Create', [
-            'version' => new Version(),
-            'productionList' => Production::pluck('name', 'id'),
-            'productList' => Product::pluck('name', 'id'),
-            'versionType'  => Version::getTypes(),
+            'version'           => new Version(),
+            'productionList'    => Production::pluck('name', 'id'),
+            'productList'       => $products,
+            'versionType'       => Version::getTypes(),
         ]);
     }
 
     public function store(Request $request)
     {
+        return $request->packageProductPrice;
         $version = Version::create($this->validateData($request));
+        $this->packageInsert($request, $version);
 
         return redirect()
             ->route('versions.show', $version->id)
@@ -71,6 +82,21 @@ class VersionController extends Controller
             ->route('versions.show', $version->id)
             ->with('status', 'The record has been update successfully.');
     }
+
+    protected function packageInsert($request, $product)
+    {
+        PackageProduct::where(['package_id' => $product->id])->delete();
+        
+        if(is_array($request->product_ids)) {
+            foreach($request->product_ids as $package_id) {
+                PackageProduct::onlyTrashed()->updateOrCreate(
+                    ['package_id' => $product->id],
+                    ['product_id' => $package_id, 'deleted_at' => null]
+                );
+            }
+        }
+    }
+
 
     public function destroy(Version $version)
     {
@@ -110,7 +136,14 @@ class VersionController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            //
+            'type'              => 'required',
+            'production_id'     => 'required',
+            'edition'           => '',
+            'isbn'              => '',
+            'crl'               => '',
+            'link'              => '',
+            'production_cost'   => '',
+            'active'            => '',
         ]);
     }
 

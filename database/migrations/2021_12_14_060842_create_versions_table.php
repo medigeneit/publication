@@ -20,7 +20,6 @@ class CreateVersionsTable extends Migration
             $table->string('edition');
             $table->string('isbn')->nullable();
             $table->string('crl')->nullable();
-            $table->double('cost')->nullable();
             $table->string('link')->nullable();
             $table->double('production_cost')->nullable();
             $table->unsignedBigInteger('user_id');

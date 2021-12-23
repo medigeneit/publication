@@ -567,7 +567,7 @@ export default {
         searchProduct(event) {
             let url = this.route(this.routeName || this.route().current(), {
                 selected: this.selected.toString(),
-                search: event.target.value,
+                search: !event.target.value.includes('\\') ? event.target.value: '',
             });
 
             this.$inertia.get(url, {}, { preserveState: true });
