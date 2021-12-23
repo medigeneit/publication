@@ -6,7 +6,7 @@
             Create outlet
         </template>
         
-        <form-component :data="data"  module-action="store" />
+        <form-component :outlet="outlet" :outletType="outletType"  module-action="store" />
     </app-layout>
 </template>
 
@@ -21,15 +21,6 @@ export default {
         Head,
         Link,
         FormComponent,
-    },
-
-    data() {
-        return {
-            data: {
-                outlet: this.outlet,
-                outletType: this.outletType,
-            }
-        }
     },
 
     props: {

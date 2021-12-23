@@ -3,7 +3,7 @@
 
     <app-layout>
         <template #header>
-            Edit User
+            Edit Category
         </template>
         
         <form-component :data="data" module-action="update" />

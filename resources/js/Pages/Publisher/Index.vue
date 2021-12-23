@@ -8,13 +8,7 @@
 
         <add-new-button :href="route('publishers.create')" />
 
-        <data-table :collections="publishers" :filters="filters" :dateFilter="true">
-            <template #head>
-                <th class="py-3 px-2 text-left">ID</th>
-                <th class="py-3 px-2 text-left">Name</th>
-                <th class="py-3 px-2 text-center">Active</th>
-                <th class="py-3 px-2 text-center">Action</th>
-            </template>
+        <data-table :collections="publishers" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: publisher }">
                 <td class="py-3 px-2 text-left">{{ publisher.id }}</td>
                 <td class="py-3 px-2 text-left">{{ publisher.name }}</td>
@@ -55,6 +49,16 @@ export default {
     props: {
         publishers: { type: Object, default: {} },
         filters: { type: Object, default: {} },
+    },
+    data() {
+        return {
+           columns: [
+                    {title: 'ID', align: 'left', sortable: 'id'},
+                    {title: 'Name', align: 'left', sortable: 'name'},
+                    {title: 'Active', align: 'center', sortable: 'active'},
+                    {title: 'Action', align: 'center'},
+                ],
+        }
     },
 };
 </script>

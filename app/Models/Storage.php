@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\ScopeDateFilter;
+use App\Traits\ScopeSearch;
+use App\Traits\ScopeSort;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +12,7 @@ use tidy;
 
 class Storage extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ScopeDateFilter, ScopeSearch, ScopeSort;
 
     protected $guarded = [];
 
@@ -18,6 +21,14 @@ class Storage extends Model
     public function outlet()
     {
         return $this->belongsTo(Outlet::class);
+    }
+    
+    public function scopeFilter($query)
+    {
+        return $query
+            ->when(isset(request()->active), function($query) {
+                $query->where('active', request()->active);
+            });
     }
 
     public function product()

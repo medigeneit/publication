@@ -16,9 +16,12 @@ class OutletController extends Controller
 
     public function index()
     {
-        $outlets = $this->setQuery(Outlet::query())
-            ->search()->filter()
-            ->getQuery();
+        $outlets = Outlet::query()
+            ->with('accounts')
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name', 'address', 'phone'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Outlet/Index', [
             'outlets' => OutletResource::collection($outlets->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -30,6 +33,7 @@ class OutletController extends Controller
     {
         return Inertia::render('Outlet/Create', [
             'outlet' => new Outlet(),
+            'outletType'  => Outlet::getTypes(),
         ]);
     }
 
@@ -58,6 +62,7 @@ class OutletController extends Controller
     {
         return Inertia::render('Outlet/Edit', [
             'outlet' => $outlet,
+            'outletType'  => Outlet::getTypes(),
         ]);
     }
 
@@ -91,17 +96,10 @@ class OutletController extends Controller
         return $this;
     }
 
-    protected function filter()
-    {
-        $this->getQuery();
-
-        return $this;
-    }
-
     protected function getFilterProperty()
     {
         return [
-            //
+            'active' => Outlet::getActiveProperties()
         ];
     }
 
@@ -112,6 +110,7 @@ class OutletController extends Controller
             'address'   => ['required'],
             'phone'     => ['required'],
             'email'     => ['required'],
+            'type'      => ['required'],
             'active'    => ['required'],
         ]);
     }

@@ -16,10 +16,11 @@ class AuthorController extends Controller
 
     public function index()
     {
-        $authors = $this->setQuery(Author::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
+        $authors = Author::query()
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name',])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Author/Index', [
             'authors' => AuthorResource::collection($authors->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -86,16 +87,6 @@ class AuthorController extends Controller
                 $query->where(function ($query) use ($search) {
                     $query->where('id', 'regexp', $search);
                 });
-            });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery()
-            ->when(isset(request()->active), function($query) {
-                $query->where("active", request()->active);
             });
 
         return $this;

@@ -19,17 +19,46 @@ class CategoryController extends Controller
             ->search()->filter()
             ->getQuery();
 
+        $categories = Category::query()
+        ->with('subcategories.subcategories.subcategories.subcategories')
+        ->mainCategory()
+        ->get();
+
+        // CategoryResource::withoutWrapping();
+
+        return Inertia::render('Category/Tree', [
+            'categories' => CategoryResource::collection($categories),
+        ]);
+
+        if (request()->view == 'tree') {
+            $categories = Category::query()
+                ->with('subcategories.subcategories.subcategories.subcategories')
+                ->mainCategory()
+                ->get();
+
+            // CategoryResource::withoutWrapping();
+
+            return Inertia::render('Category/Tree', [
+                'categories' => CategoryResource::collection($categories),
+            ]);
+        }
+
         return Inertia::render('Category/Index', [
             'categories' => CategoryResource::collection($categories->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
 
+    private function checkSubcategories($category)
+    {
+        return $category->subcategories->count();
+    }
+
     public function create()
     {
         return Inertia::render('Category/Create', [
-            'category' => new Category(),
-            'categoryList' => Category::pluck('name', 'id'),
+            'category'  => new Category(),
+            'parent'    => Category::where('id', request()->parent_id)->first() ?? [],
         ]);
     }
 
@@ -38,6 +67,9 @@ class CategoryController extends Controller
         $category = Category::create($this->validateData($request) + [
             'user_id'  => Auth::id(),
         ]);
+
+        return redirect()
+            ->route('categories.index');
 
         return redirect()
             ->route('categories.show', $category->id)
@@ -57,7 +89,7 @@ class CategoryController extends Controller
     {
         return Inertia::render('Category/Edit', [
             'category' => $category,
-            'categoryList' => Category::pluck('name', 'id'),
+            'categoryList' => Category::active()->pluck('name', 'id'),
         ]);
     }
 
@@ -96,8 +128,8 @@ class CategoryController extends Controller
     {
         $this->getQuery()
             ->when(isset(request()->active), function ($query) {
-            $query->where('active', request()->active);
-        });
+                $query->where('active', request()->active);
+            });
 
         return $this;
     }
@@ -121,15 +153,8 @@ class CategoryController extends Controller
                     })
                     ->ignore($id),
             ],
-            'parent_id' => [
-                'required',
-                'numeric',
-            ],
-            'active' => [
-                'required',
-                'numeric',
-            ]
+            'parent_id' => '',
+            'active' => '',
         ]);
     }
-
 }

@@ -13,9 +13,25 @@ class Category extends Model
     
     protected $guarded = [];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function scopeActive($query)
     {
         return $query->where('active', 1);
+    }
+
+    public function scopeMainCategory($query)
+    {
+        return $query->where('parent_id', 0);
+    }
+
+    public function subcategories()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
     
     public function parent()
@@ -26,5 +42,9 @@ class Category extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function products(){
+        return $this->belongsToMany(Product::class)->orderBy('categories.priority')->whereNull('category_product.deleted_at');
     }
 }

@@ -19,10 +19,12 @@ class StorageController extends Controller
 
     public function index()
     {
-        $storages = $this->setQuery(Storage::query())
-            ->search()->filter()
-            ->getQuery()
-            ->with('user');
+        $storages = Storage::query()
+            ->with('product', 'outlet')
+            ->filter()
+            ->dateFilter()
+            ->search(['id'], ['product:name', 'outlet:name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Storage/Index', [
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -63,6 +65,8 @@ class StorageController extends Controller
     {
         return Inertia::render('Storage/Edit', [
             'storage' => $storage,
+            'outlets'   => Outlet::pluck('name', 'id'),
+            'products'  => Product::pluck('name', 'id'),
         ]);
     }
 

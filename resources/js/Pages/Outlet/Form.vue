@@ -22,6 +22,14 @@
             </div>
 
             <div class="mb-4">
+                <Label for="type" value="Type" />
+                <Select name="type" class="mt-1 block w-full" v-model="form.type" required>
+                    <option value="0"> --Select Type-- </option>
+                    <option :value="type" v-for="(typeName, type) in outletType" :key="type">{{ typeName }}</option>
+                </Select>
+            </div>
+
+            <div class="mb-4">
                 <Label for="active" value="Active" />
                 <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
                     <option value="1">Yes</option>
@@ -75,6 +83,7 @@ export default {
                 address: this.outlet.address,
                 phone: this.outlet.phone,
                 email: this.outlet.email,
+                type: this.outlet.type || 0,
                 active: this.moduleAction == 'store' ? 1 : this.outlet.active,
             })
         }

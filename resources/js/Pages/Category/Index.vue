@@ -1,5 +1,5 @@
 <template>
-    <Head title="User" />
+    <Head title="Category" />
 
     <app-layout>
         <template #header>
@@ -20,7 +20,7 @@
                 <td class="py-3 px-2 text-left">{{ category.id }}</td>
                 <td class="py-3 px-2 text-left">{{ category.name }}</td>
                 <td class="py-3 px-2 text-left">{{ category.parentName }}</td>
-                <td class="py-3 px-2 text-center">
+                <td class="py-3 px-2 text-left">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : category.active, 'bg-red-500' : !category.active }">
                         {{ category.activeValue }}
                     </span>

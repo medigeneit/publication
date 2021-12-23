@@ -81,7 +81,7 @@ export default {
                 email: this.user.email,
                 phone: this.user.phone,
                 type: this.user.type || 0,
-                active: this.user.active || 1,
+                active: this.moduleAction == 'store' ? 1 : this.user.active,
             })
         }
     },

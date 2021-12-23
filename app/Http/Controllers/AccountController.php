@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;
+use App\Models\AccountCategory;
 use App\Models\Outlet;
 use App\Models\Publisher;
 use App\Traits\DateFilter;
@@ -19,9 +20,12 @@ class AccountController extends Controller
 
     public function index()
     {
-        $accounts = $this->setQuery(Account::query())
-            ->search()->filter()
-            ->getQuery();
+        $accounts = Account::query()
+                ->with('publisher')
+                ->filter()
+                ->dateFilter()
+                ->search(['id', 'name'])
+                ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Account/Index', [
             'accounts' => AccountResource::collection($accounts->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -33,8 +37,10 @@ class AccountController extends Controller
     {
         return Inertia::render('Account/Create', [
             'account'  => new Account(),
-            'publishers'  => Publisher::pluck('name', 'id'),
+            'publishers'  => Publisher::active()->pluck('name', 'id'),
             'accountType'  => Account::getTypes(),
+            'incomeCategoryList' => AccountCategory::where('type', 1)->pluck('name', 'id'),
+            'expenseCategoryList' => AccountCategory::where('type', 2)->pluck('name', 'id'),
         ]);
     }
 
@@ -68,18 +74,19 @@ class AccountController extends Controller
         // return $account;
         return Inertia::render('Account/Edit', [
             'account' => $account,
-            'publishers'  => Publisher::pluck('name', 'id'),
+            'publishers'  => Publisher::active()->pluck('name', 'id'),
             'accountType'  => Account::getTypes(),
+            'incomeCategoryList' => AccountCategory::where('type', 1)->pluck('name', 'id'),
+            'expenseCategoryList' => AccountCategory::where('type', 2)->pluck('name', 'id'),
         ]);
     }
 
     public function update(Request $request, Account $account)
     {
-        $publisher = Publisher::findOrFail($request->publisher_id);
 
-        $account = $publisher->accounts()->create($this->validateData($request, $account->id));
-
-        // $account->update($this->validateData($request, $account->id));
+        $account->update($this->validateData($request, $account->id) + [
+            'accountable_id' => $request->publisher_id
+        ]);
 
         return redirect()
             ->route('accounts.show', $account->id)
@@ -124,9 +131,10 @@ class AccountController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            'purpose'       => ['required'],
-            'amount'        => ['required'],
-            'type'          => ['required']
+            'purpose'               => ['required'],
+            'amount'                => ['required'],
+            'type'                  => ['required'],
+            'account_category_id'   => ['required'],
         ]);
     }
 }

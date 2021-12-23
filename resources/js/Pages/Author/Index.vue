@@ -8,21 +8,16 @@
 
         <add-new-button :href="route('authors.create')" />
 
-        <data-table :collections="authors" :filters="filters" :dateFilter="true">
-            <template #head>
-                <th class="py-3 px-2 text-left">ID</th>
-                <th class="py-3 px-2 text-left">Name</th>
-                <th class="py-3 px-2 text-center">Active</th>
-                <th class="py-3 px-2 text-center">Action</th>
-            </template>
+        <data-table :collections="authors" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: author }">
-                <td class="py-3 px-2 text-left">{{ author.id }}</td>
-                <td class="py-3 px-2 text-left">{{ author.name }}</td>
+                <td class="py-2 px-2 text-left">{{ author.id }}</td>
+                <td class="py-2 px-2 text-left">{{ author.name }}</td>
                 <td class="py-2 px-2 text-center">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : author.active, 'bg-red-500' : !author.active }">
                         {{ author.activeValue }}
                     </span>
                 </td>
+                <td class="py-2 px-2 text-right">{{ author.honorarium }} TK</td>
                 <td class="py-2.5 px-2"> 
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('authors.show', author.id)" />
@@ -55,6 +50,17 @@ export default {
     props: {
         authors: { type: Object, default: {} },
         filters: { type: Object, default: {} },
+    },
+        data() {
+        return {
+            columns: [
+                {title: 'ID', align: 'left', sortable: 'id'},
+                {title: 'Name', align: 'left', sortable: 'name'},
+                {title: 'Active', align: 'center', sortable: 'active'},
+                {title: 'Honorarium', align: 'right', sortable: 'honorarium'},
+                {title: 'Action', align: 'center'},
+            ],
+        }
     },
 };
 </script>

@@ -12,33 +12,27 @@
             </select>
         </div>
 
-        <div class="sm:w-24 flex order-2 lg:order-1">
-            <select @change="searchHandler" v-model="perpage" class="block w-full rounded-md shadow-sm focus:outline-none focus:ring-0 cursor-pointer">
-                <option value="100">100</option>
-                <option value="50">50</option>
-                <option value="25">25</option>
-                <option value="15">15</option>
-            </select>
-        </div>
-
         <div v-if="dateFilter" class="ml-auto w-full lg:max-w-xl lg:w-auto flex flex-col sm:flex-row justify-between items-end gap-2 order-1 lg:order-2">
             <div class="w-full max-w-sm flex justify-end items-center gap-1">
-                <select @change="dateSearchHandler" v-model="customDateFilter" class="block w-full rounded-md min-w-max shadow-sm focus:outline-none focus:ring-0 cursor-pointer">
+                <select @change="dateSearchHandler" v-model="valueDateFilter" class="block w-full rounded-md min-w-max shadow-sm focus:outline-none focus:ring-0 cursor-pointer">
                     <option value="">Custom Date</option>
-                    <option value="7">Last 7 days</option>
-                    <option value="30">Last 30 days</option>
-                    <option value="90">Last 90 days</option>
-                    <option value="180">Last 6 Months</option>
+                    <option v-for="(varient, index) in varientDateFilter" :key="index" :value="index">{{ varient }}</option>
                 </select>
             </div>
-            <div v-if="! customDateFilter" class="w-full max-w-sm flex justify-end items-center gap-1">
-                <label class="w-12 text-right">From</label>
-                <input @input="searchHandler" v-model="dateFrom" :max="this.dateTo" type="date" class="block w-full max-w-xs rounded-md shadow-sm focus:outline-none focus:ring-0" />
+            <div class="w-full max-w-sm flex justify-end items-center gap-1">
+                <!-- <label class="w-12 text-right">From</label> -->
+                <input v-show="!valueDateFilter" @input="searchHandler" v-model="dateFrom" :max="this.dateTo" type="date" class="block w-full max-w-xs rounded-md shadow-sm focus:outline-none focus:ring-0" />
             </div>
-            <div v-if="! customDateFilter" class="w-full max-w-sm flex justify-end items-center gap-1">
-                <label class="w-12 text-right">To</label>
-                <input @input="searchHandler" v-model="dateTo" :min="this.dateFrom" type="date" class="block w-full max-w-xs rounded-md shadow-sm focus:outline-none focus:ring-0" />
+            <div class="w-full max-w-sm flex justify-end items-center gap-1">
+                <!-- <label class="w-12 text-right">To</label> -->
+                <input v-show="!valueDateFilter" @input="searchHandler" v-model="dateTo" :min="this.dateFrom" type="date" class="block w-full max-w-xs rounded-md shadow-sm focus:outline-none focus:ring-0" />
             </div>
+        </div>
+
+        <div class="sm:w-24 flex order-2 lg:order-1">
+            <select @change="searchHandler" v-model="perpage" class="block w-full rounded-md shadow-sm focus:outline-none focus:ring-0 cursor-pointer">
+                <option v-for="pageLengthItem in pageLength" :key="pageLengthItem" :value="pageLengthItem">{{ pageLengthItem }}</option>
+            </select>
         </div>
 
         <div class="ml-auto w-2/3 max-w-xs lg:w-auto flex order-4 lg:order-4">
@@ -54,9 +48,32 @@
         <table class="min-w-max w-full table-auto">
             <thead>
                 <tr class="bg-blue-600 text-white uppercase text-sm leading-normal">
-                    <th v-if="serialColumn" class="py-3 px-2 text-left sticky left-0 bg-blue-600">SL</th>
+                    <!-- <th v-if="serialColumn" class="py-3 px-2 text-left sticky left-0 bg-blue-600">SL</th> -->
 
-                    <slot name="head" />
+                    <th v-if="serialColumn" class="py-3 px-2 text-left sticky left-0 bg-blue-600">
+                        <div class="inline-flex items-center gap-1">
+                            <div>SL</div>
+                            <div class="flex flex-col cursor-pointer"  @click="sortDirectionHandler">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                </svg>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th v-for="(column, index) in columns" :key="index" class="py-3 px-2 bg-blue-600" :class="{ 'text-left': column.align == 'left', 'text-center': column.align == 'center', 'text-right': column.align == 'right' }">
+                        <div class="inline-flex items-center gap-1">
+                            <div v-html="column.title"></div>
+                            <div v-if="column.sortable" class="flex flex-col cursor-pointer"  @click="sortHandler(column.sortable)" :class="{ 'text-gray-900': column.sortable != this.sort }">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                </svg>
+                            </div>
+                        </div>
+                    </th>
+
+                    <slot name="head"/>
+
                 </tr>
             </thead>
 
@@ -64,7 +81,7 @@
 
                 <tr v-for="(item, index) in collections.data" :key="index" class="border-b border-gray-200 hover:bg-gray-50">
                     <td v-if="serialColumn" class="py-3 px-2 text-left sticky left-0 bg-white">
-                        {{ collections.meta.from + index }}
+                        {{ sortNewToOld ? (collections.meta.total + 1) - (collections.meta.from + index) : (collections.meta.from + index) }}
                     </td>
 
                     <slot :item="item" />
@@ -100,13 +117,57 @@ export default {
 		}
 	},
     props: {
-        collections: { type: Object, default: {} },
-        filters: { type: Object, default: {} },
-        dateFilter: { type: Boolean, default: false },
-        serialColumn: { type: Boolean, default: true},
-        routeName: { type: String, default: null},
-        topLinks: { type: Boolean, default: false},
-        bottomLinks: { type: Boolean, default: true},
+        dateFilter: {
+            type: Boolean,
+            default: false
+        },
+        serialColumn: {
+            type: Boolean,
+            default: true
+        },
+        latest: {
+            type: Boolean,
+            default: false
+        },
+        routeName: {
+            type: String,
+            default: null
+        },
+        topLinks: {
+            type: Boolean,
+            default: false
+        },
+        bottomLinks: { 
+            type: Boolean,
+            default: true
+        },
+        pageLength: {
+            type: Array,
+            default: [100, 50, 25, 15, 10]
+        },
+        varientDateFilter: {
+            type: Object,
+            default: {
+                7: "Last 7 days",
+                15: "Last 15 days",
+                30: "Last 30 days",
+                90: "Last 90 days",
+                180: "Last 180 days",
+                365: "Last 365 days",
+            }
+        },
+        collections: {
+            type: Object,
+            default: {}
+        },
+        filters: {
+            type: Object,
+            default: {}
+        },
+        columns: {
+            type: Array,
+            default: []
+        },
     },
     created() {
         Object.entries(this.filters).forEach( ([key, value]) => {
@@ -119,6 +180,8 @@ export default {
 
         this.search = this.request.search || '';
 
+        this.sortNewToOld = this.request.order == 'desc' ? true : this.latest;
+
         localStorage.setItem('historyOfList', this.route(this.routeName || this.route().current()));
     },
     data() {
@@ -129,7 +192,9 @@ export default {
             data: {},
             dateFrom: '',
             dateTo: '',
-            customDateFilter: "",
+            valueDateFilter: '',
+            sortDirection: '',
+            sort: '',
         }
     },
     methods: {
@@ -143,6 +208,10 @@ export default {
             this.data['from'] = this.dateFrom;
 
             this.data['to'] = this.dateTo;
+
+            this.data['sort'] = this.sort;
+
+            this.data['order'] = this.sortDirection;
 
             this.data['search'] = this.search;
 
@@ -177,6 +246,22 @@ export default {
             }
             return obj;
         },
+        sortHandler(value) {
+            this.sortDirection = (this.sort == value && this.sortDirection == 'asc') ? 'desc' : 'asc';
+
+            this.sort = value;
+
+            this.sortNewToOld = this.sortDirection == 'desc' ? true : false;
+
+            this.searchHandler();
+        },
+        sortDirectionHandler() {
+            this.sortDirection = this.sortDirection == 'asc' ? 'desc' : 'asc';
+
+            this.sortNewToOld = this.sortDirection == 'desc' ? true : false;
+
+            this.searchHandler();
+        }
     }
 }
 </script>

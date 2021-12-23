@@ -27,20 +27,20 @@ export default {
         return {
             data: {
                 sale : this.sale,
-                saleList: this.saleList
+                outlets: this.outlets
             }
         }
     },
 
     props: {
         sale: { 
-            type: Object, 
-            default: {} 
-        },
-        saleList: {
-            type:Object,
+            type: Object,
             default: {}
-        }
+        },
+        outlets: {
+            type: Object,
+            default: {}
+        },
     },
 };
 </script>

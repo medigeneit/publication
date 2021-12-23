@@ -1,9 +1,9 @@
 <template>
-    <Head title="User" />
+    <Head title="Category" />
 
     <app-layout>
         <template #header>
-            Create User
+            Create Category
         </template>
         
         <form-component :data="data" module-action="store" />
@@ -27,7 +27,7 @@ export default {
         return {
             data: {
                 category: this.category,
-                categoryList: this.categoryList,
+                parent: this.parent,
             }
         }
     },
@@ -37,10 +37,10 @@ export default {
             type: Object,
             default: {}
         },
-        categoryList: {
+        parent: {
             type: Object,
-            default: {}
-        },
+            default: {},
+        }
     },
 };
 </script>

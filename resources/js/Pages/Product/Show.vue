@@ -13,11 +13,24 @@
                 <show-table-row heading="ID">{{ product.id }}</show-table-row>
                 <show-table-row heading="Name">{{ product.name }}</show-table-row>
                 <show-table-row heading="Type">{{ product.typeName }}</show-table-row>
+                <show-table-row heading="Category">
+                    <div v-for="(categoryName, index) of categories" :key="index">
+                        {{ categoryName }}
+                    </div>
+                </show-table-row>
                 <show-table-row heading="Publisher Name">{{ product.publisherName ?? '' }}</show-table-row>
                 <show-table-row heading="Product Cost">{{ product.productionCost }}</show-table-row>
                 <show-table-row heading="MRP ">{{ product.mrp }}</show-table-row>
-                <show-table-row heading="Wholesale Price">{{ product.wholesaleRate }}</show-table-row>
-                <show-table-row heading="Retail Price">{{ product.retailRate }}</show-table-row>
+                <show-table-row heading="Wholesale Price">{{ product.wholesalePrice }}</show-table-row>
+                <show-table-row heading="Retail Price">{{ product.retailPrice }}</show-table-row>
+                <show-table-row heading="Distribute Price">{{ product.distributePrice }}</show-table-row>
+                <show-table-row heading="Special Price">{{ product.specialPrice }}</show-table-row>
+                <show-table-row heading="Outside Dhaka Price">{{ product.outsideDhakaPrice }}</show-table-row>
+                <show-table-row heading="Ecom. Distribute Price">{{ product.ecomDistributePrice }}</show-table-row>
+                <show-table-row heading="Ecom. Wholesale Price">{{ product.ecomWholesalePrice }}</show-table-row>
+                <show-table-row heading="Edition">{{ product.edition }}</show-table-row>
+                <show-table-row heading="ISBN">{{ product.isbn }}</show-table-row>
+                <show-table-row heading="CRL">{{ product.crl }}</show-table-row>
                 <show-table-row heading="Alert Quantity">{{ product.alertQuantity }}</show-table-row>
                 <show-table-row heading="Active">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
@@ -34,7 +47,7 @@
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('users.index')"/>
+            <go-to-list :href="route('products.index')"/>
         </div>
     </app-layout>
 </template>
@@ -59,6 +72,7 @@ export default {
     },
     props: {
         product: { type: Object, default: {} },
+        categories: { type: Object, default: {} },
     },
 };
 </script>

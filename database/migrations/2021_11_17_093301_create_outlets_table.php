@@ -19,6 +19,7 @@ class CreateOutletsTable extends Migration
             $table->string('address')->nullable();
             $table->bigInteger('phone')->nullable();
             $table->string('email')->nullable();
+            $table->tinyInteger('type')->comment("1=Godown, 2=Sale point")->default(1);
             $table->tinyInteger('active')->default(1);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

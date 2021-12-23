@@ -6,7 +6,7 @@
             Edit Storage
         </template>
         
-        <form-component :storage="storage" :storageType="storageType" module-action="update" />
+        <form-component :data="{ storage, outlets, products }" module-action="update" />
     </app-layout>
 </template>
 
@@ -25,7 +25,8 @@ export default {
 
     props: {
         storage: { type: Object, default: {} },
-        storageType: { type: Object, default: {} },
+        outlets: { type: Object, default: {} },
+        products: { type: Object, default: {} },
     },
 };
 </script>

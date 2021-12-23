@@ -8,22 +8,14 @@
 
         <add-new-button :href="route('outlets.create')" />
 
-        <data-table :collections="outlets" :filters="filters" :dateFilter="true">
-            <template #head>
-                <th class="py-3 px-2 text-left">ID</th>
-                <th class="py-3 px-2 text-left">Name</th>
-                <th class="py-3 px-2 text-center">Address</th>
-                <th class="py-3 px-2 text-center">Phone</th>
-                <th class="py-3 px-2 text-center">Email</th>
-                <th class="py-3 px-2 text-center">Active</th>
-                <th class="py-3 px-2 text-center">Action</th>
-            </template>
+        <data-table :collections="outlets" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: outlet }">
                 <td class="py-3 px-2 text-left">{{ outlet.id }}</td>
                 <td class="py-3 px-2 text-left">{{ outlet.name }}</td>
                 <td class="py-3 px-2 text-center">{{ outlet.address }}</td>
                 <td class="py-3 px-2 text-center">{{ outlet.phone }}</td>
                 <td class="py-3 px-2 text-center">{{ outlet.email }}</td>
+                <td class="py-3 px-2 text-center">{{ outlet.typeName }}</td>
                 <td class="py-3 px-2 text-center">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': outlet.active, 'bg-red-500': !outlet.active }">
                         {{ outlet.activeValue }}
@@ -61,6 +53,20 @@ export default {
     props: {
         outlets: { type: Object, default: {} },
         filters: { type: Object, default: {} },
+    },
+    data() {
+        return {
+           columns: [
+                    {title: 'ID', align: 'left', sortable: 'id'},
+                    {title: 'Name', align: 'left', sortable: 'name'},
+                    {title: 'Address', align: 'center', sortable: 'address'},
+                    {title: 'Phone', align: 'center', sortable: 'phone'},
+                    {title: 'Email', align: 'center', sortable: 'email'},
+                    {title: 'Type', align: 'center', sortable: 'type'},
+                    {title: 'Active', align: 'center', sortable: 'active'},
+                    {title: 'Action', align: 'center'},
+                ],
+        }
     },
 };
 </script>
