@@ -71,6 +71,10 @@
         
         <div id="volumeWrapper" class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded" :class="{'hidden' : form.type !== 4 && (form.type !== 2 || form.type !== 3) }">
             <div class="mb-4 col-start-1">
+                <Label for="volume_name" value="Volume Name" />
+                <Input id="volumeName" name="volume_name" type="text" step="0.01" class="mt-1 block w-full" v-model="form.volumeName" />
+            </div>
+            <div class="mb-4 col-start-1">
                 <Label for="volume_no" value="Volume No" />
                 <Input id="volumeNo" name="volume_no" type="text" step="0.01" class="mt-1 block w-full" v-model="form.volumeNo" />
             </div>
@@ -82,7 +86,14 @@
                 <Label for="volume_cost" value="Volume Cost" />
                 <Input id="volumeCost" name="volume_cost" type="text" step="0.01" class="mt-1 block w-full" v-model="form.volumeCost" />
             </div>
-        </div>
+                <div class="mb-4">
+                    <Label for="volumeActive" value="Active" />
+                    <Select id="volumeActive" name="volume_active" class="mt-1 block w-full" v-model="form.volumeActive">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </Select>
+                </div>
+            </div>
         
         <div id="productWrapper" class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded" :class="{'hidden' : form.type !== 1 && (form.type !== 2 || form.type !== 3) }" >
             <input placeholder="Search..." @input="searchProduct" class=" px-2 py-2 w-full rounded border border-gray-500 focus:outline-none focus:ring-0"/>
@@ -157,9 +168,11 @@ export default {
                 productionCost: this.data.production_cost || '',
                 link: this.data.link || '',
                 active: this.moduleAction == 'store' ? 1 : this.data.version.active,
+                volumeName: '',
                 volumeNo: '',
                 volumeLink: '',
                 volumeCost: '',
+                volumeActive: '',
                 product_ids: this.data.product_ids || [],
                 packageProductPrice:  {},
             }),

@@ -8,8 +8,10 @@ use App\Models\Product;
 use App\Models\Production;
 use App\Models\Version;
 use App\Models\PackageProduct;
+use App\Models\Volume;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class VersionController extends Controller
@@ -49,9 +51,11 @@ class VersionController extends Controller
 
     public function store(Request $request)
     {
-        return $request->packageProductPrice;
-        $version = Version::create($this->validateData($request));
+        $version = Version::create($this->validateData($request) + [
+            'user_id' => Auth::id()
+        ]);
         $this->packageInsert($request, $version);
+        $this->volumeInsert($request, $version);
 
         return redirect()
             ->route('versions.show', $version->id)
@@ -83,17 +87,44 @@ class VersionController extends Controller
             ->with('status', 'The record has been update successfully.');
     }
 
-    protected function packageInsert($request, $product)
+    protected function packageInsert($request, $version)
     {
-        PackageProduct::where(['package_id' => $product->id])->delete();
+        PackageProduct::where(['package_id' => $version->id])->delete();
         
         if(is_array($request->product_ids)) {
             foreach($request->product_ids as $package_id) {
-                PackageProduct::onlyTrashed()->updateOrCreate(
-                    ['package_id' => $product->id],
+                $package= PackageProduct::onlyTrashed()->updateOrCreate(
+                    ['package_id' => $version->id],
                     ['product_id' => $package_id, 'deleted_at' => null]
                 );
+
+                if(is_array($request->packageProductPrice)) {
+                    foreach($request->packageProductPrice as $id => $packageProductPrice) {
+                        PackageProduct::where(['product_id'=> $id, 'id' => $package->id])->update([
+                            'price' => $packageProductPrice
+                        ]);
+                    }
+                }
             }
+        }
+    }
+
+    protected function volumeInsert($request, $version)
+    {
+        Volume::where(['version_id' => $version->id])->delete();
+        
+        if(($request->volumeNo)) {
+               Volume::onlyTrashed()->updateOrCreate(
+                    ['version_id'    => $version->id],
+                    ['name'          => $request->volumeName, 
+                     'volume_no'     => $request->volumeNo, 
+                     'link'          => $request->volumeLink,
+                     'cost'          => $request->volumeCost,
+                     'user_id'       => Auth::id(),
+                     'active'        => $request->volumeActive,
+                     'deleted_at'    => null
+                    ]);
+            
         }
     }
 
