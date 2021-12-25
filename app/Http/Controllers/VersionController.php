@@ -54,9 +54,14 @@ class VersionController extends Controller
         $version = Version::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
-        $this->packageInsert($request, $version);
-        $this->volumeInsert($request, $version);
+        if(is_array($request->product_ids)) {
+            $this->packageInsert($request, $version);
+        }
 
+        if(($request->volumeNo)) {
+            $this->volumeInsert($request, $version);
+        }
+        
         return redirect()
             ->route('versions.show', $version->id)
             ->with('status', 'The record has been added successfully.');
@@ -91,19 +96,18 @@ class VersionController extends Controller
     {
         PackageProduct::where(['package_id' => $version->id])->delete();
         
-        if(is_array($request->product_ids)) {
-            foreach($request->product_ids as $package_id) {
-                $package= PackageProduct::onlyTrashed()->updateOrCreate(
-                    ['package_id' => $version->id],
-                    ['product_id' => $package_id, 'deleted_at' => null]
-                );
+        
+        foreach($request->product_ids as $package_id) {
+            $package= PackageProduct::onlyTrashed()->updateOrCreate(
+                ['package_id' => $version->id],
+                ['product_id' => $package_id, 'deleted_at' => null]
+            );
 
-                if(is_array($request->packageProductPrice)) {
-                    foreach($request->packageProductPrice as $id => $packageProductPrice) {
-                        PackageProduct::where(['product_id'=> $id, 'id' => $package->id])->update([
-                            'price' => $packageProductPrice
-                        ]);
-                    }
+            if(is_array($request->packageProductPrice)) {
+                foreach($request->packageProductPrice as $id => $packageProductPrice) {
+                    PackageProduct::where(['product_id'=> $id, 'id' => $package->id])->update([
+                        'price' => $packageProductPrice
+                    ]);
                 }
             }
         }
@@ -113,19 +117,17 @@ class VersionController extends Controller
     {
         Volume::where(['version_id' => $version->id])->delete();
         
-        if(($request->volumeNo)) {
-               Volume::onlyTrashed()->updateOrCreate(
-                    ['version_id'    => $version->id],
-                    ['name'          => $request->volumeName, 
-                     'volume_no'     => $request->volumeNo, 
-                     'link'          => $request->volumeLink,
-                     'cost'          => $request->volumeCost,
-                     'user_id'       => Auth::id(),
-                     'active'        => $request->volumeActive,
-                     'deleted_at'    => null
-                    ]);
-            
-        }
+        
+        Volume::onlyTrashed()->updateOrCreate(
+            ['version_id'    => $version->id],
+            ['name'          => $request->volumeName, 
+                'volume_no'     => $request->volumeNo, 
+                'link'          => $request->volumeLink,
+                'cost'          => $request->volumeCost,
+                'user_id'       => Auth::id(),
+                'active'        => $request->volumeActive,
+                'deleted_at'    => null
+            ]);
     }
 
 
