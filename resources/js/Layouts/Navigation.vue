@@ -9,7 +9,7 @@
         </nav-link>
     </nav-link-wrapper>
 
-    <nav-link-wrapper title="Publication" :active="route().current('(users|categories|authors|publishers|productions|versions|products).*')"> 
+    <nav-link-wrapper title="Publication" :active="route().current('(users|categories|authors|publishers|productions|versions|products|packages).*')"> 
         <nav-link :href="route('users.index')" :active="route().current('users.*')">
             Users
         </nav-link>
@@ -30,6 +30,9 @@
         </nav-link>
         <nav-link :href="route('products.index')" :active="route().current('products.*')">
             Products
+        </nav-link>
+        <nav-link :href="route('packages.index')" :active="route().current('packages.*')">
+            Packages
         </nav-link>
     </nav-link-wrapper>
 
