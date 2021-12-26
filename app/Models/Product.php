@@ -29,10 +29,10 @@ class Product extends Model
     public function scopeFilter($query)
     {
         return $query
-            ->when(request()->type, function($query) {
+            ->when(request()->type, function ($query) {
                 $query->where('type', request()->type);
             })
-            ->when(isset(request()->active), function($query) {
+            ->when(isset(request()->active), function ($query) {
                 $query->where('active', request()->active);
             });
     }
@@ -66,5 +66,10 @@ class Product extends Model
     public function package_products()
     {
         return $this->belongsToMany(Product::class, 'package_product', 'package_id', 'product_id')->whereNull('package_product.deleted_at');
+    }
+
+    public function prices()
+    {
+        return $this->belongsToMany(Pricing::class);
     }
 }

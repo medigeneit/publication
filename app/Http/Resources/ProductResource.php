@@ -23,7 +23,7 @@ class ProductResource extends JsonResource
             'publisherName'         => (string) ($this->publisher->name ?? ''),
             'productionCost'        => (float) ($this->production_cost ?? 0),
             'mrp'                   => (float) ($this->mrp ?? ''),
-            'wholesalePrice'        => (float) ($this->wholesale_price ?? 0),
+            'wholesalePrice'        => (float) ($this->prices->amount ?? 0),
             'retailPrice'           => (float) ($this->retail_price ?? 0),
             'distributePrice'       => (float) ($this->distribute_price ?? 0),
             'specialPrice'          => (float) ($this->special_price ?? 0),

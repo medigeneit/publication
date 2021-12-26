@@ -6,20 +6,37 @@
 
             <form @submit.prevent="submit">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4">
-                    <div class="mb-4 col-span-2">
+                    <!-- <div class="mb-4 col-span-2">
                         <Label for="type" value="Type" />
                         <Select name="type" class="mt-1 block w-full" @change="typeChange(parseInt(form.type))" v-model="form.type" required>
                             <option value=""> -- Select Type -- </option>
                             <option :value="type" v-for="(typeName, type) in data.productType" :key="type">{{ typeName }}</option>
                         </Select>
-                    </div>
+                    </div> -->
 
                     <div class="mb-4 col-span-2">
-                        <Label for="name" value="Name" />
+                        <Label for="type" value="Type" />
+                        <Select >
+                            <option value="">Select Button</option>
+                            <option value="1">Volumes</option>
+                            <option value="2">Version</option>
+                            <option value="3">Package</option>
+                        </Select>
+                    </div>
+                    <div class="mb-4 col-span-2">
+                        <Label for="name" value="Soft Copy" />
+                        <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
+                    </div>
+                    <div class="mb-4 col-span-2">
+                        <Label for="name" value="Status" />
+                        <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
+                    </div>
+                    <div class="mb-4 col-span-2">
+                        <Label for="name" value="Image" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                     </div>
 
-                    <div class="mb-4 col-span-2" id="publisherWrapper" :class="{'hidden' : form.type === 1}">
+                    <!-- <div class="mb-4 col-span-2" id="publisherWrapper" :class="{'hidden' : form.type === 1}">
                         <Label for="publisher_id" value="Publisher Name" />
                         <Select id="publisher_id" class="mt-1 block w-full" v-model="form.publisher_id">
                             <option value=""> -- Select Publisher -- </option>
@@ -79,42 +96,17 @@
                     <div class="mb-4 col-start-1">
                         <Label for="mrp" value="MRP ." />
                         <Input id="mrp" name="mrp" type="number" step="0.01" class="mt-1 block w-full" v-model="form.mrp" required />
+                    </div> -->
+                    
+                    <div v-for="(priceCategory) in data.priceCategories" :key="priceCategory.id">
+                        <div class="grid">
+                            <div class="block">
+                                <Label for="wholesale" v-text="priceCategory.name" />
+                                <Input :label="index" v-model="form.amounts[priceCategory.id]" step="0.01" type="number" class="mt-1 block w-full" required />
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <Label for="distribute_price" value="Distribute Price" />
-                        <Input id="distribute_price" name="distribute_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.distribute_price" required />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="wholesale" value="Wholesale Price" />
-                        <Input id="wholesale" name="wholesale_price" step="0.01" type="number" class="mt-1 block w-full" v-model="form.wholesale_price" required />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="retail_price" value="Retail Price" />
-                        <Input id="retail_price" name="retail_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.retail_price" required />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="special_price" value="Special Price" />
-                        <Input id="special_price" name="special_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.special_price" required />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="outside_dhaka_price" value="Outside Dhaka Price" />
-                        <Input id="outside_dhaka_price" name="outside_dhaka_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.outside_dhaka_price" required />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="ecom_distribute_price" value="Ecom. Distribute Price" />
-                        <Input id="ecom_distribute_price" name="ecom_distribute_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.ecom_distribute_price" required />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="ecom_wholesale_price" value="Ecom. Wholesale Price" />
-                        <Input id="ecom_wholesale_price" name="ecom_wholesale_price" type="number" step="0.01" class="mt-1 block w-full" v-model="form.ecom_wholesale_price" required />
-                    </div>
                 </div>
 
                 <hr class="w-full my-4">
@@ -242,26 +234,27 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                name: this.data.product.name,
-                type: this.data.product.type || '',
-                publisher_id: this.data.product.publisher_id || '',
-                product_id: this.data.product.id || '',
-                production_cost: this.data.product.production_cost,
-                mrp: this.data.product.mrp,
-                wholesale_price: this.data.product.wholesale_price,
-                retail_price: this.data.product.retail_price,
-                distribute_price: this.data.product.distribute_price,
-                special_price: this.data.product.special_price,
-                outside_dhaka_price: this.data.product.outside_dhaka_price,
-                ecom_distribute_price: this.data.product.ecom_distribute_price,
-                ecom_wholesale_price: this.data.product.ecom_wholesale_price,
-                edition: this.data.product.edition,
-                isbn: this.data.product.isbn,
-                crl: this.data.product.crl,
-                alert_quantity: this.data.product.alert_quantity,
-                active: this.moduleAction == 'store' ? 1 : this.data.product.active,
-                category_ids: this.data.category_ids || [],
-                product_ids: this.data.product_ids || [],
+                // name: this.data.product.name,
+                // type: this.data.product.type || '',
+                // publisher_id: this.data.product.publisher_id || '',
+                // product_id: this.data.product.id || '',
+                // production_cost: this.data.product.production_cost,
+                // mrp: this.data.product.mrp,
+                priceCategory: this.data.product.priceCategory,
+                // retail_price: this.data.product.retail_price,
+                // distribute_price: this.data.product.distribute_price,
+                // special_price: this.data.product.special_price,
+                // outside_dhaka_price: this.data.product.outside_dhaka_price,
+                // ecom_distribute_price: this.data.product.ecom_distribute_price,
+                // ecom_wholesale_price: this.data.product.ecom_wholesale_price,
+                amounts: {},
+                // edition: this.data.product.edition,
+                // isbn: this.data.product.isbn,
+                // crl: this.data.product.crl,
+                // alert_quantity: this.data.product.alert_quantity,
+                // active: this.moduleAction == 'store' ? 1 : this.data.product.active,
+                // category_ids: this.data.category_ids || [],
+                // product_ids: this.data.product_ids || [],
             }),
             categoryShow: false,
             productShow: false,
@@ -286,6 +279,7 @@ export default {
 
         submit() {
             if(this.moduleAction == 'store') {
+                // return console.log(this.form.amounts)
                 return this.form.post(this.route('products.store'));
             }
 

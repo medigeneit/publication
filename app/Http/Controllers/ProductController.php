@@ -9,6 +9,8 @@ use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\Publisher;
 use App\Models\PackageProduct;
+use App\Models\PriceCategory;
+use App\Models\Pricing;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +22,13 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::query()
-        ->with('categories', 'publisher')
-        ->filter()
-        ->dateFilter()
-        ->search(['id', 'name'], ['publisher:name'])
-        ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+        return
+            $products = Product::query()
+            ->with('categories', 'publisher', 'prices')
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name'], ['publisher:name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -38,9 +41,10 @@ class ProductController extends Controller
         return Inertia::render('Product/Create', [
             'product' => new Product(),
             'publisherList' => Publisher::active()->pluck('name', 'id'),
-            'productList' => Product::pluck('name', 'id'),
+            // 'productList' => Product::pluck('name', 'id'),
             'categories'  => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
             'productType'  => Product::getTypes(),
+            'priceCategories' => PriceCategory::get(),
         ]);
     }
 
@@ -51,6 +55,29 @@ class ProductController extends Controller
         ]);
         $this->categoryInsert($request, $product);
         $this->packageInsert($request, $product);
+
+        if (is_array($request->amounts)) {
+
+            foreach ($request->amounts as $index => $amount) {
+                // return $index;
+                if ($amount == '') {
+                    continue;
+                }
+                Pricing::insert(
+                    [
+                        'product_id' => $product->id,
+                        'price_category_id' => $index,
+                        'amount' => $amount,
+                        'deleted_at' => NULL
+                    ]
+                );
+                Product::insert(
+                    [
+                        'pricing_id' => $index,
+                    ]
+                );
+            }
+        }
 
         return redirect()
             ->route('products.show', $product->id)
@@ -84,7 +111,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $product->update($this->validateData($request, $product->id));
-        
+
         $this->categoryInsert($request, $product);
 
         $this->packageInsert($request, $product);
@@ -97,14 +124,14 @@ class ProductController extends Controller
     protected function categoryInsert($request, $product)
     {
         CategoryProduct::where(['product_id' => $product->id])->delete();
-        
-        if(is_array($request->category_ids)) {
-            foreach($request->category_ids as $category_id) {
+
+        if (is_array($request->category_ids)) {
+            foreach ($request->category_ids as $category_id) {
                 CategoryProduct::onlyTrashed()->updateOrCreate(
                     [
                         'product_id' => $product->id
                     ],
-                    [   
+                    [
                         'category_id'   => $category_id,
                         'deleted_at'    => null
                     ]
@@ -116,9 +143,9 @@ class ProductController extends Controller
     protected function packageInsert($request, $product)
     {
         PackageProduct::where(['package_id' => $product->id])->delete();
-        
-        if(is_array($request->product_ids)) {
-            foreach($request->product_ids as $package_id) {
+
+        if (is_array($request->product_ids)) {
+            foreach ($request->product_ids as $package_id) {
                 PackageProduct::onlyTrashed()->updateOrCreate(
                     ['package_id' => $product->id],
                     ['product_id' => $package_id, 'deleted_at' => null]
@@ -164,9 +191,9 @@ class ProductController extends Controller
             'publisher_id'          => '',
             'production_cost'       => ['required'],
             'mrp'                   => ['required'],
-            'wholesale_price'       => ['required'],
-            'retail_price'          => ['required'],
-            'distribute_price'      => ['required'],
+            'wholesale_price'       => [''],
+            'retail_price'          => [''],
+            'distribute_price'      => [''],
             'special_price'         => '',
             'outside_dhaka_price'   => '',
             'ecom_distribute_price' => '',
