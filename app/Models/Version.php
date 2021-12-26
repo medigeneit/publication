@@ -26,4 +26,9 @@ class Version extends Model
             4 => 'Volume',
         ];
     }
+
+    public function package_products()
+    {
+        return $this->belongsToMany(Product::class, 'package_product', 'package_id', 'product_id')->whereNull('package_product.deleted_at');
+    }
 }

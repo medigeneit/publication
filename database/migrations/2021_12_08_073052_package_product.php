@@ -17,6 +17,7 @@ class PackageProduct extends Migration
             $table->id();
             $table->unsignedBigInteger('package_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedFloat('price')->nullable();
             $table->softDeletes();
         });
     }

@@ -96,7 +96,6 @@ class VersionController extends Controller
     {
         PackageProduct::where(['package_id' => $version->id])->delete();
         
-        
         foreach($request->product_ids as $package_id) {
             $package= PackageProduct::onlyTrashed()->updateOrCreate(
                 ['package_id' => $version->id],
