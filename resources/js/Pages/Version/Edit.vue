@@ -6,7 +6,7 @@
             Edit Version
         </template>
         
-        <form-component :data="{ version, versionList, categoryList, publisherList, versionType, versionCategories, categoryVersion, categories, category_ids, version_ids }" module-action="update" />
+        <form-component :data="{ version, productionList, productList, versionType, product_ids }" module-action="update" />
     </app-layout>
 </template>
 
@@ -25,42 +25,6 @@ export default {
 
     props: {
         version: { 
-            type: Object, 
-            default: {} 
-        },
-        versionList: {
-            type:Object,
-            default: {}
-        },
-        publisherList: {
-            type: Object,
-            default: {}
-        },
-        versionList: {
-            type: Object,
-            default: {}
-        },
-        categoryList: {
-            type: Object,
-            default: {}
-        },
-        categories: {
-            type: Object,
-            default: {}
-        },
-        category_ids: {
-            type: Array,
-            default: []
-        },
-        version_ids: {
-            type: Array,
-            default: []
-        },
-        versionCategories: {
-            type: Object,
-            default: {}
-        },
-        categoryVersion: {
             type: Object,
             default: {}
         },
@@ -68,6 +32,26 @@ export default {
             type: Object, 
             default: {} 
         },
+        productionList: {
+            type: Object,
+            default: {}
+        },
+        productList: {
+            type: Object,
+            default: {}
+        },
+        product_ids: {
+            type: Array,
+            default: []
+        },
+        product_prices: {
+            type: Array,
+            default: []
+        },
+        // categories: {
+        //     type: Object,
+        //     default: {}
+        // },
     }, 
 };
 </script>

@@ -3,6 +3,12 @@
         Dashboard
     </nav-link>
 
+    <nav-link-wrapper title="Administration" :active="route().current('(users).*')"> 
+        <nav-link :href="route('users.index')" :active="route().current('users.*')">
+            Admin
+        </nav-link>
+    </nav-link-wrapper>
+
     <nav-link-wrapper title="Publication" :active="route().current('(users|categories|authors|publishers|productions|versions|products).*')"> 
         <nav-link :href="route('users.index')" :active="route().current('users.*')">
             Users
