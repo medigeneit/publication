@@ -31,7 +31,6 @@
         <nav-link :href="route('outlets.index')" :active="route().current('outlets.*')">
             Outlets
         </nav-link>
-
         <nav-link :href="route('distributions.index')" :active="route().current('distributions.*')">
             Distributor
         </nav-link>
@@ -62,6 +61,9 @@
         <nav-link :href="route('expenses.index')" :active="route().current('expenses.*')">
             Expense
         </nav-link> 
+        <nav-link :href="route('price-categories.index')" :active="route().current('price-categories.*')">
+            Price Category
+       </nav-link>
     </nav-link-wrapper>
 </template>
 

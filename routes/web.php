@@ -9,6 +9,7 @@ use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OutletController;
+use App\Http\Controllers\PriceCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\PublisherController;
@@ -40,9 +41,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard',[ DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/typing-test', function() {
+Route::get('/typing-test', function () {
     return Inertia::render('TypingTest');
 })->middleware(['auth', 'admin'])->name('typing-test');
 
@@ -66,5 +67,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'accounts'                  => AccountController::class,
         'incomes'                   => IncomeController::class,
         'expenses'                  => ExpenseController::class,
+        'price-categories'          => PriceCategoryController::class,
     ]);
 });
