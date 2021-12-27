@@ -9,10 +9,7 @@
         </nav-link>
     </nav-link-wrapper>
 
-    <nav-link-wrapper title="Publication" :active="route().current('(users|categories|authors|publishers|productions|versions|products|packages).*')"> 
-        <nav-link :href="route('users.index')" :active="route().current('users.*')">
-            Users
-        </nav-link>
+    <nav-link-wrapper title="Publication" :active="route().current('(categories|authors|publishers|productions|versions|products|packages).*')"> 
         <nav-link :href="route('categories.index')" :active="route().current('categories.*')">
             Categories
         </nav-link>

@@ -44,11 +44,22 @@ class PackageController extends Controller
                 ->orWhereIn('id', explode(',', request()->selected));
         })
         ->where('type', '!=', 1)
-        ->get(['id', 'name', 'production_cost', 'mrp']);
+        ->get();
 
+        foreach($products as $product)
+        {
+            $property = (object)[
+                'name'  => (string) ($product->name ?? ''),
+                'cost'  => (int) ($product->production_cost ?? ''),
+                'mrp'   => (int) ($product->mrp ?? ''),
+            ];
+        
+            $productList[$product->id] = $property;
+        }
         return Inertia::render('Package/Create', [
             'product' => new Product(),
-            'productList' => $products,
+            // 'productList' => $products,
+            'productList' => $productList,
             'categories'  => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
             'productType'  => Product::getTypes(),
         ]);
@@ -83,16 +94,27 @@ class PackageController extends Controller
     public function edit(Product $product)
     {
         $product = Product::find(request()->segment(2));
-
-        $productList =Product::query()
+        
+        $products =Product::query()
         ->when(isset(request()->search), function ($query) {
             $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
                 ->orWhere('id', request()->search)
                 ->orWhereIn('id', explode(',', request()->selected));
         })
         ->where('type', '!=', 1)
-        ->get(['id', 'name', 'production_cost', 'mrp']);
-
+        ->get();
+        
+        foreach($products as $item)
+        {
+            $property = (object)[
+                'name'  => (string) ($item->name ?? ''),
+                'cost'  => (int) ($item->production_cost ?? ''),
+                'mrp'   => (int) ($item->mrp ?? ''),
+            ];
+        
+            $productList[$item->id] = $property;
+        }
+        
         return Inertia::render('Package/Edit', [
             'product'               => $product,
             'productCategories'     => $product->categories,
@@ -142,7 +164,9 @@ class PackageController extends Controller
             foreach($request->product_ids as $package_id) {
                 PackageProduct::onlyTrashed()->updateOrCreate(
                     ['package_id' => $product->id],
-                    ['product_id' => $package_id, 'deleted_at' => null]
+                    ['product_id' => $package_id, 
+                    'deleted_at' => null
+                    ]
                 );
 
                 // if(is_array($request->packageProductPrice)) {

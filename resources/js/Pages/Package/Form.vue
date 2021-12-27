@@ -178,14 +178,45 @@
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light bg-white">
-                            <tr class="border" v-for="(product) in data.productList" :key="product.id" :class="{ 'bg-green-200' : form.product_ids.includes(parseInt(product.id)), 'bg-white' : form.product_ids.includes(parseInt(product.id)) }">
+                            <tr class="border" v-for="(product, productId) in data.productList" :key="productId" :class="{'hidden' : form.product_ids.includes(parseInt(productId))}">
                                 <td class="w-40">{{ product.name }}</td>
                                 <td>{{ product.production_cost }}</td>
                                 <td>{{ product.mrp }}</td>
                                 <!-- <td>
                                     <input type="number" class="cursor-pointer w-20 ml-auto text-center" v-model="form.packageProductPrice[product.id]" >
                                 </td> -->
-                                <td><Input type="checkbox" class="cursor-pointer" @change="productSelectHandler(product.id)" :checked="form.product_ids.includes(parseInt(product.id))" /></td>
+                                <td><Input type="checkbox" class="cursor-pointer" @change="productSelectHandler(productId)" :checked="form.product_ids.includes(parseInt(product.id))" /></td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                </div>
+                <div class="w-full flex justify-between items-center p-4" >
+                    <table class="min-w-max w-full table-auto">
+                        <thead>
+                            <tr class="text-gray-600 text-sm font-light bg-white">
+                                <th class="text-left">Name</th>
+                                <th class="text-left">Cost</th>
+                                <th>Mrp</th>
+                                <!-- <th>Estimation</th> -->
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm font-light bg-white">
+                            <tr class="border bg-green-200 border-white" v-for="(product, productId) in selectedProducts" :key="productId" >
+                                <td class="w-40">{{ product.name }}</td>
+                                <td>{{ product.cost }}</td>
+                                <td>{{ product.mrp }}</td>
+                                <!-- <td>
+                                    <input type="number" class="cursor-pointer w-20 ml-auto text-center" v-model="form.packageProductPrice[product.id]" >
+                                </td> -->
+                                <td>
+                                        <button
+                                            class="text-red-500 text-2xl"
+                                            @click="removeProduct(productId)"
+                                            type="button"
+                                        >
+                                            &times;
+                                        </button>
+                                    </td>
                             </tr>
                         </tbody>
                     </table>
@@ -212,7 +243,6 @@ export default {
         GoToList,
         Select,
     },
-
     props: {
         moduleAction: String,
         buttonValue: { 
@@ -224,7 +254,6 @@ export default {
             default: {}
         },
     },
-
     data() {
         return {
             form: this.$inertia.form({
@@ -240,10 +269,6 @@ export default {
                 outside_dhaka_price: this.data.product.outside_dhaka_price,
                 ecom_distribute_price: this.data.product.ecom_distribute_price,
                 ecom_wholesale_price: this.data.product.ecom_wholesale_price,
-                // edition: this.data.product.edition,
-                // isbn: this.data.product.isbn,
-                // crl: this.data.product.crl,
-                // alert_quantity: this.data.product.alert_quantity,
                 active: this.moduleAction == 'store' ? 1 : this.data.product.active,
                 category_ids: this.data.category_ids || [],
                 product_ids: this.data.product_ids || [],
@@ -251,6 +276,7 @@ export default {
             }),
             categoryShow: false,
             selected: [],
+            selectedProducts: [],
         }
     },
 
@@ -276,7 +302,8 @@ export default {
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('packages.update', this.data.product.id));
+                console.log(this.data.product_ids)
+                // return this.form.put(this.route('packages.update', this.data.product.id));
             }
         },
 
@@ -310,6 +337,31 @@ export default {
             } else {
                 this.form.product_ids.push(productId);
             }
+            let product = this.data.productList[productId];
+            
+            if (!product.selected) {
+                this.selectedProducts.push({
+                    productId: productId,
+                    name: product.name,
+                    cost: product.production_cost,
+                    mrp: product.mrp
+                });
+            }
+            this.selectedProductHandler();
+        },
+        removeProduct(numberOfIndex) {
+            this.selectedProducts.splice(numberOfIndex, 1);
+
+            this.form.product_ids.splice(numberOfIndex, 1);
+
+            this.selectedProductHandler();
+        },
+        selectedProductHandler() {
+            this.selected = [];
+
+            this.selectedProducts.forEach((selectedProduct) => {
+                this.selected.push(selectedProduct.productId);
+            });
         },
         searchProduct(event) {
             let url = this.route(this.routeName || this.route().current(), {
