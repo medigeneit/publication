@@ -191,37 +191,42 @@
                         </tbody>
                     </table> 
                 </div>
-                <div class="w-full flex justify-between items-center p-4" >
-                    <table class="min-w-max w-full table-auto">
-                        <thead>
-                            <tr class="text-gray-600 text-sm font-light bg-white">
-                                <th class="text-left">Name</th>
-                                <th class="text-left">Cost</th>
-                                <th>Mrp</th>
-                                <!-- <th>Estimation</th> -->
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-600 text-sm font-light bg-white">
-                            <tr class="border bg-green-200 border-white" v-for="(product, productId) in selectedProducts" :key="productId" >
-                                <td class="w-40">{{ product.name }}</td>
-                                <td>{{ product.cost }}</td>
-                                <td>{{ product.mrp }}</td>
-                                <!-- <td>
-                                    <input type="number" class="cursor-pointer w-20 ml-auto text-center" v-model="form.packageProductPrice[product.id]" >
-                                </td> -->
-                                <td>
-                                        <button
-                                            class="text-red-500 text-2xl"
-                                            @click="removeProduct(productId, 'checkbox')"
-                                            type="button"
-                                        >
-                                            &times;
-                                        </button>
-                                    </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>   
+
+                <div v-if="selectedProducts.length > 0">
+                    <div class="px-4 py-3 text-lg font-bold">Selected Products</div>
+                    <hr>
+                    <div class="w-full flex justify-between items-center p-4" >
+                        <table class="min-w-max w-full table-auto">
+                            <thead>
+                                <tr class="text-gray-600 text-sm font-light bg-white">
+                                    <th class="text-left">Name</th>
+                                    <th class="text-left">Cost</th>
+                                    <th>Mrp</th>
+                                    <!-- <th>Estimation</th> -->
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 text-sm font-light bg-white">
+                                <tr class="border bg-green-200 border-white" v-for="(product, productId) in selectedProducts" :key="productId" >
+                                    <td class="w-40">{{ product.name }}</td>
+                                    <td>{{ product.cost }}</td>
+                                    <td>{{ product.mrp }}</td>
+                                    <!-- <td>
+                                        <input type="number" class="cursor-pointer w-20 ml-auto text-center" v-model="form.packageProductPrice[product.id]" >
+                                    </td> -->
+                                    <td>
+                                            <button
+                                                class="text-red-500 text-2xl"
+                                                @click="removeProduct(productId, 'checkbox')"
+                                                type="button"
+                                            >
+                                                &times;
+                                            </button>
+                                        </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>   
+                </div>
             </div>
         </div>
     </div>
