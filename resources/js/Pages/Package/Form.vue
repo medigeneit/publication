@@ -185,7 +185,8 @@
                                 <!-- <td>
                                     <input type="number" class="cursor-pointer w-20 ml-auto text-center" v-model="form.packageProductPrice[product.id]" >
                                 </td> -->
-                                <td><Input type="checkbox" class="cursor-pointer" @change="productSelectHandler(productId)" :checked="form.product_ids.includes(parseInt(product.id))" /></td>
+                                <!-- <td><Input type="checkbox" class="cursor-pointer" @change="productSelectHandler(productId)" :checked="form.product_ids.includes(parseInt(product.id))" /></td> -->
+                                <td><Input type="checkbox" class="cursor-pointer checkbox" @change="productSelectHandler(productId)" :checked="product.checked" /></td>
                             </tr>
                         </tbody>
                     </table> 
@@ -211,7 +212,7 @@
                                 <td>
                                         <button
                                             class="text-red-500 text-2xl"
-                                            @click="removeProduct(productId)"
+                                            @click="removeProduct(productId, 'checkbox')"
                                             type="button"
                                         >
                                             &times;
@@ -355,9 +356,14 @@ export default {
             }
             this.selectedProductHandler();
         },
-        removeProduct(numberOfIndex) {
-            this.selectedProducts.splice(numberOfIndex, 1);
+        removeProduct(numberOfIndex, className) {
+            document.querySelectorAll(`.${className}`).forEach((checkBox) => {
+                if(checkBox.checked) {
+                    checkBox.checked = false;
+                }
+            });
 
+            this.selectedProducts.splice(numberOfIndex, 1);
             this.form.product_ids.splice(numberOfIndex, 1);
 
             this.selectedProductHandler();
