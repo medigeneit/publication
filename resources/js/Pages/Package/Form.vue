@@ -254,6 +254,13 @@ export default {
             default: {}
         },
     },
+    created() {
+        let products = [];
+        for (let product of this.form.product_ids) {
+            products.push(this.data.productList[product]);
+        }
+        this.selectedProducts= products || []
+    },
     data() {
         return {
             form: this.$inertia.form({
@@ -302,8 +309,7 @@ export default {
             }
 
             if(this.moduleAction == 'update') {
-                console.log(this.data.product_ids)
-                // return this.form.put(this.route('packages.update', this.data.product.id));
+                return this.form.put(this.route('packages.update', this.data.product.id));
             }
         },
 
@@ -364,6 +370,7 @@ export default {
             });
         },
         searchProduct(event) {
+            
             let url = this.route(this.routeName || this.route().current(), {
                 selected: this.selected.toString(),
                 search: !event.target.value.includes('\\') ? event.target.value : '',
@@ -371,6 +378,12 @@ export default {
 
             this.$inertia.get(url, {}, { preserveState: true });
         },
+
+        packageProducts() {
+            for (let product of this.form.product_ids) {
+                return this.data.productList[product]
+            }
+        }
     }
 };
 </script>

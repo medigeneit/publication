@@ -126,13 +126,17 @@ class PackageController extends Controller
         ]);
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request)
     {
+        $product = Product::find(request()->segment(2));
+
         $product->update($this->validateData($request, $product->id));
         
         $this->categoryInsert($request, $product);
 
-        $this->packageInsert($request, $product);
+        if(is_array($request->product_ids)) {
+            $this->packageInsert($request, $product);
+        }
 
         return redirect()
             ->route('packages.show', $product->id)
