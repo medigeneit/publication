@@ -20,10 +20,10 @@ class Version extends Model
     protected static function getTypes()
     {
         return [
-            1 => 'Package',
-            2 => 'Book',
-            3 => 'Lecture',
-            4 => 'Volume',
+            // 1 => 'Package',
+            1 => 'Book',
+            2 => 'Lecture',
+            3 => 'Volume',
         ];
     }
 

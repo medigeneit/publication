@@ -15,6 +15,11 @@
                     </Select>
                 </div>
 
+                <div class="mb-4 col-start-1">
+                    <Label for="edition" value="Edition" />
+                    <Input id="edition" name="edition" type="number" step="0.01" class="mt-1 block w-full" v-model="form.edition" />
+                </div>
+
                 <div class="mb-4">
                     <Label for="type" value="Type" />
                     <Select name="type" class="mt-1 block w-full" @change="typeChange(parseInt(form.type))" v-model="form.type" required>
@@ -29,11 +34,6 @@
                         <option value="1">Yes</option>
                         <option value="0">No</option>
                     </Select>
-                </div>
-
-                <div class="mb-4 col-start-1">
-                    <Label for="edition" value="Edition" />
-                    <Input id="edition" name="edition" type="number" step="0.01" class="mt-1 block w-full" v-model="form.edition" />
                 </div>
 
                 <div class="mb-4 col-start-1">
@@ -190,13 +190,9 @@ export default {
             // let productWrapper = document.getElementById('productWrapper');
             
             switch(type) {
-                case 4:
+                case 3:
                     volumeWrapper.classList.remove('hidden');
                     // productWrapper.classList.add('hidden');
-                    break;
-                case 1:
-                    volumeWrapper.classList.add('hidden');
-                    // productWrapper.classList.remove('hidden');
                     break;
                 default:
                     // productWrapper.classList.add('hidden');

@@ -18,7 +18,7 @@
                         <Label for="name" value="Name" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                     </div>
-                    
+
                     <div class="mb-4 col-span-2">
                         <Label for="category_id" value="Category" />
                         <button type="button" class="mt-1 block w-full px-3 py-2 border rounded bg-gray-600 text-white" @click="categoryShow = !categoryShow">
@@ -378,6 +378,7 @@ export default {
             let url = this.route(this.routeName || this.route().current(), {
                 selected: this.selected.toString(),
                 search: !event.target.value.includes('\\') ? event.target.value : '',
+                id : this.data.product.id
             });
 
             this.$inertia.get(url, {}, { preserveState: true });
