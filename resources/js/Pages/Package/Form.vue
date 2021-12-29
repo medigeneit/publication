@@ -18,14 +18,7 @@
                         <Label for="name" value="Name" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                     </div>
-
-                    <div class="mb-4 col-span-2" id="productWrapper" :class="{'hidden' : form.type !== 1}">
-                        <Label for="product_id" value="Product Name" />
-                        <button type="button" class="mt-1 block w-full px-3 py-2 border rounded bg-gray-600 text-white">
-                            {{ form.product_ids.length || 0 }} selected | Show Products
-                        </button>
-                    </div>
-
+                    
                     <div class="mb-4 col-span-2">
                         <Label for="category_id" value="Category" />
                         <button type="button" class="mt-1 block w-full px-3 py-2 border rounded bg-gray-600 text-white" @click="categoryShow = !categoryShow">
@@ -193,7 +186,7 @@
                 </div>
 
                 <div v-if="selectedProducts.length > 0">
-                    <div class="px-4 py-3 text-lg font-bold">Selected Products</div>
+                    <div class="px-4 py-3 text-lg font-bold ">Selected Products ( {{ form.product_ids.length }} )</div>
                     <hr>
                     <div class="w-full flex justify-between items-center p-4" >
                         <table class="min-w-max w-full table-auto">
