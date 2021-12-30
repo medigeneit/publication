@@ -21,12 +21,6 @@
                 <show-table-row heading="Publisher Name">{{ version.publisherName ?? '' }}</show-table-row>
                 <show-table-row heading="Version Cost">{{ version.versionionCost }}</show-table-row>
                 <show-table-row heading="MRP ">{{ version.mrp }}</show-table-row>
-                <show-table-row  v-if="version.packageProductCount" heading="Package Product ">
-                    <div class="py-1.5 flex gap-2" v-for="(packageProduct, index) in version.packageProducts" :key="index">
-                        <span>{{ index + 1 }}.</span>
-                        <Link class="underline hover:text-blue-500" :href="route('categories.show', packageProduct.id)">{{ packageProduct.name }}</Link>
-                    </div>
-                </show-table-row>
                 <show-table-row heading="Wholesale Price">{{ version.wholesalePrice }}</show-table-row>
                 <show-table-row heading="Retail Price">{{ version.retailPrice }}</show-table-row>
                 <show-table-row heading="Distribute Price">{{ version.distributePrice }}</show-table-row>

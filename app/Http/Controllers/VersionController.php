@@ -51,7 +51,7 @@ class VersionController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
+        return $request;
         $version = Version::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
@@ -72,7 +72,6 @@ class VersionController extends Controller
     {
         VersionResource::withoutWrapping();
 
-        // return $version->package_products;
         return Inertia::render('Version/Show', [
             'version' => new VersionResource($version),
         ]);
@@ -90,8 +89,6 @@ class VersionController extends Controller
         return Inertia::render('Version/Edit', [
             'productionList'    => Production::pluck('name', 'id'),
             'productList'       => $products,
-            'product_ids'       =>$version->package_products()->get()->pluck('id')->toArray(),
-            'product_prices'    =>$version->package_products()->get()->pluck('price')->toArray(),
             'versionType'       => Version::getTypes(),
             'version'           => $version,
         ]);
