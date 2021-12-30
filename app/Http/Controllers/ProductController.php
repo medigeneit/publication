@@ -22,8 +22,8 @@ class ProductController extends Controller
 
     public function index()
     {
-        return
-            $products = Product::query()
+
+        $products = Product::query()
             ->with('categories', 'publisher', 'prices')
             ->filter()
             ->dateFilter()

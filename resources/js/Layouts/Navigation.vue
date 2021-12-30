@@ -9,7 +9,7 @@
         </nav-link>
     </nav-link-wrapper>
 
-    <nav-link-wrapper title="Publication" :active="route().current('(categories|authors|publishers|productions|versions|products|packages).*')"> 
+    <nav-link-wrapper title="Publication" :active="route().current('(categories|authors|publishers|productions|versions|price-categories|products|packages).*')"> 
         <nav-link :href="route('categories.index')" :active="route().current('categories.*')">
             Categories
         </nav-link>
@@ -24,6 +24,9 @@
         </nav-link>
         <nav-link :href="route('versions.index')" :active="route().current('versions.*')">
             Versions
+        </nav-link>
+        <nav-link :href="route('price-categories.index')" :active="route().current('price-categories.*')">
+            Price Category
         </nav-link>
         <nav-link :href="route('products.index')" :active="route().current('products.*')">
             Products
@@ -67,9 +70,6 @@
         <nav-link :href="route('expenses.index')" :active="route().current('expenses.*')">
             Expense
         </nav-link> 
-        <nav-link :href="route('price-categories.index')" :active="route().current('price-categories.*')">
-            Price Category
-       </nav-link>
     </nav-link-wrapper>
 </template>
 
