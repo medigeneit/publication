@@ -21,8 +21,6 @@ class VersionResource extends JsonResource
             'typeName'              => (string) ($this->value_of_type ?? ''),
             'active'                => (int) ($this->active),
             'activeValue'           => (string) ($this->value_of_active),
-            'packageProducts'       => (object) ($this->package_products),
-            'packageProductCount'   => (int) ($this->package_products->count()),
         ];
     }
 }

@@ -20,15 +20,9 @@ class Version extends Model
     protected static function getTypes()
     {
         return [
-            // 1 => 'Package',
             1 => 'Book',
             2 => 'Lecture',
             3 => 'Volume',
         ];
-    }
-
-    public function package_products()
-    {
-        return $this->belongsToMany(Product::class, 'package_product', 'package_id', 'product_id')->whereNull('package_product.deleted_at');
     }
 }
