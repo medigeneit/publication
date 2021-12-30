@@ -9,6 +9,7 @@ use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OutletController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PriceCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductionController;
@@ -58,6 +59,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'productions'               => ProductionController::class,
         'versions'                  => VersionController::class,
         'products'                  => ProductController::class,
+        'packages'                  => PackageController::class,
         'publishers'                => PublisherController::class,
         'sales'                     => SaleController::class,
         'outlets'                   => OutletController::class,

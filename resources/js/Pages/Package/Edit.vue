@@ -1,12 +1,12 @@
 <template>
-    <Head title="Version" />
+    <Head title="Product" />
 
     <app-layout>
         <template #header>
-            Edit Version
+            Edit Product
         </template>
         
-        <form-component :data="{ version, productionList, productList, versionType, product_ids }" module-action="update" />
+        <form-component :data="{ product, productList, categoryList, productType, productCategories, categoryProduct, categories, category_ids, product_ids }" module-action="update" />
     </app-layout>
 </template>
 
@@ -24,34 +24,42 @@ export default {
     },
 
     props: {
-        version: { 
-            type: Object,
-            default: {}
-        },
-        versionType: { 
+        product: { 
             type: Object, 
             default: {} 
         },
-        productionList: {
+        productList: {
+            type:Object,
+            default: {}
+        },
+        categoryList: {
             type: Object,
             default: {}
         },
-        productList: {
+        categories: {
             type: Object,
             default: {}
+        },
+        category_ids: {
+            type: Array,
+            default: []
         },
         product_ids: {
             type: Array,
             default: []
         },
-        product_prices: {
-            type: Array,
-            default: []
+        productCategories: {
+            type: Object,
+            default: {}
         },
-        // categories: {
-        //     type: Object,
-        //     default: {}
-        // },
+        categoryProduct: {
+            type: Object,
+            default: {}
+        },
+        productType: { 
+            type: Object, 
+            default: {} 
+        },
     }, 
 };
 </script>

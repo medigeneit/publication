@@ -15,6 +15,11 @@
                     </Select>
                 </div>
 
+                <div class="mb-4 col-start-1">
+                    <Label for="edition" value="Edition" />
+                    <Input id="edition" name="edition" type="number" step="0.01" class="mt-1 block w-full" v-model="form.edition" />
+                </div>
+
                 <div class="mb-4">
                     <Label for="type" value="Type" />
                     <Select name="type" class="mt-1 block w-full" @change="typeChange(parseInt(form.type))" v-model="form.type" required>
@@ -32,11 +37,6 @@
                 </div>
 
                 <div class="mb-4 col-start-1">
-                    <Label for="edition" value="Edition" />
-                    <Input id="edition" name="edition" type="number" step="0.01" class="mt-1 block w-full" v-model="form.edition" />
-                </div>
-
-                <div class="mb-4 col-start-1">
                     <Label for="isbn" value="ISBN" />
                     <Input id="isbn" name="isbn" type="text" step="0.01" class="mt-1 block w-full" v-model="form.isbn" />
                 </div>
@@ -48,7 +48,7 @@
 
                 <div class="mb-4 col-start-1">
                     <Label for="productionCost" value="Production Cost" />
-                    <Input id="production_cost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.productionCost" />
+                    <Input id="productionCost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.production_cost" />
                 </div>
 
                 <div class="mb-4 col-start-1">
@@ -95,7 +95,7 @@
                 </div>
             </div>
         
-        <div id="productWrapper" class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded" :class="{'hidden' : form.type !== 1 && (form.type !== 2 || form.type !== 3) }" >
+        <!-- <div id="productWrapper" class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded" :class="{'hidden' : form.type !== 1 && (form.type !== 2 || form.type !== 3) }" >
             <input placeholder="Search..." @input="searchProduct" class=" px-2 py-2 w-full rounded border border-gray-500 focus:outline-none focus:ring-0"/>
             <div class="p-2 mb-2 border">
                
@@ -111,7 +111,7 @@
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light bg-white">
                             <tr class="border" v-for="(product) in data.productList" :key="product.id" :class="{ 'bg-green-200' : form.product_ids.includes(parseInt(product.id)), 'bg-white' : form.product_ids.includes(parseInt(product.id)) }">
-                                <td class="w-40">{{ product.name }}</td>
+                                <td class="w-40">{{ product.name }} {{form.packageProductPrice[product.id]}}</td>
                                 <td>{{ product.production_cost }}</td>
                                 <td>{{ product.mrp }}</td>
                                 <td>
@@ -123,7 +123,7 @@
                     </table>
                 </div>
             </div>   
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -162,11 +162,11 @@ export default {
             form: this.$inertia.form({
                 type: this.data.version.type || '',
                 production_id: this.data.version.production_id || '',
-                edition: this.data.edition || '',
-                isbn: this.data.isbn || '',
-                crl: this.data.crl || '',
-                productionCost: this.data.production_cost || '',
-                link: this.data.link || '',
+                edition: this.data.version.edition || '',
+                isbn: this.data.version.isbn || '',
+                crl: this.data.version.crl || '',
+                production_cost: this.data.version.production_cost || '',
+                link: this.data.version.link || '',
                 active: this.moduleAction == 'store' ? 1 : this.data.version.active,
                 volumeName: '',
                 volumeNo: '',
@@ -174,7 +174,8 @@ export default {
                 volumeCost: '',
                 volumeActive: '',
                 product_ids: this.data.product_ids || [],
-                packageProductPrice:  {},
+                product_prices: this.data.product_prices || [],
+                packageProductPrice: this.data.product_prices || {},
             }),
             categoryShow: false,
             productShow: false,
@@ -186,19 +187,15 @@ export default {
 
         typeChange(type) {
             let volumeWrapper = document.getElementById('volumeWrapper');
-            let productWrapper = document.getElementById('productWrapper');
+            // let productWrapper = document.getElementById('productWrapper');
             
             switch(type) {
-                case 4:
+                case 3:
                     volumeWrapper.classList.remove('hidden');
-                    productWrapper.classList.add('hidden');
-                    break;
-                case 1:
-                    volumeWrapper.classList.add('hidden');
-                    productWrapper.classList.remove('hidden');
+                    // productWrapper.classList.add('hidden');
                     break;
                 default:
-                    productWrapper.classList.add('hidden');
+                    // productWrapper.classList.add('hidden');
                     volumeWrapper.classList.add('hidden');
             }
         },

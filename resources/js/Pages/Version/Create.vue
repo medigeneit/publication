@@ -6,7 +6,7 @@
             Create Version
         </template>
         
-        <form-component :data="{ version, productionList, productList, versionType}" module-action="store" />
+        <form-component :data="{ version, productionList, productList, versionType, product_ids}" module-action="store" />
     </app-layout>
 </template>
 
@@ -39,6 +39,10 @@ export default {
         productList: {
             type: Object,
             default: {}
+        },
+        product_ids: {
+            type: Array,
+            default: []
         },
         // categories: {
         //     type: Object,

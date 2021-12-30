@@ -51,6 +51,7 @@ class VersionController extends Controller
 
     public function store(Request $request)
     {
+        // return $request;
         $version = Version::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
@@ -71,6 +72,7 @@ class VersionController extends Controller
     {
         VersionResource::withoutWrapping();
 
+        // return $version->package_products;
         return Inertia::render('Version/Show', [
             'version' => new VersionResource($version),
         ]);
@@ -78,8 +80,20 @@ class VersionController extends Controller
 
     public function edit(Version $version)
     {
+        $products =Product::query()
+                ->when(isset(request()->search), function ($query) {
+                    $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
+                        ->orWhere('id', request()->search)
+                        ->orWhereIn('id', explode(',', request()->selected));
+                })
+                ->get(['id', 'name', 'production_cost', 'mrp']);
         return Inertia::render('Version/Edit', [
-            'version' => $version,
+            'productionList'    => Production::pluck('name', 'id'),
+            'productList'       => $products,
+            'product_ids'       =>$version->package_products()->get()->pluck('id')->toArray(),
+            'product_prices'    =>$version->package_products()->get()->pluck('price')->toArray(),
+            'versionType'       => Version::getTypes(),
+            'version'           => $version,
         ]);
     }
 
