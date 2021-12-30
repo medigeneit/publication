@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->boolean('soft');
             $table->boolean('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
