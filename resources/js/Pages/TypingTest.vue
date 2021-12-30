@@ -2,15 +2,46 @@
     <app-layout>
         <div class="w-full mx-auto max-w-4xl p-4">
             <div class="border rounded shadow p-4">
-                <div
-                    id="word-section"
-                    class="flex flex-wrap text-xl"
-                >
-                    <div class="waiting">⌛</div>
+                <ul v-if="result.status">
+                    <li>
+                        WPM: <span class="wpm-value">{{ result.wpm }}</span>
+                    </li>
+                    <li>
+                        Accuracy:
+                        <span class="wpm-accuracy">{{ result.accuracy }}%</span>
+                    </li>
+                    <li>
+                        Total Words: <span>{{ result.totalWord }}</span>
+                    </li>
+                    <li>
+                        Correct Words: <span>{{ result.correctWord }}</span>
+                    </li>
+                    <li>
+                        Incorrect Words: <span>{{ result.incorrectWord }}</span>
+                    </li>
+                    <li>
+                        Characters Typed:
+                        <span>{{ result.characerTyped }}</span>
+                    </li>
+                </ul>
+
+                <div v-if="!result.status" class="flex flex-wrap text-xl">
+                    <span
+                        v-for="(word, index) in words"
+                        :key="index"
+                        class="px-1"
+                        :class="word.classes[word.status]"
+                    >
+                        {{ word.text }}
+                    </span>
+                    <div v-if="!words.length" class="w-full text-center">
+                        <div class="inline-block animate-spin">⌛</div>
+                    </div>
                 </div>
 
-                <div id="type-section" class="mt-4 flex items-center gap-4">
+                <div class="flex justify-between items-center gap-4 mt-4">
                     <input
+                        v-if="!result.status"
                         v-model="typedWord"
                         class="block w-full rounded text-3xl"
                         type="text"
@@ -19,17 +50,22 @@
                         @keyup="typingTest"
                     />
 
-                    <div class="text-center">
-                        <span class="text-4xl font-bold">{{ timer }}</span>
+                    <div v-if="!result.status" class="text-center">
+                        <span v-if="timer">{{ timer }}</span>
+                        <select v-else v-model="wordData.seconds">
+                            <option value="60">1 minute</option>
+                            <option value="120">2 minutes</option>
+                            <option value="300">5 minutes</option>
+                        </select>
                     </div>
 
                     <div class="text-center">
                         <button
-                            class="border border-gray-700 px-3 py-1 rounded"
+                            class="border border-gray-700 px-3 py-2"
                             tabindex="2"
                             @click="restartTest"
                         >
-                            <span id="restart-symbol">↻</span>
+                            <span>↻</span>
                         </button>
                     </div>
                 </div>
@@ -48,7 +84,6 @@ export default {
     data() {
         return {
             typedWord: "",
-            submitted: false,
             wordData: {
                 seconds: 60,
                 correct: 0,
@@ -56,7 +91,7 @@ export default {
                 total: 0,
                 typed: 0,
             },
-            timer: "1:00",
+            timer: "",
             wordList: [
                 "the",
                 "name",
@@ -559,13 +594,49 @@ export default {
                 "morning",
                 "among",
             ],
+            words: [],
+            result: {
+                wpm: 0,
+                accuracy: 0,
+                totalWord: 0,
+                correctWord: 0,
+                incorrectWord: 0,
+                characerTyped: 0,
+                status: false,
+            },
         };
     },
     computed: {},
     mounted() {
-        this.addWords();
+        this.addWords(30, true);
     },
     methods: {
+        addWords(count = 10, init = false) {
+            for (let i = count; i > 0; i--) {
+                this.words.push({
+                    text: this.wordList[
+                        Math.floor(Math.random() * this.wordList.length)
+                    ], //random text from wordList
+                    status: init && count == i ? 1 : 0,
+                    classes: {
+                        0: "", //normal word
+                        1: "bg-gray-300 rounded", //current word
+                        2: "bg-red-400", //current wrong typing
+                        3: "text-green-600", //correct word
+                        4: "text-red-600", //incorrect word
+                    },
+                });
+            }
+        },
+        removeWords(count = 10) {
+            let total = Math.min(count, this.words.length);
+
+            for (let i = total; i > 0; i--) {
+                this.words.shift();
+            }
+
+            return total;
+        },
         typingTest(event) {
             // Char:        Key Code:
             // <space>      32
@@ -574,18 +645,23 @@ export default {
             // [A-Z]        65-90
             // [' "]        222
             event = event || window.event;
+
             let kCode = event.keyCode;
+
             if (this.typedWord.match(/^\s/g)) {
                 this.typedWord = "";
                 return false;
             }
+
             if (this.isTimer(this.wordData.seconds)) {
-                this.checkWord(this.typedWord);
+                let response = this.checkWord(this.typedWord);
+
                 if (kCode === 32) {
-                    this.submitWord(this.typedWord);
-                    this.clearLine();
+                    this.submitWord(this.typedWord, response);
                     this.typedWord = "";
                 }
+
+                return;
 
                 if (this.wordData.typed > 100) {
                     let element = document.getElementById("word-section");
@@ -596,130 +672,76 @@ export default {
                 this.calculateWPM();
             }
         },
-        isTimer(seconds) {
-            let time = seconds;
-            let one = this.timer;
-            if (this.timer === "1:00") {
-                let typingTimer = setInterval(() => {
-                    if (time <= 0) {
-                        clearInterval(typingTimer);
-                    } else {
-                        time -= 1;
-                        let timePad = time < 10 ? "0" + time : time;
-                        this.timer = `0:${timePad}`;
-                    }
-                }, 1000);
-            }
-            return one !== "0:00";
-        },
-        addWords() {
-            let wordSection = document.getElementById("word-section");
-            this.typedWord = "";
-            wordSection.innerHTML = "";
-            for (let i = 200; i > 0; i--) {
-                let words = this.shuffle(this.wordList);
-                let wordSpan = `<span class="px-1">${words[i]}</span>`;
-                wordSection.innerHTML += wordSpan;
-            }
-            wordSection.firstChild.classList.add("current-word");
+        findCurrentWord() {
+            return this.words.find(
+                (word) => word.status === 1 || word.status === 2
+            );
         },
         checkWord(word) {
-            let wordLength = word.length;
-            let current = document.getElementsByClassName("current-word")[0];
-            let currentSubstring = current.innerHTML.substring(0, wordLength);
-            if (word.trim() === currentSubstring && wordLength) {
-                current.classList.remove("incorrect-word-bg");
-                return true;
+            let current = this.findCurrentWord();
+
+            if (word.trim() !== current.text.slice(0, word.length)) {
+                current.status = 2;
+                return false;
             }
 
-            current.classList.add("incorrect-word-bg");
-            return false;
+            current.status = 1;
+            return true;
         },
-        shuffle(array) {
-            let m = array.length,
-                t,
-                i;
-            while (m) {
-                i = Math.floor(Math.random() * m--);
-                t = array[m];
-                array[m] = array[i];
-                array[i] = t;
-            }
-            return array;
-        },
-        submitWord(word) {
-            let current = document.getElementsByClassName("current-word")[0];
-            if (this.checkWord(word)) {
-                current.classList.remove("current-word");
-                current.classList.add("correct-word-c");
+        submitWord(word, response) {
+            let current = this.findCurrentWord();
+
+            if (response) {
+                current.status = 3;
                 this.wordData.typed += word.length;
                 this.wordData.correct += 1;
             } else {
-                current.classList.remove("current-word", "incorrect-word-bg");
-                current.classList.add("incorrect-word-c");
+                current.status = 4;
                 this.wordData.incorrect += 1;
             }
+
             this.wordData.total =
                 this.wordData.correct + this.wordData.incorrect;
 
-            current.nextSibling.classList.add("current-word");
-        },
-        clearLine() {
-            let wordSection = document.getElementById("word-section");
-            let current = document.getElementsByClassName("current-word")[0];
-            let previous = current.previousSibling;
-            let children = document.querySelectorAll(
-                ".correct-word-c, .incorrect-word-c"
-            )[0].length;
-            if (current.offsetTop > previous.offsetTop) {
-                for (let i = 0; i < children; i++) {
-                    wordSection.removeChild(wordSection.firstChild);
-                }
+            let index = this.words.indexOf(current);
+
+            if (index + 2 > this.words.length) {
+                index = index - this.removeWords(this.words.length);
+                this.addWords(this.words.length);
             }
+
+            this.words[index + 1].status = 1;
         },
         calculateWPM() {
             let { seconds, correct, incorrect, total, typed } = this.wordData;
             let minutes = seconds / 60;
             let wpm = Math.ceil((typed / 5 - incorrect) / minutes);
             let accuracy = Math.ceil((correct / total) * 100);
-            if (wpm < 0) {
-                wpm = 0;
-            }
-            document.getElementById(
-                "word-section"
-            ).innerHTML = `<ul id="results">
-                    <li>WPM: <span class="wpm-value">${wpm}</span></li>
-                    <li>Accuracy: <span class="wpm-accuracy">${accuracy}%</span></li>
-                    <li>Total Words: <span>${total}</span></li>
-                    <li>Correct Words: <span>${correct}</span></li>
-                    <li>Incorrect Words: <span>${incorrect}</span></li>
-                    <li>Characters Typed: <span>${typed}</span></li>
-                </ul>`;
-            let wpmClass =
-                document.getElementsByClassName("wpm-accuracy")[0].classList;
-            if (accuracy > 80) {
-                wpmClass.add("correct-word-c");
-            } else {
-                wpmClass.add("incorrect-word-c");
-            }
-            if (!this.submitted) {
-                window.axios
-                    .post("/submit-test", {
-                        words_per_minute: wpm,
-                        accuracy: accuracy,
-                        total_words: total,
-                        correct_words: correct,
-                        incorrect_words: incorrect,
-                        characters_typed: typed,
-                    })
-                    .then((response) => {
-                        console.log(response);
-                        this.submitted = true;
-                    })
-                    .catch((response) => {
-                        console.log(response);
-                    });
-            }
+
+            this.result.wpm = wpm > 0 ? wpm : 0;
+            this.result.accuracy = accuracy;
+            this.result.correctWord = correct;
+            this.result.incorrectWord = incorrect;
+            this.result.characerTyped = typed;
+            this.result.totalWord = correct + incorrect;
+
+            this.result.status = true;
+        },
+        isTimer(totalSeconds) {
+            let typingTimer = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    clearInterval(typingTimer);
+                    this.calculateWPM();
+                } else {
+                    totalSeconds -= 1;
+
+                    let seconds = totalSeconds % 60;
+
+                    let minutes = totalSeconds / 60;
+
+                    this.timer = `${minutes}:${minutes}`;
+                }
+            }, 1000);
         },
         restartTest() {
             this.typedWord = "";
