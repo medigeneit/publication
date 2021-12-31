@@ -22,8 +22,10 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('outlet_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            $table->boolean('active')->default(1);
+            $table->unsignedBigInteger('user_id')->default(0)->comment('0=Register, user_id=created_by');
             $table->rememberToken();
-            $table->tinyInteger('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

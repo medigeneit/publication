@@ -16,17 +16,17 @@ class Publisher extends Model
 
     protected $guarded = [];
 
-    public function scopeActive($query)
-    {
-        return $query->where('active', 1);
-    }
-
     public function scopeFilter($query)
     {
         return $query
             ->when(isset(request()->active), function($query) {
                 $query->where("active", request()->active);
             });
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
     }
 
     public function accounts()

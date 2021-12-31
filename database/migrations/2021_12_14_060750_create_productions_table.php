@@ -16,6 +16,9 @@ class CreateProductionsTable extends Migration
         Schema::create('productions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('publisher_id');
+
+            $table->boolean('active')->default(1);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();

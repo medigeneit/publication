@@ -1,0 +1,41 @@
+<template>
+    <div>
+        <label class="block font-medium text-sm text-gray-700">
+            <span>Active</span>
+        </label>
+        <select
+            class="
+                border-gray-300
+                focus:ring
+                focus:border-indigo-300
+                focus:ring-indigo-200
+                focus:ring-opacity-50
+                rounded-md
+                shadow-sm
+                mt-1
+                block
+                w-full
+            "
+            :value="modelValue"
+            @change="$emit('update:modelValue', $event.target.value)"
+            ref="input"
+        >
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+    </div>
+</template>
+
+<script>
+export default {
+    props: ["modelValue"],
+
+    emits: ["update:modelValue"],
+
+    methods: {
+        focus() {
+            this.$refs.input.focus();
+        },
+    },
+};
+</script>

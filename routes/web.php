@@ -54,13 +54,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::resources([
         'users'                     => UserController::class,
-        'categories'                => CategoryController::class,
-        'authors'                   => AuthorController::class,
+        'publishers'                => PublisherController::class,
         'productions'               => ProductionController::class,
         'versions'                  => VersionController::class,
+
+        'categories'                => CategoryController::class,
+        'authors'                   => AuthorController::class,
         'products'                  => ProductController::class,
         'packages'                  => PackageController::class,
-        'publishers'                => PublisherController::class,
         'sales'                     => SaleController::class,
         'outlets'                   => OutletController::class,
         'distributions'             => DistributionController::class,

@@ -5,24 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductionResource;
 use App\Models\Production;
-use App\Traits\DateFilter;
+use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProductionController extends Controller
 {
-    use DateFilter;
-
     public function index()
     {
-        $productions = $this->setQuery(Production::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
+        $productions = Production::query()
+            ->search(['id', 'name'])
+            ->filter()
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Production/Index', [
-            'productions' => ProductionResource::collection($productions->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'productions' => ProductionResource::collection($productions->paginate(request()->perpage)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
@@ -31,6 +29,7 @@ class ProductionController extends Controller
     {
         return Inertia::render('Production/Create', [
             'production' => new Production(),
+            'publishers' => Publisher::get(),
         ]);
     }
 
@@ -58,6 +57,7 @@ class ProductionController extends Controller
     {
         return Inertia::render('Production/Edit', [
             'production' => $production,
+            'publishers' => Publisher::get(),
         ]);
     }
 
@@ -79,36 +79,24 @@ class ProductionController extends Controller
             ->with('status', 'The record has been delete successfully.');
     }
 
-    protected function search()
-    {
-        $this->getQuery()
-            ->when(request()->search, function ($query, $search) {
-                $query->where(function ($query) use ($search) {
-                    $query->where('id', 'regexp', $search);
-                });
-            });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery();
-
-        return $this;
-    }
-
     protected function getFilterProperty()
     {
         return [
-            //
+            'publisher' => Publisher::active()->pluck('name', 'id'),
+            'active' => Production::getActiveProperties(),
         ];
     }
 
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            'name' => 'required',
+            'name' => [
+                'required',
+            ],
+            'publisher_id' => [
+                'required',
+                'numeric',
+            ],
         ]);
     }
 

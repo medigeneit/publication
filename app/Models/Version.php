@@ -25,4 +25,13 @@ class Version extends Model
             3 => 'Volume',
         ];
     }
+
+    public function scopeFilter($query)
+    {
+        return $query
+            ->when(isset(request()->active), function($query) {
+                $query->where("active", request()->active);
+            });
+    }
+
 }

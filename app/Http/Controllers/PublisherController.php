@@ -12,18 +12,15 @@ use Inertia\Inertia;
 
 class PublisherController extends Controller
 {
-    use DateFilter;
-
     public function index()
     {
         $publishers = Publisher::query()
                 ->filter()
-                ->dateFilter()
-                ->search(['id', 'name'])
+                ->search(['id', 'name', 'phone', 'email'])
                 ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Publisher/Index', [
-            'publishers' => PublisherResource::collection($publishers->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'publishers' => PublisherResource::collection($publishers->paginate(request()->perpage)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
@@ -36,7 +33,7 @@ class PublisherController extends Controller
     }
 
     public function store(Request $request)
-    {
+    { 
         $publisher = Publisher::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
@@ -103,6 +100,9 @@ class PublisherController extends Controller
     {
         return $request->validate([
             'name' => ['required'],
+            'phone' => '',
+            'email' => '',
+            'address' => '',
             'active' => ['required'],
         ]);
     }

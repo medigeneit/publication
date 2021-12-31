@@ -2,16 +2,23 @@
     <Head title="Version" />
 
     <app-layout>
-        <template #header>
-            Create Version
-        </template>
-        
-        <form-component :data="{ version, productionList, productList, versionType, product_ids}" module-action="store" />
+        <template #header> Create Version </template>
+
+        <form-component
+            :data="{
+                version,
+                productionList,
+                productList,
+                versionType,
+                product_ids,
+            }"
+            module-action="store"
+        />
     </app-layout>
 </template>
 
 <script>
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link } from "@inertiajs/inertia-vue3";
 import AppLayout from "@/Layouts/App.vue";
 import FormComponent from "./Form.vue";
 
@@ -24,25 +31,25 @@ export default {
     },
 
     props: {
-        version: { 
+        version: {
             type: Object,
-            default: {}
+            default: {},
         },
-        versionType: { 
-            type: Object, 
-            default: {} 
+        versionType: {
+            type: Object,
+            default: {},
         },
         productionList: {
             type: Object,
-            default: {}
+            default: {},
         },
         productList: {
             type: Object,
-            default: {}
+            default: {},
         },
         product_ids: {
             type: Array,
-            default: []
+            default: [],
         },
         // categories: {
         //     type: Object,

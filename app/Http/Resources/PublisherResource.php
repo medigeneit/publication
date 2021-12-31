@@ -17,6 +17,9 @@ class PublisherResource extends JsonResource
         return [
             'id'            => (int) $this->id,
             'name'          => (string) ($this->name ?? ''),
+            'phone'         => (string) ($this->phone ?? ''),
+            'email'         => (string) ($this->email ?? ''),
+            'address'       => (string) ($this->address ?? ''),
             'active'        => (bool) ($this->active ?? ''),
             'activeValue'   => (string) ($this->value_of_active),
             'createdBy'     => (string) ($this->user->name ?? '')

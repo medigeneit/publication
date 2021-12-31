@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedTinyInteger('parent_id')->default(0)->comment("0=Category, category_id=Sub Category");
+
             $table->boolean('active')->default(1);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

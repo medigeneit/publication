@@ -20,10 +20,11 @@ class VersionController extends Controller
 
     public function index()
     {
-        $versions = $this->setQuery(Version::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
+        $versions = Version::query()
+            ->filter()
+            ->dateFilter()
+            ->search(['id'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Version/Index', [
             'versions' => VersionResource::collection($versions->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -34,12 +35,12 @@ class VersionController extends Controller
     public function create()
     {
         $products =Product::query()
-                ->when(isset(request()->search), function ($query) {
-                    $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
-                        ->orWhere('id', request()->search)
-                        ->orWhereIn('id', explode(',', request()->selected));
-                })
-                ->get(['id', 'name', 'production_cost', 'mrp']);
+            ->when(isset(request()->search), function ($query) {
+                $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
+                    ->orWhere('id', request()->search)
+                    ->orWhereIn('id', explode(',', request()->selected));
+            })
+            ->get();
 
         return Inertia::render('Version/Create', [
             'version'           => new Version(),
@@ -86,6 +87,7 @@ class VersionController extends Controller
                         ->orWhereIn('id', explode(',', request()->selected));
                 })
                 ->get(['id', 'name', 'production_cost', 'mrp']);
+
         return Inertia::render('Version/Edit', [
             'productionList'    => Production::pluck('name', 'id'),
             'productList'       => $products,
@@ -148,25 +150,6 @@ class VersionController extends Controller
         return redirect()
             ->route('versions.index')
             ->with('status', 'The record has been delete successfully.');
-    }
-
-    protected function search()
-    {
-        $this->getQuery()
-            ->when(request()->search, function ($query, $search) {
-                $query->where(function ($query) use ($search) {
-                    $query->where('id', 'regexp', $search);
-                });
-            });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery();
-
-        return $this;
     }
 
     protected function getFilterProperty()

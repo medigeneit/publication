@@ -17,6 +17,8 @@ class ProductionResource extends JsonResource
         return [
             'id'            => (int) $this->id,
             'name'          => (string) ($this->name ?? ''),
+            'publisherId'   => (int) ($this->publisher_id ?? 0),
+            'publisherName' => (string) ($this->publisher->name ?? ''),
             'createdBy'     => (string) ($this->user->name ?? '')
         ];
     }

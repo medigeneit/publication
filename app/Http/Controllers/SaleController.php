@@ -63,6 +63,25 @@ class SaleController extends Controller
             $productList[$product->id] = $property;
         }
 
+        
+        $productList[5] = [
+            'name'          => 'Last Hour',
+            'maxQuantity'   => 10,
+            'unitPrice'     => [
+                1 => 790,
+                2 => 740,
+            ],
+        ];
+
+        $productList[7] = [
+            'name'          => 'SBA Pearl',
+            'maxQuantity'   => 5,
+            'unitPrice'     => [
+                1 => 590,
+                2 => 540,
+            ],
+        ];
+
         return Inertia::render('Sale/SaleMemo', [
             'sale' => new Sale(),
             'outlets' => Outlet::active()->pluck('name', 'id'),
