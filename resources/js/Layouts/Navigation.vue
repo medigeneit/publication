@@ -17,7 +17,7 @@
 
     <nav-link-wrapper
         title="Production Management"
-        :active="route().current('(publishers|productions|versions|authors).*')"
+        :active="route().current('(publishers|productions|versions|author-types|authors).*')"
     >
         <nav-link
             :href="route('publishers.index')"
@@ -36,6 +36,12 @@
             :active="route().current('versions.*')"
         >
             Release Versions
+        </nav-link>
+        <nav-link
+            :href="route('author-types.index')"
+            :active="route().current('author-types.*')"
+        >
+            Author Types
         </nav-link>
         <nav-link
             :href="route('authors.index')"
