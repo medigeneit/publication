@@ -55,7 +55,7 @@
         title="Publication"
         :active="
             route().current(
-                '(categories|authors|price-categories|products|packages).*'
+                '(categories|price-categories|products|packages).*'
             )
         "
     >
