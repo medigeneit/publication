@@ -46,6 +46,8 @@ class PackageController extends Controller
         ->where('type', '!=', 1)
         ->get();
 
+        $productList = [];
+
         foreach($products as $product)
         {
             $property = (object)[
