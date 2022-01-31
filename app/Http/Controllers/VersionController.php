@@ -52,17 +52,17 @@ class VersionController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+        return $request->release_date;
         $version = Version::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
-        if(is_array($request->product_ids)) {
-            $this->packageInsert($request, $version);
-        }
+        // if(is_array($request->product_ids)) {
+        //     $this->packageInsert($request, $version);
+        // }
 
-        if(($request->volumeNo)) {
-            $this->volumeInsert($request, $version);
-        }
+        // if(($request->volumes)) {
+        //     $this->volumeInsert($request, $version);
+        // }
         
         return redirect()
             ->route('versions.show', $version->id)

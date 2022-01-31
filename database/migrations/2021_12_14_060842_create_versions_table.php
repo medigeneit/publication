@@ -18,6 +18,7 @@ class CreateVersionsTable extends Migration
             $table->tinyInteger('type')->comment('1=Package, 2=Book, 3=Lecture Sheet');
             $table->unsignedBigInteger('production_id')->nullable();
             $table->string('edition');
+            $table->timestamp('release_date')->nullable();
             $table->string('isbn')->nullable();
             $table->string('crl')->nullable();
             $table->string('link')->nullable();

@@ -48,7 +48,16 @@
                     <Input
                         type="date"
                         class="mt-1 block w-full"
-                        v-model="form.release_date"
+                        v-model="(form.release_date)"
+                    />
+                </div>
+
+                <div>
+                    <Label value="Link" />
+                    <Input
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.link"
                     />
                 </div>
 
@@ -58,7 +67,6 @@
                     <Label value="Type" />
                     <Select
                         class="mt-1 block w-full"
-                        @change="typeChange(parseInt(form.type))"
                         v-model="form.type"
                         required
                     >
@@ -200,9 +208,10 @@ export default {
             form: this.$inertia.form({
                 production_id: this.data.version.production_id || "",
                 edition: this.data.version.edition || "",
+                release_date: this.data.version.release_date || "",
+                link: this.data.version.link || "",
                 type: this.data.version.type || "",
-                active:
-                    this.moduleAction == "store" ? 1 : this.data.version.active,
+                active: this.moduleAction == "store" ? 1 : this.data.version.active,
                 volumes: [
                     {
                         name: "",
@@ -227,20 +236,7 @@ export default {
             });
         },
 
-        typeChange(type) {
-            let volumeWrapper = document.getElementById("volumeWrapper");
-
-            switch (type) {
-                case 3:
-                    volumeWrapper.classList.remove("hidden");
-                    break;
-                default:
-                    volumeWrapper.classList.add("hidden");
-            }
-        },
-
         copyVolume(id) {
-            // appendableDiv.append(singleWrapper)
             appendableDiv.innerHTML += singleWrapper;
         },
 
