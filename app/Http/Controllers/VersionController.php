@@ -13,6 +13,7 @@ use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use League\CommonMark\Util\ArrayCollection;
 
 class VersionController extends Controller
 {
@@ -52,17 +53,35 @@ class VersionController extends Controller
 
     public function store(Request $request)
     {
-        return $request->release_date;
-        $version = Version::create($this->validateData($request) + [
+        $validate = $this->validateData($request) + [
             'user_id' => Auth::id()
-        ]);
+        ];
+
+        $count = 0;
+
+        foreach ($request->volumes as  $volume) {
+            
+            if($volume['name'] &&( $volume['isbn'] || $volume['crl'])){
+                $count ++;
+            }
+            if($count==2){
+                break;
+            }
+        }
+
+        if($count==2){
+            $validate['type'] = $validate['type'] == 1 ? 3 : $validate['type'] ;
+        }
+
+        $version = Version::create($validate);
+
         // if(is_array($request->product_ids)) {
         //     $this->packageInsert($request, $version);
         // }
 
-        // if(($request->volumes)) {
-        //     $this->volumeInsert($request, $version);
-        // }
+        if(($request->volumes)) {
+            $this->volumeInsert($request, $version);
+        }
         
         return redirect()
             ->route('versions.show', $version->id)
@@ -71,6 +90,7 @@ class VersionController extends Controller
 
     public function show(Version $version)
     {
+        // return Version::with('volumes')->find($version->id);
         VersionResource::withoutWrapping();
 
         return Inertia::render('Version/Show', [
@@ -86,23 +106,58 @@ class VersionController extends Controller
                         ->orWhere('id', request()->search)
                         ->orWhereIn('id', explode(',', request()->selected));
                 })
-                ->get(['id', 'name', 'production_cost', 'mrp']);
+                ->get();
 
         return Inertia::render('Version/Edit', [
-            'productionList'    => Production::pluck('name', 'id'),
-            'productList'       => $products,
-            'versionType'       => Version::getTypes(),
-            'version'           => $version,
+            'data' => [
+                'productionList'    => Production::pluck('name', 'id'),
+                'productList'       => $products,
+                'versionType'       => Version::getTypes(),
+                'version'           => $version,
+                'volumes'           => $version->volumes()->get(),
+            ]
         ]);
     }
 
     public function update(Request $request, Version $version)
     {
-        $version->update($this->validateData($request, $version->id));
+        $validate = $this->validateData($request, $version->id);
+        
+        $count = 0;
+
+        foreach ($request->volumes as  $volume) {
+            
+            if($volume['name'] &&( $volume['isbn'] || $volume['crl'])){
+                $count ++;
+            }
+            if($count==2){
+                break;
+            }
+        }
+
+        if($count==2){
+            $validate['type'] = $validate['type'] == 1 ? 3 : $validate['type'] ;
+        }
+        else{
+            $validate['type'] = 1 ;
+        }
+        
+        $version->update($validate);
+
+        
 
         return redirect()
             ->route('versions.show', $version->id)
             ->with('status', 'The record has been update successfully.');
+    }
+
+    public function destroy(Version $version)
+    {
+        $version->delete();
+
+        return redirect()
+            ->route('versions.index')
+            ->with('status', 'The record has been delete successfully.');
     }
 
     protected function packageInsert($request, $version)
@@ -129,27 +184,21 @@ class VersionController extends Controller
     {
         Volume::where(['version_id' => $version->id])->delete();
         
-        
-        Volume::onlyTrashed()->updateOrCreate(
-            ['version_id'    => $version->id],
-            ['name'          => $request->volumeName, 
-                'volume_no'     => $request->volumeNo, 
-                'link'          => $request->volumeLink,
-                'cost'          => $request->volumeCost,
-                'user_id'       => Auth::id(),
-                'active'        => $request->volumeActive,
-                'deleted_at'    => null
-            ]);
-    }
-
-
-    public function destroy(Version $version)
-    {
-        $version->delete();
-
-        return redirect()
-            ->route('versions.index')
-            ->with('status', 'The record has been delete successfully.');
+        foreach ($request->volumes as $volume)
+        {
+            // return $volume;
+            if($volume['name']) {
+                Volume::onlyTrashed()->updateOrCreate(
+                    ['version_id'       => $version->id],
+                    [   'name'          => $volume['name'], 
+                        'isbn'          => $volume['isbn'], 
+                        'crl'           => $volume['crl'], 
+                        'user_id'       => Auth::id(),
+                        'deleted_at'    => null
+                    ]);
+            }
+            
+        }
     }
 
     protected function getFilterProperty()
@@ -164,6 +213,7 @@ class VersionController extends Controller
         return $request->validate([
             'type'              => 'required',
             'production_id'     => 'required',
+            'release_date'      => '',
             'edition'           => '',
             'isbn'              => '',
             'crl'               => '',

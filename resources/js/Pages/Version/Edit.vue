@@ -6,7 +6,7 @@
             Edit Version
         </template>
         
-        <form-component :data="{ version, productionList, productList, versionType }" module-action="update" />
+        <form-component :data="data" module-action="update" />
     </app-layout>
 </template>
 
@@ -24,26 +24,10 @@ export default {
     },
 
     props: {
-        version: { 
+        data: { 
             type: Object,
             default: {}
         },
-        versionType: { 
-            type: Object, 
-            default: {} 
-        },
-        productionList: {
-            type: Object,
-            default: {}
-        },
-        productList: {
-            type: Object,
-            default: {}
-        },
-        // categories: {
-        //     type: Object,
-        //     default: {}
-        // },
     }, 
 };
 </script>

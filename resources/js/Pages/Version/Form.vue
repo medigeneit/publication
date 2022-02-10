@@ -53,6 +53,15 @@
                 </div>
 
                 <div>
+                    <Label value="Cost" />
+                    <Input
+                        type="number"
+                        class="mt-1 block w-full"
+                        v-model="(form.production_cost)"
+                    />
+                </div>
+
+                <div>
                     <Label value="Link" />
                     <Input
                         type="text"
@@ -75,8 +84,10 @@
                             :value="type"
                             v-for="(typeName, type) in data.versionType"
                             :key="type"
+                            :disabled ="type == 3"
+                            :hidden="(type == 3) && (this.data.version.type != 3) "
                         >
-                            {{ typeName }}
+                         {{ typeName }}
                         </option>
                     </Select>
                 </div>
@@ -105,7 +116,7 @@
                     />
                 </div>
 
-                <div>
+                <!-- <div>
                     <Label value="Production Cost" />
                     <Input
                         type="number"
@@ -113,7 +124,7 @@
                         class="mt-1 block w-full"
                         v-model="form.volumes[index].cost"
                     />
-                </div>
+                </div> -->
 
                 <div>
                     <Label value="ISBN" />
@@ -133,14 +144,14 @@
                     />
                 </div>
 
-                <div>
+                <!-- <div>
                     <Label value="Link" />
                     <Input
                         type="text"
                         class="mt-1 block w-full"
                         v-model="form.volumes[index].link"
                     />
-                </div>
+                </div> -->
             </div>
 
             <div class="w-full text-right">
@@ -209,30 +220,34 @@ export default {
                 production_id: this.data.version.production_id || "",
                 edition: this.data.version.edition || "",
                 release_date: this.data.version.release_date || "",
+                production_cost: this.data.version.production_cost || "",
                 link: this.data.version.link || "",
                 type: this.data.version.type || "",
                 active: this.moduleAction == "store" ? 1 : this.data.version.active,
                 volumes: [
                     {
                         name: "",
-                        cost: "",
-                        link: "",
                         isbn: "",
                         crl: "",
+                        // name: this.data.volumes[0].name ||  "",
+                        // isbn: this.data.volumes[0].isbn || "",
+                        // crl:this.data.volumes[0].crl || "",
                     },
                 ],
             }),
         };
     },
-
+    // created() {
+    //     this.form.volumes.name = this.data.volumes[0].name
+    //     this.form.volumes.isbn = this.data.volumes[0].isbn
+    //     this.form.volumes.crl = this.data.volumes[0].crl
+    // },
     methods: {
         addVolume() {
             this.form.volumes.push({
                 name: "",
-                cost: "",
                 isbn: "",
                 crl: "",
-                link: "",
             });
         },
 

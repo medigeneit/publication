@@ -17,6 +17,8 @@ class CreateVolumesTable extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('version_id');
+            $table->string('isbn')->nullable();
+            $table->string('crl')->nullable();
             $table->string('link');
             $table->string('volume_no');
             $table->double('cost')->nullable();

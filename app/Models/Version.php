@@ -34,4 +34,14 @@ class Version extends Model
             });
     }
 
+    public function production()
+    {
+        return $this->belongsTo(Production::class);
+    }
+
+    public function volumes()
+    {
+        return $this->hasMany(Volume::class);
+    }
+
 }
