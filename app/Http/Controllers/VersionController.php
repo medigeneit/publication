@@ -191,7 +191,7 @@ class VersionController extends Controller
         {
             // return $volume;
             if($volume['name']) {
-                Volume::onlyTrashed()->updateOrCreate(
+                $volume = Volume::onlyTrashed()->updateOrCreate(
                     ['version_id'       => $version->id],
                     [   'name'          => $volume['name'], 
                         'isbn'          => $volume['isbn'], 
@@ -199,6 +199,16 @@ class VersionController extends Controller
                         'user_id'       => Auth::id(),
                         'deleted_at'    => null
                     ]);
+
+                $volume->products()->updateorCreate(
+                [
+                    'productable_type'  => 'App\Models\Volume',
+                    'productable_id'    => $volume->id
+                ],
+                [
+                    'active' => 0
+                ]
+            );
             }
             
         }

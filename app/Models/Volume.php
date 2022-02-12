@@ -19,4 +19,9 @@ class Volume extends Model
                 $query->where("active", request()->active);
             });
     }
+
+    public function products()
+    {
+        return $this->morphMany(Product::class, 'productable');
+    }
 }
