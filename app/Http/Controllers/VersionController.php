@@ -24,6 +24,7 @@ class VersionController extends Controller
         $versions = Version::query()
             ->filter()
             ->dateFilter()
+            ->with('volumes')
             ->search(['id'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
@@ -90,11 +91,11 @@ class VersionController extends Controller
 
     public function show(Version $version)
     {
-        // return Version::with('volumes')->find($version->id);
         VersionResource::withoutWrapping();
 
         return Inertia::render('Version/Show', [
             'version' => new VersionResource($version),
+            'volumes' => Volume::where('version_id', $version->id)->get()
         ]);
     }
 
@@ -144,7 +145,9 @@ class VersionController extends Controller
         
         $version->update($validate);
 
-        
+        if(($request->volumes)) {
+            $this->volumeInsert($request, $version);
+        }
 
         return redirect()
             ->route('versions.show', $version->id)

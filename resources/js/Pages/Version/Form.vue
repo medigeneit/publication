@@ -214,7 +214,7 @@ export default {
         },
     },
 
-    data() {
+    data() {      
         return {
             form: this.$inertia.form({
                 production_id: this.data.version.production_id || "",
@@ -229,19 +229,16 @@ export default {
                         name: "",
                         isbn: "",
                         crl: "",
-                        // name: this.data.volumes[0].name ||  "",
-                        // isbn: this.data.volumes[0].isbn || "",
-                        // crl:this.data.volumes[0].crl || "",
                     },
                 ],
             }),
         };
     },
-    // created() {
-    //     this.form.volumes.name = this.data.volumes[0].name
-    //     this.form.volumes.isbn = this.data.volumes[0].isbn
-    //     this.form.volumes.crl = this.data.volumes[0].crl
-    // },
+    created() {
+        for(let index in this.data.volumes) {
+            this.form.volumes[index] = this.data.volumes[index] ? this.data.volumes[index] : [];
+        } 
+    },
     methods: {
         addVolume() {
             this.form.volumes.push({

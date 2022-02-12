@@ -44,4 +44,9 @@ class Version extends Model
         return $this->hasMany(Volume::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

@@ -33,15 +33,13 @@
                 <show-table-row heading="Production Cost">
                     {{ version.productionCost }}
                 </show-table-row>
-                <show-table-row heading="ISBN">
-                    {{ version.isbn }}
+                <show-table-row heading="Volumes">
+                    <div v-for="(volume, index) of volumes" :key="index">
+                            name - {{ volume.name }},
+                            isbn - {{ volume.isbn }},
+                            crl - {{ volume.crl }}
+                    </div>
                 </show-table-row>
-                <show-table-row heading="CRL">
-                    {{ version.crl }}
-                </show-table-row>
-                <!-- <show-table-row heading="Alert Quantity">
-                    {{ version.alertQuantity }}
-                </show-table-row> -->
                 <show-table-row heading="Active">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': version.active, 'bg-red-500': !version.active }">
                         {{ version.activeValue }}
@@ -85,7 +83,7 @@ export default {
     },
     props: {
         version: { type: Object, default: {} },
-        categories: { type: Object, default: {} },
+        volumes: { type: Object, default: {} },
     },
 };
 </script>

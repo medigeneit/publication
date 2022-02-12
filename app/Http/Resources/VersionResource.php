@@ -22,8 +22,9 @@ class VersionResource extends JsonResource
             'typeName'              => (string) ($this->value_of_type ?? ''),
             'publisherName'         => (string) ($this->production->publisher->name ?? ''),
             'productionCost'        => (float) ($this->production_cost ?? ''),
-            'isbn'                  => (string) ($this->volumes[0]->isbn ?? ''),
-            'crl'                   => (string) ($this->volumes[0]->crl ?? ''),
+            'volumes'               => (object) ($this->volumes ?? ''),
+            'volumesCount'          => (int) ($this->volumes->count() ?? ''),
+            'createdBy'             => (string) ($this->user->name),
             'active'                => (int) ($this->active),
             'activeValue'           => (string) ($this->value_of_active),
         ];
