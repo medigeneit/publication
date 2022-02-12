@@ -236,7 +236,7 @@ export default {
     },
     created() {
         for(let index in this.data.volumes) {
-            this.form.volumes[index] = this.data.volumes[index] ? this.data.volumes[index] : [];
+            this.form.volumes[index] = this.data.volumes[index] ? this.data.volumes[index] : '';
         } 
     },
     methods: {
