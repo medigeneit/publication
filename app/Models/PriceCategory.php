@@ -11,4 +11,9 @@ class PriceCategory extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function pricings()
+    {
+        return $this->hasMany(Pricing::class);
+    }
 }

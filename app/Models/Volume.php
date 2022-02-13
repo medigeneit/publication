@@ -24,4 +24,9 @@ class Volume extends Model
     {
         return $this->morphMany(Product::class, 'productable');
     }
+
+    public  function version()
+    {
+        return $this->belongsTo(Version::class);
+    }
 }

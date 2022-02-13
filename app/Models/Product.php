@@ -68,8 +68,18 @@ class Product extends Model
         return $this->belongsToMany(Product::class, 'package_product', 'package_id', 'product_id')->whereNull('package_product.deleted_at');
     }
 
+    public function price_categories()
+    {
+        return $this->belongsToMany(PriceCategory::class, 'pricings', 'product_id', 'price_category_id');
+    }
+
     public function prices()
     {
-        return $this->belongsToMany(Pricing::class);
+        return $this->hasMany(Pricing::class, 'product_id', 'id');
+    }
+
+    public function productable()
+    {
+        return $this->morphTo();
     }
 }

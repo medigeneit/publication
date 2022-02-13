@@ -6,7 +6,7 @@
             Product List
         </template>
 
-        <add-new-button :href="route('products.create')" />
+        <!-- <add-new-button :href="route('products.create')" /> -->
 
         <data-table :collections="products" :filters="filters" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: product }">
@@ -17,7 +17,11 @@
                     </div>
                 </td>
                 <td class="py-3 px-2 text-left">{{ product.id }}</td>
-                <td class="py-3 px-2 text-left">{{ product.name }}</td>
+                <td class="py-3 px-2 text-left">
+                    <b>
+                        {{ `${product.volume.version.production.name}, ${product.volume.version.edition} edition (${product.productable.name})` }}
+                    </b>
+                </td>
                 <td class="py-3 px-2 text-left">{{ product.typeName }}</td>
                 <td class="py-3 px-2 text-left">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
@@ -76,13 +80,29 @@
                 <td class="py-3 px-2 text-left">{{ product.publisherName ?? '' }}</td>
                 <td class="py-3 px-2 text-right">{{ product.productionCost }}</td>
                 <td class="py-3 px-2 text-right">{{ product.mrp }}</td>
-                <td class="py-3 px-2 text-right">{{ product.wholesalePrice }}</td>
-                <td class="py-3 px-2 text-right">{{ product.retailPrice }}</td>
-                <td class="py-3 px-2 text-right">{{ product.distributePrice }}</td>
-                <td class="py-3 px-2 text-right">{{ product.specialPrice }}</td>
-                <td class="py-3 px-2 text-right">{{ product.outsideDhakaPrice }}</td>
-                <td class="py-3 px-2 text-right">{{ product.ecomDistributePrice }}</td>
-                <td class="py-3 px-2 text-right">{{ product.ecomWholesalePrice }}</td>
+                <td class="py-3 px-2 text-right">
+                    <div v-if="product.prices" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
+                        View {{ product.prices.length }} Prices
+                    </div>
+                    <div v-if="product.prices" class="fixed inset-0 hidden z-50">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Prices</div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                    <div class="py-1.5 flex gap-2 mr-10" v-for="(priceCategory, index) in product.priceCategories" :key="priceCategory">
+                                        <span>{{ index + 1 }}.</span>
+                                        {{ priceCategory.name }} : {{ product.prices[index].amount }} 
+                                    </div>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
                 <td class="py-3 px-2 text-right">
                     <!-- <span class="py-1 px-3 rounded-full text-white font-bold bg-gray-500"> -->
                         {{ product.alertQuantity }}
@@ -113,6 +133,7 @@ export default {
     },
     props: {
         products: { type: Object, default: {} },
+        pricing: { type: Object, default: {} },
         filters: { type: Object, default: {} }
     },
     methods: {
@@ -136,13 +157,15 @@ export default {
                     {title: 'Publisher Name', align: 'left', sortable:'publisher.name'},
                     {title: 'Production Cost', align: 'right', sortable:'production_cost'},
                     {title: 'MRP', align: 'right', sortable: 'mrp'},
-                    {title: 'Wholesale', align: 'right', sortable: 'wholesale_price'},
-                    {title: 'Retail', align: 'right', sortable: 'retail_price'},
-                    {title: 'Distributor', align: 'right', sortable: 'distributor_price'},
-                    {title: 'Special', align: 'right', sortable: 'special_price'},
-                    {title: 'Outside Dhaka', align: 'right', sortable: 'outside_dhaka_price'},
-                    {title: 'Ecom Distribution', align: 'right', sortable: 'ecom_distribution_price'},
-                    {title: 'Ecom Wholesale', align: 'right', sortable: 'ecom_wholesale_price'},
+                    // {title: 'Wholesale', align: 'right', sortable: 'wholesale_price'},
+                    // {title: 'Retail', align: 'right', sortable: 'retail_price'},
+                    // {title: 'Distributor', align: 'right', sortable: 'distributor_price'},
+                    // {title: 'Special', align: 'right', sortable: 'special_price'},
+                    // {title: 'Outside Dhaka', align: 'right', sortable: 'outside_dhaka_price'},
+                    // {title: 'Ecom Distribution', align: 'right', sortable: 'ecom_distribution_price'},
+                    // {title: 'Ecom Wholesale', align: 'right', sortable: 'ecom_wholesale_price'},
+                    {title: 'Prices', align: 'right'},
+                    // {title: 'Prices', align: 'right'},
                     {title: 'Alert', align: 'right', sortable: 'alert_quantity'},
                 ],
         }

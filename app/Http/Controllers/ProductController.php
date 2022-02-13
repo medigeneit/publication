@@ -11,6 +11,7 @@ use App\Models\Publisher;
 use App\Models\PackageProduct;
 use App\Models\PriceCategory;
 use App\Models\Pricing;
+use App\Models\Volume;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ class ProductController extends Controller
     {
 
         $products = Product::query()
-            ->with('categories', 'publisher', 'prices')
+            ->with('categories', 'publisher', 'prices', 'price_categories')
             ->filter()
             ->dateFilter()
             ->search(['id', 'name'], ['publisher:name'])
@@ -96,15 +97,20 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        // return Volume::find($product->productable->id)->with('version')->get();
         return Inertia::render('Product/Edit', [
-            'product'               => $product,
-            'productCategories'     => $product->categories,
-            'publisherList'         => Publisher::active()->pluck('name', 'id'),
-            'productList'           => Product::where('id', '!=', $product->id)->pluck('name', 'id'),
-            'product_ids'           => $product->package_products()->get()->pluck('id')->toArray(),
-            'category_ids'          => $product->categories()->get()->pluck('id')->toArray(),
-            'categories'            => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
-            'productType'           => Product::getTypes(),
+            "data" => [
+                'product'               => $product,
+                'productable'           => $product->productable,
+                'volume'                => Volume::find($product->productable->id)->with('version','version.production')->first(),
+                'productCategories'     => $product->categories,
+                'publisherList'         => Publisher::active()->pluck('name', 'id'),
+                'productList'           => Product::where('id', '!=', $product->id)->pluck('productable_type', 'id'),
+                'product_ids'           => $product->package_products()->get()->pluck('id')->toArray(),
+                'category_ids'          => $product->categories()->get()->pluck('id')->toArray(),
+                'categories'            => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
+                'productType'           => Product::getTypes(),
+            ]
         ]);
     }
 

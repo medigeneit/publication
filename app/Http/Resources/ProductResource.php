@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Volume;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -23,13 +24,17 @@ class ProductResource extends JsonResource
             'publisherName'         => (string) ($this->publisher->name ?? ''),
             'productionCost'        => (float) ($this->production_cost ?? 0),
             'mrp'                   => (float) ($this->mrp ?? ''),
-            'wholesalePrice'        => (float) ($this->prices->amount ?? 0),
-            'retailPrice'           => (float) ($this->retail_price ?? 0),
-            'distributePrice'       => (float) ($this->distribute_price ?? 0),
-            'specialPrice'          => (float) ($this->special_price ?? 0),
-            'outsideDhakaPrice'     => (float) ($this->outside_dhaka_price ?? 0),
-            'ecomDistributePrice'   => (float) ($this->ecom_distribute_price ?? 0),
-            'ecomWholesalePrice'    => (float) ($this->ecom_wholesale_price ?? 0),
+            // 'wholesalePrice'        => (float) ($this->prices->amount ?? 0),
+            // 'retailPrice'           => (float) ($this->retail_price ?? 0),
+            // 'distributePrice'       => (float) ($this->distribute_price ?? 0),
+            // 'specialPrice'          => (float) ($this->special_price ?? 0),
+            // 'outsideDhakaPrice'     => (float) ($this->outside_dhaka_price ?? 0),
+            // 'ecomDistributePrice'   => (float) ($this->ecom_distribute_price ?? 0),
+            // 'ecomWholesalePrice'    => (float) ($this->ecom_wholesale_price ?? 0),
+            'prices'                => (object) ($this->prices ?? []),
+            'priceCategories'       => (object) ($this->price_categories ?? []),
+            'volume'                => (object) (Volume::find($this->productable->id)->with('version','version.production')->first() ?? ''),
+            'productable'           => (object) ($this->productable ?? ''),
             'edition'               => (string) ($this->edition ?? ''),
             'isbn'                  => (string) ($this->isbn ?? ''),
             'crl'                   => (string) ($this->crl ?? ''),

@@ -3,7 +3,11 @@
         <div class="w-full max-w-2xl p-4 bg-white border shadow rounded">
 
             <ValidationErrors class="mb-4" />
-
+                <div class="mb-4 col-span-2 text-center">
+                       <b>
+                           {{ `${data.volume.version.production.name},  ${data.volume.version.edition} edition ( ${data.productable.name} )` }}
+                       </b>
+                </div>
             <form @submit.prevent="submit">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4">
                     <!-- <div class="mb-4 col-span-2">
@@ -14,7 +18,7 @@
                         </Select>
                     </div> -->
 
-                    <div class="mb-4 col-span-2">
+                    <!-- <div class="mb-4 col-span-2">
                         <Label for="type" value="Type" />
                         <Select >
                             <option value="">Select Button</option>
@@ -22,7 +26,7 @@
                             <option value="2">Version</option>
                             <option value="3">Package</option>
                         </Select>
-                    </div>
+                    </div> -->
                     <div class="mb-4 col-span-2">
                         <Label for="name" value="Soft Copy" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
