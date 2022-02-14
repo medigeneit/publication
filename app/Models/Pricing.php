@@ -12,6 +12,8 @@ class Pricing extends Model
 
     protected $guarded = [];
 
+    public $timestamps = false;
+
     public function product()
     {
         $this->belongsTo(Product::class);

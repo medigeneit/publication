@@ -72,11 +72,6 @@ class ProductController extends Controller
                         'deleted_at' => NULL
                     ]
                 );
-                Product::insert(
-                    [
-                        'pricing_id' => $index,
-                    ]
-                );
             }
         }
 
@@ -97,19 +92,21 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        // return Volume::find($product->productable->id)->with('version')->get();
+        // return $product->prices()->pluck('amount', 'id');
         return Inertia::render('Product/Edit', [
             "data" => [
-                'product'               => $product,
-                'productable'           => $product->productable,
-                'volume'                => Volume::find($product->productable->id)->with('version','version.production')->first(),
-                'productCategories'     => $product->categories,
-                'publisherList'         => Publisher::active()->pluck('name', 'id'),
-                'productList'           => Product::where('id', '!=', $product->id)->pluck('productable_type', 'id'),
-                'product_ids'           => $product->package_products()->get()->pluck('id')->toArray(),
-                'category_ids'          => $product->categories()->get()->pluck('id')->toArray(),
-                'categories'            => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
-                'productType'           => Product::getTypes(),
+                'product'                   => $product,
+                'productable'               => $product->productable,
+                'volume'                    => Volume::find($product->productable->id)->with('version','version.production')->first(),
+                'productCategories'         => $product->categories,
+                'publisherList'             => Publisher::active()->pluck('name', 'id'),
+                'productList'               => Product::where('id', '!=', $product->id)->pluck('productable_type', 'id'),
+                'product_ids'               => $product->package_products()->get()->pluck('id')->toArray(),
+                'category_ids'              => $product->categories()->get()->pluck('id')->toArray(),
+                'categories'                => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
+                'productType'               => Product::getTypes(),
+                'priceCategories'           => PriceCategory::get(),
+                'selectedPriceCategories'   => $product->prices()->pluck('amount', 'price_category_id'),
             ]
         ]);
     }
@@ -117,6 +114,26 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $product->update($this->validateData($request, $product->id));
+        
+        if (is_array($request->amounts)) {
+            
+            foreach ($request->amounts as $index => $amount) {
+                // return $index;
+                if ($amount == '') {
+                    continue;
+                }
+                Pricing::updateOrCreate(
+                    [
+                        'product_id' => $product->id,
+                        'price_category_id' => $index,
+                    ],
+                    [
+                        'amount' => $amount,
+                        'deleted_at' => NULL
+                    ]
+                );
+            }
+        }
 
         $this->categoryInsert($request, $product);
 
@@ -192,11 +209,11 @@ class ProductController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            'name'                  => ['required'],
-            'type'                  => ['required'],
+            'name'                  => [''],
+            'type'                  => [''],
             'publisher_id'          => '',
-            'production_cost'       => ['required'],
-            'mrp'                   => ['required'],
+            'production_cost'       => [''],
+            'mrp'                   => [''],
             'wholesale_price'       => [''],
             'retail_price'          => [''],
             'distribute_price'      => [''],
@@ -208,7 +225,7 @@ class ProductController extends Controller
             'isbn'                  => '',
             'crl'                   => '',
             'alert_quantity'        => '',
-            'active'                => ['required'],
+            'active'                => [''],
 
         ]);
     }

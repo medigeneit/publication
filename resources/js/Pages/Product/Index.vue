@@ -81,10 +81,10 @@
                 <td class="py-3 px-2 text-right">{{ product.productionCost }}</td>
                 <td class="py-3 px-2 text-right">{{ product.mrp }}</td>
                 <td class="py-3 px-2 text-right">
-                    <div v-if="product.prices" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
-                        View {{ product.prices.length }} Prices
+                    <div v-if="Object.keys(product.prices).length" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
+                        View {{ Object.keys(product.prices).length }} Prices
                     </div>
-                    <div v-if="product.prices" class="fixed inset-0 hidden z-50">
+                    <div v-if="Object.keys(product.prices).length" class="fixed inset-0 hidden z-50">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
                                 <div class="text-lg font-bold text-center">Prices</div>
@@ -92,7 +92,7 @@
                                 <div class="p-3">
                                     <div class="py-1.5 flex gap-2 mr-10" v-for="(priceCategory, index) in product.priceCategories" :key="priceCategory">
                                         <span>{{ index + 1 }}.</span>
-                                        {{ priceCategory.name }} : {{ product.prices[index].amount }} 
+                                        {{ priceCategory }} : {{ product.prices[index] }} 
                                     </div>
                                 </div>
                                 <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>

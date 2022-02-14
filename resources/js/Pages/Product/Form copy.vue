@@ -3,31 +3,12 @@
         <div class="w-full max-w-2xl p-4 bg-white border shadow rounded">
 
             <ValidationErrors class="mb-4" />
-            <form @submit.prevent="submit">
                 <div class="mb-4 col-span-2 text-center">
                        <b>
                            {{ `${data.volume.version.production.name},  ${data.volume.version.edition} edition ( ${data.productable.name} )` }}
                        </b>
                 </div>
-                 <!-- <div class="mb-4 flex justify-center text-center">
-                    <div class="">
-                        <Label value="Image" />
-                        <div class="w-20 h-30 m-auto">
-                             <img
-                            v-if="data.product.image && !imagePreview"
-                            :src="'/' + data.product.image"
-                                class="transform scale-75 md:scale-90 imageHolder"
-                            />
-                            <img
-                                v-else
-                                :src="'/images/book.png'"
-                                class="transform scale-75 md:scale-90 imageHolder"
-                            />
-                            <img id="imagePreview" class="transform scale-75 md:scale-90" />
-                        </div>
-                        <input class="mt-1 block w-full" accept="image/*" ref="fileInput" type="file" @change="pickFile">
-                    </div>
-                </div> -->
+            <form @submit.prevent="submit">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4">
                     <!-- <div class="mb-4 col-span-2">
                         <Label for="type" value="Type" />
@@ -47,13 +28,17 @@
                         </Select>
                     </div> -->
                     <div class="mb-4 col-span-2">
-                        <Label for="soft" value="Soft Copy" />
-                        <Input id="soft" type="text" class="mt-1 block w-full" v-model="form.soft" autofocus />
+                        <Label for="name" value="Soft Copy" />
+                        <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                     </div>
-                    <!-- <div class="mb-4 col-span-2">
+                    <div class="mb-4 col-span-2">
                         <Label for="name" value="Status" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
-                    </div> -->
+                    </div>
+                    <div class="mb-4 col-span-2">
+                        <Label for="name" value="Image" />
+                        <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
+                    </div>
 
                     <!-- <div class="mb-4 col-span-2" id="publisherWrapper" :class="{'hidden' : form.type === 1}">
                         <Label for="publisher_id" value="Publisher Name" />
@@ -121,7 +106,7 @@
                         <div class="grid">
                             <div class="block">
                                 <Label for="wholesale" v-text="priceCategory.name" />
-                                <Input :label="index" v-model="form.amounts[priceCategory.id]" step="0.01" type="number" class="mt-1 block w-full" />
+                                <Input :label="index" v-model="form.amounts[priceCategory.id]" step="0.01" type="number" class="mt-1 block w-full" required />
                             </div>
                         </div>
                     </div>
@@ -253,22 +238,20 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                soft: this.data.product.soft,
-                priceCategory: this.data.product.priceCategory,
-                amounts: {},
-                // image : this.data.product.image || null,
                 // name: this.data.product.name,
                 // type: this.data.product.type || '',
                 // publisher_id: this.data.product.publisher_id || '',
                 // product_id: this.data.product.id || '',
                 // production_cost: this.data.product.production_cost,
                 // mrp: this.data.product.mrp,
+                priceCategory: this.data.product.priceCategory,
                 // retail_price: this.data.product.retail_price,
                 // distribute_price: this.data.product.distribute_price,
                 // special_price: this.data.product.special_price,
                 // outside_dhaka_price: this.data.product.outside_dhaka_price,
                 // ecom_distribute_price: this.data.product.ecom_distribute_price,
                 // ecom_wholesale_price: this.data.product.ecom_wholesale_price,
+                amounts: {},
                 // edition: this.data.product.edition,
                 // isbn: this.data.product.isbn,
                 // crl: this.data.product.crl,
@@ -283,26 +266,10 @@ export default {
     },
 
     created() {
-        for(let index in this.data.selectedPriceCategories) {
-            this.form.amounts[index] = this.data.selectedPriceCategories[index] ? this.data.selectedPriceCategories[index] : ''
-        }
+        console.log(this.data.selectedPriceCategories);
     },
 
     methods: {
-
-        pickFile (event) {;
-            console.log(document.getElementById('imagePreview'));
-            const files = event.target.files || event.dataTransfer.files;
-            document.getElementById('imagePreview').src = window.URL.createObjectURL(files[0])
-            document.querySelectorAll('.imageHolder').forEach((el)=> {
-                el.style.display = 'none'
-            })
-            
-            if (!files.length) {
-                return this.form.image = null;
-            }
-            return this.form.image = files[0];
-        },
 
         typeChange(type) {
             console.log(this.data.product.type === 1)
