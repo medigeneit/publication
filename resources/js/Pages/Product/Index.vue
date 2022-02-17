@@ -82,7 +82,7 @@
                 </td>
                 <td class="py-3 px-2 text-left">{{ product.publisherName ?? '' }}</td>
                 <td class="py-3 px-2 text-right">{{ product.productionCost }}</td>
-                <td class="py-3 px-2 text-right">{{ product.mrp }}</td>
+                <!-- <td class="py-3 px-2 text-right">{{ product.mrp }}</td> -->
                 <td class="py-3 px-2 text-right">
                     <div v-if="Object.keys(product.prices).length" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ Object.keys(product.prices).length }} Prices
@@ -159,7 +159,7 @@ export default {
                     {title: 'Package', align: 'center'},
                     {title: 'Publisher Name', align: 'left', sortable:'publisher.name'},
                     {title: 'Production Cost', align: 'right', sortable:'production_cost'},
-                    {title: 'MRP', align: 'right', sortable: 'mrp'},
+                    // {title: 'MRP', align: 'right', sortable: 'mrp'},
                     // {title: 'Wholesale', align: 'right', sortable: 'wholesale_price'},
                     // {title: 'Retail', align: 'right', sortable: 'retail_price'},
                     // {title: 'Distributor', align: 'right', sortable: 'distributor_price'},

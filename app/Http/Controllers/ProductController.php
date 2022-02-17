@@ -26,12 +26,16 @@ class ProductController extends Controller
     public function index()
     {
         // \DB::connection()->enableQueryLog();
+
+        // return
+        $price_categories = PriceCategory::pluck('name', 'id');
+        ProductResource::$price_categories = $price_categories;
         $products = Product::query()
             // ->with('categories', 'publisher', 'prices', 'price_categories')
-            ->with(['categories', 'publisher', 'prices', 'price_categories', 'productable' => function(MorphTo $morphTo){
+            ->with(['categories', 'publisher:id,name', 'prices', 'productable' => function(MorphTo $morphTo){
                 $morphTo->constrain([
                     Volume::class => function ( $query) {
-                        $query->with('version.production');
+                        $query->with('version.production','version.volumes:id,version_id');
                     },
                     Version::class => function ( $query) {
                         $query->with('volumes','production');
