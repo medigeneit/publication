@@ -17,7 +17,7 @@ class ProductResource extends JsonResource
     {
         return [
             'id'                    => (int) $this->id,
-            'name'                  => (string) ($this->name ?? ''),
+            'name'                  => (string) ($this->product_name ?? ''),
             'type'                  => (int) ($this->type ?? 0),
             'typeName'              => (string) ($this->value_of_type ?? ''),
             'publisherId'           => (int) ($this->publisher_id ?? 0),
