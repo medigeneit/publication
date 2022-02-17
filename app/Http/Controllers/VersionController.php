@@ -76,6 +76,16 @@ class VersionController extends Controller
 
         $version = Version::create($validate);
 
+        $version->products()->updateorCreate(
+            [
+                'productable_type'  => Version::class,
+                'productable_id'    => $version->id
+            ],
+            [
+                'active' => 0
+            ]
+        );
+
         // if(is_array($request->product_ids)) {
         //     $this->packageInsert($request, $version);
         // }
@@ -199,16 +209,6 @@ class VersionController extends Controller
                         'user_id'       => Auth::id(),
                         'deleted_at'    => null
                     ]);
-
-                $volume->products()->updateorCreate(
-                [
-                    'productable_type'  => 'App\Models\Volume',
-                    'productable_id'    => $volume->id
-                ],
-                [
-                    'active' => 0
-                ]
-            );
             }
             
         }

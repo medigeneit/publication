@@ -39,14 +39,19 @@ class Version extends Model
         return $this->belongsTo(Production::class);
     }
 
+    
     public function volumes()
     {
         return $this->hasMany(Volume::class);
     }
-
+    
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
+    
+    public function products()
+    {
+        return $this->morphMany(Product::class, 'productable');
+    }
 }

@@ -6,7 +6,8 @@
             <form @submit.prevent="submit">
                 <div class="mb-4 col-span-2 text-center">
                        <b>
-                           {{ `${data.volume.version.production.name},  ${data.volume.version.edition} edition ( ${data.productable.name} )` }}
+                           <!-- {{ `${data.volume.version.production.name},  ${data.volume.version.edition} edition ( ${data.productable.name} )` }} -->
+                           {{ data.product.product_name }}
                        </b>
                 </div>
                  <!-- <div class="mb-4 flex justify-center text-center">
