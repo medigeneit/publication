@@ -25,6 +25,7 @@ class ProductController extends Controller
 
     public function index()
     {
+        // \DB::connection()->enableQueryLog();
         $products = Product::query()
             // ->with('categories', 'publisher', 'prices', 'price_categories')
             ->with(['categories', 'publisher', 'prices', 'price_categories', 'productable' => function(MorphTo $morphTo){

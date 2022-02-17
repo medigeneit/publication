@@ -19,7 +19,8 @@
                 <td class="py-3 px-2 text-left">{{ product.id }}</td>
                 <td class="py-3 px-2 text-left">
                     <b>
-                        {{ `${product.volume.version.production.name}, ${product.volume.version.edition} edition (${product.productable.name})` }}
+                        <!-- {{ `${product.volume.version.production.name}, ${product.volume.version.edition} edition (${product.productable.name})` }} -->
+                        {{ product.name }}
                     </b>
                 </td>
                 <td class="py-3 px-2 text-left">{{ product.typeName }}</td>
@@ -92,7 +93,7 @@
                                 <div class="p-3">
                                     <div class="py-1.5 flex gap-2 mr-10" v-for="(priceCategory, index) in product.priceCategories" :key="priceCategory">
                                         <span>{{ index + 1 }}.</span>
-                                        {{ priceCategory }} : {{ product.prices[index] }} 
+                                        {{ priceCategory }} : {{ product.prices[index] }}
                                     </div>
                                 </div>
                                 <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>

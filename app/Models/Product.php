@@ -19,6 +19,7 @@ class Product extends Model
 
     protected $appends = ['product_name'];
 
+
     protected static function getTypes()
     {
         return [
@@ -31,10 +32,16 @@ class Product extends Model
     public function getProductNameAttribute()
     {
         if($this->productable_type == Version::class) {
-          return  $this->productable()->production->name ?? 'Version';
+            $vol_name = '(';
+            foreach($this->productable->volumes as $volume){
+                $vol_name = $vol_name . ($vol_name== '(' ? '' : '-' ) . $volume->name;
+            }
+            $vol_name = $vol_name .')';
+
+          return  $this->productable->production->name .', '. $this->productable->edition. ' edition, Vol' . $vol_name ?? 'Version';
         }
         elseif ($this->productable_type == Volume::class) {
-            return $this->productable->version->production->name ??'Volume';
+            return $this->productable->version->production->name. ', '.  $this->productable->version->edition . ' edition, Vol ('.  $this->productable->name .')' ??'Volume';
         }
     }
     public function scopeFilter($query)
@@ -94,6 +101,6 @@ class Product extends Model
         return $this->morphTo();
     }
 
-    
+
 
 }
