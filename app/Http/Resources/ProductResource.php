@@ -25,6 +25,7 @@ class ProductResource extends JsonResource
         $type = ($product_type == 1 || $product_type == 3) ? 2 : ($product_type == 2 ? 3 : 2);
 
         $cost = $this->productable_type == Volume::class ? (string)($this->productable->version->production_cost . '/'. $this->productable->version->volumes->count()) :  ($this->productable_type == Version::class ? $this->productable->production_cost : 0);
+        $publisher_name = $this->productable_type == Volume::class ? ($this->productable->version->production->publisher->name) :  ($this->productable_type == Version::class ? $this->productable->production->publisher->name : '');
 
         return [
             'id'                    => (int) $this->id,
@@ -32,7 +33,7 @@ class ProductResource extends JsonResource
             'type'                  => (int) ($type ?? 0),
             'typeName'              => (string) (Product::types[$type] ?? ''),
             'publisherId'           => (int) ($this->publisher_id ?? 0),
-            'publisherName'         => (string) ($this->publisher->name ?? ''),
+            'publisherName'         => (string) ( $publisher_name ?? ''),
             'productionCost'        => (string) ($cost ?? 0),
             'mrp'                   => (float) ($this->mrp ?? ''),
             // 'wholesalePrice'        => (float) ($this->prices->amount ?? 0),

@@ -12,11 +12,11 @@
                 </Select>
             </div>
 
-            <div class="mb-4">  
+            <div class="mb-4">
                 <Label for="product_id" value="Product Name" />
                 <Select id="product_id" class="mt-1 block w-full" v-model="form.product_id" >
                     <option value="0">-- Select --</option>
-                    <option :value="productId" v-for="product in data.products" :key="product.id">{{ product.product_name }}</option>
+                    <option :value="id" v-for="(product, id) in data.products" :key="parseInt(id)">{{ product }}</option>
                 </Select>
             </div>
 
@@ -26,7 +26,7 @@
             </div>
 
             <hr class="w-full my-4">
-            
+
             <div class="flex items-center justify-between">
                 <div class="">
                     <go-to-list :href="route('storages.index')"/>
@@ -44,7 +44,7 @@ import Button from '@/Components/Button.vue';
 import Input from '@/Components/Input.vue';
 import Label from '@/Components/Label.vue';
 import ValidationErrors from '@/Components/ValidationErrors.vue';
-import GoToList from '@/Components/GoToList.vue';
+// import GoToList from '@/Components/GoToList.vue';
 import Select from '@/Components/Select.vue';
 
 export default {
@@ -53,19 +53,19 @@ export default {
         Input,
         Label,
         ValidationErrors,
-        GoToList,
+        // GoToList,
         Select,
     },
 
     props: {
-        data: { 
-            type: Object, 
-            default: {} 
+        data: {
+            type: Object,
+            default: {}
         },
 
         moduleAction: String,
 
-        buttonValue: { 
+        buttonValue: {
             type: String,
             default: 'Submit'
         },
@@ -80,7 +80,7 @@ export default {
                 quantity: this.data.storage.quantity,
             })
         }
-    },    
+    },
 
     methods: {
         submit() {
