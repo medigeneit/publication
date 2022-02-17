@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Storage;
 use App\Models\User;
 use App\Traits\DateFilter;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -37,10 +38,19 @@ class StorageController extends Controller
         // foreach (Product::get() as $key => $product) {
         //    return  $product->product_name;
         // }
-        return Inertia::render('Storage/Create', [
+        return  Inertia::render('Storage/Create', [
             'storage'   => new Storage(),
             'outlets'   => Outlet::pluck('name', 'id'),
-            'products'  => Product::get(),
+            'products'  => Product::with(['productable' => function(MorphTo $morphTo){
+                $morphTo->constrain([
+                    Volume::class => function ( $query) {
+                        $query->with('version.production');
+                    },
+                    Version::class => function ( $query) {
+                        $query->with('volumes','production');
+                    },
+                ]);
+            }])->get()->pluck('product_name','id'),
         ]);
     }
 

@@ -32,13 +32,13 @@ class ProductController extends Controller
         ProductResource::$price_categories = $price_categories;
         $products = Product::query()
             // ->with('categories', 'publisher', 'prices', 'price_categories')
-            ->with(['categories', 'publisher:id,name', 'prices', 'productable' => function(MorphTo $morphTo){
+            ->with(['categories',  'prices', 'productable' => function(MorphTo $morphTo){
                 $morphTo->constrain([
                     Volume::class => function ( $query) {
-                        $query->with('version.production','version.volumes:id,version_id');
+                        $query->with('version.production.publisher:id,name','version.volumes:id,version_id');
                     },
                     Version::class => function ( $query) {
-                        $query->with('volumes','production');
+                        $query->with('volumes','production.publisher:id,name');
                     },
                 ]);
             }])
