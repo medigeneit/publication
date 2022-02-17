@@ -13,23 +13,25 @@ use Ramsey\Collection\Tool\TypeTrait;
 
 class Version extends Model
 {
-    use HasFactory, TypeProperty, ActiveProperty,ScopeDateFilter,ScopeSearch,ScopeSort;
+    use HasFactory, TypeProperty, ActiveProperty, ScopeDateFilter, ScopeSearch, ScopeSort;
 
     protected $guarded = [];
 
+    const types = [
+        1 => 'Book',
+        2 => 'Lecture',
+        3 => 'Volume',
+    ];
+
     protected static function getTypes()
     {
-        return [
-            1 => 'Book',
-            2 => 'Lecture',
-            3 => 'Volume',
-        ];
+        return self::types;
     }
 
     public function scopeFilter($query)
     {
         return $query
-            ->when(isset(request()->active), function($query) {
+            ->when(isset(request()->active), function ($query) {
                 $query->where("active", request()->active);
             });
     }
@@ -39,17 +41,17 @@ class Version extends Model
         return $this->belongsTo(Production::class);
     }
 
-    
+
     public function volumes()
     {
         return $this->hasMany(Volume::class);
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function products()
     {
         return $this->morphMany(Product::class, 'productable');

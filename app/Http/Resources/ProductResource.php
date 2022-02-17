@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
+use App\Models\Version;
 use App\Models\Volume;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,11 +17,14 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $product_type = $this->productable_type == Volume::class ? $this->productable->version->type :  ($this->productable_type == Version::class ? $this->productable->type : 1);
+        $type = ($product_type == 1 || $product_type == 3) ? 2 : ($product_type == 2 ? 3 : 2);
         return [
             'id'                    => (int) $this->id,
             'name'                  => (string) ($this->product_name ?? ''),
-            'type'                  => (int) ($this->type ?? 0),
-            'typeName'              => (string) ($this->value_of_type ?? ''),
+            'type'                  => (int) ($type ?? 0),
+            'typeName'              => (string) (Product::types[$type] ?? ''),
             'publisherId'           => (int) ($this->publisher_id ?? 0),
             'publisherName'         => (string) ($this->publisher->name ?? ''),
             'productionCost'        => (float) ($this->production_cost ?? 0),

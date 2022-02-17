@@ -23,7 +23,9 @@
                         {{ product.name }}
                     </b>
                 </td>
-                <td class="py-3 px-2 text-left">{{ product.typeName }}</td>
+                <td class="py-3 px-2 text-left">
+                    {{ product.typeName }}
+                </td>
                 <td class="py-3 px-2 text-left">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
                         {{ product.activeValue }}

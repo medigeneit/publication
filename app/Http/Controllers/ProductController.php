@@ -43,6 +43,7 @@ class ProductController extends Controller
             ->dateFilter()
             ->search(['id', 'name'], ['publisher:name'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+            // return  $products->get();
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
