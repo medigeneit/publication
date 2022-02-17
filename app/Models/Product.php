@@ -82,4 +82,7 @@ class Product extends Model
     {
         return $this->morphTo();
     }
+
+    
+
 }

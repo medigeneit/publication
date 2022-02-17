@@ -11,12 +11,9 @@ use App\Models\Publisher;
 use App\Models\PackageProduct;
 use App\Models\PriceCategory;
 use App\Models\Pricing;
-use App\Models\Version;
 use App\Models\Volume;
 use App\Traits\DateFilter;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -26,40 +23,16 @@ class ProductController extends Controller
 
     public function index()
     {
+
         $products = Product::query()
-            // ->with('categories', 'publisher', 'prices', 'price_categories')
+            ->with('categories', 'publisher', 'prices', 'price_categories')
             ->filter()
             ->dateFilter()
             ->search(['id', 'name'], ['publisher:name'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
-        $all_products = [];
-      
-        $arr = ($products->where('productable_type', Version::class)->with('productable.volumes','productable.production')->get())->toArray();
-        // array_push($all_products,($products->where('productable_type', Volume::class)->with('productable.version.production')->get())->toArray());
-        array_push($all_products,$arr);
-        $products2 = Product::query()
-        ->with('categories', 'publisher', 'prices', 'price_categories')
-        ->filter()
-        ->dateFilter()
-        ->search(['id', 'name'], ['publisher:name'])
-        ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
-        $arr2 = $products2->where('productable_type', Volume::class)->with('productable.version.production')->get()->toArray();
-        
-        array_push($all_products,$arr2);
-        //   return['1'=>$arr,
-        //   '2'=>$arr2];  
-        // $all_products =  $all_products->merge($products->where('productable_type', Volume::class)->with('productable.version.production')->get());
-
-        
-        $products_collect = collect(Arr::collapse($all_products));
-
-        // return $products_collect[0];
-        // return $products->get();
         return Inertia::render('Product/Index', [
-            'products' => $products_collect,
-
-            // 'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
