@@ -17,6 +17,8 @@ class Product extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['product_name'];
+
     protected static function getTypes()
     {
         return [
@@ -26,6 +28,15 @@ class Product extends Model
         ];
     }
 
+    public function getProductNameAttribute()
+    {
+        if($this->productable_type == Version::class) {
+          return  $this->productable()->production->name ?? 'Version';
+        }
+        elseif ($this->productable_type == Volume::class) {
+            return $this->productable->version->production->name ??'Volume';
+        }
+    }
     public function scopeFilter($query)
     {
         return $query

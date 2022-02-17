@@ -34,10 +34,13 @@ class StorageController extends Controller
 
     public function create()
     {
+        // foreach (Product::get() as $key => $product) {
+        //    return  $product->product_name;
+        // }
         return Inertia::render('Storage/Create', [
             'storage'   => new Storage(),
             'outlets'   => Outlet::pluck('name', 'id'),
-            'products'  => Product::pluck('name', 'id'),
+            'products'  => Product::get(),
         ]);
     }
 

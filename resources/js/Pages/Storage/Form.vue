@@ -16,7 +16,7 @@
                 <Label for="product_id" value="Product Name" />
                 <Select id="product_id" class="mt-1 block w-full" v-model="form.product_id" >
                     <option value="0">-- Select --</option>
-                    <option :value="productId" v-for="(productName, productId) in data.products" :key="productId">{{ productName }}</option>
+                    <option :value="productId" v-for="product in data.products" :key="product.id">{{ product.product_name }}</option>
                 </Select>
             </div>
 
