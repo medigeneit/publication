@@ -14,7 +14,7 @@
                 <td class="py-3 px-2 text-left">{{ storage.outletName }}</td>
                 <td class="py-3 px-2 text-left">{{ storage.productName }}</td>
                 <td class="py-3 px-2 text-left">{{ storage.quantity }}</td>
-                <td class="py-2.5 px-2"> 
+                <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('storages.show', storage.id)" />
                         <action-button-edit :href="route('storages.edit', storage.id)" />
@@ -40,11 +40,11 @@
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue($event, storage.id)" >
+                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue($event, storage.outlet_id)" >
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
-                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue($event,storage.id)">
+                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue($event,storage.outlet_id)">
                                     </div>
                                 </div>
                                 <hr class="my-1">
@@ -52,13 +52,13 @@
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" >
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" :disabled="fromDisabled" >
                                                 <option value="">-- Select From--</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
                                         <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" >
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" :disabled="toDisabled">
                                                 <option value="">-- Select To --</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
@@ -66,7 +66,7 @@
 
                                         <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity"/>
 
-                                        <Button class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
+                                        <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
                                             Submit
                                         </Button>
                                     </form>
@@ -127,33 +127,51 @@ export default {
                 from: '',
                 to: '',
                 quantity: '',
-            })
+                type: ''
+            }),
+            fromDisabled: false,
+            toDisabled: false,
         }
     },
     methods : {
         changeValue(event, id) {
-            let value = event.target.value
-            console.log(value);
+            let value = event.target.value;
+            this.form.type = value;
+
             if (value == 1) {
-                // this.form.from = this.outlets[id]
-                this.form.to = ''
-                this.form.from = id
-                console.log(this.form.from);
+                this.form.from = '';
+
+                this.form.to = id;
+                this.toDisabled = true
+                this.fromDisabled = false
             }
             else {
-                // this.form.to = this.outlets[id]
-                this.form.from = ''
-                this.form.to = id
+                this.form.to = '';
+
+                this.form.from = id;
+                this.fromDisabled = true
+                this.toDisabled = false
+
             }
         },
 
         modalHandler(event, id) {
-            event.target.nextElementSibling.classList.toggle('hidden');
+            event.target.nextElementSibling .classList.toggle('hidden');
         },
 
         closeModal(event) {
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
-        }
+        },
+        submit() {
+            // if(this.moduleAction == 'store') {
+                // return console.log(this.form.amounts)
+                return this.form.post(this.route('circulations.store'));
+            // }
+
+            if(this.moduleAction == 'update') {
+                return this.form.put(this.route('products.update', this.data.product.id));
+            }
+        },
     }
 };
 </script>

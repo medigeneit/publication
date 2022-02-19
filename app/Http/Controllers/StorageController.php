@@ -162,4 +162,13 @@ class StorageController extends Controller
             'alert_quantity' => ['required'],
         ]);
     }
+
+
+    public function circulation_create(Request $request)
+    {
+        return $request;
+    }
+
+
+
 }
