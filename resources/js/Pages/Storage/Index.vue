@@ -40,11 +40,11 @@
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue($event, storage.outlet_id)" >
+                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue($event, storage.outletId)" >
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
-                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue($event,storage.outlet_id)">
+                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue($event,storage.outletId)">
                                     </div>
                                 </div>
                                 <hr class="my-1">
@@ -137,7 +137,8 @@ export default {
         changeValue(event, id) {
             let value = event.target.value;
             this.form.type = value;
-
+            
+            console.log(id);
             if (value == 1) {
                 this.form.from = '';
 
