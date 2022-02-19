@@ -18,6 +18,52 @@
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('storages.show', storage.id)" />
                         <action-button-edit :href="route('storages.edit', storage.id)" />
+                        <!-- <action-button-cerculation @click="modalHandler" /> -->
+                    </div>
+                </td>
+                <td class="py-3 px-2 text-center">
+                    <div class="flex justify-center items-center text-gray-700 cursor-pointer" @click="modalHandler">
+                        Circulation
+                        <!-- <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 font-weight-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 font-weight-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                            </svg>
+                        </div> -->
+                    </div>
+                    <div class="fixed inset-0 hidden z-50">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Circulaion</div>
+                                <div class="flex justify-center">
+                                    <div>
+                                        <label for=""> In </label>
+                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue" >
+                                    </div>
+                                    <div>
+                                        <label for=""> Out </label>
+                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue">
+                                    </div>
+                                </div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                    <form @submit.prevent="submit" class="">
+                                        <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/>
+                                        <Input id="to" type="number" class="mt-1 block w-full" placeholder="To" v-model="form.to"/>
+                                        <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity"/>
+                                        <Button class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
+                                            Submit
+                                        </Button>
+                                    </form>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </template>
@@ -32,6 +78,8 @@ import DataTable from "@/Components/DataTable.vue";
 import ActionButtonShow from "@/Components/ActionButtonShow.vue";
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import AddNewButton from '@/Components/AddNewButton.vue';
+import Input from '@/Components/Input.vue';
+import Button from '@/Components/Button.vue';
 
 export default {
     components: {
@@ -39,6 +87,8 @@ export default {
         DataTable,
         Head,
         Link,
+        Input,
+        Button,
         ActionButtonShow,
         ActionButtonEdit,
         AddNewButton,
@@ -55,8 +105,33 @@ export default {
                 {title: 'Product Name', align : 'left', sortable : 'product.name'},
                 {title: 'Quantity', align : 'left', sortable : 'quantity'},
                 {title: 'Action', align : 'center'},
-            ]
+                {title: 'Cerculation', align : 'center'},
+            ],
+            form: this.$inertia.form({
+                from: '',
+                to: '',
+                quantity: '',
+            })
         }
     },
+    methods : {
+        changeValue(event) {
+            let value = event.target.value
+            if (value == 1) {
+                this.form.to = "From"
+            }
+            else {
+                this.form.to = "To"
+            }
+        },
+
+        modalHandler(event) {
+            event.target.nextElementSibling.classList.toggle('hidden');
+        },
+
+        closeModal(event) {
+            event.target.parentElement.parentElement.parentElement.classList.add('hidden');
+        }
+    }
 };
 </script>
