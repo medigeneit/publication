@@ -163,14 +163,7 @@ export default {
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
         submit() {
-            // if(this.moduleAction == 'store') {
-                // return console.log(this.form.amounts)
-                return this.form.post(this.route('circulations.store'));
-            // }
-
-            if(this.moduleAction == 'update') {
-                return this.form.put(this.route('products.update', this.data.product.id));
-            }
+            return this.form.post(this.route('circulations.store'));
         },
     }
 };
