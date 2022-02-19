@@ -40,19 +40,32 @@
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue" >
+                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue($event, storage.id)" >
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
-                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue">
+                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue($event,storage.id)">
                                     </div>
                                 </div>
                                 <hr class="my-1">
                                 <div class="p-3">
                                     <form @submit.prevent="submit" class="">
-                                        <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/>
-                                        <Input id="to" type="number" class="mt-1 block w-full" placeholder="To" v-model="form.to"/>
+                                        <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
+                                        <div class="mb-4">
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" >
+                                                <option value="">-- Select From--</option>
+                                                <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
+                                            </Select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" >
+                                                <option value="">-- Select To --</option>
+                                                <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
+                                            </Select>
+                                        </div>
+
                                         <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity"/>
+
                                         <Button class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
                                             Submit
                                         </Button>
@@ -80,6 +93,7 @@ import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import AddNewButton from '@/Components/AddNewButton.vue';
 import Input from '@/Components/Input.vue';
 import Button from '@/Components/Button.vue';
+import Select from '@/Components/Select.vue';
 
 export default {
     components: {
@@ -92,9 +106,11 @@ export default {
         ActionButtonShow,
         ActionButtonEdit,
         AddNewButton,
+        Select,
     },
     props: {
         storages: { type: Object, default: {} },
+        outlets: { type: Object, default: {} },
         filters: { type: Object, default: {} },
     },
     data() {
@@ -115,17 +131,23 @@ export default {
         }
     },
     methods : {
-        changeValue(event) {
+        changeValue(event, id) {
             let value = event.target.value
+            console.log(value);
             if (value == 1) {
-                this.form.to = "From"
+                // this.form.from = this.outlets[id]
+                this.form.to = ''
+                this.form.from = id
+                console.log(this.form.from);
             }
             else {
-                this.form.to = "To"
+                // this.form.to = this.outlets[id]
+                this.form.from = ''
+                this.form.to = id
             }
         },
 
-        modalHandler(event) {
+        modalHandler(event, id) {
             event.target.nextElementSibling.classList.toggle('hidden');
         },
 

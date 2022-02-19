@@ -45,6 +45,7 @@ class StorageController extends Controller
 
         return Inertia::render('Storage/Index', [
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'outlets' => Outlet::pluck('name', 'id'),
             'filters' => $this->getFilterProperty(),
         ]);
     }
