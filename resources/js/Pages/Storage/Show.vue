@@ -7,7 +7,7 @@
         </template>
 
         <add-new-button :href="route('storages.create')" class="mb-4" />
-        
+
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
                 <show-table-row heading="ID">{{ storage.id }}</show-table-row>
@@ -17,6 +17,8 @@
                 <show-table-row heading="Product Name">{{ storage.productName }}</show-table-row>
 
                 <show-table-row heading="Quantity">{{ storage.quantity }}</show-table-row>
+
+                <show-table-row heading="Alert Quantity">{{ storage.alert_quantity }}</show-table-row>
 
                 <show-table-row heading="Created By">{{ storage.createdBy }}</show-table-row>
 

@@ -16,13 +16,13 @@
                 <Label for="product_id" value="Product Name" />
                 <Select id="product_id" class="mt-1 block w-full" v-model="form.product_id" >
                     <option value="0">-- Select --</option>
-                    <option :value="id" v-for="(product, id) in data.products" :key="parseInt(id)">{{ product }}</option>
+                    <option :value="id" v-for="(productName, id) in data.products" :key="parseInt(id)">{{ productName }}</option>
                 </Select>
             </div>
 
             <div class="mb-4">
-                <Label for="quantity" value="Quantity" />
-                <Input id="quantity" type="number" class="mt-1 block w-full" v-model="form.quantity" />
+                <Label for="alert_quantity" value="Alert Quantity" />
+                <Input id="alert_quantity" type="number" class="mt-1 block w-full" v-model="form.alert_quantity" />
             </div>
 
             <hr class="w-full my-4">
@@ -77,7 +77,7 @@ export default {
                 outlet_id: this.data.storage.outlet_id || 0,
                 user_id: this.data.storage.user_id || 0,
                 product_id: this.data.storage.product_id || 0,
-                quantity: this.data.storage.quantity,
+                alert_quantity: this.data.storage.alert_quantity,
             })
         }
     },

@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Http\Resources\StorageResource;
 use App\Models\Outlet;
+use App\Models\PriceCategory;
 use App\Models\Product;
 use App\Models\Storage;
 use App\Models\User;
+use App\Models\Version;
+use App\Models\Volume;
 use App\Traits\DateFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,11 +26,22 @@ class StorageController extends Controller
     public function index()
     {
         $storages = Storage::query()
-            ->with('product', 'outlet')
+            ->with(['product.productable' => function (MorphTo $morphTo) {
+                $morphTo->constrain([
+                    Volume::class => function ($query) {
+                        $query->with('version.production');
+                    },
+                    Version::class => function ($query) {
+                        $query->with('volumes', 'production');
+                    },
+                ]);
+            }, 'outlet', 'user'])
             ->filter()
             ->dateFilter()
             ->search(['id'], ['product:name', 'outlet:name'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+
+            // return $storages ->get();
 
         return Inertia::render('Storage/Index', [
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -41,16 +57,16 @@ class StorageController extends Controller
         return  Inertia::render('Storage/Create', [
             'storage'   => new Storage(),
             'outlets'   => Outlet::pluck('name', 'id'),
-            'products'  => Product::with(['productable' => function(MorphTo $morphTo){
+            'products'  => Product::with(['productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
-                    Volume::class => function ( $query) {
+                    Volume::class => function ($query) {
                         $query->with('version.production');
                     },
-                    Version::class => function ( $query) {
-                        $query->with('volumes','production');
+                    Version::class => function ($query) {
+                        $query->with('volumes', 'production');
                     },
                 ]);
-            }])->get()->pluck('product_name','id'),
+            }])->get()->pluck('product_name', 'id'),
         ]);
     }
 
@@ -76,10 +92,20 @@ class StorageController extends Controller
 
     public function edit(Storage $storage)
     {
+
         return Inertia::render('Storage/Edit', [
             'storage' => $storage,
             'outlets'   => Outlet::pluck('name', 'id'),
-            'products'  => Product::pluck('name', 'id'),
+            'products'  => Product::with(['productable' => function (MorphTo $morphTo) {
+                $morphTo->constrain([
+                    Volume::class => function ($query) {
+                        $query->with('version.production');
+                    },
+                    Version::class => function ($query) {
+                        $query->with('volumes', 'production');
+                    },
+                ]);
+            }])->get()->pluck('product_name', 'id'),
         ]);
     }
 
@@ -132,7 +158,7 @@ class StorageController extends Controller
         return $request->validate([
             'outlet_id' => ['required'],
             'product_id' => ['required'],
-            'quantity' => ['required'],
+            'alert_quantity' => ['required'],
         ]);
     }
 }

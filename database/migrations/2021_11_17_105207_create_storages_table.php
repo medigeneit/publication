@@ -18,6 +18,7 @@ class CreateStoragesTable extends Migration
             $table->unsignedBigInteger('outlet_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->bigInteger('quantity')->nullable();
+            $table->unsignedBigInteger('alert_quantity')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
