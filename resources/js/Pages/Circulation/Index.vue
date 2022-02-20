@@ -19,7 +19,7 @@
                         <action-button-show :href="route('circulations.show', circulation.id)" />
                         <action-button-edit :href="route('circulations.edit', circulation.id)" />
                         <!-- <action-button-cerculation @click="modalHandler" /> -->
-                    </div>
+                    </div> 
                 </td>
             </template>
         </data-table>
