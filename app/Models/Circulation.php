@@ -10,8 +10,15 @@ class Circulation extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded = [];
+
     const TYPE = [
         1   => "In",
         2   => "Out"
     ];
+
+    public function destinationable()
+    {
+        return $this->morphTo();
+    }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CirculationResource;
 use App\Models\Circulation;
+use App\Models\Outlet;
+use App\Models\Storage;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -35,19 +37,57 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
-        if(Circulation::TYPE[$request->type]== 'In'){
-            $quantity = $request->quantity;
-        }
-        elseif(Circulation::TYPE[$request->type]== 'Out'){
-            $quantity = $request->quantity*-1;
-        }
-return $quantity;
+        // return $request;
 
-        $circulation = Circulation::create($this->validateData($request));
+        if (Circulation::TYPE[$request->type] == 'In') {
+            $quantity = $request->quantity;
+            $storage_outlet_id = $request->to;
+            $destination = $request->from;
+        } elseif (Circulation::TYPE[$request->type] == 'Out') {
+            $quantity = $request->quantity * -1;
+            $storage_outlet_id = $request->from;
+            $destination = $request->to;
+        }
+        $storage = Storage::query()
+            ->where([
+                'outlet_id' => $storage_outlet_id,
+                'product_id' => $request->product_id,
+            ])->first();
+        // return $storage;
+
+        // return
+        $updated_quantity = $storage->quantity + $quantity;
+        if ($updated_quantity > 0) {
+            $storage->quantity = $updated_quantity;
+            $updated = $storage->save();
+            // return $updated;
+            if ($updated) {
+                $outlet = Outlet::findOrFail($destination);
+                // return
+                $data = [
+                    'storage_id' => $storage->id,
+                    // 'destinationable_type' => ,
+                    // 'destinationable_id' => $destination,
+                    'quantity' => $quantity,
+                ];
+
+                $circulation = $outlet->circulations()->create($data);
+                // return[
+                //     'storage' => $storage,
+                //     'circulation' => $circulation,
+                // ];
+            }
+        } else {
+            // return
+            $data = [
+                'message' => 'Sory, you dont have enough quantity'
+            ];
+        }
+
+        // $circulation = Circulation::create($this->validateData($request));
 
         return redirect()
-            ->route('collections.show', $circulation->id)
+            ->route('storages.index')
             ->with('status', 'The record has been added successfully.');
     }
 
@@ -117,5 +157,4 @@ return $quantity;
             //
         ]);
     }
-
 }

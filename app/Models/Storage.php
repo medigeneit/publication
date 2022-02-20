@@ -16,13 +16,13 @@ class Storage extends Model
 
     protected $guarded = [];
 
-    public $timestamps = false;
+    // public $timestamps = false;
 
     public function outlet()
     {
         return $this->belongsTo(Outlet::class);
     }
-    
+
     public function scopeFilter($query)
     {
         return $query

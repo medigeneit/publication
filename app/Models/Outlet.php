@@ -22,7 +22,7 @@ class Outlet extends Model
     protected static function getTypes()
     {
         return [
-            1 =>'Godown', 
+            1 =>'Godown',
             2 =>'Sale point'
         ];
     }
@@ -49,5 +49,10 @@ class Outlet extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function circulations()
+    {
+        return $this->morphMany(Circulation::class, 'destinationable');
     }
 }

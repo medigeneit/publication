@@ -14,6 +14,7 @@
                 <td class="py-3 px-2 text-left">{{ storage.outletName }}</td>
                 <td class="py-3 px-2 text-left">{{ storage.productName }}</td>
                 <td class="py-3 px-2 text-left">{{ storage.quantity }}</td>
+                <td class="py-3 px-2 text-left">{{ storage.alert_quantity }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('storages.show', storage.id)" />
@@ -40,11 +41,11 @@
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue($event, storage.outletId)" >
+                                        <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue($event, storage.outletId, storage.productId)"  required>
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
-                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue($event,storage.outletId)">
+                                        <input type="radio" name="inOut" id="" value="2" @change="changeValue($event,storage.outletId, storage.productId)" required>
                                     </div>
                                 </div>
                                 <hr class="my-1">
@@ -52,19 +53,19 @@
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" :disabled="fromDisabled" >
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" :disabled="fromDisabled" required >
                                                 <option value="">-- Select From--</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
                                         <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" :disabled="toDisabled">
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" :disabled="toDisabled" required>
                                                 <option value="">-- Select To --</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
 
-                                        <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity"/>
+                                        <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
 
                                         <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
                                             Submit
@@ -120,6 +121,7 @@ export default {
                 {title: 'Outlet Name', align : 'left', sortable : 'outlet.name'},
                 {title: 'Product Name', align : 'left', sortable : 'product.name'},
                 {title: 'Quantity', align : 'left', sortable : 'quantity'},
+                {title: 'Alert Quantity', align : 'left', sortable : 'alert_quantity'},
                 {title: 'Action', align : 'center'},
                 {title: 'Cerculation', align : 'center'},
             ],
@@ -127,17 +129,20 @@ export default {
                 from: '',
                 to: '',
                 quantity: '',
-                type: ''
+                type: '',
+                product_id: ''
             }),
             fromDisabled: false,
             toDisabled: false,
+            closeModel: ''
         }
     },
     methods : {
-        changeValue(event, id) {
+        changeValue(event, id, productId) {
             let value = event.target.value;
             this.form.type = value;
-            
+            this.form.product_id = productId
+
             console.log(id);
             if (value == 1) {
                 this.form.from = '';
@@ -161,6 +166,12 @@ export default {
         },
 
         closeModal(event) {
+            this.closeModel = event
+            this.form.from = '';
+            this.form.to = '';
+            this.fromDisabled = false;
+            this.toDisabled = false;
+
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
         submit() {
