@@ -21,7 +21,7 @@ class CirculationController extends Controller
     public function index()
     {
         $circulations = Circulation::query()
-        ->with(['storage','storage.product.productable' => function (MorphTo $morphTo) {
+        ->with(['storage','destinationable','storage.product.productable' => function (MorphTo $morphTo) {
             $morphTo->constrain([
                 Volume::class => function ($query) {
                     $query->with('version.production');
@@ -35,6 +35,9 @@ class CirculationController extends Controller
         ->dateFilter()
         ->search(['id'], ['product:name', 'outlet:name'])
         ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+
+        // $circulation_demo = $circulations->get();
+        // return $circulation_demo;
 
         // return  CirculationResource::collection($circulations->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
         return Inertia::render('Circulation/Index', [
@@ -68,15 +71,15 @@ class CirculationController extends Controller
                 'outlet_id' => $storage_outlet_id,
                 'product_id' => $request->product_id,
             ])->first();
-            
+
         $updated_quantity = $storage->quantity + $quantity;
         if ($updated_quantity > 0) {
             $storage->quantity = $updated_quantity;
             $updated = $storage->save();
-            
+
             if ($updated) {
                 $outlet = Outlet::findOrFail($destination);
-                
+
                 $data = [
                     'storage_id' => $storage->id,
                     'quantity' => $quantity,

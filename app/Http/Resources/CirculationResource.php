@@ -22,6 +22,7 @@ class CirculationResource extends JsonResource
                 'productId' => (int) ($this->storage->product->id ?? 0),
                 'productName' => (string) ($this->storage->product->product_name ?? ''),
                 'quantity'  => (int) ($this->quantity ?? 0),
+                'circulationDate'  => (string) ($this->created_at->format('d-M-Y') ?? 0),
             ];
     }
 }

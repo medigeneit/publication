@@ -13,13 +13,14 @@
                 <td class="py-3 px-2 text-left">{{ circulation.id }}</td>
                 <td class="py-3 px-2 text-left">{{ circulation.destination }}</td>
                 <td class="py-3 px-2 text-left">{{ circulation.productName }}</td>
-                <td class="py-3 px-2 text-left font-bold" :class="{'text-red-600': circulation.quantity < 0, 'text-green-600': circulation.quantity > 0 }"> {{ circulation.quantity }}</td>
+                <td class="py-3 px-2 text-left font-bold" :class="{'text-red-500': circulation.quantity < 0, 'text-green-500': circulation.quantity > 0 }"> {{ circulation.quantity }}</td>
+                <td class="py-3 px-2 text-left"> {{ circulation.circulationDate }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('circulations.show', circulation.id)" />
                         <action-button-edit :href="route('circulations.edit', circulation.id)" />
                         <!-- <action-button-cerculation @click="modalHandler" /> -->
-                    </div> 
+                    </div>
                 </td>
             </template>
         </data-table>
@@ -62,6 +63,7 @@ export default {
                 {title: 'Outlet Name', align : 'left', sortable : 'outlet.name'},
                 {title: 'Product Name', align : 'left', sortable : 'product.name'},
                 {title: 'Quantity', align : 'left', sortable : 'quantity'},
+                {title: 'Date', align : 'left', sortable : 'created_at'},
                 {title: 'Action', align : 'center'},
             ],
             form: this.$inertia.form({
