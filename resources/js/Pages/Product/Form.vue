@@ -49,8 +49,21 @@
                     </div> -->
                     <div class="mb-4 col-span-2">
                         <Label for="soft" value="Soft Copy" />
-                        <Input id="soft" type="text" class="mt-1 block w-full" v-model="form.soft" autofocus />
+                        <Select  class="mt-1 block w-full" v-model="form.soft" >
+                            <option value="">Select Soft</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </Select>
                     </div>
+
+                    <div class="mb-4">
+                        <Label for="active" value="Active" />
+                        <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </Select>
+                    </div>
+
                     <!-- <div class="mb-4 col-span-2">
                         <Label for="name" value="Status" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
@@ -85,13 +98,6 @@
                         <Input id="alert_quantity" name="alert_quantity" type="number" class="mt-1 block w-full" v-model="form.alert_quantity" required />
                     </div>
 
-                    <div class="mb-4">
-                        <Label for="active" value="Active" />
-                        <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </Select>
-                    </div>
 
                     <div class="mb-4 col-start-1">
                         <Label for="edition" value="Edition" />
@@ -254,9 +260,11 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                soft: this.data.product.soft,
+                soft: this.data.product.soft || '',
                 priceCategory: this.data.product.priceCategory,
                 amounts: {},
+                active: this.moduleAction == 'store' ? 1 : this.data.product.active,
+                category_ids: this.data.category_ids || [],
                 // image : this.data.product.image || null,
                 // name: this.data.product.name,
                 // type: this.data.product.type || '',
@@ -274,8 +282,6 @@ export default {
                 // isbn: this.data.product.isbn,
                 // crl: this.data.product.crl,
                 // alert_quantity: this.data.product.alert_quantity,
-                // active: this.moduleAction == 'store' ? 1 : this.data.product.active,
-                category_ids: this.data.category_ids || [],
                 // product_ids: this.data.product_ids || [],
             }),
             categoryShow: true,

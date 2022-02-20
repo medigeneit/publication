@@ -32,6 +32,11 @@
                 <show-table-row heading="ISBN">{{ product.isbn }}</show-table-row>
                 <show-table-row heading="CRL">{{ product.crl }}</show-table-row>
                 <show-table-row heading="Alert Quantity">{{ product.alertQuantity }}</show-table-row>
+                <show-table-row heading="Soft">
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-yellow-500': product.soft, 'bg-gray-500': !product.soft }">
+                        {{ product.soft ? 'Yes' : 'No' }}
+                    </span>
+                </show-table-row>
                 <show-table-row heading="Active">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
                         {{ product.activeValue }}

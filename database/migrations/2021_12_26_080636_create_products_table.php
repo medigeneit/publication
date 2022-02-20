@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->morphs('productable');
             $table->string('img')->nullable();
-            $table->boolean('soft')->nullable();
+            $table->boolean('soft')->default(0);
             $table->boolean('active');
             $table->timestamps();
             $table->softDeletes();

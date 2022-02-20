@@ -228,6 +228,7 @@ class ProductController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
+            'soft'                  => [''],
             'name'                  => [''],
             'type'                  => [''],
             'publisher_id'          => '',

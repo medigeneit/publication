@@ -17,7 +17,10 @@
                     </div>
                 </td>
                 <td class="py-3 px-2 text-left">{{ version.id }}</td>
+                <td class="py-3 px-2 text-left">{{ version.name }}</td>
+                <td class="py-3 px-2 text-left">{{ version.edition }}</td>
                 <td class="py-3 px-2 text-left">{{ version.typeName }}</td>
+                <td class="py-3 px-2 text-left">{{ version.releaseDate }}</td>
                 <td class="py-3 px-2 text-center">
                     <div v-if="version.type == 3" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ version.volumes.length }} Volumes
@@ -88,7 +91,10 @@ export default {
            columns: [
                     {title: 'Action', align: 'center'},
                     {title: 'ID', align: 'left', sortable: 'id'},
+                    {title: 'Production', align: 'left', sortable: 'production_id'},
+                    {title: 'Edition', align: 'left', sortable: 'edition'},
                     {title: 'Type', align: 'left', sortable: 'type'},
+                    {title: 'Date', align: 'left', sortable: 'release_date'},
                     {title: 'Show Volumes', align: 'left'},
                     {title: 'Active', align: 'left', sortable: 'active'},
                 ],
