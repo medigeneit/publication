@@ -134,7 +134,7 @@ export default {
             }),
             fromDisabled: false,
             toDisabled: false,
-            closeModel: ''
+            modalEvent: ''
         }
     },
     methods : {
@@ -162,11 +162,11 @@ export default {
         },
 
         modalHandler(event, id) {
+            this.modalEvent = event
             event.target.nextElementSibling .classList.toggle('hidden');
         },
 
         closeModal(event) {
-            this.closeModel = event
             this.form.from = '';
             this.form.to = '';
             this.fromDisabled = false;
@@ -176,6 +176,7 @@ export default {
         },
         submit() {
             return this.form.post(this.route('circulations.store'));
+            this.closeModal(this.modalEvent)
         },
     }
 };

@@ -1,0 +1,42 @@
+<template>
+    <Head title="Circulation" />
+
+    <app-layout>
+        <template #header>
+            Create Circulation
+        </template>
+        
+        <form-component :data="data"  module-action="store" />
+    </app-layout>
+</template>
+
+<script>
+import { Head, Link } from '@inertiajs/inertia-vue3';
+import AppLayout from "@/Layouts/App.vue";
+import FormComponent from "./Form.vue";
+
+export default {
+    components: {
+        AppLayout,
+        Head,
+        Link,
+        FormComponent,
+    },
+
+    data() {
+        return {
+            data: {
+                circulation: this.circulation,
+                outlets: this.outlets,
+                products: this.products,
+            }
+        }
+    },
+
+    props: {
+        circulation: { type: Object, default: {} },
+        outlets: { type: Object, default: {} },
+        products: { type: Object, default: {} },
+    },
+};
+</script>

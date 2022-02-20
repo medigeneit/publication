@@ -7,7 +7,10 @@ use App\Http\Resources\CirculationResource;
 use App\Models\Circulation;
 use App\Models\Outlet;
 use App\Models\Storage;
+use App\Models\Version;
+use App\Models\Volume;
 use App\Traits\DateFilter;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,13 +20,25 @@ class CirculationController extends Controller
 
     public function index()
     {
-        $collections = $this->setQuery(Circulation::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
+        $circulations = Circulation::query()
+        ->with(['storage','storage.product.productable' => function (MorphTo $morphTo) {
+            $morphTo->constrain([
+                Volume::class => function ($query) {
+                    $query->with('version.production');
+                },
+                Version::class => function ($query) {
+                    $query->with('volumes', 'production');
+                },
+            ]);
+        }])
+        ->filter()
+        ->dateFilter()
+        ->search(['id'], ['product:name', 'outlet:name'])
+        ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
+        // return  CirculationResource::collection($circulations->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
         return Inertia::render('Circulation/Index', [
-            'collections' => CirculationResource::collection($collections->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'circulations' => CirculationResource::collection($circulations->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
@@ -53,38 +68,27 @@ class CirculationController extends Controller
                 'outlet_id' => $storage_outlet_id,
                 'product_id' => $request->product_id,
             ])->first();
-        // return $storage;
-
-        // return
+            
         $updated_quantity = $storage->quantity + $quantity;
         if ($updated_quantity > 0) {
             $storage->quantity = $updated_quantity;
             $updated = $storage->save();
-            // return $updated;
+            
             if ($updated) {
                 $outlet = Outlet::findOrFail($destination);
-                // return
+                
                 $data = [
                     'storage_id' => $storage->id,
-                    // 'destinationable_type' => ,
-                    // 'destinationable_id' => $destination,
                     'quantity' => $quantity,
                 ];
 
-                $circulation = $outlet->circulations()->create($data);
-                // return[
-                //     'storage' => $storage,
-                //     'circulation' => $circulation,
-                // ];
+                $outlet->circulations()->create($data);
             }
         } else {
-            // return
             $data = [
                 'message' => 'Sory, you dont have enough quantity'
             ];
         }
-
-        // $circulation = Circulation::create($this->validateData($request));
 
         return redirect()
             ->route('storages.index')
@@ -112,7 +116,7 @@ class CirculationController extends Controller
         $circulation->update($this->validateData($request, $circulation->id));
 
         return redirect()
-            ->route('collections.show', $circulation->id)
+            ->route('circulations.show', $circulation->id)
             ->with('status', 'The record has been update successfully.');
     }
 
@@ -121,7 +125,7 @@ class CirculationController extends Controller
         $circulation->delete();
 
         return redirect()
-            ->route('collections.index')
+            ->route('circulations.index')
             ->with('status', 'The record has been delete successfully.');
     }
 

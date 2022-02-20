@@ -87,7 +87,7 @@
 
     <nav-link-wrapper
         title="Stock & Circulation"
-        :active="route().current('(outlets|distributions|storages).*')"
+        :active="route().current('(outlets|distributions|storages|circulations).*')"
     >
         <nav-link
             :href="route('outlets.index')"
@@ -106,6 +106,12 @@
             :active="route().current('storages.*')"
         >
             Storages
+        </nav-link>
+        <nav-link
+            :href="route('circulations.index')"
+            :active="route().current('circulations.*')"
+        >
+            Circulaion
         </nav-link>
     </nav-link-wrapper>
 
