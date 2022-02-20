@@ -13,7 +13,7 @@
                 <td class="py-3 px-2 text-left">{{ circulation.id }}</td>
                 <td class="py-3 px-2 text-left">{{ circulation.destination }}</td>
                 <td class="py-3 px-2 text-left">{{ circulation.productName }}</td>
-                <td class="py-3 px-2 text-left">{{ circulation.quantity }}</td>
+                <td class="py-3 px-2 text-left" :class="{'text-red-900': circulation.quantity < 0, 'text-green-900': circulation.quantity > 0 }"> {{ circulation.quantity }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('circulations.show', circulation.id)" />
