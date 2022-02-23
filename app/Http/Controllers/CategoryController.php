@@ -15,12 +15,12 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = $this->setQuery(Category::query())
-            ->search()->filter()
-            ->getQuery();
+        // $categories = $this->setQuery(Category::query())
+        //     ->search()->filter()
+        //     ->getQuery();
 
         $categories = Category::query()
-        ->with('subcategories.subcategories.subcategories.subcategories')
+        ->with('subcategories.subcategories.subcategories.subcategories', 'user')
         ->mainCategory()
         ->get();
 
@@ -32,7 +32,7 @@ class CategoryController extends Controller
 
         if (request()->view == 'tree') {
             $categories = Category::query()
-                ->with('subcategories.subcategories.subcategories.subcategories')
+                ->with('subcategories.subcategories.subcategories.subcategories', 'user')
                 ->mainCategory()
                 ->get();
 
