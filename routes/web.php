@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PriceCategoryController;
@@ -75,5 +76,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'price-categories'          => PriceCategoryController::class,
         'author-types'              => AuthorTypeController::class,
         'circulations'              => CirculationController::class,
+        'moderators'                => ModeratorController::class
     ]);
 });
