@@ -15,9 +15,10 @@ class PublisherController extends Controller
     public function index()
     {
         $publishers = Publisher::query()
-                ->filter()
-                ->search(['id', 'name', 'phone', 'email'])
-                ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+            ->with('user')
+            ->filter()
+            ->search(['id', 'name', 'phone', 'email'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('Publisher/Index', [
             'publishers' => PublisherResource::collection($publishers->paginate(request()->perpage)->onEachSide(1)->appends(request()->input())),
@@ -33,7 +34,7 @@ class PublisherController extends Controller
     }
 
     public function store(Request $request)
-    { 
+    {
         $publisher = Publisher::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);

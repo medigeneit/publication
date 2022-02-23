@@ -24,7 +24,7 @@ class VersionController extends Controller
         $versions = Version::query()
             ->filter()
             ->dateFilter()
-            ->with('volumes')
+            ->with('volumes','user','production.publisher',)
             ->search(['id'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
@@ -61,7 +61,7 @@ class VersionController extends Controller
         $count = 0;
 
         foreach ($request->volumes as  $volume) {
-            
+
             if($volume['name'] &&( $volume['isbn'] || $volume['crl'])){
                 $count ++;
             }
@@ -93,7 +93,7 @@ class VersionController extends Controller
         if(($request->volumes)) {
             $this->volumeInsert($request, $version);
         }
-        
+
         return redirect()
             ->route('versions.show', $version->id)
             ->with('status', 'The record has been added successfully.');
@@ -133,11 +133,11 @@ class VersionController extends Controller
     public function update(Request $request, Version $version)
     {
         $validate = $this->validateData($request, $version->id);
-        
+
         $count = 0;
 
         foreach ($request->volumes as  $volume) {
-            
+
             if($volume['name'] &&( $volume['isbn'] || $volume['crl'])){
                 $count ++;
             }
@@ -152,7 +152,7 @@ class VersionController extends Controller
         else{
             $validate['type'] = 1 ;
         }
-        
+
         $version->update($validate);
 
         if(($request->volumes)) {
@@ -176,7 +176,7 @@ class VersionController extends Controller
     protected function packageInsert($request, $version)
     {
         PackageProduct::where(['package_id' => $version->id])->delete();
-        
+
         foreach($request->product_ids as $package_id) {
             $package= PackageProduct::onlyTrashed()->updateOrCreate(
                 ['package_id' => $version->id],
@@ -196,21 +196,21 @@ class VersionController extends Controller
     protected function volumeInsert($request, $version)
     {
         Volume::where(['version_id' => $version->id])->delete();
-        
+
         foreach ($request->volumes as $volume)
         {
             // return $volume;
             if($volume['name']) {
                 $volume = Volume::onlyTrashed()->updateOrCreate(
                     ['version_id'       => $version->id],
-                    [   'name'          => $volume['name'], 
-                        'isbn'          => $volume['isbn'], 
-                        'crl'           => $volume['crl'], 
+                    [   'name'          => $volume['name'],
+                        'isbn'          => $volume['isbn'],
+                        'crl'           => $volume['crl'],
                         'user_id'       => Auth::id(),
                         'deleted_at'    => null
                     ]);
             }
-            
+
         }
     }
 

@@ -15,6 +15,7 @@ class ProductionController extends Controller
     public function index()
     {
         $productions = Production::query()
+            ->with('user','publisher')
             ->search(['id', 'name'])
             ->filter()
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
