@@ -58,6 +58,7 @@ class VersionController extends Controller
 
     public function store(Request $request)
     {
+        return $request;
         $validate = $this->validateData($request) + [
             'user_id' => Auth::id()
         ];

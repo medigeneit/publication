@@ -26886,9 +26886,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     addModertor: function addModertor() {
       this.form.moderators.push({
-        name: "",
-        isbn: "",
-        crl: ""
+        authorId: "",
+        moderatorType: "",
+        honorariumType: "",
+        honorarium: ""
       });
     },
     copyVolume: function copyVolume(id) {
@@ -43319,7 +43320,7 @@ var _hoisted_18 = {
 
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
   value: ""
-}, "-- Select Author --", -1
+}, "-- Select Moderator --", -1
 /* HOISTED */
 );
 
@@ -43327,38 +43328,44 @@ var _hoisted_20 = ["value"];
 var _hoisted_21 = {
   "class": "mb-4"
 };
-var _hoisted_22 = {
-  "class": "mb-4"
-};
+
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  value: ""
+}, "-- Select Moderator --", -1
+/* HOISTED */
+);
 
 var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
-  value: "1"
-}, "Yes", -1
+  value: 1
+}, " One Time ", -1
 /* HOISTED */
 );
 
 var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
-  value: "0"
-}, "No", -1
+  value: 2
+}, " Percentage ", -1
 /* HOISTED */
 );
 
 var _hoisted_25 = {
+  "class": "mb-4"
+};
+var _hoisted_26 = {
   "class": "w-full text-right"
 };
 
-var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" (+) Add Moderator ");
+var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" (+) Add Moderator ");
 
-var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
   "class": "w-full my-4"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_28 = {
+var _hoisted_29 = {
   "class": "flex items-center justify-between"
 };
-var _hoisted_29 = {
+var _hoisted_30 = {
   "class": ""
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -43574,29 +43581,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* PROPS, DYNAMIC_SLOTS */
     , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
       value: "Moderator Type"
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-      type: "email",
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
       "class": "mt-1 block w-full",
       modelValue: $data.form.moderators[index].moderatorType,
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return $data.form.moderators[index].moderatorType = $event;
-      }
-    }, null, 8
-    /* PROPS */
-    , ["modelValue", "onUpdate:modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
-      "class": "mt-1 block w-full",
-      modelValue: $data.form.moderators[index].authorId,
-      "onUpdate:modelValue": function onUpdateModelValue($event) {
-        return $data.form.moderators[index].authorId = $event;
       },
       required: ""
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-        return [_hoisted_19, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.data.authors, function (author, id) {
+        return [_hoisted_19, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.data.moderatorTypes, function (moderator, type) {
           return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
-            value: id,
-            key: id
-          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(author), 9
+            value: _ctx.id,
+            key: type
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(moderator), 9
           /* TEXT, PROPS */
           , _hoisted_20);
         }), 128
@@ -43610,39 +43608,38 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* PROPS, DYNAMIC_SLOTS */
     , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
       value: "Honorarium Type"
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-      type: "email",
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input\r\n                                type=\"email\"\r\n                                class=\"mt-1 block w-full\"\r\n                                v-model=\"form.moderators[index].honorariumType\"\r\n                            /> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
       "class": "mt-1 block w-full",
       modelValue: $data.form.moderators[index].honorariumType,
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return $data.form.moderators[index].honorariumType = $event;
-      }
-    }, null, 8
-    /* PROPS */
-    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
-      "for": "active",
-      value: "Honorarium"
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
-      id: "active",
-      name: "active",
-      "class": "mt-1 block w-full",
-      modelValue: $data.form.moderators[index].honorarium,
-      "onUpdate:modelValue": function onUpdateModelValue($event) {
-        return $data.form.moderators[index].honorarium = $event;
-      }
+      },
+      required: ""
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-        return [_hoisted_23, _hoisted_24];
+        return [_hoisted_22, _hoisted_23, _hoisted_24];
       }),
       _: 2
       /* DYNAMIC */
 
     }, 1032
     /* PROPS, DYNAMIC_SLOTS */
+    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
+      "for": "active",
+      value: "Honorarium"
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+      type: "number",
+      "class": "mt-1 block w-full",
+      modelValue: $data.form.moderators[index].honorarium,
+      "onUpdate:modelValue": function onUpdateModelValue($event) {
+        return $data.form.moderators[index].honorarium = $event;
+      }
+    }, null, 8
+    /* PROPS */
     , ["modelValue", "onUpdate:modelValue"])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
+  )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
     type: "button",
     "class": "btn-danger border-4",
     onClick: _cache[8] || (_cache[8] = function ($event) {
@@ -43650,12 +43647,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_26];
+      return [_hoisted_27];
     }),
     _: 1
     /* STABLE */
 
-  })])])]), _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_go_to_list, {
+  })])])]), _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_go_to_list, {
     href: _ctx.route('versions.index')
   }, null, 8
   /* PROPS */
