@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModeratorResource;
+use App\Models\Author;
 use App\Models\ModeratorType;
 use App\Models\Moderator;
 use App\Models\Version;
@@ -34,6 +35,7 @@ class ModeratorController extends Controller
             "data" => [
                 'moderator'     => new Moderator(),
                 'versions'      => Version::pluck('edition', 'id'),
+                'authors'       => Author::pluck('name', 'id'),
                 'moderatorType' => ModeratorType::pluck('name', 'id')
             ]
         ]);

@@ -11,6 +11,8 @@
                 productList,
                 versionType,
                 product_ids,
+                authors,
+                moderatorTypes
             }"
             module-action="store"
         />
@@ -48,6 +50,14 @@ export default {
             default: {},
         },
         product_ids: {
+            type: Array,
+            default: [],
+        },
+        authors: {
+            type: Array,
+            default: [],
+        },
+        moderatorTypes: {
             type: Array,
             default: [],
         },

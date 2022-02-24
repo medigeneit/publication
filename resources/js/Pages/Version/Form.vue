@@ -168,52 +168,76 @@
                 </div>
                 <div class="w-full max-w-md">
                     <h3 class="text-lg text-gray-600 font-bold">Moderator Information</h3>
-                    <div class="w-full p-4 bg-white border shadow rounded">
-                        <div class="mb-4">
-                            <Label for="name" value="Name" />
-                            <Input
-                                id="name"
-                                type="text"
-                                class="mt-1 block w-full"
-                                v-model="form.name"
-                                autofocus
-                            />
-                        </div>
+                    <div class="w-full p-4 bg-white border shadow rounded" v-for="(moderator, index) in form.moderators"
+                        :key="index">
 
                         <div class="mb-4">
-                            <Label value="Phone" />
-                            <Input
+                            <Label value="Author" />
+                            <!-- <Input
                                 type="number"
                                 class="mt-1 block w-full"
-                                v-model="form.phone"
-                            />
+                                v-model="form.moderators[index].authorId"
+                            /> -->
+                             <!-- <Select
+                                id="author"
+                                name="active"
+                                class="mt-1 block w-full"
+                                v-model="form.moderators[index].authorId"
+                            >
+                                <option value="">Select Author</option>
+                                <option :value="id" v-for="(author, id) in data.authors" :key="id">{{ author }}</option>
+                            </Select> -->
+                            <Select
+                                class="mt-1 block w-full"
+                                v-model="form.moderators[index].authorId"
+                                required
+                            >
+                                <option value="">-- Select Author --</option>
+                                <option
+                                    :value="id" v-for="(author, id) in data.authors" :key="id"
+                                >
+                                    {{ author }}
+                                </option>
+                            </Select>
                         </div>
 
                         <div class="mb-4">
-                            <Label value="Email" />
+                            <Label value="Moderator Type" />
                             <Input
                                 type="email"
                                 class="mt-1 block w-full"
-                                v-model="form.email"
+                                v-model="form.moderators[index].moderatorType"
+                            />
+                            <Select
+                                class="mt-1 block w-full"
+                                v-model="form.moderators[index].authorId"
+                                required
+                            >
+                                <option value="">-- Select Author --</option>
+                                <option
+                                    :value="id" v-for="(author, id) in data.authors" :key="id"
+                                >
+                                    {{ author }}
+                                </option>
+                            </Select>
+                        </div>
+
+                        <div class="mb-4">
+                            <Label value="Honorarium Type" />
+                            <Input
+                                type="email"
+                                class="mt-1 block w-full"
+                                v-model="form.moderators[index].honorariumType"
                             />
                         </div>
 
                         <div class="mb-4">
-                            <Label value="Address" />
-                            <Textarea
-                                type="number"
-                                class="mt-1 block w-full"
-                                v-model="form.address"
-                            ></Textarea>
-                        </div>
-
-                        <div class="mb-4">
-                            <Label for="active" value="Active" />
+                            <Label for="active" value="Honorarium" />
                             <Select
                                 id="active"
                                 name="active"
                                 class="mt-1 block w-full"
-                                v-model="form.active"
+                                v-model="form.moderators[index].honorarium"
                             >
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
@@ -304,9 +328,10 @@ export default {
                 ],
                 moderators: [
                     {
-                        name: "",
-                        isbn: "",
-                        crl: "",
+                        authorId: "",
+                        moderatorType: "",
+                        honorariumType: "",
+                        honorarium: "",
                     },
                 ],
             }),

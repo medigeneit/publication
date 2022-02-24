@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VersionResource;
+use App\Models\Author;
+use App\Models\ModeratorType;
 use App\Models\Product;
 use App\Models\Production;
 use App\Models\Version;
@@ -48,6 +50,8 @@ class VersionController extends Controller
             'version'           => new Version(),
             'productionList'    => Production::pluck('name', 'id'),
             'productList'       => $products,
+            'authors'           => Author::pluck('name', 'id'),
+            'moderatorTypes'    => ModeratorType::pluck('name', 'id'),
             'versionType'       => Version::getTypes(),
         ]);
     }
