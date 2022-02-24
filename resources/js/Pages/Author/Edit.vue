@@ -6,7 +6,7 @@
             Edit Author
         </template>
         
-        <form-component :data="{ author, authorType }" module-action="update" />
+        <form-component :data="{ author, ModeratorType }" module-action="update" />
     </app-layout>
 </template>
 
@@ -25,7 +25,7 @@ export default {
 
     props: {
         author: { type: Object, default: {} },
-        authorType: { type: Object, default: {} },
+        ModeratorType: { type: Object, default: {} },
     },
 };
 </script>

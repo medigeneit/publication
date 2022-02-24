@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AuthorType extends Model
+class ModeratorType extends Model
 {
     use HasFactory, SoftDeletes, ScopeDateFilter, ScopeSearch, ScopeSort;
 

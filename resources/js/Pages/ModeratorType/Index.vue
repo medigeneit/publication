@@ -6,19 +6,19 @@
             Author Type List
         </template>
 
-        <add-new-button :href="route('author-types.create')" />
+        <add-new-button :href="route('moderator-types.create')" />
 
-        <data-table :collections="authorTypes" :filters="filters" :columns="columns" :latest="true">
+        <data-table :collections="ModeratorTypes" :filters="filters" :columns="columns" :latest="true">
             <!-- <template #head>
                 <th class="py-3 px-2 text-left">Name</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template> -->
-            <template #default="{ item: authorType }">
-                <td class="py-3 px-2 text-left">{{ authorType.name }}</td>
+            <template #default="{ item: ModeratorType }">
+                <td class="py-3 px-2 text-left">{{ ModeratorType.name }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
-                        <action-button-show :href="route('author-types.show', authorType.id)" />
-                        <action-button-edit :href="route('author-types.edit', authorType.id)" />
+                        <action-button-show :href="route('moderator-types.show', ModeratorType.id)" />
+                        <action-button-edit :href="route('moderator-types.edit', ModeratorType.id)" />
                     </div>
                 </td>
             </template>
@@ -45,7 +45,7 @@ export default {
         AddNewButton,
     },
     props: {
-        authorTypes: { type: Object, default: {} },
+        ModeratorTypes: { type: Object, default: {} },
         filters: { type: Object, default: {} },
     },
     data() {

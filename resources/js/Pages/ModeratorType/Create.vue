@@ -1,12 +1,12 @@
 <template>
-    <Head title="Author Type" />
+    <Head title="Price Category" />
 
     <app-layout>
         <template #header>
-            Edit Author Type
+            Create Author Type
         </template>
         
-        <form-component :data="data" module-action="update" />
+        <form-component :data="data" module-action="store" />
     </app-layout>
 </template>
 
@@ -25,14 +25,14 @@ export default {
 
     data() {
         return {
-            data:{
-                authorType: this.authorType,
+            data: {
+                ModeratorType: this.ModeratorType,
             }
         }
     },
 
     props: {
-        authorType: { 
+        ModeratorType: { 
             type: Object,
             default: {}
         }

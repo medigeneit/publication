@@ -54,7 +54,7 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                name: this.data.authorType.name || '',
+                name: this.data.ModeratorType.name || '',
             })
         }
     },
@@ -62,11 +62,11 @@ export default {
     methods: {
         submit() {
             if(this.moduleAction == 'store') {
-                return this.form.post(this.route('author-types.store'));
+                return this.form.post(this.route('moderator-types.store'));
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('author-types.update', this.data.authorType.id));
+                return this.form.put(this.route('moderator-types.update', this.data.ModeratorType.id));
             }
         }
     }

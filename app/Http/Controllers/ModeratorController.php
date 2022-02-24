@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModeratorResource;
-use App\Models\AuthorType;
+use App\Models\ModeratorType;
 use App\Models\Moderator;
 use App\Models\Version;
 use App\Traits\DateFilter;
@@ -32,9 +32,9 @@ class ModeratorController extends Controller
     {
         return Inertia::render('Moderator/Create', [
             "data" => [
-                'moderator' => new Moderator(),
-                'versions'  => Version::pluck('edition', 'id'),
-                'moderatorType' => AuthorType::pluck('name', 'id')
+                'moderator'     => new Moderator(),
+                'versions'      => Version::pluck('edition', 'id'),
+                'moderatorType' => ModeratorType::pluck('name', 'id')
             ]
         ]);
     }

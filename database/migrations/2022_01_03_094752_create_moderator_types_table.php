@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAuthorTypesTable extends Migration
+class CreateModeratorTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAuthorTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('author_types', function (Blueprint $table) {
+        Schema::create('moderator_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->tinyInteger('active')->default(1);

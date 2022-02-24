@@ -1,167 +1,235 @@
 <template>
     <div class="w-full flex gap-4">
-        <form @submit.prevent="submit" class="w-full max-w-4xl space-y-4">
-            <h3 class="text-lg text-gray-600 font-bold">Version Information</h3>
-            <div
-                class="
-                    w-full
-                    grid grid-cols-2
-                    md:grid-cols-3
-                    bg-white
-                    border
-                    rounded
-                    gap-4
-                    p-4
-                "
-            >
-                <div>
-                    <Label value="Raw Product" />
-                    <Select
-                        class="mt-1 block w-full"
-                        v-model="form.production_id"
-                        required
+        <form @submit.prevent="submit" class="w-full max-w-7xl space-y-4">
+            <div class="w-full flex gap-6">
+                <div class="w-full max-w-3xl p-4 bg-white border shadow rounded">
+                    <h3 class="text-lg text-gray-600 font-bold">Version Information</h3>
+                    <div
+                        class="
+                            w-full
+                            grid grid-cols-2
+                            md:grid-cols-3
+                            bg-white
+                            border
+                            rounded
+                            gap-4
+                            p-4
+                        "
                     >
-                        <option value="">-- Select Production --</option>
-                        <option
-                            :value="productionId"
-                            v-for="(
-                                productionName, productionId
-                            ) in data.productionList"
-                            :key="productionId"
-                        >
-                            {{ productionName }}
-                        </option>
-                    </Select>
-                </div>
+                        <div>
+                            <Label value="Raw Product" />
+                            <Select
+                                class="mt-1 block w-full"
+                                v-model="form.production_id"
+                                required
+                            >
+                                <option value="">-- Select Production --</option>
+                                <option
+                                    :value="productionId"
+                                    v-for="(
+                                        productionName, productionId
+                                    ) in data.productionList"
+                                    :key="productionId"
+                                >
+                                    {{ productionName }}
+                                </option>
+                            </Select>
+                        </div>
 
-                <div>
-                    <Label value="Edition" />
-                    <Input
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.edition"
-                    />
-                </div>
+                        <div>
+                            <Label value="Edition" />
+                            <Input
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.edition"
+                            />
+                        </div>
 
-                <div>
-                    <Label value="Release Date" />
-                    <Input
-                        type="date"
-                        class="mt-1 block w-full"
-                        v-model="(form.release_date)"
-                    />
-                </div>
+                        <div>
+                            <Label value="Release Date" />
+                            <Input
+                                type="date"
+                                class="mt-1 block w-full"
+                                v-model="(form.release_date)"
+                            />
+                        </div>
 
-                <div>
-                    <Label value="Cost" />
-                    <Input
-                        type="number"
-                        class="mt-1 block w-full"
-                        v-model="(form.production_cost)"
-                    />
-                </div>
+                        <div>
+                            <Label value="Cost" />
+                            <Input
+                                type="number"
+                                class="mt-1 block w-full"
+                                v-model="(form.production_cost)"
+                            />
+                        </div>
 
-                <div>
-                    <Label value="Link" />
-                    <Input
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.link"
-                    />
-                </div>
+                        <div>
+                            <Label value="Link" />
+                            <Input
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.link"
+                            />
+                        </div>
 
-                <active-input v-model="form.active" />
+                        <active-input v-model="form.active" />
 
-                <div>
-                    <Label value="Type" />
-                    <Select
-                        class="mt-1 block w-full"
-                        v-model="form.type"
-                        required
+                        <div>
+                            <Label value="Type" />
+                            <Select
+                                class="mt-1 block w-full"
+                                v-model="form.type"
+                                required
+                            >
+                                <option value="">-- Select Type --</option>
+                                <option
+                                    :value="type"
+                                    v-for="(typeName, type) in data.versionType"
+                                    :key="type"
+                                    :disabled ="type == 3"
+                                    :hidden="(type == 3) && (this.data.version.type != 3) "
+                                >
+                                {{ typeName }}
+                                </option>
+                            </Select>
+                        </div>
+                    </div>
+                    <h3 class="text-lg text-gray-600 font-bold">Volume Information</h3>
+                    <div
+                        class="
+                            w-full
+                            grid grid-cols-2
+                            md:grid-cols-3
+                            bg-white
+                            border
+                            rounded
+                            gap-4
+                            p-4
+                        "
+                        v-for="(volume, index) in form.volumes"
+                        :key="index"
                     >
-                        <option value="">-- Select Type --</option>
-                        <option
-                            :value="type"
-                            v-for="(typeName, type) in data.versionType"
-                            :key="type"
-                            :disabled ="type == 3"
-                            :hidden="(type == 3) && (this.data.version.type != 3) "
+                        <div>
+                            <Label value="Valume Name" />
+                            <Input
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.volumes[index].name"
+                            />
+                        </div>
+
+                        <!-- <div>
+                            <Label value="Production Cost" />
+                            <Input
+                                type="number"
+                                step="0.01"
+                                class="mt-1 block w-full"
+                                v-model="form.volumes[index].cost"
+                            />
+                        </div> -->
+
+                        <div>
+                            <Label value="ISBN" />
+                            <Input
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.volumes[index].isbn"
+                            />
+                        </div>
+
+                        <div>
+                            <Label value="CRL" />
+                            <Input
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.volumes[index].crl"
+                            />
+                        </div>
+
+                        <!-- <div>
+                            <Label value="Link" />
+                            <Input
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.volumes[index].link"
+                            />
+                        </div> -->
+                    </div>
+
+                    <div class="w-full text-right">
+                        <Button
+                            type="button"
+                            class="btn-danger border-4"
+                            @click="addVolume()"
                         >
-                         {{ typeName }}
-                        </option>
-                    </Select>
+                            (+) Add Volume
+                        </Button>
+                    </div>
                 </div>
-            </div>
-            <h3 class="text-lg text-gray-600 font-bold">Volume Information</h3>
-            <div
-                class="
-                    w-full
-                    grid grid-cols-2
-                    md:grid-cols-3
-                    bg-white
-                    border
-                    rounded
-                    gap-4
-                    p-4
-                "
-                v-for="(volume, index) in form.volumes"
-                :key="index"
-            >
-                <div>
-                    <Label value="Valume Name" />
-                    <Input
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.volumes[index].name"
-                    />
+                <div class="w-full max-w-md">
+                    <h3 class="text-lg text-gray-600 font-bold">Moderator Information</h3>
+                    <div class="w-full p-4 bg-white border shadow rounded">
+                        <div class="mb-4">
+                            <Label for="name" value="Name" />
+                            <Input
+                                id="name"
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.name"
+                                autofocus
+                            />
+                        </div>
+
+                        <div class="mb-4">
+                            <Label value="Phone" />
+                            <Input
+                                type="number"
+                                class="mt-1 block w-full"
+                                v-model="form.phone"
+                            />
+                        </div>
+
+                        <div class="mb-4">
+                            <Label value="Email" />
+                            <Input
+                                type="email"
+                                class="mt-1 block w-full"
+                                v-model="form.email"
+                            />
+                        </div>
+
+                        <div class="mb-4">
+                            <Label value="Address" />
+                            <Textarea
+                                type="number"
+                                class="mt-1 block w-full"
+                                v-model="form.address"
+                            ></Textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <Label for="active" value="Active" />
+                            <Select
+                                id="active"
+                                name="active"
+                                class="mt-1 block w-full"
+                                v-model="form.active"
+                            >
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </Select>
+                        </div>
+                    </div>
+                    <div class="w-full text-right">
+                        <Button
+                            type="button"
+                            class="btn-danger border-4"
+                            @click="addModertor()"
+                        >
+                            (+) Add Moderator
+                        </Button>
+                    </div>
                 </div>
-
-                <!-- <div>
-                    <Label value="Production Cost" />
-                    <Input
-                        type="number"
-                        step="0.01"
-                        class="mt-1 block w-full"
-                        v-model="form.volumes[index].cost"
-                    />
-                </div> -->
-
-                <div>
-                    <Label value="ISBN" />
-                    <Input
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.volumes[index].isbn"
-                    />
-                </div>
-
-                <div>
-                    <Label value="CRL" />
-                    <Input
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.volumes[index].crl"
-                    />
-                </div>
-
-                <!-- <div>
-                    <Label value="Link" />
-                    <Input
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.volumes[index].link"
-                    />
-                </div> -->
-            </div>
-
-            <div class="w-full text-right">
-                <Button
-                    type="button"
-                    class="btn-danger border-4"
-                    @click="addVolume()"
-                >
-                    (+) Add Volume
-                </Button>
             </div>
 
             <hr class="w-full my-4" />
@@ -234,6 +302,13 @@ export default {
                         crl: "",
                     },
                 ],
+                moderators: [
+                    {
+                        name: "",
+                        isbn: "",
+                        crl: "",
+                    },
+                ],
             }),
         };
     },
@@ -245,6 +320,13 @@ export default {
     methods: {
         addVolume() {
             this.form.volumes.push({
+                name: "",
+                isbn: "",
+                crl: "",
+            });
+        },
+        addModertor() {
+            this.form.moderators.push({
                 name: "",
                 isbn: "",
                 crl: "",

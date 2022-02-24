@@ -3,7 +3,7 @@
 use App\Http\Controllers\AccountCategoryController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthorController;
-use App\Http\Controllers\AuthorTypeController;
+use App\Http\Controllers\ModeratorTypeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CirculationController;
 use App\Http\Controllers\DashboardController;
@@ -74,7 +74,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'incomes'                   => IncomeController::class,
         'expenses'                  => ExpenseController::class,
         'price-categories'          => PriceCategoryController::class,
-        'author-types'              => AuthorTypeController::class,
+        'moderator-types'           => ModeratorTypeController::class,
         'circulations'              => CirculationController::class,
         'moderators'                => ModeratorController::class
     ]);
