@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModeratorResource;
+use App\Models\AuthorType;
 use App\Models\Moderator;
 use App\Models\Version;
 use App\Traits\DateFilter;
@@ -20,8 +21,6 @@ class ModeratorController extends Controller
             ->search()->filter()
             //->dateFilter()
             ->getQuery();
-        
-        $versions = Version::pluck('production_type', 'id');
 
         return Inertia::render('Moderator/Index', [
             'moderators' => ModeratorResource::collection($moderators->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -32,7 +31,11 @@ class ModeratorController extends Controller
     public function create()
     {
         return Inertia::render('Moderator/Create', [
-            'moderator' => new Moderator(),
+            "data" => [
+                'moderator' => new Moderator(),
+                'versions'  => Version::pluck('edition', 'id'),
+                'moderatorType' => AuthorType::pluck('name', 'id')
+            ]
         ]);
     }
 

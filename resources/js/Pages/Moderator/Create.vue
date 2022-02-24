@@ -6,7 +6,7 @@
             Create Moderator
         </template>
         
-        <form-component :data="{ moderator, moderatorType }" module-action="store" />
+        <form-component :data="data" module-action="store" />
     </app-layout>
 </template>
 
@@ -24,7 +24,7 @@ export default {
     },
 
     props: {
-        moderator: { type: Object, default: {} },
+        data: { type: Object, default: {} },
         moderatorType: { type: Object, default: {} },
     },
 };
