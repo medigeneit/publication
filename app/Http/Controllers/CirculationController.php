@@ -55,7 +55,7 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+        // return $request;
 
         if (Circulation::TYPE[$request->type] == 'In') {
             $quantity = $request->quantity;
