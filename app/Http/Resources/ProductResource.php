@@ -51,6 +51,7 @@ class ProductResource extends JsonResource
             'categoryCount'         => (int) ($this->categories->count()),
             'moderators'            => (object) ($moderators ?? []),
             'total_storage'         => (int) ($this->storages->pluck('quantity')->sum() ?? 0),
+            'storage_outlets'       => (array) ($this->storages->pluck('outlet_id')->toArray() ?? []),
             'storages'              => (object) ($this->storages ?? []),
             // 'wholesalePrice'        => (float) ($this->prices->amount ?? 0),
             // 'retailPrice'           => (float) ($this->retail_price ?? 0),

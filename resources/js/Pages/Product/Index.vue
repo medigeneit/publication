@@ -23,7 +23,7 @@
                     </b>
                 </td>
                 <td class="py-3 px-2 text-left">
-                    {{ product.typeName }}
+                    {{ product.typeName }} {{ product.storage_outlets }}
                 </td>
                 <td class="py-3 px-2 text-left">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
@@ -134,6 +134,66 @@
                     </div>
                 </td>
                 <td class="py-3 px-2 text-center">
+                    <div class="flex justify-center items-center text-gray-700 cursor-pointer" @click="modalHandler">
+                        Circulation
+                        <!-- <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 font-weight-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 font-weight-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                            </svg>
+                        </div> -->
+                    </div>
+                    <div class="fixed inset-0 hidden z-50">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Circulation</div>
+                                <div class="flex justify-center">
+                                    <div>
+                                        <label for=""> In </label>
+                                        <input type="radio" name="inOut" id="" class="mr-2" v-model="form.type" value="1"   required>
+                                    </div>
+                                    <div>
+                                        <label for=""> Out </label>
+                                        <input type="radio" name="inOut" id="" value="2" v-model="form.type" @click="alertQuantity = false" required>
+                                    </div>
+                                </div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                    <form @submit.prevent="submit" class="">
+                                        <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
+                                        <div class="mb-4">
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" required @change="changeValue(product.id, product.storage_outlets)">
+                                                <option value="">-- Select From--</option>
+                                                <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
+                                            </Select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" required>
+                                                <option value="">-- Select To --</option>
+                                                <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
+                                            </Select>
+                                        </div>
+
+                                        <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
+
+                                        <Input id="type" type="number" class="mt-1 block w-full" placeholder="Alert Quantityi" v-model="form.alert_quantity" v-if="alertQuantity"/>
+
+                                        <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
+                                            Submit
+                                        </Button>
+                                    </form>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="py-3 px-2 text-center">
                     <div v-if="product.packageProductCount" @click="modalHandler" class="text-center border bg-yellow-600 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ product.packageProductCount }} products
                     </div>
@@ -173,6 +233,9 @@ import DataTable from "@/Components/DataTable.vue";
 import ActionButtonShow from "@/Components/ActionButtonShow.vue";
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import AddNewButton from '@/Components/AddNewButton.vue';
+import Input from '@/Components/Input.vue';
+import Button from '@/Components/Button.vue';
+import Select from '@/Components/Select.vue';
 
 export default {
     components: {
@@ -183,10 +246,14 @@ export default {
         ActionButtonShow,
         ActionButtonEdit,
         AddNewButton,
+        Input,
+        Button,
+        Select,
     },
     props: {
         products: { type: Object, default: {} },
         pricing: { type: Object, default: {} },
+        outlets: { type: Object, default: {} },
         filters: { type: Object, default: {} }
     },
     methods: {
@@ -210,6 +277,7 @@ export default {
                     {title: 'Prices', align: 'right'},
                     {title: 'Moderators', align: 'right'},
                     {title: 'Storages', align: 'right'},
+                    {title: 'Circulation', align: 'right'},
                     {title: 'Package', align: 'center'},
                     {title: 'Publisher Name', align: 'left', sortable:'publisher.name'},
                     {title: 'Production Cost', align: 'right', sortable:'production_cost'},
@@ -224,7 +292,56 @@ export default {
                     // {title: 'Prices', align: 'right'},
                     {title: 'Alert', align: 'right', sortable: 'alert_quantity'},
                 ],
+
+            form: this.$inertia.form({
+                from: '',
+                to: '',
+                quantity: '',
+                type: '',
+                product_id: '',
+                alert_quantity: ''
+            }),
+            modalEvent: '',
+            alertQuantity : false
         }
     },
+
+    methods : {
+        changeValue(productId, storageOutlets) {
+            // console.log('storageOutlets',storageOutlets);
+            let value = this.form.type;
+            let alertQuantity = storageOutlets.includes(parseInt(this.form.from));
+            console.log(storageOutlets, alertQuantity);
+
+            if (value == 1 && !alertQuantity) {
+                this.alertQuantity = true
+            }
+            // else {
+            //     this.form.to = '';
+
+            //     this.form.from = id;
+                // this.fromDisabled = true
+                // this.toDisabled = false
+
+            // }
+        },
+
+        modalHandler(event, id) {
+            this.modalEvent = event
+            event.target.nextElementSibling .classList.toggle('hidden');
+        },
+
+        closeModal(event) {
+            this.form.from = '';
+            this.form.to = '';
+            this.alertQuantity = false,
+
+            event.target.parentElement.parentElement.parentElement.classList.add('hidden');
+        },
+        submit() {
+            return this.form.post(this.route('circulations.store'));
+            this.closeModal(this.modalEvent)
+        },
+    }
 };
 </script>
