@@ -26218,7 +26218,8 @@ __webpack_require__.r(__webpack_exports__);
       }),
       fromDisabled: false,
       toDisabled: false,
-      modalEvent: ''
+      modalEvent: '',
+      message: ''
     };
   },
   methods: {
@@ -26246,15 +26247,24 @@ __webpack_require__.r(__webpack_exports__);
       event.target.nextElementSibling.classList.toggle('hidden');
     },
     closeModal: function closeModal(event) {
-      this.form.from = '';
-      this.form.to = '';
-      this.fromDisabled = false;
-      this.toDisabled = false;
+      this.emptyValue();
       event.target.parentElement.parentElement.parentElement.classList.add('hidden');
     },
     submit: function submit() {
-      return this.form.post(this.route('circulations.store'));
-      this.closeModal(this.modalEvent);
+      this.message = "Your circulation is complete";
+      this.form.post(this.route('circulations.store')); // bangla code 
+
+      setTimeout(function () {
+        document.getElementById('circulationWrapper').classList.add('hidden');
+      }, 2000);
+    },
+    emptyValue: function emptyValue() {
+      this.message = '';
+      this.form.from = '';
+      this.form.to = '';
+      this.form.quantity = '', this.form.type = '', this.form.product_id = '';
+      this.fromDisabled = false;
+      this.toDisabled = false;
     }
   }
 });
@@ -42397,7 +42407,8 @@ var _hoisted_9 = {
   "class": "py-3 px-2 text-center"
 };
 var _hoisted_10 = {
-  "class": "fixed inset-0 hidden z-50"
+  "class": "fixed inset-0 hidden z-50",
+  id: "circulationWrapper"
 };
 var _hoisted_11 = {
   "class": "relative w-full h-full flex justify-center items-center"
@@ -42442,31 +42453,34 @@ var _hoisted_20 = {
   "class": "p-3"
 };
 var _hoisted_21 = {
+  "class": "text-green-300"
+};
+var _hoisted_22 = {
   "class": "mb-4"
 };
 
-var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
   value: ""
 }, "-- Select From--", -1
 /* HOISTED */
 );
 
-var _hoisted_23 = ["value"];
-var _hoisted_24 = {
+var _hoisted_24 = ["value"];
+var _hoisted_25 = {
   "class": "mb-4"
 };
 
-var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
   value: ""
 }, "-- Select To --", -1
 /* HOISTED */
 );
 
-var _hoisted_26 = ["value"];
+var _hoisted_27 = ["value"];
 
-var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Submit ");
+var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Submit ");
 
-var _hoisted_28 = {
+var _hoisted_29 = {
   "class": "absolute inset-0 bg-gray-500 bg-opacity-50 z-40"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -42555,12 +42569,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             required: ""
           }, null, 40
           /* PROPS, HYDRATE_EVENTS */
-          , _hoisted_18)])]), _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+          , _hoisted_18)])]), _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.message), 1
+          /* TEXT */
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
             onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
               return $options.submit && $options.submit.apply($options, arguments);
             }, ["prevent"])),
             "class": ""
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input id=\"from\" type=\"number\" class=\"mt-1 block w-full\" placeholder=\"From\" v-model=\"form.from\"/> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
+          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input id=\"from\" type=\"number\" class=\"mt-1 block w-full\" placeholder=\"From\" v-model=\"form.from\"/> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
             id: "outlet_id",
             "class": "mt-1 block w-full",
             modelValue: $data.form.from,
@@ -42571,13 +42587,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             required: ""
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-              return [_hoisted_22, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.outlets, function (outletsName, outletsId) {
+              return [_hoisted_23, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.outlets, function (outletsName, outletsId) {
                 return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
                   value: outletsId,
                   key: outletsId
                 }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(outletsName), 9
                 /* TEXT, PROPS */
-                , _hoisted_23);
+                , _hoisted_24);
               }), 128
               /* KEYED_FRAGMENT */
               ))];
@@ -42587,7 +42603,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
           }, 8
           /* PROPS */
-          , ["modelValue", "disabled"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
+          , ["modelValue", "disabled"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
             id: "outlet_id",
             "class": "mt-1 block w-full",
             modelValue: $data.form.to,
@@ -42598,13 +42614,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             required: ""
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-              return [_hoisted_25, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.outlets, function (outletsName, outletsId) {
+              return [_hoisted_26, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.outlets, function (outletsName, outletsId) {
                 return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
                   value: outletsId,
                   key: outletsId
                 }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(outletsName), 9
                 /* TEXT, PROPS */
-                , _hoisted_26);
+                , _hoisted_27);
               }), 128
               /* KEYED_FRAGMENT */
               ))];
@@ -42631,7 +42647,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "class": "bg-gray-600 text-white px-2 py-1 rounded mt-2"
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-              return [_hoisted_27];
+              return [_hoisted_28];
             }),
             _: 1
             /* STABLE */
@@ -42643,7 +42659,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[5] || (_cache[5] = function () {
               return $options.closeModal && $options.closeModal.apply($options, arguments);
             })
-          }, "×")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+          }, "×")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
             "class": "w-full h-full",
             onClick: _cache[6] || (_cache[6] = function () {
               return $options.closeModal && $options.closeModal.apply($options, arguments);

@@ -26,7 +26,7 @@
                     <div class="flex justify-center items-center text-gray-700 cursor-pointer" @click="modalHandler">
                         Circulation
                     </div>
-                    <div class="fixed inset-0 hidden z-50">
+                    <div class="fixed inset-0 hidden z-50" id="circulationWrapper">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
                                 <div class="text-lg font-bold text-center">Circulation</div>
@@ -42,6 +42,7 @@
                                 </div>
                                 <hr class="my-1">
                                 <div class="p-3">
+                                    <div class="text-green-300">{{ message }}</div>
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
@@ -126,7 +127,8 @@ export default {
             }),
             fromDisabled: false,
             toDisabled: false,
-            modalEvent: ''
+            modalEvent: '',
+            message : ''
         }
     },
     methods : {
@@ -160,17 +162,28 @@ export default {
         },
 
         closeModal(event) {
-            this.form.from = '';
-            this.form.to = '';
-            this.fromDisabled = false;
-            this.toDisabled = false;
-
+            this.emptyValue();
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
         submit() {
-            return this.form.post(this.route('circulations.store'));
-            this.closeModal(this.modalEvent)
+            this.message = "Your circulation is complete"
+            this.form.post(this.route('circulations.store'));
+            // bangla code 
+            setTimeout(()=> {
+                document.getElementById('circulationWrapper').classList.add('hidden');
+            }, 2000)
         },
+
+        emptyValue() {
+            this.message = '';
+            this.form.from = '';
+            this.form.to = '';
+            this.form.quantity= '',
+            this.form.type= '',
+            this.form.product_id= ''
+            this.fromDisabled = false;
+            this.toDisabled = false;
+        }
     }
 };
 </script>
