@@ -86,6 +86,53 @@
                         </div>
                     </div>
                 </td>
+                <td class="py-3 px-2 text-right">
+                    <div v-if="product.moderators.length" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
+                        View {{ product.moderators.length }} Moderators
+                    </div>
+                    <div v-if="product.moderators.length" class="fixed inset-0 hidden z-50">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Pannel</div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                    <div class="py-1.5 flex gap-2" v-for="(moderator, index) in product.moderators" :key="index">
+                                        {{ moderator.moderators_type.name }} :   {{ moderator.author.name }}
+                                    </div>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="py-3 px-2 text-right">
+                    <div v-if="product.storages.length" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
+                        Total Quantity :  {{ product.total_storage }}
+                        <br>
+                       Stored in :  {{ product.storages.length }} outlets
+                    </div>
+                    <div v-if="product.storages.length" class="fixed inset-0 hidden z-50">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Storage</div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                    <div class="py-1.5 flex gap-2" v-for="(storage, index) in product.storages" :key="index">
+                                        <!-- {{ moderator.moderators_type.name }} :   {{ moderator.author.name }} -->
+                                        {{ storage.outlet.name }} : {{ storage.quantity || 0 }}
+                                    </div>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
                 <td class="py-3 px-2 text-center">
                     <div v-if="product.packageProductCount" @click="modalHandler" class="text-center border bg-yellow-600 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ product.packageProductCount }} products
@@ -161,6 +208,8 @@ export default {
                     {title: 'Soft', align: 'left', sortable: 'soft'},
                     {title: 'Categrories', align: 'center'},
                     {title: 'Prices', align: 'right'},
+                    {title: 'Moderators', align: 'right'},
+                    {title: 'Storages', align: 'right'},
                     {title: 'Package', align: 'center'},
                     {title: 'Publisher Name', align: 'left', sortable:'publisher.name'},
                     {title: 'Production Cost', align: 'right', sortable:'production_cost'},

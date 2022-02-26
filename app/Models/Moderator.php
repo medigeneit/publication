@@ -13,6 +13,10 @@ class Moderator extends Model
 {
     use HasFactory, SoftDeletes, ScopeSort, ScopeSearch, ScopeDateFilter;
 
+    protected $guarded = [];
+
+    static $name = false;
+
     public function scopeFilter($query)
     {
         return $query
@@ -21,4 +25,30 @@ class Moderator extends Model
             });
 
     }
+
+    // static $appends ['product_name'];
+    // protected $appends = ['mentor_type_name','author_name'];
+
+
+
+
+    public function getMentorTypeNameAttribute()
+    {
+        return $this->moderators_type->name ?? '';
+    }
+    public function getAuthorNameAttribute()
+    {
+        return $this->author->name ?? '';
+    }
+
+    public function moderators_type()
+    {
+        return $this->belongsTo(ModeratorType::class, 'moderator_type');
+    }
+    public function author()
+    {
+        return $this->belongsTo(Author::class, );
+    }
+
 }
+

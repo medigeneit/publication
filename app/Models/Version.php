@@ -47,6 +47,16 @@ class Version extends Model
         return $this->hasMany(Volume::class);
     }
 
+    public function moderators()
+    {
+        return $this->hasMany(Moderator::class);
+    }
+
+    // public function moderators_types()
+    // {
+    //     return $this->hasMany(Moderator::class);
+    // }
+
     public function user()
     {
         return $this->belongsTo(User::class);

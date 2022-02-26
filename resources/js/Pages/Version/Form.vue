@@ -189,14 +189,13 @@
                             </Select> -->
                             <Select
                                 class="mt-1 block w-full"
-                                v-model="form.moderators[index].authorId"
-                                required
+                                v-model="form.moderators[index].author_id"
                             >
                                 <option value="">-- Select Author --</option>
                                 <option
-                                    :value="id" v-for="(author, id) in data.authors" :key="id"
+                                    :value="index" v-for="(author, index) in data.authors" :key="index"
                                 >
-                                    {{ author }}
+                                  {{ author }}
                                 </option>
                             </Select>
                         </div>
@@ -205,12 +204,12 @@
                             <Label value="Moderator Type" />
                             <Select
                                 class="mt-1 block w-full"
-                                v-model="form.moderators[index].moderatorType"
-                                required
+                                v-model="form.moderators[index].moderator_type"
+
                             >
                                 <option value="">-- Select Moderator --</option>
                                 <option
-                                    :value="id" v-for="(moderator, type) in data.moderatorTypes" :key="type"
+                                    :value="type" v-for="(moderator, type) in data.moderatorTypes" :key="type"
                                 >
                                     {{ moderator }}
                                 </option>
@@ -226,8 +225,7 @@
                             /> -->
                             <Select
                                 class="mt-1 block w-full"
-                                v-model="form.moderators[index].honorariumType"
-                                required
+                                v-model="form.moderators[index].honorarium_type"
                             >
                                 <option value="">-- Select Moderator --</option>
                                 <option
@@ -317,7 +315,7 @@ export default {
         },
     },
 
-    data() {      
+    data() {
         return {
             form: this.$inertia.form({
                 production_id: this.data.version.production_id || "",
@@ -336,9 +334,9 @@ export default {
                 ],
                 moderators: [
                     {
-                        authorId: "",
-                        moderatorType: "",
-                        honorariumType: "",
+                        author_id: "",
+                        moderator_type: "",
+                        honorarium_type: "",
                         honorarium: "",
                     },
                 ],
@@ -347,8 +345,14 @@ export default {
     },
     created() {
         for(let index in this.data.volumes) {
+            console.log('volumes', index);
             this.form.volumes[index] = this.data.volumes[index] ? this.data.volumes[index] : '';
-        } 
+        }
+
+        for(let index in this.data.selectedModerators) {
+            console.log(this.data.selectedModerators[index]);
+            this.form.moderators[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
+        }
     },
     methods: {
         addVolume() {

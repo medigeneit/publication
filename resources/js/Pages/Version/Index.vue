@@ -46,6 +46,28 @@
                         </div>
                     </div>
                 </td>
+                <td class="py-3 px-2 text-center">
+                    <div v-if="version.moderators.length" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
+                        View {{ version.moderators.length }} Moderators
+                    </div>
+                    <div v-if="version.moderators.length" class="fixed inset-0 hidden z-50">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Moderators</div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                    <div class="py-1.5 flex gap-2 mr-10" v-for="(moderator, index) in version.moderators" :key="index">
+                                        {{ moderator.moderators_type.name }} :   {{ moderator.author.name }}
+                                    </div>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
                 <td class="py-3 px-2 text-left">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': version.active, 'bg-red-500': !version.active }">
                         {{ version.activeValue }}
@@ -96,6 +118,7 @@ export default {
                     {title: 'Type', align: 'left', sortable: 'type'},
                     {title: 'Date', align: 'left', sortable: 'release_date'},
                     {title: 'Show Volumes', align: 'left'},
+                    {title: 'Show Moderators', align: 'left'},
                     {title: 'Active', align: 'left', sortable: 'active'},
                 ],
         }

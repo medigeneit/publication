@@ -15,7 +15,7 @@ class VersionResource extends JsonResource
     public function toArray($request)
     {
         $release_date = date("d-M-Y", strtotime($this->release_date));
-        
+
         return [
             'id'                    => (int) $this->id,
             'name'                  => (string) ($this->production->name ?? ''),
@@ -30,6 +30,7 @@ class VersionResource extends JsonResource
             'createdBy'             => (string) ($this->user->name),
             'active'                => (int) ($this->active),
             'activeValue'           => (string) ($this->value_of_active),
+            'moderators'           => (object) ($this->moderators),
         ];
     }
 }
