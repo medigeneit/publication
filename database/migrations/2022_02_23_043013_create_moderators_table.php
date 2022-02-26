@@ -17,8 +17,8 @@ class CreateModeratorsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('version_id');
             $table->unsignedBigInteger('author_id');
-            $table->tinyInteger('type')->comment('1=Author, 2=Editor');
-            $table->tinyInteger('honorarium_type')->comment('1=Yearly, 2=Per sale');
+            $table->bigInteger('moderator_type');
+            $table->tinyInteger('honorarium_type')->comment('1=One Time, 2=Percentage');
             $table->float('honorarium')->nullable();
             $table->timestamps();
             $table->softDeletes();

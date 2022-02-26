@@ -35,6 +35,10 @@ class Storage extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    // public function getQuantityAttribute()
+    // {
+    //     return $this->quantity == NULL ? 0 : $this->quantity;
+    // }
 
     public function user()
     {

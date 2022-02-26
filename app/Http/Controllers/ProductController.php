@@ -19,6 +19,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use function PHPUnit\Framework\returnSelf;
+
 class ProductController extends Controller
 {
     use DateFilter;
@@ -32,13 +34,25 @@ class ProductController extends Controller
         ProductResource::$price_categories = $price_categories;
         $products = Product::query()
             // ->with('categories', 'publisher', 'prices', 'price_categories')
-            ->with(['categories',  'prices', 'productable' => function(MorphTo $morphTo){
+            ->with(['categories',  'prices','storages.outlet' ,'productable' => function(MorphTo $morphTo){
                 $morphTo->constrain([
                     Volume::class => function ( $query) {
-                        $query->with('version.production.publisher:id,name','version.volumes:id,version_id');
+                        $query->with([
+                            'version.production.publisher:id,name',
+                            'version.volumes:id,version_id',
+                            'version.moderators:id,author_id,moderator_type,version_id',
+                            'version.moderators.moderators_type:id,name',
+                            'version.moderators.author:id,name'
+                        ]);
                     },
                     Version::class => function ( $query) {
-                        $query->with('volumes','production.publisher:id,name');
+                        $query->with([
+                            'moderators:id,author_id,moderator_type,version_id',
+                            'moderators.moderators_type:id,name',
+                            'moderators.author:id,name',
+                            'volumes',
+                            'production.publisher:id,name'
+                        ]);
                     },
                 ]);
             }])
@@ -47,7 +61,14 @@ class ProductController extends Controller
             ->dateFilter()
             ->search(['id', 'name'], ['publisher:name'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+
+
+
+            // $products =  ProductResource::collection($products->get());
             // $products =  $products->get();
+            // $products =  $products->where('id',10)->first()->storages->pluck('quantity')->sum();
+            // $instance =  $products[10];
+            // $moderators = $instance->productable_type == Volume::class ? ($instance->productable->version->moderators) :  ($instance->productable_type == Version::class ? $instance->productable->moderators : []);
             // return $products;
 
         return Inertia::render('Product/Index', [

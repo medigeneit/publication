@@ -73,8 +73,13 @@ class StorageController extends Controller
 
     public function store(Request $request)
     {
-        $storage = Storage::create($this->validateData($request) + [
+        $data =$this->validateData($request);
+        $storage = Storage::updateOrCreate( [
             'user_id' => Auth::id(),
+            'product_id' => $data['product_id'],
+        ],
+        [
+            'product_id' => $data['product_id'],
         ]);
 
         return redirect()

@@ -96,7 +96,7 @@ class Product extends Model
     {
         return $this->hasMany(Pricing::class, 'product_id', 'id');
     }
-
+   
     public function productable()
     {
         return $this->morphTo();
