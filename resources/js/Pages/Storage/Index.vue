@@ -37,7 +37,7 @@
                     <div class="fixed inset-0 hidden z-50">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
-                                <div class="text-lg font-bold text-center">Circulaion</div>
+                                <div class="text-lg font-bold text-center">Circulation</div>
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>

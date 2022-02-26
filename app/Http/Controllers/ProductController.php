@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\Publisher;
 use App\Models\PackageProduct;
@@ -73,6 +74,7 @@ class ProductController extends Controller
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'outlets' => Outlet::pluck('name', 'id'),
             'filters' => $this->getFilterProperty(),
         ]);
     }
