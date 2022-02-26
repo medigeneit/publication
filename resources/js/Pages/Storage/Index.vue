@@ -23,18 +23,10 @@
                     </div>
                 </td>
                 <td class="py-3 px-2 text-center">
-                    <div class="flex justify-center items-center text-gray-700 cursor-pointer" @click="modalHide = !modalHide">
+                    <div class="flex justify-center items-center text-gray-700 cursor-pointer" @click="modalHandler">
                         Circulation
-                        <!-- <div class="">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 font-weight-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 font-weight-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                            </svg>
-                        </div> -->
                     </div>
-                    <div class="fixed inset-0 z-50" :class="{'hidden': modalHide}">
+                    <div class="fixed inset-0 hidden z-50">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
                                 <div class="text-lg font-bold text-center">Circulation</div>
@@ -134,12 +126,12 @@ export default {
             }),
             fromDisabled: false,
             toDisabled: false,
-            modalEvent: '',
-            modalHide : true
+            modalEvent: ''
         }
     },
     methods : {
         changeValue(event, id, productId) {
+            console.log(productId);
             let value = event.target.value;
             this.form.type = value;
             this.form.product_id = productId
@@ -162,25 +154,23 @@ export default {
             }
         },
 
-        // modalHandler(event, id) {
-        //     // event.target.nextElementSibling .classList.toggle('hidden');
-            
-        // },
+        modalHandler(event, id) {
+            this.modalEvent = event
+            event.target.nextElementSibling .classList.toggle('hidden');
+        },
 
         closeModal(event) {
             this.form.from = '';
             this.form.to = '';
-            this.form.quantity= '',
-            this.form.type= '',
-            this.form.product_id= '';
             this.fromDisabled = false;
             this.toDisabled = false;
-            this.modalHide = true;
+
+            event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
         submit() {
-            this.form.post(this.route('circulations.store'));
-            this.closeModal();
-        }, 
+            return this.form.post(this.route('circulations.store'));
+            this.closeModal(this.modalEvent)
+        },
     }
 };
 </script>

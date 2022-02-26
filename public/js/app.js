@@ -26218,12 +26218,12 @@ __webpack_require__.r(__webpack_exports__);
       }),
       fromDisabled: false,
       toDisabled: false,
-      modalEvent: '',
-      modalHide: true
+      modalEvent: ''
     };
   },
   methods: {
     changeValue: function changeValue(event, id, productId) {
+      console.log(productId);
       var value = event.target.value;
       this.form.type = value;
       this.form.product_id = productId;
@@ -26241,20 +26241,20 @@ __webpack_require__.r(__webpack_exports__);
         this.toDisabled = false;
       }
     },
-    // modalHandler(event, id) {
-    //     // event.target.nextElementSibling .classList.toggle('hidden');
-    // },
+    modalHandler: function modalHandler(event, id) {
+      this.modalEvent = event;
+      event.target.nextElementSibling.classList.toggle('hidden');
+    },
     closeModal: function closeModal(event) {
       this.form.from = '';
       this.form.to = '';
-      this.form.quantity = '', this.form.type = '', this.form.product_id = '';
       this.fromDisabled = false;
       this.toDisabled = false;
-      this.modalHide = true;
+      event.target.parentElement.parentElement.parentElement.classList.add('hidden');
     },
     submit: function submit() {
-      this.form.post(this.route('circulations.store'));
-      this.closeModal();
+      return this.form.post(this.route('circulations.store'));
+      this.closeModal(this.modalEvent);
     }
   }
 });
@@ -42396,9 +42396,9 @@ var _hoisted_8 = {
 var _hoisted_9 = {
   "class": "py-3 px-2 text-center"
 };
-
-var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Circulation ");
-
+var _hoisted_10 = {
+  "class": "fixed inset-0 hidden z-50"
+};
 var _hoisted_11 = {
   "class": "relative w-full h-full flex justify-center items-center"
 };
@@ -42529,14 +42529,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           /* PROPS */
           , ["href"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <action-button-cerculation @click=\"modalHandler\" /> ")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
             "class": "flex justify-center items-center text-gray-700 cursor-pointer",
-            onClick: _cache[0] || (_cache[0] = function ($event) {
-              return $data.modalHide = !$data.modalHide;
+            onClick: _cache[0] || (_cache[0] = function () {
+              return $options.modalHandler && $options.modalHandler.apply($options, arguments);
             })
-          }, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"\">\r\n                            <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-4 w-4 font-weight-bold\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\r\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M7 11l5-5m0 0l5 5m-5-5v12\" />\r\n                            </svg>\r\n                            <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-4 w-4 font-weight-bold\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\r\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 13l-5 5m0 0l-5-5m5 5V6\" />\r\n                            </svg>\r\n                        </div> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-            "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["fixed inset-0 z-50", {
-              'hidden': $data.modalHide
-            }])
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+          }, " Circulation "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
             type: "radio",
             name: "inOut",
             id: "",
@@ -42652,9 +42648,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[6] || (_cache[6] = function () {
               return $options.closeModal && $options.closeModal.apply($options, arguments);
             })
-          })])])], 2
-          /* CLASS */
-          )])];
+          })])])])])];
         }),
         _: 1
         /* STABLE */
