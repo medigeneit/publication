@@ -23,7 +23,7 @@
                     </div>
                 </td>
                 <td class="py-3 px-2 text-center">
-                    <div class="flex justify-center items-center text-gray-700 cursor-pointer" @click="modalHandler">
+                    <div class="flex justify-center items-center text-gray-700 cursor-pointer" @click="modalHide = !modalHide">
                         Circulation
                         <!-- <div class="">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 font-weight-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +34,7 @@
                             </svg>
                         </div> -->
                     </div>
-                    <div class="fixed inset-0 hidden z-50">
+                    <div class="fixed inset-0 z-50" :class="{'hidden': modalHide}">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
                                 <div class="text-lg font-bold text-center">Circulation</div>
@@ -134,7 +134,8 @@ export default {
             }),
             fromDisabled: false,
             toDisabled: false,
-            modalEvent: ''
+            modalEvent: '',
+            modalHide : true
         }
     },
     methods : {
@@ -161,22 +162,24 @@ export default {
             }
         },
 
-        modalHandler(event, id) {
-            this.modalEvent = event
-            event.target.nextElementSibling .classList.toggle('hidden');
-        },
+        // modalHandler(event, id) {
+        //     // event.target.nextElementSibling .classList.toggle('hidden');
+            
+        // },
 
         closeModal(event) {
             this.form.from = '';
             this.form.to = '';
+            this.form.quantity= '',
+            this.form.type= '',
+            this.form.product_id= '';
             this.fromDisabled = false;
             this.toDisabled = false;
-
-            event.target.parentElement.parentElement.parentElement.classList.add('hidden');
+            this.modalHide = true;
         },
         submit() {
-            return this.form.post(this.route('circulations.store'));
-            this.closeModal(this.modalEvent)
+            this.form.post(this.route('circulations.store'));
+            this.closeModal();
         },
     }
 };

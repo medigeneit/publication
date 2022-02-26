@@ -17,7 +17,9 @@
 
     <nav-link-wrapper
         title="Production Management"
-        :active="route().current('(publishers|productions|versions|moderator-types|authors|moderators).*')"
+        :active="route().current(
+            '(publishers|productions|versions|moderator-types|authors|moderators|categories|price-categories|products|packages).*'
+            )"
     >
         <nav-link
             :href="route('publishers.index')"
@@ -55,41 +57,42 @@
         >
             Moderators
         </nav-link>
+        <nav-link-wrapper
+            title="Publication"
+            :active="
+                route().current(
+                    '(categories|price-categories|products|packages).*'
+                )
+            "
+        >
+            <nav-link
+                :href="route('categories.index')"
+                :active="route().current('categories.*')"
+            >
+                Categories
+            </nav-link>
+            <nav-link
+                :href="route('price-categories.index')"
+                :active="route().current('price-categories.*')"
+            >
+                Price Category
+            </nav-link>
+            <nav-link
+                :href="route('products.index')"
+                :active="route().current('products.*')"
+            >
+                Products
+            </nav-link>
+            <nav-link
+                :href="route('packages.index')"
+                :active="route().current('packages.*')"
+            >
+                Packages
+            </nav-link>
+        </nav-link-wrapper>
     </nav-link-wrapper>
 
-    <nav-link-wrapper
-        title="Publication"
-        :active="
-            route().current(
-                '(categories|price-categories|products|packages).*'
-            )
-        "
-    >
-        <nav-link
-            :href="route('categories.index')"
-            :active="route().current('categories.*')"
-        >
-            Categories
-        </nav-link>
-        <nav-link
-            :href="route('price-categories.index')"
-            :active="route().current('price-categories.*')"
-        >
-            Price Category
-        </nav-link>
-        <nav-link
-            :href="route('products.index')"
-            :active="route().current('products.*')"
-        >
-            Products
-        </nav-link>
-        <nav-link
-            :href="route('packages.index')"
-            :active="route().current('packages.*')"
-        >
-            Packages
-        </nav-link>
-    </nav-link-wrapper>
+    
 
     <nav-link-wrapper
         title="Stock & Circulation"
