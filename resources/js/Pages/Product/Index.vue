@@ -161,6 +161,7 @@
                                 </div>
                                 <hr class="my-1">
                                 <div class="p-3">
+                                    <div class="text-green-600">{{ message }}</div>
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
@@ -327,21 +328,32 @@ export default {
         },
 
         modalHandler(event, id) {
-            this.modalEvent = event
+            this.emptyValue();
             event.target.nextElementSibling .classList.toggle('hidden');
         },
 
         closeModal(event) {
-            this.form.from = '';
-            this.form.to = '';
-            this.alertQuantity = false,
-
+            this.emptyValue();
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
         submit() {
-            return this.form.post(this.route('circulations.store'));
-            this.closeModal(this.modalEvent)
+            this.message = "Your circulation is complete"
+            this.form.post(this.route('circulations.store'));
+            // bangla code 
+            setTimeout(()=> {
+                document.getElementById('circulationWrapper').classList.add('hidden');
+            }, 2000)
         },
+        emptyValue() {
+            this.message = '';
+            this.form.from = '';
+            this.form.to = '';
+            this.form.quantity= '',
+            this.form.type= '',
+            this.form.product_id= ''
+            this.fromDisabled = false;
+            this.toDisabled = false;
+        }
     }
 };
 </script>

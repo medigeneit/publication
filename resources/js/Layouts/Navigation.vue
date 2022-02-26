@@ -83,12 +83,12 @@
             >
                 Products
             </nav-link>
-            <nav-link
+            <!-- <nav-link
                 :href="route('packages.index')"
                 :active="route().current('packages.*')"
             >
                 Packages
-            </nav-link>
+            </nav-link> -->
         </nav-link-wrapper>
     </nav-link-wrapper>
 

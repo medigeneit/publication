@@ -42,7 +42,7 @@
                                 </div>
                                 <hr class="my-1">
                                 <div class="p-3">
-                                    <div class="text-green-300">{{ message }}</div>
+                                    <div class="text-green-600">{{ message }}</div>
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
@@ -157,7 +157,7 @@ export default {
         },
 
         modalHandler(event, id) {
-            this.modalEvent = event
+            this.emptyValue()
             event.target.nextElementSibling .classList.toggle('hidden');
         },
 
