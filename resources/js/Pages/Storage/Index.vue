@@ -180,7 +180,7 @@ export default {
         submit() {
             this.form.post(this.route('circulations.store'));
             this.closeModal();
-        },
+        }, 
     }
 };
 </script>
