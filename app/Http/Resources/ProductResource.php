@@ -35,7 +35,7 @@ class ProductResource extends JsonResource
             'name'                  => (string) ($this->product_name ?? ''),
             'type'                  => (int) ($type ?? 0),
             'typeName'              => (string) (Product::types[$type] ?? ''),
-            'soft'                  => (int) ($this->type ?? ''),
+            'soft'                  => (int) ($this->soft ?? ''),
             'publisherId'           => (int) ($this->publisher_id ?? 0),
             'publisherName'         => (string) ($publisher_name ?? ''),
             'productionCost'        => (string) ($cost ?? 0),

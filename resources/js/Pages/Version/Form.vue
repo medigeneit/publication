@@ -55,7 +55,7 @@
                         </div>
 
                         <div>
-                            <Label value="Cost" />
+                            <Label value="Cost per unit" />
                             <Input
                                 type="number"
                                 class="mt-1 block w-full"

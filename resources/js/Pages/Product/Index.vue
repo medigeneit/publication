@@ -162,6 +162,7 @@
                                 <hr class="my-1">
                                 <div class="p-3">
                                     <div class="text-green-600">{{ message }}</div>
+                                    <div class="text-xl">Total product <b>100</b> pices</div>
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">

@@ -30,27 +30,9 @@
                     </div>
                 </div> -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4">
-                    <!-- <div class="mb-4 col-span-2">
-                        <Label for="type" value="Type" />
-                        <Select name="type" class="mt-1 block w-full" @change="typeChange(parseInt(form.type))" v-model="form.type" required>
-                            <option value=""> -- Select Type -- </option>
-                            <option :value="type" v-for="(typeName, type) in data.productType" :key="type">{{ typeName }}</option>
-                        </Select>
-                    </div> -->
-
-                    <!-- <div class="mb-4 col-span-2">
-                        <Label for="type" value="Type" />
-                        <Select >
-                            <option value="">Select Button</option>
-                            <option value="1">Volumes</option>
-                            <option value="2">Version</option>
-                            <option value="3">Package</option>
-                        </Select>
-                    </div> -->
                     <div class="mb-4 col-span-2">
                         <Label for="soft" value="Soft Copy" />
                         <Select  class="mt-1 block w-full" v-model="form.soft" >
-                            <option value="">Select Soft</option>
                             <option value="1">Yes</option>
                             <option value="0">No</option>
                         </Select>
@@ -124,7 +106,23 @@
                         <Input id="mrp" name="mrp" type="number" step="0.01" class="mt-1 block w-full" v-model="form.mrp" required />
                     </div> -->
                     
-                    <div v-for="(priceCategory, index) in data.priceCategories" :key="priceCategory.id">
+                    
+
+                </div>
+                <div
+                        class="
+                            w-full
+                            grid grid-cols-2
+                            md:grid-cols-3
+                            bg-white
+                            border
+                            rounded
+                            gap-4
+                            p-4
+                        "
+                       v-for="(priceCategory, index) in data.priceCategories" :key="priceCategory.id"
+                    >
+                    <div class="flex" >
                         <div class="grid">
                             <div class="block">
                                 <Label for="wholesale" v-text="priceCategory.name" />
@@ -132,7 +130,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <hr class="w-full my-4">
@@ -260,7 +257,7 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                soft: this.data.product.soft || '',
+                soft: this.data.product.soft || 0,
                 priceCategory: this.data.product.priceCategory,
                 amounts: {},
                 active: this.moduleAction == 'store' ? 1 : this.data.product.active,
