@@ -22,7 +22,7 @@ class CirculationController extends Controller
     public function index()
     {
         $circulations = Circulation::query()
-            ->with(['storage', 'destinationable', 'storage.product.productable' => function (MorphTo $morphTo) {
+            ->with(['storage.outlet', 'destinationable', 'storage.product.productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Volume::class => function ($query) {
                         $query->with('version.production');
@@ -56,12 +56,14 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
+        $redirect_location = 'storages.index';
+        if ($request->has('alert_quantity')) {
+            $redirect_location = 'products.index';
+        }
 
         if (!in_array($request->type, array_keys(Circulation::TYPE))) {
-            // return  array_keys(Circulation::TYPE);
-            // return $request;
             return redirect()
-                ->route('storages.index')
+                ->route($redirect_location)
                 ->with('status', 'Unsuccessfull attempt, because of wrong type.');
         }
 
@@ -113,7 +115,7 @@ class CirculationController extends Controller
         }
 
         return redirect()
-            ->route('storages.index')
+            ->route($redirect_location)
             ->with('status', 'The record has been added successfully.');
     }
 

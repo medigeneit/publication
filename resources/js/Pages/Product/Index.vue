@@ -347,7 +347,7 @@ export default {
             // bangla code
             setTimeout(()=> {
                 document.getElementById('circulationWrapper').classList.add('hidden');
-            }, 2000)
+            }, 1000)
             this.emptyValue()
         },
         emptyValue() {
