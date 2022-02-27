@@ -24887,13 +24887,15 @@ __webpack_require__.r(__webpack_exports__);
       }),
       modalEvent: '',
       alertQuantity: false,
-      message: ''
+      message: '',
+      formToLabel: '-- Select To --'
     };
   },
   methods: {
     changeValue: function changeValue(productId, storageOutlets) {
       var value = this.form.type;
       this.form.product_id = productId;
+      this.formToLabel = value == 1 ? "--Stored In--" : "--Sending to--";
       var alertQuantity = this.form.to ? storageOutlets.includes(parseInt(this.form.to)) : false;
       console.log(storageOutlets, alertQuantity);
 
@@ -39171,7 +39173,7 @@ var _hoisted_58 = {
 
 var _hoisted_59 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
   value: ""
-}, "-- Select From--", -1
+}, "--From where--", -1
 /* HOISTED */
 );
 
@@ -39179,13 +39181,9 @@ var _hoisted_60 = ["value"];
 var _hoisted_61 = {
   "class": "mb-4"
 };
-
-var _hoisted_62 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+var _hoisted_62 = {
   value: ""
-}, "-- Select To --", -1
-/* HOISTED */
-);
-
+};
 var _hoisted_63 = ["value"];
 var _hoisted_64 = {
   "class": "mb-4"
@@ -39248,8 +39246,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_action_button_edit = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("action-button-edit");
 
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
-
-  var _component_Label = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Label");
 
   var _component_Select = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Select");
 
@@ -39444,7 +39440,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             id: "",
             "class": "mr-2",
             onClick: function onClick($event) {
-              ;
               $data.form.type = 1;
               $options.changeValue(product.id, product.storage_outlets);
             },
@@ -39473,10 +39468,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               return $options.submit && $options.submit.apply($options, arguments);
             }, ["prevent"])),
             "class": ""
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input id=\"from\" type=\"number\" class=\"mt-1 block w-full\" placeholder=\"From\" v-model=\"form.from\"/> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_58, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
-            "for": "wholesale",
-            value: "Send To"
-          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
+          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input id=\"from\" type=\"number\" class=\"mt-1 block w-full\" placeholder=\"From\" v-model=\"form.from\"/> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_58, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
             id: "outlet_id",
             "class": "mt-1 block w-full",
             modelValue: $data.form.from,
@@ -39489,19 +39481,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               return [_hoisted_59, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.outlets, function (outletsName, outletsId) {
                 return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
                   value: outletsId,
-                  key: outletsId
-                }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(outletsName), 9
-                /* TEXT, PROPS */
+                  key: outletsId,
+                  "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
+                    'hidden': !product.storage_outlets.includes(parseInt(outletsId))
+                  })
+                }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(outletsName), 11
+                /* TEXT, CLASS, PROPS */
                 , _hoisted_60);
               }), 128
               /* KEYED_FRAGMENT */
               ))];
             }),
-            _: 1
-            /* STABLE */
+            _: 2
+            /* DYNAMIC */
 
-          }, 8
-          /* PROPS */
+          }, 1032
+          /* PROPS, DYNAMIC_SLOTS */
           , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_61, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
             id: "outlet_id",
             "class": "mt-1 block w-full",
@@ -39515,7 +39510,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-              return [_hoisted_62, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.outlets, function (outletsName, outletsId) {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", _hoisted_62, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.formToLabel), 1
+              /* TEXT */
+              ), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.outlets, function (outletsName, outletsId) {
                 return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
                   value: outletsId,
                   key: outletsId
@@ -39548,7 +39545,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             id: "type",
             type: "number",
             "class": "mt-1 block w-full",
-            placeholder: "Alert Quantityi",
+            placeholder: "Alert Quantity",
             modelValue: $data.form.alert_quantity,
             "onUpdate:modelValue": _cache[16] || (_cache[16] = function ($event) {
               return $data.form.alert_quantity = $event;

@@ -152,7 +152,7 @@
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" id="" class="mr-2" @click=";form.type = 1;changeValue(product.id, product.storage_outlets)" value="1" required>
+                                        <input type="radio" name="inOut" id="" class="mr-2" @click="form.type = 1;changeValue(product.id, product.storage_outlets)" value="1" required>
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
@@ -166,15 +166,16 @@
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
-                                            <Label for="wholesale" value="Send To" />
                                             <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" required>
-                                                <option value="">-- Select From--</option>
-                                                <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
+                                                <option value="">--From where--</option>
+                                                <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId" :class="{'hidden' : !(product.storage_outlets.includes(parseInt(outletsId)))}">
+                                                    {{ outletsName }}
+                                                </option>
                                             </Select>
                                         </div>
                                         <div class="mb-4">
                                             <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" required @change="changeValue(product.id, product.storage_outlets)">
-                                                <option value="">-- Select To --</option>
+                                                <option value="">{{ formToLabel }}</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
@@ -183,7 +184,7 @@
                                             <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
                                         </div>
                                         <div class="mb-4">
-                                            <Input id="type" type="number" class="mt-1 block w-full" placeholder="Alert Quantityi" v-model="form.alert_quantity" v-if="alertQuantity"/>
+                                            <Input id="type" type="number" class="mt-1 block w-full" placeholder="Alert Quantity" v-model="form.alert_quantity" v-if="alertQuantity"/>
                                         </div>
 
                                         <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
@@ -311,7 +312,8 @@ export default {
             }),
             modalEvent: '',
             alertQuantity : false,
-            message : ''
+            message : '',
+            formToLabel : '-- Select To --'
         }
     },
 
@@ -319,6 +321,7 @@ export default {
         changeValue(productId, storageOutlets) {
             let value = this.form.type;
             this.form.product_id = productId;
+            this.formToLabel = value == 1 ? "--Stored In--" : "--Sending to--"
             let alertQuantity = this.form.to ? storageOutlets.includes(parseInt(this.form.to)) : false;
             console.log(storageOutlets, alertQuantity);
 
