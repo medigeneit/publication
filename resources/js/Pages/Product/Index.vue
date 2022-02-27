@@ -330,7 +330,7 @@ export default {
             console.log(this.alertQuantity);
         },
         modalHandler(event) {
-            // this.emptyValue();
+            this.emptyValue();
             event.target.nextElementSibling .classList.toggle('hidden');
         },
 
@@ -342,7 +342,7 @@ export default {
             console.log(this.form);
             this.message = "Your circulation is complete"
             this.form.post(this.route('circulations.store'));
-            // bangla code 
+            // bangla code
             setTimeout(()=> {
                 document.getElementById('circulationWrapper').classList.add('hidden');
             }, 2000)

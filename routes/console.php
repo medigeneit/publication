@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,12 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('server', function () {
+
+    Artisan::call('serve',[
+        '--port'  =>  9050,
+        '--host'  =>  gethostbyname(trim(`hostname`)),
+    ], (new ConsoleOutput())  );
+
+})->purpose('Running server on port=7000 host=' . gethostbyname(trim(`hostname`)));
