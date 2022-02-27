@@ -152,11 +152,11 @@
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" id="" class="mr-2" @click="form.type = 1;" @change="changeValue(product.storage_outlets)" value="1" required>
+                                        <input type="radio" name="inOut" id="" class="mr-2" @click=";form.type = 1;changeValue(product.id, product.storage_outlets)" value="1" required>
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
-                                        <input type="radio" name="inOut" id="" value="2"  @click="alertQuantity = false; form.type = 2;" required>
+                                        <input type="radio" name="inOut" id="" value="2"  @click="form.type = 2;changeValue(product.id, product.storage_outlets);" required>
                                     </div>
                                 </div>
                                 <hr class="my-1">
@@ -319,7 +319,7 @@ export default {
         changeValue(productId, storageOutlets) {
             let value = this.form.type;
             this.form.product_id = productId;
-            let alertQuantity = storageOutlets.includes(parseInt(this.form.to));
+            let alertQuantity = this.form.to ? storageOutlets.includes(parseInt(this.form.to)) : false;
             console.log(storageOutlets, alertQuantity);
 
             if (value == 1 && !alertQuantity && this.form.to) {
@@ -327,7 +327,6 @@ export default {
             } else {
                 this.alertQuantity = false
             }
-            console.log(this.alertQuantity);
         },
         modalHandler(event) {
             // this.emptyValue();
@@ -357,6 +356,7 @@ export default {
             this.form.product_id= ''
             this.fromDisabled = false;
             this.toDisabled = false;
+            console.log(this.form);
         }
     }
 };
