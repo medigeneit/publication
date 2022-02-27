@@ -167,7 +167,7 @@
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
                                             <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" required>
-                                                <option value="">--From where--</option>
+                                                <!-- <option value="">--From where--</option> -->
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId" :class="{'hidden' : !(product.storage_outlets.includes(parseInt(outletsId)))}">
                                                     {{ outletsName }}
                                                 </option>
