@@ -11,9 +11,10 @@
         <data-table :collections="circulations" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: circulation }">
                 <td class="py-3 px-2 text-left">{{ circulation.id }}</td>
-                <td class="py-3 px-2 text-left">{{ circulation.destination }}</td>
+                <td class="py-3 px-2 text-left">{{ circulation.circulation_of }}</td>
                 <td class="py-3 px-2 text-left">{{ circulation.productName }}</td>
                 <td class="py-3 px-2 text-left font-bold" :class="{'text-red-500': circulation.quantity < 0, 'text-green-500': circulation.quantity > 0 }"> {{ circulation.quantity }}</td>
+                <td class="py-3 px-2 text-left">{{ circulation.destination }}</td>
                 <td class="py-3 px-2 text-left"> {{ circulation.circulationDate }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
@@ -60,9 +61,11 @@ export default {
         return {
             columns : [
                 {title: 'ID', align : 'left', sortable : 'id'},
-                {title: 'Outlet Name', align : 'left', sortable : 'outlet.name'},
+                {title: 'Circulation Of', align : 'left', sortable : 'outlet.name'},
                 {title: 'Product Name', align : 'left', sortable : 'product.name'},
                 {title: 'Quantity', align : 'left', sortable : 'quantity'},
+                // {title: 'Outlet Name', align : 'left', sortable : 'outlet.name'},
+                {title: 'From / To', align : 'left', sortable : 'outlet.name'},
                 {title: 'Date', align : 'left', sortable : 'created_at'},
                 {title: 'Action', align : 'center'},
             ],

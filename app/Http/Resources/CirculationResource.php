@@ -17,8 +17,10 @@ class CirculationResource extends JsonResource
         return
             [
                 'id'  => (int) $this->id,
+                'circulation_of_id' => (string)  ($this->storage->outlet->id  ?? ''),
+                'circulation_of' => (string)  ($this->storage->outlet->name  ?? ''),
                 'destinationable_id' => (int) ($this->destinationable_id ?? 0),
-                'destination' => (string) ($this->quantity >  0 ? $this->storage->outlet->name : $this->destinationable->name ?? ''),
+                'destination' => (string) ($this->destinationable->name ?? ''),
                 'productId' => (int) ($this->storage->product->id ?? 0),
                 'productName' => (string) ($this->storage->product->product_name ?? ''),
                 'quantity'  => (int) ($this->quantity ?? 0),
