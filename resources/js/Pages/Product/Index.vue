@@ -152,35 +152,39 @@
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" id="" class="mr-2" @click="form.type = 1" value="1" required>
+                                        <input type="radio" name="inOut" id="" class="mr-2" @click="form.type = 1;" @change="changeValue(product.storage_outlets)" value="1" required>
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
-                                        <input type="radio" name="inOut" id="" value="2"  @click="alertQuantity = false; form.type = 2" required>
+                                        <input type="radio" name="inOut" id="" value="2"  @click="alertQuantity = false; form.type = 2;" required>
                                     </div>
                                 </div>
                                 <hr class="my-1">
                                 <div class="p-3">
                                     <div class="text-green-600">{{ message }}</div>
-                                    <div class="text-xl">Total product <b>100</b> pices</div>
+                                    <div class="text-xl">Total Quantity :  {{ product.total_storage }}</div>
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
+                                            <Label for="wholesale" value="Send To" />
                                             <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" required>
                                                 <option value="">-- Select From--</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
                                         <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" required @change="changeValue(product.storage_outlets)">
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" required @change="changeValue(product.id, product.storage_outlets)">
                                                 <option value="">-- Select To --</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
 
-                                        <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
-
-                                        <Input id="type" type="number" class="mt-1 block w-full" placeholder="Alert Quantityi" v-model="form.alert_quantity" v-if="alertQuantity"/>
+                                        <div class="mb-4">
+                                            <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
+                                        </div>
+                                        <div class="mb-4">
+                                            <Input id="type" type="number" class="mt-1 block w-full" placeholder="Alert Quantityi" v-model="form.alert_quantity" v-if="alertQuantity"/>
+                                        </div>
 
                                         <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
                                             Submit
@@ -238,6 +242,7 @@ import AddNewButton from '@/Components/AddNewButton.vue';
 import Input from '@/Components/Input.vue';
 import Button from '@/Components/Button.vue';
 import Select from '@/Components/Select.vue';
+import Label from '@/Components/Label.vue';
 
 export default {
     components: {
@@ -251,6 +256,7 @@ export default {
         Input,
         Button,
         Select,
+        Label
     },
     props: {
         products: { type: Object, default: {} },
@@ -310,15 +316,18 @@ export default {
     },
 
     methods : {
-        changeValue(storageOutlets) {
-            console.log(this.form.type);
+        changeValue(productId, storageOutlets) {
             let value = this.form.type;
+            this.form.product_id = productId;
             let alertQuantity = storageOutlets.includes(parseInt(this.form.to));
             console.log(storageOutlets, alertQuantity);
 
-            if (value == 1 && !alertQuantity) {
+            if (value == 1 && !alertQuantity && this.form.to) {
                 this.alertQuantity = true
+            } else {
+                this.alertQuantity = false
             }
+            console.log(this.alertQuantity);
         },
         modalHandler(event) {
             // this.emptyValue();
