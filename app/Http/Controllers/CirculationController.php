@@ -12,6 +12,7 @@ use App\Models\Volume;
 use App\Traits\DateFilter;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class CirculationController extends Controller
@@ -21,20 +22,20 @@ class CirculationController extends Controller
     public function index()
     {
         $circulations = Circulation::query()
-        ->with(['storage','destinationable','storage.product.productable' => function (MorphTo $morphTo) {
-            $morphTo->constrain([
-                Volume::class => function ($query) {
-                    $query->with('version.production');
-                },
-                Version::class => function ($query) {
-                    $query->with('volumes', 'production');
-                },
-            ]);
-        }])
-        ->filter()
-        ->dateFilter()
-        ->search(['id'], ['product:name', 'outlet:name'])
-        ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+            ->with(['storage', 'destinationable', 'storage.product.productable' => function (MorphTo $morphTo) {
+                $morphTo->constrain([
+                    Volume::class => function ($query) {
+                        $query->with('version.production');
+                    },
+                    Version::class => function ($query) {
+                        $query->with('volumes', 'production');
+                    },
+                ]);
+            }])
+            ->filter()
+            ->dateFilter()
+            ->search(['id'], ['product:name', 'outlet:name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         // $circulation_demo = $circulations->get();
         // return $circulation_demo;
@@ -55,7 +56,14 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+
+        if (!in_array($request->type, array_keys(Circulation::TYPE))) {
+            // return  array_keys(Circulation::TYPE);
+            // return $request;
+            return redirect()
+                ->route('storages.index')
+                ->with('status', 'Unsuccessfull attempt, because of wrong type.');
+        }
 
         if (Circulation::TYPE[$request->type] == 'In') {
             $quantity = $request->quantity;
@@ -72,8 +80,19 @@ class CirculationController extends Controller
                 'product_id' => $request->product_id,
             ])->first();
 
-        $updated_quantity = $storage->quantity + $quantity;
-        if ($updated_quantity > 0) {
+        if (Circulation::TYPE[$request->type] == 'In' &&  !$storage) {
+            $storage = new Storage;
+            $storage->user_id  = Auth::id();
+            $storage->outlet_id  = $storage_outlet_id;
+            $storage->product_id = $request->product_id;
+            $storage->alert_quantity = $request->alert_quantity;
+            $updated_quantity = $quantity;
+        } else {
+            $updated_quantity = $storage->quantity + $quantity;
+        }
+        // return [$storage, $updated_quantity];
+
+        if ($updated_quantity >= 0) {
             $storage->quantity = $updated_quantity;
             $updated = $storage->save();
 
