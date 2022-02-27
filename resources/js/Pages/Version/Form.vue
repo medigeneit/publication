@@ -172,6 +172,7 @@
                         :key="index">
 
                         <div class="mb-4">
+                        <action-button-edit v-if="form.moderators[index].disableInput" />
                             <Label value="Author" />
                             <!-- <Input
                                 type="number"
@@ -190,6 +191,7 @@
                             <Select
                                 class="mt-1 block w-full"
                                 v-model="form.moderators[index].author_id"
+                                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
                             >
                                 <option value="">-- Select Author --</option>
                                 <option
@@ -205,7 +207,7 @@
                             <Select
                                 class="mt-1 block w-full"
                                 v-model="form.moderators[index].moderator_type"
-
+                                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
                             >
                                 <option value="">-- Select Moderator --</option>
                                 <option
@@ -226,6 +228,7 @@
                             <Select
                                 class="mt-1 block w-full"
                                 v-model="form.moderators[index].honorarium_type"
+                                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
                             >
                                 <option value="">-- Select Moderator --</option>
                                 <option
@@ -247,6 +250,7 @@
                                 type="number"
                                 class="mt-1 block w-full"
                                 v-model="form.moderators[index].honorarium"
+                                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
                             />
                         </div>
                     </div>
@@ -291,6 +295,7 @@ import ValidationErrors from "@/Components/ValidationErrors.vue";
 import GoToList from "@/Components/GoToList.vue";
 import Select from "@/Components/Select.vue";
 import ActiveInput from "@/Components/ActiveInput.vue";
+import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 
 export default {
     components: {
@@ -301,6 +306,7 @@ export default {
         GoToList,
         Select,
         ActiveInput,
+        ActionButtonEdit
     },
 
     props: {
@@ -338,8 +344,10 @@ export default {
                         moderator_type: "",
                         honorarium_type: "",
                         honorarium: "",
+                        disableInput : true
                     },
                 ],
+                moduleAction: this.moduleAction
             }),
         };
     },
@@ -352,6 +360,7 @@ export default {
         for(let index in this.data.selectedModerators) {
             console.log(this.data.selectedModerators[index]);
             this.form.moderators[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
+            this.form.moderators[index].disableInput = true;
         }
     },
     methods: {

@@ -163,6 +163,7 @@ class VersionController extends Controller
 
     public function update(Request $request, Version $version)
     {
+        return $request;
         $validate = $this->validateData($request, $version->id);
 
         $count = 0;

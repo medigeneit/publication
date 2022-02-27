@@ -21768,7 +21768,7 @@ __webpack_require__.r(__webpack_exports__);
         align: 'left',
         sortable: 'id'
       }, {
-        title: 'Outlet Name',
+        title: 'Circulation Of',
         align: 'left',
         sortable: 'outlet.name'
       }, {
@@ -21779,6 +21779,11 @@ __webpack_require__.r(__webpack_exports__);
         title: 'Quantity',
         align: 'left',
         sortable: 'quantity'
+      }, // {title: 'Outlet Name', align : 'left', sortable : 'outlet.name'},
+      {
+        title: 'From / To',
+        align: 'left',
+        sortable: 'outlet.name'
       }, {
         title: 'Date',
         align: 'left',
@@ -26909,6 +26914,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_GoToList_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/GoToList.vue */ "./resources/js/Components/GoToList.vue");
 /* harmony import */ var _Components_Select_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/Select.vue */ "./resources/js/Components/Select.vue");
 /* harmony import */ var _Components_ActiveInput_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Components/ActiveInput.vue */ "./resources/js/Components/ActiveInput.vue");
+/* harmony import */ var _Components_ActionButtonEdit_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/Components/ActionButtonEdit.vue */ "./resources/js/Components/ActionButtonEdit.vue");
+
 
 
 
@@ -26924,7 +26931,8 @@ __webpack_require__.r(__webpack_exports__);
     ValidationErrors: _Components_ValidationErrors_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     GoToList: _Components_GoToList_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
     Select: _Components_Select_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
-    ActiveInput: _Components_ActiveInput_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+    ActiveInput: _Components_ActiveInput_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+    ActionButtonEdit: _Components_ActionButtonEdit_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   props: {
     moduleAction: String,
@@ -26956,8 +26964,10 @@ __webpack_require__.r(__webpack_exports__);
           author_id: "",
           moderator_type: "",
           honorarium_type: "",
-          honorarium: ""
-        }]
+          honorarium: "",
+          disableInput: true
+        }],
+        moduleAction: this.moduleAction
       })
     };
   },
@@ -26970,6 +26980,7 @@ __webpack_require__.r(__webpack_exports__);
     for (var _index in this.data.selectedModerators) {
       console.log(this.data.selectedModerators[_index]);
       this.form.moderators[_index] = this.data.selectedModerators[_index] ? this.data.selectedModerators[_index] : '';
+      this.form.moderators[_index].disableInput = true;
     }
   },
   methods: {
@@ -32231,9 +32242,12 @@ var _hoisted_5 = {
   "class": "py-3 px-2 text-left"
 };
 var _hoisted_6 = {
-  "class": "py-2.5 px-2"
+  "class": "py-3 px-2 text-left"
 };
 var _hoisted_7 = {
+  "class": "py-2.5 px-2"
+};
+var _hoisted_8 = {
   "class": "flex justify-center items-center gap-1 md:gap-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -32266,7 +32280,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           var circulation = _ref.item;
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(circulation.id), 1
           /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(circulation.destination), 1
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(circulation.circulation_of), 1
           /* TEXT */
           ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(circulation.productName), 1
           /* TEXT */
@@ -32277,9 +32291,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }])
           }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(circulation.quantity), 3
           /* TEXT, CLASS */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(circulation.circulationDate), 1
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(circulation.destination), 1
           /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_action_button_show, {
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(circulation.circulationDate), 1
+          /* TEXT */
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_action_button_show, {
             href: _ctx.route('circulations.show', circulation.id)
           }, null, 8
           /* PROPS */
@@ -39311,7 +39327,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "class": "text-center border bg-indigo-500 text-white px-2 py-0.5 rounded cursor-pointer"
           }, " View " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(product.categoryCount) + " categories ", 1
           /* TEXT */
-          )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div v-else class=\"text-center border bg-indigo-500 text-white px-2 py-0.5 rounded\">\n                        {{ product.categoryCount }} categories\n                    </div> "), product.categoryCount ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(product.categories, function (category, index) {
+          )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div v-else class=\"text-center border bg-indigo-500 text-white px-2 py-0.5 rounded\">\r\n                        {{ product.categoryCount }} categories\r\n                    </div> "), product.categoryCount ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(product.categories, function (category, index) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
               "class": "py-1.5 flex gap-2",
               key: index
@@ -39434,7 +39450,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: _cache[12] || (_cache[12] = function () {
               return $options.modalHandler && $options.modalHandler.apply($options, arguments);
             })
-          }, [_hoisted_44, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"\">\n                            <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-4 w-4 font-weight-bold\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M7 11l5-5m0 0l5 5m-5-5v12\" />\n                            </svg>\n                            <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-4 w-4 font-weight-bold\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 13l-5 5m0 0l-5-5m5 5V6\" />\n                            </svg>\n                        </div> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_46, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, [_hoisted_48, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+          }, [_hoisted_44, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"\">\r\n                            <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-4 w-4 font-weight-bold\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\r\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M7 11l5-5m0 0l5 5m-5-5v12\" />\r\n                            </svg>\r\n                            <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-4 w-4 font-weight-bold\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\r\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 13l-5 5m0 0l-5-5m5 5V6\" />\r\n                            </svg>\r\n                        </div> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_46, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, [_hoisted_48, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
             type: "radio",
             name: "inOut",
             id: "",
@@ -43843,6 +43859,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Button");
 
+  var _component_action_button_edit = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("action-button-edit");
+
   var _component_go_to_list = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("go-to-list");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
@@ -43972,7 +43990,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }
     }, null, 8
     /* PROPS */
-    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\r\n                            <Label value=\"Production Cost\" />\r\n                            <Input\r\n                                type=\"number\"\r\n                                step=\"0.01\"\r\n                                class=\"mt-1 block w-full\"\r\n                                v-model=\"form.volumes[index].cost\"\r\n                            />\r\n                        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
+    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\n                            <Label value=\"Production Cost\" />\n                            <Input\n                                type=\"number\"\n                                step=\"0.01\"\n                                class=\"mt-1 block w-full\"\n                                v-model=\"form.volumes[index].cost\"\n                            />\n                        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
       value: "ISBN"
     }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
       type: "text",
@@ -43994,7 +44012,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }
     }, null, 8
     /* PROPS */
-    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\r\n                            <Label value=\"Link\" />\r\n                            <Input\r\n                                type=\"text\"\r\n                                class=\"mt-1 block w-full\"\r\n                                v-model=\"form.volumes[index].link\"\r\n                            />\r\n                        </div> ")]);
+    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\n                            <Label value=\"Link\" />\n                            <Input\n                                type=\"text\"\n                                class=\"mt-1 block w-full\"\n                                v-model=\"form.volumes[index].link\"\n                            />\n                        </div> ")]);
   }), 128
   /* KEYED_FRAGMENT */
   )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
@@ -44014,14 +44032,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": "w-full p-4 bg-white border shadow rounded",
       key: index
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [$data.form.moderators[index].disableInput ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_action_button_edit, {
+      key: 0
+    })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
       value: "Author"
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input\r\n                                type=\"number\"\r\n                                class=\"mt-1 block w-full\"\r\n                                v-model=\"form.moderators[index].authorId\"\r\n                            /> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Select\r\n                                id=\"author\"\r\n                                name=\"active\"\r\n                                class=\"mt-1 block w-full\"\r\n                                v-model=\"form.moderators[index].authorId\"\r\n                            >\r\n                                <option value=\"\">Select Author</option>\r\n                                <option :value=\"id\" v-for=\"(author, id) in data.authors\" :key=\"id\">{{ author }}</option>\r\n                            </Select> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input\n                                type=\"number\"\n                                class=\"mt-1 block w-full\"\n                                v-model=\"form.moderators[index].authorId\"\n                            /> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Select\n                                id=\"author\"\n                                name=\"active\"\n                                class=\"mt-1 block w-full\"\n                                v-model=\"form.moderators[index].authorId\"\n                            >\n                                <option value=\"\">Select Author</option>\n                                <option :value=\"id\" v-for=\"(author, id) in data.authors\" :key=\"id\">{{ author }}</option>\n                            </Select> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
       "class": "mt-1 block w-full",
       modelValue: $data.form.moderators[index].author_id,
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return $data.form.moderators[index].author_id = $event;
-      }
+      },
+      disabled: $props.moduleAction === 'update' && $data.form.moderators[index].disableInput
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
         return [_hoisted_16, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.data.authors, function (author, index) {
@@ -44040,14 +44061,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
     }, 1032
     /* PROPS, DYNAMIC_SLOTS */
-    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
+    , ["modelValue", "onUpdate:modelValue", "disabled"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
       value: "Moderator Type"
     }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
       "class": "mt-1 block w-full",
       modelValue: $data.form.moderators[index].moderator_type,
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return $data.form.moderators[index].moderator_type = $event;
-      }
+      },
+      disabled: $props.moduleAction === 'update' && $data.form.moderators[index].disableInput
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
         return [_hoisted_19, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.data.moderatorTypes, function (moderator, type) {
@@ -44066,14 +44088,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
     }, 1032
     /* PROPS, DYNAMIC_SLOTS */
-    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
+    , ["modelValue", "onUpdate:modelValue", "disabled"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
       value: "Honorarium Type"
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input\r\n                                type=\"email\"\r\n                                class=\"mt-1 block w-full\"\r\n                                v-model=\"form.moderators[index].honorariumType\"\r\n                            /> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Input\n                                type=\"email\"\n                                class=\"mt-1 block w-full\"\n                                v-model=\"form.moderators[index].honorariumType\"\n                            /> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
       "class": "mt-1 block w-full",
       modelValue: $data.form.moderators[index].honorarium_type,
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return $data.form.moderators[index].honorarium_type = $event;
-      }
+      },
+      disabled: $props.moduleAction === 'update' && $data.form.moderators[index].disableInput
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
         return [_hoisted_22, _hoisted_23, _hoisted_24];
@@ -44083,7 +44106,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
     }, 1032
     /* PROPS, DYNAMIC_SLOTS */
-    , ["modelValue", "onUpdate:modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
+    , ["modelValue", "onUpdate:modelValue", "disabled"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, {
       "for": "active",
       value: "Honorarium"
     }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
@@ -44092,10 +44115,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       modelValue: $data.form.moderators[index].honorarium,
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return $data.form.moderators[index].honorarium = $event;
-      }
+      },
+      disabled: $props.moduleAction === 'update' && $data.form.moderators[index].disableInput
     }, null, 8
     /* PROPS */
-    , ["modelValue", "onUpdate:modelValue"])])]);
+    , ["modelValue", "onUpdate:modelValue", "disabled"])])]);
   }), 128
   /* KEYED_FRAGMENT */
   )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
@@ -44133,7 +44157,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["class", "disabled"])])], 32
   /* HYDRATE_EVENTS */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"\">\r\n            Calculator\r\n        </div> ")]);
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"\">\n            Calculator\n        </div> ")]);
 }
 
 /***/ }),
