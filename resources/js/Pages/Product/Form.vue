@@ -105,24 +105,11 @@
                         <Label for="mrp" value="MRP ." />
                         <Input id="mrp" name="mrp" type="number" step="0.01" class="mt-1 block w-full" v-model="form.mrp" required />
                     </div> -->
-                    
-                    
-
                 </div>
-                <div
-                        class="
-                            w-full
-                            grid grid-cols-2
-                            md:grid-cols-3
-                            bg-white
-                            border
-                            rounded
-                            gap-4
-                            p-4
-                        "
-                       v-for="(priceCategory, index) in data.priceCategories" :key="priceCategory.id"
-                    >
-                    <div class="flex" >
+                <hr class="w-full my-4">
+                <h3 class="text-lg text-gray-600 font-bold">Price Section</h3>
+                <div class="w-full grid grid-cols-2 md:grid-cols-3 bg-white border rounded gap-4 p-4">
+                    <div class="flex" v-for="(priceCategory, index) in data.priceCategories" :key="priceCategory.id">
                         <div class="grid">
                             <div class="block">
                                 <Label for="wholesale" v-text="priceCategory.name" />

@@ -145,18 +145,18 @@
                             </svg>
                         </div> -->
                     </div>
-                    <div class="fixed inset-0 hidden z-50">
+                    <div class="fixed inset-0 hidden z-50" id="circulationWrapper">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
                                 <div class="text-lg font-bold text-center">Circulation</div>
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" id="" class="mr-2" v-model="form.type" value="1"   required>
+                                        <input type="radio" name="inOut" id="" class="mr-2" @click="form.type = 1" value="1" required>
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
-                                        <input type="radio" name="inOut" id="" value="2" v-model="form.type" @click="alertQuantity = false" required>
+                                        <input type="radio" name="inOut" id="" value="2"  @click="alertQuantity = false; form.type = 2" required>
                                     </div>
                                 </div>
                                 <hr class="my-1">
@@ -166,13 +166,13 @@
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" required @change="changeValue(product.id, product.storage_outlets)">
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" required>
                                                 <option value="">-- Select From--</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
                                         <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" required>
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" required @change="changeValue(product.storage_outlets)">
                                                 <option value="">-- Select To --</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
@@ -258,14 +258,14 @@ export default {
         outlets: { type: Object, default: {} },
         filters: { type: Object, default: {} }
     },
-    methods: {
-        modalHandler(event) {
-            event.target.nextElementSibling.classList.toggle('hidden');
-        },
-        closeModal(event) {
-            event.target.parentElement.parentElement.parentElement.classList.add('hidden');
-        }
-    },
+    // methods: {
+    //     modalHandler(event) {
+    //         event.target.nextElementSibling.classList.toggle('hidden');
+    //     },
+    //     closeModal(event) {
+    //         event.target.parentElement.parentElement.parentElement.classList.add('hidden');
+    //     }
+    // },
     data() {
         return {
            columns: [
@@ -304,32 +304,24 @@ export default {
                 alert_quantity: ''
             }),
             modalEvent: '',
-            alertQuantity : false
+            alertQuantity : false,
+            message : ''
         }
     },
 
     methods : {
-        changeValue(productId, storageOutlets) {
-            // console.log('storageOutlets',storageOutlets);
+        changeValue(storageOutlets) {
+            console.log(this.form.type);
             let value = this.form.type;
-            let alertQuantity = storageOutlets.includes(parseInt(this.form.from));
+            let alertQuantity = storageOutlets.includes(parseInt(this.form.to));
             console.log(storageOutlets, alertQuantity);
 
             if (value == 1 && !alertQuantity) {
                 this.alertQuantity = true
             }
-            // else {
-            //     this.form.to = '';
-
-            //     this.form.from = id;
-                // this.fromDisabled = true
-                // this.toDisabled = false
-
-            // }
         },
-
-        modalHandler(event, id) {
-            this.emptyValue();
+        modalHandler(event) {
+            // this.emptyValue();
             event.target.nextElementSibling .classList.toggle('hidden');
         },
 
@@ -338,12 +330,14 @@ export default {
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
         submit() {
+            console.log(this.form);
             this.message = "Your circulation is complete"
             this.form.post(this.route('circulations.store'));
             // bangla code 
             setTimeout(()=> {
                 document.getElementById('circulationWrapper').classList.add('hidden');
             }, 2000)
+            this.emptyValue()
         },
         emptyValue() {
             this.message = '';
