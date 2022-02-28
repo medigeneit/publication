@@ -39,6 +39,13 @@
         >
             Release Versions
         </nav-link>
+        
+        <nav-link
+            :href="route('products.index')"
+            :active="route().current('products.*')"
+        >
+            Products
+        </nav-link>
         <nav-link
             :href="route('moderator-types.index')"
             :active="route().current('moderator-types.*')"
@@ -76,12 +83,6 @@
                 :active="route().current('price-categories.*')"
             >
                 Price Category
-            </nav-link>
-            <nav-link
-                :href="route('products.index')"
-                :active="route().current('products.*')"
-            >
-                Products
             </nav-link>
             <!-- <nav-link
                 :href="route('packages.index')"

@@ -167,102 +167,7 @@
                     </div>
                 </div>
                 <div class="w-full max-w-md">
-                    <h3 class="text-lg text-gray-600 font-bold">Moderator Information</h3>
-                    <div class="w-full p-4 bg-white border shadow rounded" v-for="(moderator, index) in form.moderators"
-                        :key="index">
-
-                        <div class="mb-4">
-                        <action-button-edit v-if="form.moderators[index].disableInput" />
-                            <Label value="Author" />
-                            <!-- <Input
-                                type="number"
-                                class="mt-1 block w-full"
-                                v-model="form.moderators[index].authorId"
-                            /> -->
-                             <!-- <Select
-                                id="author"
-                                name="active"
-                                class="mt-1 block w-full"
-                                v-model="form.moderators[index].authorId"
-                            >
-                                <option value="">Select Author</option>
-                                <option :value="id" v-for="(author, id) in data.authors" :key="id">{{ author }}</option>
-                            </Select> -->
-                            <Select
-                                class="mt-1 block w-full"
-                                v-model="form.moderators[index].author_id"
-                                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
-                            >
-                                <option value="">-- Select Author --</option>
-                                <option
-                                    :value="index" v-for="(author, index) in data.authors" :key="index"
-                                >
-                                  {{ author }}
-                                </option>
-                            </Select>
-                        </div>
-
-                        <div class="mb-4">
-                            <Label value="Moderator Type" />
-                            <Select
-                                class="mt-1 block w-full"
-                                v-model="form.moderators[index].moderator_type"
-                                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
-                            >
-                                <option value="">-- Select Moderator --</option>
-                                <option
-                                    :value="type" v-for="(moderator, type) in data.moderatorTypes" :key="type"
-                                >
-                                    {{ moderator }}
-                                </option>
-                            </Select>
-                        </div>
-
-                        <div class="mb-4">
-                            <Label value="Honorarium Type" />
-                            <!-- <Input
-                                type="email"
-                                class="mt-1 block w-full"
-                                v-model="form.moderators[index].honorariumType"
-                            /> -->
-                            <Select
-                                class="mt-1 block w-full"
-                                v-model="form.moderators[index].honorarium_type"
-                                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
-                            >
-                                <option value="">-- Select Moderator --</option>
-                                <option
-                                    :value="1"
-                                >
-                                    One Time
-                                </option>
-                                <option
-                                    :value="2"
-                                >
-                                    Percentage
-                                </option>
-                            </Select>
-                        </div>
-
-                        <div class="mb-4">
-                            <Label for="active" value="Honorarium" />
-                            <Input
-                                type="number"
-                                class="mt-1 block w-full"
-                                v-model="form.moderators[index].honorarium"
-                                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
-                            />
-                        </div>
-                    </div>
-                    <div class="w-full text-right">
-                        <Button
-                            type="button"
-                            class="btn-danger border-4"
-                            @click="addModertor()"
-                        >
-                            (+) Add Moderator
-                        </Button>
-                    </div>
+                   <Moderators :form ="form" :data="data"/>
                 </div>
             </div>
 
@@ -296,6 +201,7 @@ import GoToList from "@/Components/GoToList.vue";
 import Select from "@/Components/Select.vue";
 import ActiveInput from "@/Components/ActiveInput.vue";
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
+import Moderators from "@/Components/Moderators.vue";
 
 export default {
     components: {
@@ -306,7 +212,8 @@ export default {
         GoToList,
         Select,
         ActiveInput,
-        ActionButtonEdit
+        ActionButtonEdit,
+        Moderators
     },
 
     props: {
