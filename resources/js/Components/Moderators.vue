@@ -4,12 +4,11 @@
         :key="index">
 
         <div class="mb-4">
-        <action-button-edit v-if="form.moderators[index].disableInput" />
             <Label value="Author" />
             <Select
                 class="mt-1 block w-full"
                 v-model="form.moderators[index].author_id"
-                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
+
             >
                 <option value="">-- Select Author --</option>
                 <option
@@ -25,7 +24,7 @@
             <Select
                 class="mt-1 block w-full"
                 v-model="form.moderators[index].moderator_type"
-                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
+
             >
                 <option value="">-- Select Moderator --</option>
                 <option
@@ -46,7 +45,7 @@
             <Select
                 class="mt-1 block w-full"
                 v-model="form.moderators[index].honorarium_type"
-                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
+
             >
                 <option value="">-- Select Moderator --</option>
                 <option
@@ -68,7 +67,7 @@
                 type="number"
                 class="mt-1 block w-full"
                 v-model="form.moderators[index].honorarium"
-                :disabled="moduleAction === 'update' && form.moderators[index].disableInput"
+                
             />
         </div>
     </div>
@@ -95,7 +94,7 @@ export default {
         Input,
         Label,
         Select,
-        ActionButtonEdit  
+        ActionButtonEdit
     },
     props: {
         data: {

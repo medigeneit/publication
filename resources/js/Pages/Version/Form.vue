@@ -251,7 +251,6 @@ export default {
                         moderator_type: "",
                         honorarium_type: "",
                         honorarium: "",
-                        disableInput : true
                     },
                 ],
                 moduleAction: this.moduleAction
@@ -267,7 +266,6 @@ export default {
         for(let index in this.data.selectedModerators) {
             console.log(this.data.selectedModerators[index]);
             this.form.moderators[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
-            this.form.moderators[index].disableInput = true;
         }
     },
     methods: {

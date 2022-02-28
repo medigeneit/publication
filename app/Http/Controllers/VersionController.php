@@ -163,7 +163,7 @@ class VersionController extends Controller
 
     public function update(Request $request, Version $version)
     {
-        return $request;
+        // return $request;
         $validate = $this->validateData($request, $version->id);
 
         $count = 0;
@@ -191,22 +191,9 @@ class VersionController extends Controller
         }
 
         if($request->moderators){
-        foreach ($request->moderators as $moderator) {
-            if($moderator['author_id']&&$moderator['moderator_type']&&$moderator['honorarium_type'])
-            Moderator::updateOrCreate(
-                [
-                    'version_id' => $version->id,
-                    'author_id' => $moderator['author_id'],
-                    'moderator_type' => $moderator['moderator_type'],
-                ],
-                [
-                    'honorarium_type' => $moderator['honorarium_type'],
-                    'honorarium' => $moderator['honorarium'],
-                ]
-            );
-
-            // return $moderator;
-        }}
+            // return
+            $this->moderatorInsert($request, $version);
+        }
 
         return redirect()
             ->route('versions.show', $version->id)
@@ -260,6 +247,31 @@ class VersionController extends Controller
                     ]
                 );
             }
+        }
+    }
+
+    protected function moderatorInsert($request, $version)
+    {
+        Moderator::where(['version_id' => $version->id])->delete();
+
+        foreach ($request->moderators as $moderator) {
+            if($moderator['author_id'] && $moderator['moderator_type'] && $moderator['honorarium_type'])
+            // return $moderator['author_id'];
+            $moderator = Moderator::onlyTrashed()->updateOrCreate(
+                [
+                    'version_id' => $version->id,
+                ],
+                [
+                    'author_id' => $moderator['author_id'],
+                    'moderator_type' => $moderator['moderator_type'],
+                    'honorarium_type' => $moderator['honorarium_type'],
+                    'honorarium' => $moderator['honorarium'],
+                    'deleted_at'    => null
+
+                ]
+            );
+
+            // return $moderator;
         }
     }
 
