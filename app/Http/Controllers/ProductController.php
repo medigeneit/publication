@@ -60,7 +60,7 @@ class ProductController extends Controller
 
             ->filter()
             ->dateFilter()
-            ->search(['id', 'name'], ['publisher:name'])
+            ->search(['id'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
 
