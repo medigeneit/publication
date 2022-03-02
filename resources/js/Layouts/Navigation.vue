@@ -21,12 +21,53 @@
             '(publishers|productions|versions|moderator-types|authors|moderators|categories|price-categories|products|packages).*'
             )"
     >
-        <nav-link
-            :href="route('publishers.index')"
-            :active="route().current('publishers.*')"
+        <nav-link-wrapper
+            title="Publication"
+            :active="
+                route().current(
+                    '(categories|price-categories|packages|authors|publishers|moderator-types).*'
+                )
+            "
         >
-            Publishers
-        </nav-link>
+            <nav-link
+                :href="route('categories.index')"
+                :active="route().current('categories.*')"
+            >
+                Categories
+            </nav-link>
+            <nav-link
+                :href="route('price-categories.index')"
+                :active="route().current('price-categories.*')"
+            >
+                Price Category
+            </nav-link>
+            
+            <nav-link
+                :href="route('authors.index')"
+                :active="route().current('authors.*')"
+            >
+                Authors
+            </nav-link>
+            <nav-link
+                :href="route('publishers.index')"
+                :active="route().current('publishers.*')"
+            >
+                Publishers
+            </nav-link>
+            <nav-link
+                :href="route('moderator-types.index')"
+                :active="route().current('moderator-types.*')"
+            >
+                Moderator Types
+            </nav-link>
+            <!-- <nav-link
+                :href="route('packages.index')"
+                :active="route().current('packages.*')"
+            >
+                Packages
+            </nav-link> -->
+        </nav-link-wrapper>
+
         <nav-link
             :href="route('productions.index')"
             :active="route().current('productions.*')"
@@ -46,51 +87,6 @@
         >
             Products
         </nav-link>
-        <nav-link
-            :href="route('moderator-types.index')"
-            :active="route().current('moderator-types.*')"
-        >
-            Moderator Types
-        </nav-link>
-        <nav-link
-            :href="route('authors.index')"
-            :active="route().current('authors.*')"
-        >
-            Authors
-        </nav-link>
-        <nav-link
-            :href="route('moderators.index')"
-            :active="route().current('moderators.*')"
-        >
-            Moderators
-        </nav-link>
-        <nav-link-wrapper
-            title="Publication"
-            :active="
-                route().current(
-                    '(categories|price-categories|products|packages).*'
-                )
-            "
-        >
-            <nav-link
-                :href="route('categories.index')"
-                :active="route().current('categories.*')"
-            >
-                Categories
-            </nav-link>
-            <nav-link
-                :href="route('price-categories.index')"
-                :active="route().current('price-categories.*')"
-            >
-                Price Category
-            </nav-link>
-            <!-- <nav-link
-                :href="route('packages.index')"
-                :active="route().current('packages.*')"
-            >
-                Packages
-            </nav-link> -->
-        </nav-link-wrapper>
     </nav-link-wrapper>
 
     

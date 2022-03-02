@@ -30,17 +30,6 @@
                     "
                 >
                     <div class="w-full flex items-center gap-2">
-                        <!-- <Select
-                            class="block w-full"
-                            v-model="form.price_type"
-                            @change="subtotalCalculation"
-                        >
-                            <option value="">-- Price Type --</option>
-                            <option value="1">Retail</option>
-                            <option value="2">Distributor</option>
-                            <option value="3">Wholesale</option>
-                            <option value="4">Special (Genesis)</option>
-                        </Select> -->
                         <Select
                             class="block w-full"
                             v-model="form.price_type"

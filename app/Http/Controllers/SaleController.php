@@ -72,20 +72,23 @@ class SaleController extends Controller
             // ->orderBy('name')
             ->get();
 
+            $price_category =PriceCategory::pluck('name', 'id');
 
             foreach ($products as $product) {
-                // $unit_price = (object) [
-                    //     1 => (float) ($product->wholesale_price ?? 0),
-            //     2 => (float) ($product->retail_price ?? 0),
-            //     3 => (float) ($product->distribute_price ?? 0),
-            //     4 => (float) ($product->special_price ?? 0),
-            // ];
+            $unit_price = (object) [
+                1 => (float) ($product->wholesale_price ?? 0),
+                2 => (float) ($product->retail_price ?? 0),
+                3 => (float) ($product->distribute_price ?? 0),
+                4 => (float) ($product->special_price ?? 0),
+            ];
+
 
             $unit_price = $product->prices->pluck('name', 'id');
 
             $property = (object)[
                 'name'          => (string) ($product->product_name ?? ''),
                 'maxQuantity'   => (int) rand(10, 20),
+                // 'unitPrice'     => (object) $unit_price,
                 'unitPrice'     => (object) $unit_price,
 
             ];
@@ -116,7 +119,7 @@ class SaleController extends Controller
         return Inertia::render('Sale/SaleMemo', [
             'sale' => new Sale(),
             'outlets' => Outlet::active()->pluck('name', 'id'),
-            'price_types' => PriceCategory::pluck('name', 'id'),
+            'price_types' => $price_category,
             'products' => $productList,
             // 'showProductList' => request()->search,
             'search' => request()->search,
