@@ -7,9 +7,11 @@ use App\Http\Resources\ProductResource;
 use App\Http\Resources\SaleProductResource;
 use App\Http\Resources\SaleResource;
 use App\Models\Outlet;
+use App\Models\PriceCategory;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Traits\DateFilter;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -32,59 +34,89 @@ class SaleController extends Controller
     }
 
     public function create()
-    { 
+    {
         $productList = [];
 
+        // return request()->search;
+
         $products = Product::query()
-            ->when(isset(request()->search), function ($query) {
-                $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
-                    ->orWhere('id', request()->search)
-                    ->orWhereIn('id', explode(',', request()->selected));
-            })
-            ->orderBy('name')
+            ->with(['categories',  'prices', 'storages.outlet', 'productable' => function (MorphTo $morphTo) {
+                $morphTo->constrain([
+                    Volume::class => function ($query) {
+                        $query->with([
+                            'version.production.publisher:id,name',
+                            'version.volumes:id,version_id',
+                            'version.moderators:id,author_id,moderator_type,version_id',
+                            'version.moderators.moderators_type:id,name',
+                            'version.moderators.author:id,name'
+                        ]);
+                    },
+                    Version::class => function ($query) {
+                        $query->with([
+                            'moderators:id,author_id,moderator_type,version_id',
+                            'moderators.moderators_type:id,name',
+                            'moderators.author:id,name',
+                            'volumes',
+                            'production.publisher:id,name'
+                        ]);
+                    },
+                ]);
+            }])
+            ->where('active', 1)
+            // ->when(isset(request()->search), function ($query) {
+            //     $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
+            //         ->orWhere('id', request()->search)
+            //         ->orWhereIn('id', explode(',', request()->selected));
+            // })
+            ->search(request()->search)
+            // ->orderBy('name')
             ->get();
 
-        foreach($products as $product)
-        {
-            $unit_price = (object ) [
-                1 => (float) ($product->wholesale_price ?? 0),
-                2 => (float) ($product->retail_price ?? 0),
-                3 => (float) ($product->distribute_price ?? 0),
-                4 => (float) ($product->special_price ?? 0),
-            ];
-    
+
+            foreach ($products as $product) {
+                // $unit_price = (object) [
+                    //     1 => (float) ($product->wholesale_price ?? 0),
+            //     2 => (float) ($product->retail_price ?? 0),
+            //     3 => (float) ($product->distribute_price ?? 0),
+            //     4 => (float) ($product->special_price ?? 0),
+            // ];
+
+            $unit_price = $product->prices->pluck('name', 'id');
+
             $property = (object)[
-                'name'          => (string) ($product->name ?? ''),
-                'maxQuantity'   => (int) rand(10,20),
+                'name'          => (string) ($product->product_name ?? ''),
+                'maxQuantity'   => (int) rand(10, 20),
                 'unitPrice'     => (object) $unit_price,
-    
+
             ];
-        
+
             $productList[$product->id] = $property;
         }
 
-        
-        $productList[5] = [
-            'name'          => 'Last Hour',
-            'maxQuantity'   => 10,
-            'unitPrice'     => [
-                1 => 790,
-                2 => 740,
-            ],
-        ];
 
-        $productList[7] = [
-            'name'          => 'SBA Pearl',
-            'maxQuantity'   => 5,
-            'unitPrice'     => [
-                1 => 590,
-                2 => 540,
-            ],
-        ];
+        // $productList[5] = [
+        //     'name'          => 'Last Hour',
+        //     'maxQuantity'   => 10,
+        //     'unitPrice'     => [
+        //         1 => 790,
+        //         2 => 740,
+        //     ],
+        // ];
+
+        // $productList[7] = [
+        //     'name'          => 'SBA Pearl',
+        //     'maxQuantity'   => 5,
+        //     'unitPrice'     => [
+        //         1 => 590,
+        //         2 => 540,
+        //     ],
+        // ];
+        // return PriceCategory::pluck('name', 'id');
 
         return Inertia::render('Sale/SaleMemo', [
             'sale' => new Sale(),
             'outlets' => Outlet::active()->pluck('name', 'id'),
+            'price_types' => PriceCategory::pluck('name', 'id'),
             'products' => $productList,
             // 'showProductList' => request()->search,
             'search' => request()->search,
@@ -94,7 +126,7 @@ class SaleController extends Controller
     public function store(Request $request)
     {
         return $request;
-        
+
         $sale = Sale::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);

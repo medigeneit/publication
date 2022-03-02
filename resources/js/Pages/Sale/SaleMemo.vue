@@ -30,7 +30,7 @@
                     "
                 >
                     <div class="w-full flex items-center gap-2">
-                        <Select
+                        <!-- <Select
                             class="block w-full"
                             v-model="form.price_type"
                             @change="subtotalCalculation"
@@ -40,6 +40,15 @@
                             <option value="2">Distributor</option>
                             <option value="3">Wholesale</option>
                             <option value="4">Special (Genesis)</option>
+                        </Select> -->
+                        <Select
+                            class="block w-full"
+                            v-model="form.price_type"
+                            @change="subtotalCalculation"
+                        >
+                            <option value="">-- Price Type --</option>
+
+                            <option :value="index" v-for="(priceType, index) in price_types" :key="index">{{ priceType }}</option>
                         </Select>
                     </div>
                     <div class="w-full flex items-center gap-2">
@@ -487,7 +496,7 @@ export default {
     created() {
         this.saleableProducts.forEach((saleableProduct) => {
             this.products[saleableProduct.productId] = {
-                name: "Bolbona",
+                name: "",
                 quantity: saleableProduct.quantity,
                 unitPrice: saleableProduct.unitPrice,
             };
@@ -503,6 +512,10 @@ export default {
             default: {},
         },
         outlets: {
+            type: Object,
+            default: {},
+        },
+        price_types: {
             type: Object,
             default: {},
         },

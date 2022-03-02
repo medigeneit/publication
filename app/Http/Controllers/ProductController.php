@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Models\Author;
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\ModeratorType;
 use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\Publisher;
@@ -257,6 +259,13 @@ class ProductController extends Controller
         return [
             'type' => Product::getTypes(),
             'active' => Product::getActiveProperties(),
+            'moderator_type' => ModeratorType::pluck('name','id'),
+            'author' => Author::query()
+                // ->when(request()->moderator_type,function($query){
+                //     $query->where('moderator_type',request()->moderator_type);
+                // })
+                ->pluck('name','id'),
+            'category' => Category::pluck('name', 'id'),
         ];
     }
 

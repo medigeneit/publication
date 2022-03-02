@@ -284,7 +284,7 @@ export default {
                     {title: 'Soft', align: 'left', sortable: 'soft'},
                     {title: 'Categrories', align: 'center'},
                     {title: 'Prices', align: 'right'},
-                    {title: 'Moderators', align: 'right'},
+                    {title: 'Moderators', align: 'right', sortable: 'moderator_type'},
                     {title: 'Storages', align: 'right'},
                     {title: 'Circulation', align: 'right'},
                     {title: 'Package', align: 'center'},

@@ -38,7 +38,7 @@ class StorageController extends Controller
             }, 'outlet', 'user'])
             ->filter()
             ->dateFilter()
-            ->search(['id'], ['product:name', 'outlet:name'])
+            ->search(request()->search)
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
             // return $storages ->get();

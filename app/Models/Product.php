@@ -96,17 +96,20 @@ class Product extends Model
                                         });
                                 });
                         })
-                        ->where(function ($query) use ($search_by_vol) {
-                            $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_vol) {
-                                $query
-                                    ->whereHas('volumes', function ($query) use ($search_by_vol) {
-                                        $query->where('name', 'like', "%{$search_by_vol}%");
-                                    });
-                            })
-                                ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_vol) {
+                        ->when($search_by_vol != '', function ($query) use ( $search_by_vol) {
+
+                            $query->where(function ($query) use ($search_by_vol) {
+                                $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_vol) {
                                     $query
-                                        ->Where('name', 'regexp',   $search_by_vol);
-                                });
+                                        ->whereHas('volumes', function ($query) use ($search_by_vol) {
+                                            $query->where('name', 'like', "%{$search_by_vol}%");
+                                        });
+                                })
+                                    ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_vol) {
+                                        $query
+                                            ->Where('name', 'regexp',   $search_by_vol);
+                                    });
+                            });
                         });
                 })
                 ->orWhereHas('categories', function($query) use($search_by_name){
