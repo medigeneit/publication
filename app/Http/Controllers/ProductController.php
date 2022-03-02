@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Models\Author;
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\ModeratorType;
 use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\Publisher;
@@ -19,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+// use Romans\Filter\IntToRoman;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -30,14 +33,25 @@ class ProductController extends Controller
     {
         // \DB::connection()->enableQueryLog();
 
+        // $filter = new IntToRoman();
+
+        // return request()->number;
+
+        $search = preg_replace('/ /', '%', request()->search);
         // return
+        $search = request()->search ? explode(',', $search) : NULL;
+        $search_by_name = $search[0] ?? '';
+        $search_by_edition = $search[1] ?? '';
+        $search_by_vol = $search[2] ?? '';
+        // $search = preg_replace('//', '.', request()->search);
+
         $price_categories = PriceCategory::pluck('name', 'id');
         ProductResource::$price_categories = $price_categories;
         $products = Product::query()
             // ->with('categories', 'publisher', 'prices', 'price_categories')
-            ->with(['categories',  'prices','storages.outlet' ,'productable' => function(MorphTo $morphTo){
+            ->with(['categories',  'prices', 'storages.outlet', 'productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
-                    Volume::class => function ( $query) {
+                    Volume::class => function ($query) {
                         $query->with([
                             'version.production.publisher:id,name',
                             'version.volumes:id,version_id',
@@ -46,7 +60,7 @@ class ProductController extends Controller
                             'version.moderators.author:id,name'
                         ]);
                     },
-                    Version::class => function ( $query) {
+                    Version::class => function ($query) {
                         $query->with([
                             'moderators:id,author_id,moderator_type,version_id',
                             'moderators.moderators_type:id,name',
@@ -60,17 +74,17 @@ class ProductController extends Controller
 
             ->filter()
             ->dateFilter()
-            ->search(['id'])
+            ->search(request()->search)
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
 
 
-            // $products =  ProductResource::collection($products->get());
-            // $products =  $products->get();
-            // $products =  $products->where('id',10)->first()->storages->pluck('quantity')->sum();
-            // $instance =  $products[10];
-            // $moderators = $instance->productable_type == Volume::class ? ($instance->productable->version->moderators) :  ($instance->productable_type == Version::class ? $instance->productable->moderators : []);
-            // return $products;
+        // $products =  ProductResource::collection($products->get());
+        // $products =  $products->get();
+        // $products =  $products->where('id',10)->first()->storages->pluck('quantity')->sum();
+        // $instance =  $products[10];
+        // $moderators = $instance->productable_type == Volume::class ? ($instance->productable->version->moderators) :  ($instance->productable_type == Version::class ? $instance->productable->moderators : []);
+        // return $products;
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -245,6 +259,13 @@ class ProductController extends Controller
         return [
             'type' => Product::getTypes(),
             'active' => Product::getActiveProperties(),
+            'moderator_type' => ModeratorType::pluck('name','id'),
+            'author' => Author::query()
+                // ->when(request()->moderator_type,function($query){
+                //     $query->where('moderator_type',request()->moderator_type);
+                // })
+                ->pluck('name','id'),
+            'category' => Category::pluck('name', 'id'),
         ];
     }
 

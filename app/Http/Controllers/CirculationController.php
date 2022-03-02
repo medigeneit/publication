@@ -34,7 +34,7 @@ class CirculationController extends Controller
             }])
             ->filter()
             ->dateFilter()
-            ->search(['id'], ['product:name', 'outlet:name'])
+            ->search(request()->search)
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         // $circulation_demo = $circulations->get();
