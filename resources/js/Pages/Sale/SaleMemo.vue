@@ -32,6 +32,18 @@
                     <div class="w-full flex items-center gap-2">
                         <Select
                             class="block w-full"
+                            v-model="form.memo_type"
+                            @change="searchBarHandler"
+                        >
+                            <option value="">-- Memo Type --</option>
+                            <option value="1"> Doctor memo</option>
+                            <option value="2"> Client memo </option>
+                            <option value="3"> GenesisMemo </option>
+                        </Select>
+                    </div>
+                    <div class="w-full flex items-center gap-2">
+                        <Select
+                            class="block w-full"
                             v-model="form.price_type"
                             @change="subtotalCalculation"
                         >
@@ -59,6 +71,11 @@
                     <div class="hidden w-full flex items-center gap-2">
                         <Input type="date" class="block w-full" />
                     </div>
+                </div>
+
+                <!-- v-if="searchBar" -->
+                <div class="flex justify-center items-center mb-4 mt-4" v-if="searchBar">
+                    <Input type="text" v-model="form.reg" class="block w-44" :placeholder="placeholder" />
                 </div>
 
                 <div class="">
@@ -89,7 +106,7 @@
                         />
                     </div>
                     <div class="grid md:grid-cols-2 gap-4">
-                        <div class="flex gap-2 items-end mb-4">
+                        <!-- <div class="flex gap-2 items-end mb-4">
                             <label for="address">Phone</label>
                             <input
                                 id="address"
@@ -104,7 +121,7 @@
                                     w-full
                                 "
                             />
-                        </div>
+                        </div> -->
                         <div class="flex gap-2 items-end mb-4">
                             <label for="address">Email</label>
                             <input
@@ -232,19 +249,28 @@
                                     />
                                 </td>
                                 <td class="text-right px-2 py-1 border-r">
-                                    <span v-show="saleableProduct.productId">
+                                    <span v-show="saleableProduct.productId" v-if="saleableProduct.unitPrice[form.price_type]">
                                         {{
                                             saleableProduct.unitPrice[form.price_type]
                                         }}
                                     </span>
+                                    <select name="" id="" v-model="form.selectedPriceType" @change="subtotalCalculation" v-else>
+                                        <option value="">Select Price</option>
+                                        <option :value="index" v-for="(priceType, index) in price_types" :key="index">{{ `${priceType} - ${saleableProduct.unitPrice[index] ? saleableProduct.unitPrice[index] : 0} tk.` }}</option>
+                                    </select>
                                 </td>
                                 <td class="text-right px-2 py-1 border-r">
-                                    <span v-show="saleableProduct.productId">
+                                    <span v-show="saleableProduct.productId" v-if="saleableProduct.unitPrice[form.price_type]">
                                         {{
                                             saleableProduct.quantity *
                                                 saleableProduct.unitPrice[
                                                     form.price_type
                                                 ] || 0
+                                        }}
+                                    </span>
+                                    <span v-show="saleableProduct.productId" v-else>
+                                        {{
+                                           saleableProduct.unitPrice[form.selectedPriceType]
                                         }}
                                     </span>
                                 </td>
@@ -531,12 +557,20 @@ export default {
                 subtotal: 0,
                 discount: 0,
                 discount_purpose: '',
+                memo_type : '',
+                // selectedPrice : ''
             }),
             subtotal: 0,
+            searchBar: false,
             discount: "",
+            placeholder: 'Phone'
         };
     },
     methods: {
+        searchBarHandler() {
+            this.form.memo_type== 3 ? (this.searchBar = true) : (this.searchBar = false);
+            this.form.memo_type== 3 ? (this.placeholder = 'Registration') : (this.placeholder = 'Phone')
+        },
         selectProductHandler(productId) {
             let product = this.products[productId];
 
@@ -613,12 +647,14 @@ export default {
             let subtotal = 0;
 
             this.saleableProducts.forEach((saleableProduct) => {
+                let price = saleableProduct.unitPrice[this.form.price_type] ? saleableProduct.unitPrice[this.form.price_type] :  saleableProduct.unitPrice[this.form.selectedPriceType];
+                console.log(price);
                 subtotal +=
-                    saleableProduct.unitPrice[this.form.price_type] *
+                    price *
                     saleableProduct.quantity;
             });
 
-            this.subtotal = subtotal;
+            this.subtotal = subtotal ? subtotal : this.form.selectedPrice;
 
             this.applyDiscount();
         },
