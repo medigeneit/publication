@@ -23,7 +23,7 @@
                     </div>
                 </td>
                 <td class="py-3 px-2 text-center">
-                    <div class="flex justify-center items-center text-gray-700 cursor-pointer" @click="modalHandler">
+                    <div class="flex justify-center items-center text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" @click="modalHandler">
                         Circulation
                     </div>
                     <div class="fixed inset-0 hidden z-50" id="circulationWrapper">
