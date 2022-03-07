@@ -341,9 +341,11 @@ export default {
             this.message = "Your circulation is complete";
             this.form.post(this.route('circulations.store'));
             
-            setInterval(()=> {
-                this.modalShow = true;
-            }, 1000)
+            // setInterval(()=> {
+            //     this.modalShow = true;
+            // }, 1000)
+            this.modalShow = true;
+            
             this.emptyValue();
         },
         emptyValue() {
