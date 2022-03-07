@@ -93,6 +93,38 @@
                                 </option>
                             </Select>
                         </div>
+                        
+                        <div>
+                            <Label value="Page" />
+                            <Input
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.page"
+                            />
+                        </div>
+                        
+                        <div>
+                            <Label value="Copy Quantity" />
+                            <Input
+                                type="number"
+                                class="mt-1 block w-full"
+                                v-model="form.copy_quantity"
+                            />
+                        </div>
+
+                        <div>
+                            <Label value="Binding Type" />
+                            <Select
+                                class="mt-1 block w-full"
+                                v-model="form.binding_type"
+                                required
+                            >
+                                <option value="">-- Select Binding Type --</option>
+                                <option value="1">Juce and Auto Binding</option>
+                                <option value="2">Dessert and Manual Binding</option>
+                                
+                            </Select>
+                        </div>
                     </div>
                     <h3 class="text-lg text-gray-600 font-bold">Volume Information</h3>
                     <div
@@ -165,6 +197,119 @@
                             (+) Add Volume
                         </Button>
                     </div>
+                    <h3 class="text-lg text-gray-600 font-bold">Printing Section</h3>
+                    <div
+                        class="
+                            w-full
+                            grid grid-cols-2
+                            md:grid-cols-3
+                            bg-white
+                            border
+                            rounded
+                            gap-4
+                            p-4
+                        "
+                    >
+                        <div>
+                            <Label value="Printing Press" />
+                            <Select
+                                class="mt-1 block w-full"
+                                v-model="form.press"
+                            >
+                                <option value="">-- Select Printing Press --</option>
+                                <option v-for="(printingPress, printingId) in data.presses" :value="printingId" :key="printingId">{{ printingPress }}</option>
+                            </Select>
+                        </div>
+
+                        <div>
+                            <Label value="প্লেট সংরক্ষন করা হবে কিনা" />
+                            <div class="flex ml-10">
+                                <div class="mr-5">
+                                    <Input
+                                        type="radio"
+                                        name="is_place_storable"
+                                        class="mt-1 block"
+                                        v-model="form.is_place_storable"
+                                        value="1"
+                                        @click="storigngAtVisibility = true"
+                                    />
+                                    <Label value="Yes" />
+                                </div>
+                                <div>
+                                    <Input
+                                        type="radio"
+                                        name="is_place_storable"
+                                        class="mt-1 block"
+                                        v-model="form.is_place_storable"
+                                        value="0"
+                                        @click="storigngAtVisibility = false"
+                                    />
+                                    <Label value="No" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="storigngAtVisibility">
+                            <Label value="Storing At" />
+                            <Select
+                                class="mt-1 block w-full"
+                                v-model="form.storing_at"
+                            >
+                                <option value="">-- Select Printing Press --</option>
+                                <!-- <option value="1">Juce and Auto Binding</option> -->
+                                <option v-for="(printingPress, printingId) in data.presses" :value="printingId" :key="printingId">{{ printingPress }}</option>
+                            </Select>
+                        </div>
+
+                    </div>
+                        <div
+                        class="
+                            w-full
+                            grid grid-cols-2
+                            md:grid-cols-3
+                            bg-white
+                            border
+                            rounded
+                            gap-4
+                            p-4
+                        "
+                        >
+                            <div>
+                                <table class="w-full min-w-max">
+
+                                    <tbody>
+                                        <tr
+                                            class="border-b"
+                                            v-for="(priceDetailsCategoryKey,index) in data.printing_details_category_keys"
+                                            :key="priceDetailsCategoryKey.id"
+                                        >
+                                            <td
+                                                class="
+                                                    text-right
+                                                    px-2
+                                                    py-1
+                                                    border-r border-l
+                                                "
+                                            >
+                                                {{ priceDetailsCategoryKey.name }}
+                                            </td>
+                                            <td class="text-left px-2 py-1 border-r" >
+                                                <Select
+                                                    class="mt-1 block w-full"
+                                                    v-model="form.price_details[index]"
+                                                    @change="test"
+                                                >
+                                                <option value="">Select Value</option>
+                                                <option :value="priceCategoryValue.id" v-for="(priceCategoryValue) in priceDetailsCategoryKey.values" :key="priceCategoryValue.id">
+                                                 {{ priceCategoryValue.name }}
+                                                </option>
+                                                </Select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                 </div>
                 <div class="w-full max-w-md">
                    <Moderators :form ="form" :data="data"/>
@@ -237,6 +382,13 @@ export default {
                 production_cost: this.data.version.production_cost || "",
                 link: this.data.version.link || "",
                 type: this.data.version.type || "",
+                page: '',
+                copy_quantity: '',
+                binding_type: '',
+                press: '',
+                storing_at: '',
+                is_place_storable: '',
+                price_details : [],
                 active: this.moduleAction == "store" ? 1 : this.data.version.active,
                 volumes: [
                     {
@@ -255,6 +407,7 @@ export default {
                 ],
                 moduleAction: this.moduleAction
             }),
+            storigngAtVisibility : false
         };
     },
     created() {
@@ -269,6 +422,9 @@ export default {
         }
     },
     methods: {
+        test() {
+            console.log(this.form.price_details);
+        },
         addVolume() {
             this.form.volumes.push({
                 name: "",

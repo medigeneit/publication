@@ -12,7 +12,9 @@
                 versionType,
                 product_ids,
                 authors,
-                moderatorTypes
+                moderatorTypes,
+                presses,
+                printing_details_category_keys
             }"
             module-action="store"
         />
@@ -54,10 +56,18 @@ export default {
             default: [],
         },
         authors: {
-            type: Array,
-            default: [],
+            type: Object,
+            default: {},
         },
         moderatorTypes: {
+            type: Object,
+            default: {},
+        },
+        presses: {
+            type: Object,
+            default: {},
+        },
+        printing_details_category_keys: {
             type: Array,
             default: [],
         },

@@ -11,6 +11,8 @@ use App\Models\Product;
 use App\Models\Production;
 use App\Models\Version;
 use App\Models\PackageProduct;
+use App\Models\Press;
+use App\Models\PrintingDetailsCategoryKey;
 use App\Models\Volume;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
@@ -49,6 +51,9 @@ class VersionController extends Controller
             })
             ->get();
 
+        $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id','name']);
+
+
         return Inertia::render('Version/Create', [
             'version'           => new Version(),
             'productionList'    => Production::pluck('name', 'id'),
@@ -56,6 +61,8 @@ class VersionController extends Controller
             'authors'           => Author::pluck('name', 'id'),
             'moderatorTypes'    => ModeratorType::pluck('name', 'id'),
             'versionType'       => Version::getTypes(),
+            'presses'           => Press::pluck('name', 'id'),
+            'printing_details_category_keys' => $printing_details_category_keys
         ]);
     }
 
@@ -66,6 +73,8 @@ class VersionController extends Controller
 
     public function store(Request $request)
     {
+        return $request;
+        
         $validate = $this->validateData($request) + [
             'user_id' => Auth::id()
         ];
