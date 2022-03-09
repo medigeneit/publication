@@ -74,7 +74,7 @@
                 </div>
 
                 <!-- v-if="searchBar" -->
-                <div class="flex justify-center items-center mb-4 mt-4" v-if="searchBar">
+                <div class="flex justify-center items-center mb-4 mt-4">
                     <Input type="text" v-model="form.reg" class="block w-44" :placeholder="placeholder" />
                 </div>
 
@@ -254,9 +254,11 @@
                                             saleableProduct.unitPrice[form.price_type]
                                         }}
                                     </span>
-                                    <select name="" id="" v-model="form.selectedPriceType" @change="subtotalCalculation" v-else>
+                                    <select name="" id="" v-model="form.selectedPriceType[index]" @change="subtotalCalculation(index)" v-else>
                                         <option value="">Select Price</option>
-                                        <option :value="index" v-for="(priceType, index) in price_types" :key="index">{{ `${priceType} - ${saleableProduct.unitPrice[index] ? saleableProduct.unitPrice[index] : 0} tk.` }}</option>
+                                        <option :class="{hidden:!saleableProduct.unitPrice[index]} " :value="index" v-for="(priceType, index) in price_types" :key="index">
+                                            {{ `${priceType} - ${saleableProduct.unitPrice[index] ? saleableProduct.unitPrice[index] : 0} tk.` }}
+                                        </option>
                                     </select>
                                 </td>
                                 <td class="text-right px-2 py-1 border-r">
@@ -270,7 +272,7 @@
                                     </span>
                                     <span v-show="saleableProduct.productId" v-else>
                                         {{
-                                           saleableProduct.unitPrice[form.selectedPriceType]
+                                           saleableProduct.unitPrice[form.selectedPriceType[index]]
                                         }}
                                     </span>
                                 </td>
@@ -559,16 +561,17 @@ export default {
                 discount_purpose: '',
                 memo_type : '',
                 // selectedPrice : ''
+                selectedPriceType: []
             }),
             subtotal: 0,
-            searchBar: false,
+            // searchBar: false,
             discount: "",
             placeholder: 'Phone'
         };
     },
     methods: {
         searchBarHandler() {
-            this.form.memo_type== 3 ? (this.searchBar = true) : (this.searchBar = false);
+            // this.form.memo_type== 3 ? (this.searchBar = true) : (this.searchBar = false);
             this.form.memo_type== 3 ? (this.placeholder = 'Registration') : (this.placeholder = 'Phone')
         },
         selectProductHandler(productId) {
@@ -643,11 +646,12 @@ export default {
 
             this.payable = this.subtotal - (this.discount || 0);
         },
-        subtotalCalculation() {
+        subtotalCalculation(index = 0) {
             let subtotal = 0;
 
             this.saleableProducts.forEach((saleableProduct) => {
-                let price = saleableProduct.unitPrice[this.form.price_type] ? saleableProduct.unitPrice[this.form.price_type] :  saleableProduct.unitPrice[this.form.selectedPriceType];
+                console.log(saleableProduct);
+                let price = saleableProduct.unitPrice[this.form.price_type] ? saleableProduct.unitPrice[this.form.price_type] :  saleableProduct.unitPrice[this.form.selectedPriceType[index]];
                 console.log(price);
                 subtotal +=
                     price *
@@ -655,7 +659,9 @@ export default {
             });
 
             this.subtotal = subtotal ? subtotal : this.form.selectedPrice;
-
+            if(!this.subtotal) {
+                this.subtotal = 0
+            }
             this.applyDiscount();
         },
         submit() {
