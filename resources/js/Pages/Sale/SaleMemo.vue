@@ -287,7 +287,7 @@
                                             saleableProduct.unitPrice[form.price_type]
                                         }}
                                     </span>
-                                    <select name="" id="" v-model="form.selectedPriceType[index]" @change="subtotalCalculation(index)" v-else>
+                                    <select name="" id="" v-model="form.selectedPriceType[saleableProduct.productId]" @change="subtotalCalculation(saleableProduct.productId)" v-else>
                                         <option value="">Select Price</option>
                                         <option :class="{hidden:!saleableProduct.unitPrice[index]} " :value="index" v-for="(priceType, index) in price_types" :key="index">
                                             {{ `${priceType} - ${saleableProduct.unitPrice[index] ? saleableProduct.unitPrice[index] : 0} tk.` }}
@@ -594,7 +594,7 @@ export default {
                 discount_purpose: '',
                 memo_type : '',
                 // selectedPrice : ''
-                selectedPriceType: [],
+                selectedPriceType: [[]],
                 phone: '',
                 reg: ''
             }),
@@ -686,7 +686,7 @@ export default {
             let subtotal = 0;
 
             this.saleableProducts.forEach((saleableProduct) => {
-                console.log(this.form.selectedPriceType);
+                // console.log(this.form.selectedPriceType);
                 let price = saleableProduct.unitPrice[this.form.price_type] ? saleableProduct.unitPrice[this.form.price_type] :  saleableProduct.unitPrice[this.form.selectedPriceType[index]];
                 console.log( saleableProduct.unitPrice[this.form.selectedPriceType[index]] );
                 subtotal +=
