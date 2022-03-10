@@ -682,13 +682,13 @@ export default {
 
             this.payable = this.subtotal - (this.discount || 0);
         },
-        subtotalCalculation(index = 0) {
+        subtotalCalculation(index = null) {
             let subtotal = 0;
 
             this.saleableProducts.forEach((saleableProduct) => {
-                console.log(saleableProduct);
+                console.log(this.form.selectedPriceType);
                 let price = saleableProduct.unitPrice[this.form.price_type] ? saleableProduct.unitPrice[this.form.price_type] :  saleableProduct.unitPrice[this.form.selectedPriceType[index]];
-                console.log(price);
+                console.log( saleableProduct.unitPrice[this.form.selectedPriceType[index]] );
                 subtotal +=
                     price *
                     saleableProduct.quantity;
