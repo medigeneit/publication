@@ -75,7 +75,8 @@
 
                 <!-- v-if="searchBar" -->
                 <div class="flex justify-center items-center mb-4 mt-4">
-                    <Input type="text" v-model="form.reg" class="block w-44" :placeholder="placeholder" />
+                    <Input type="text" v-model="form.phone" class="block w-44" placeholder="Phone" />
+                    <Input type="text" v-if="regBar" v-model="form.reg" class="block w-44" placeholder="Registration" />
                 </div>
 
                 <div class="">
@@ -128,6 +129,38 @@
                                 id="address"
                                 type="email"
                                 v-model="form.email"
+                                class="
+                                    border-0
+                                    border-dotted
+                                    border-b-2
+                                    border-black
+                                    focus:ring-0 focus:outline-none
+                                    w-full
+                                "
+                            />
+                        </div>
+                        <div class="flex gap-2 items-end mb-4" v-if="regBar">
+                            <label for="address">Course</label>
+                            <input
+                                id="address"
+                                type="text"
+                                v-model="form.course"
+                                class="
+                                    border-0
+                                    border-dotted
+                                    border-b-2
+                                    border-black
+                                    focus:ring-0 focus:outline-none
+                                    w-full
+                                "
+                            />
+                        </div>
+                        <div class="flex gap-2 items-end mb-4" v-if="regBar">
+                            <label for="address">Batch</label>
+                            <input
+                                id="address"
+                                type="text"
+                                v-model="form.batch"
                                 class="
                                     border-0
                                     border-dotted
@@ -561,18 +594,21 @@ export default {
                 discount_purpose: '',
                 memo_type : '',
                 // selectedPrice : ''
-                selectedPriceType: []
+                selectedPriceType: [],
+                phone: '',
+                reg: ''
             }),
             subtotal: 0,
             // searchBar: false,
+            regBar: false,
             discount: "",
-            placeholder: 'Phone'
         };
     },
     methods: {
         searchBarHandler() {
             // this.form.memo_type== 3 ? (this.searchBar = true) : (this.searchBar = false);
-            this.form.memo_type== 3 ? (this.placeholder = 'Registration') : (this.placeholder = 'Phone')
+            // this.form.memo_type== 3 ? (this.placeholder = 'Registration') : (this.placeholder = 'Phone')
+            this.form.memo_type== 3 ? (this.regBar = true) : (this.regBar = false)
         },
         selectProductHandler(productId) {
             let product = this.products[productId];
