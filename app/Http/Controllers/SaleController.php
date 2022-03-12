@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SaleProductResource;
 use App\Http\Resources\SaleResource;
+use App\Models\Customer;
 use App\Models\Outlet;
 use App\Models\PriceCategory;
 use App\Models\Pricing;
@@ -126,6 +127,7 @@ class SaleController extends Controller
             'outlets' => Outlet::active()->pluck('name', 'id'),
             'price_types' => $price_category,
             'products' => $productList,
+            // 'customers'=> Customer::get(),
             // 'showProductList' => request()->search,
             'search' => request()->search,
         ]);

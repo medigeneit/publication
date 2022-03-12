@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\ModeratorTypeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CirculationController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\ExpenseController;
@@ -46,6 +47,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/customer-list', [CustomerController::class, 'customer_list'])->middleware(['auth', 'verified'])->name('customer-list');
 
 Route::get('/typing-test', function () {
     return Inertia::render('TypingTest');
@@ -76,6 +78,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'price-categories'          => PriceCategoryController::class,
         'moderator-types'           => ModeratorTypeController::class,
         'circulations'              => CirculationController::class,
-        'moderators'                => ModeratorController::class
+        'moderators'                => ModeratorController::class,
+        'customers'                 => CustomerController::class,
     ]);
 });

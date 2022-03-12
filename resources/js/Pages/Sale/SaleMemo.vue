@@ -75,7 +75,13 @@
 
                 <!-- v-if="searchBar" -->
                 <div class="flex justify-center items-center mb-4 mt-4">
-                    <Input type="text" v-model="form.phone" class="block w-44" placeholder="Phone" @input="studentSearch" />
+                    <div>
+                        <Input type="text" v-model="form.phone" class="block w-44" placeholder="Phone" @input="studentSearch" />
+                        <div>
+                            <ul class="bg-gray-100 text-center mb-1" id="customers" @click="customerInfo(customers)">
+                            </ul>
+                        </div>
+                    </div>
                     <Input type="text" v-if="regBar" v-model="form.reg" class="block w-44" placeholder="Registration" />
                 </div>
 
@@ -107,22 +113,6 @@
                         />
                     </div>
                     <div class="grid md:grid-cols-2 gap-4">
-                        <!-- <div class="flex gap-2 items-end mb-4">
-                            <label for="address">Phone</label>
-                            <input
-                                id="address"
-                                type="number"
-                                v-model="form.customer_phone"
-                                class="
-                                    border-0
-                                    border-dotted
-                                    border-b-2
-                                    border-black
-                                    focus:ring-0 focus:outline-none
-                                    w-full
-                                "
-                            />
-                        </div> -->
                         <div class="flex gap-2 items-end mb-4">
                             <label for="address">Email</label>
                             <input
@@ -594,7 +584,6 @@ export default {
                 discount: 0,
                 discount_purpose: '',
                 memo_type : '',
-                // selectedPrice : ''
                 selectedPriceType: [],
                 select_price: '',
                 phone: '',
@@ -604,15 +593,43 @@ export default {
             selected_subtotal: [],
             regBar: false,
             discount: "",
-            selected_price: []
+            selected_price: [],
+            customers: {},
         };
     },
     methods: {
         studentSearch(event) {
-            console.log(event.target.value);
+            if (event.target.value.length > 2) {
+                axios.get('/customer-list',  {
+                    params: { 
+                        text: event.target.value 
+                    }
+                })
+                .then((response) => {
+                    let customer = document.getElementById('customers');
+                    customer.innerHTML = '';
+                    
+                    response.data.forEach((data)=> {
+                        this.customers = data;
+                        customer.innerHTML +=` ${data.name}, ${data.phone}` ;
+                    })
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+            }
+        },
+        customerInfo(data) {
+            console.log(data.name);
+            this.form.customer_name = data.name;
+            this.form.customer_phone = data.phone;
+            this.form.email = data.email;
+            let customer = document.getElementById('customers');
+            customer.innerHTML = '';
+
         },
         searchBarHandler() {
-            this.form.memo_type== 3 ? (this.regBar = true) : (this.regBar = false)
+            this.form.memo_type== 3 ? (this.regBar = true) : (this.regBar = false);
         },
         priceSave(index) {
             let saleableProduct = this.saleableProducts[index];
@@ -621,7 +638,7 @@ export default {
             
             this.selected_subtotal.push(saleableProduct.unitPrice[saleableProduct.selected_price_type]);
             
-            this.subtotalCalculation()
+            this.subtotalCalculation();
         },
         selectProductHandler(productId) {
             let product = this.products[productId];
