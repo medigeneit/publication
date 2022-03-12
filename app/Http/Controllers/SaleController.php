@@ -8,6 +8,7 @@ use App\Http\Resources\SaleProductResource;
 use App\Http\Resources\SaleResource;
 use App\Models\Outlet;
 use App\Models\PriceCategory;
+use App\Models\Pricing;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Traits\DateFilter;
@@ -37,10 +38,9 @@ class SaleController extends Controller
     {
         $productList = [];
 
-        // return request()->search;
-
+        // return
         $products = Product::query()
-            ->with(['categories',  'prices', 'storages.outlet', 'productable' => function (MorphTo $morphTo) {
+            ->with(['categories',  'prices.price_categroy', 'storages.outlet', 'productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Volume::class => function ($query) {
                         $query->with([
@@ -72,6 +72,7 @@ class SaleController extends Controller
             // ->orderBy('name')
             ->get();
 
+
             $price_category =PriceCategory::pluck('name', 'id');
 
             foreach ($products as $product) {
@@ -83,13 +84,17 @@ class SaleController extends Controller
             // ];
 
 
-            $unit_price = $product->prices->pluck('name', 'id');
+            // $unit_price = $product->prices->pluck('name', 'id');
             // return [$product->prices->pluck('amount', 'price_category_id'), $price_category ];
+            // return $product->prices->price_name;
+            // return $product->prices->pluck('amount', 'price_category');
+
             $property = (object)[
                 'name'          => (string) ($product->product_name ?? ''),
                 'maxQuantity'   => (int) rand(10, 20),
                 // 'unitPrice'     => (object) $unit_price,
                 'unitPrice'     => (object) $product->prices->pluck('amount', 'price_category_id'),
+                // 'prices'     => (object) $product->prices->pluck('amount', 'price_category.name'),
 
             ];
 

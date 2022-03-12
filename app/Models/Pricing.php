@@ -16,11 +16,15 @@ class Pricing extends Model
 
     public function product()
     {
-        $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class);
+    }
+    public function getPriceNameAttribute()
+    {
+        return $this->price_categroy->name;
     }
 
     public function price_categroy()
     {
-        $this->belongsTo(PriceCategory::class, 'price_category_id');
+        return $this->belongsTo(PriceCategory::class, 'price_category_id');
     }
 }

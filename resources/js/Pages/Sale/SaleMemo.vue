@@ -75,7 +75,7 @@
 
                 <!-- v-if="searchBar" -->
                 <div class="flex justify-center items-center mb-4 mt-4">
-                    <Input type="text" v-model="form.phone" class="block w-44" placeholder="Phone" />
+                    <Input type="text" v-model="form.phone" class="block w-44" placeholder="Phone" @input="studentSearch" />
                     <Input type="text" v-if="regBar" v-model="form.reg" class="block w-44" placeholder="Registration" />
                 </div>
 
@@ -287,7 +287,8 @@
                                             saleableProduct.unitPrice[form.price_type]
                                         }}
                                     </span>
-                                    <select name="" id="" v-model="form.selectedPriceType[saleableProduct.productId]" @change="subtotalCalculation(saleableProduct.productId)" v-else>
+                                    <!-- v-model="form.selectedPriceType[index]" subtotalCalculation(index) -->
+                                    <select name="" id="" v-model="selected_price[index]"  @change="priceSave(index); subtotalCalculation" v-else>
                                         <option value="">Select Price</option>
                                         <option :class="{hidden:!saleableProduct.unitPrice[index]} " :value="index" v-for="(priceType, index) in price_types" :key="index">
                                             {{ `${priceType} - ${saleableProduct.unitPrice[index] ? saleableProduct.unitPrice[index] : 0} tk.` }}
@@ -305,7 +306,7 @@
                                     </span>
                                     <span v-show="saleableProduct.productId" v-else>
                                         {{
-                                           saleableProduct.unitPrice[form.selectedPriceType[index]]
+                                           saleableProduct.unitPrice[saleableProduct.selected_price_type]
                                         }}
                                     </span>
                                 </td>
@@ -594,21 +595,40 @@ export default {
                 discount_purpose: '',
                 memo_type : '',
                 // selectedPrice : ''
-                selectedPriceType: [[]],
+                selectedPriceType: [],
+                select_price: '',
                 phone: '',
                 reg: ''
             }),
             subtotal: 0,
-            // searchBar: false,
+            selected_subtotal: [],
             regBar: false,
             discount: "",
+            selected_price: []
         };
     },
     methods: {
+        studentSearch(event) {
+            console.log(event.target.value);
+            
+        },
         searchBarHandler() {
-            // this.form.memo_type== 3 ? (this.searchBar = true) : (this.searchBar = false);
-            // this.form.memo_type== 3 ? (this.placeholder = 'Registration') : (this.placeholder = 'Phone')
             this.form.memo_type== 3 ? (this.regBar = true) : (this.regBar = false)
+        },
+        priceSave(index) {
+            let saleableProduct = this.saleableProducts[index];
+
+            let customize_subtotal = 0;
+
+            saleableProduct.selected_price_type = this.selected_price[index];
+            
+            this.selected_subtotal.push(saleableProduct.unitPrice[saleableProduct.selected_price_type]);
+
+            // this.selected_subtotal.forEach((subtotal) => {
+            //     customize_subtotal += subtotal * saleableProduct.quantity
+            // });
+            
+            this.subtotalCalculation()
         },
         selectProductHandler(productId) {
             let product = this.products[productId];
@@ -618,6 +638,7 @@ export default {
                     productId: productId,
                     quantity: 1,
                     unitPrice: product.unitPrice,
+                    selected_price_type: ''
                 });
             }
 
@@ -682,19 +703,18 @@ export default {
 
             this.payable = this.subtotal - (this.discount || 0);
         },
-        subtotalCalculation(index = null) {
+        subtotalCalculation() {
             let subtotal = 0;
 
             this.saleableProducts.forEach((saleableProduct) => {
-                // console.log(this.form.selectedPriceType);
-                let price = saleableProduct.unitPrice[this.form.price_type] ? saleableProduct.unitPrice[this.form.price_type] :  saleableProduct.unitPrice[this.form.selectedPriceType[index]];
-                console.log( saleableProduct.unitPrice[this.form.selectedPriceType[index]] );
+                let price = saleableProduct.unitPrice[this.form.price_type]? saleableProduct.unitPrice[this.form.price_type] : saleableProduct.unitPrice[saleableProduct.selected_price_type] ;
+                // console.log(this.form.selectedPriceType[index]);
                 subtotal +=
                     price *
                     saleableProduct.quantity;
             });
 
-            this.subtotal = subtotal ? subtotal : this.form.selectedPrice;
+            this.subtotal = subtotal;
             if(!this.subtotal) {
                 this.subtotal = 0
             }
