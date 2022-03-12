@@ -610,7 +610,6 @@ export default {
     methods: {
         studentSearch(event) {
             console.log(event.target.value);
-            
         },
         searchBarHandler() {
             this.form.memo_type== 3 ? (this.regBar = true) : (this.regBar = false)
@@ -618,15 +617,9 @@ export default {
         priceSave(index) {
             let saleableProduct = this.saleableProducts[index];
 
-            let customize_subtotal = 0;
-
             saleableProduct.selected_price_type = this.selected_price[index];
             
             this.selected_subtotal.push(saleableProduct.unitPrice[saleableProduct.selected_price_type]);
-
-            // this.selected_subtotal.forEach((subtotal) => {
-            //     customize_subtotal += subtotal * saleableProduct.quantity
-            // });
             
             this.subtotalCalculation()
         },
@@ -708,7 +701,7 @@ export default {
 
             this.saleableProducts.forEach((saleableProduct) => {
                 let price = saleableProduct.unitPrice[this.form.price_type]? saleableProduct.unitPrice[this.form.price_type] : saleableProduct.unitPrice[saleableProduct.selected_price_type] ;
-                // console.log(this.form.selectedPriceType[index]);
+                
                 subtotal +=
                     price *
                     saleableProduct.quantity;
