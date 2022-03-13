@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SaleProductResource;
 use App\Http\Resources\SaleResource;
+use App\Models\Area;
 use App\Models\Customer;
+use App\Models\District;
+use App\Models\Division;
 use App\Models\Outlet;
 use App\Models\PriceCategory;
 use App\Models\Pricing;
@@ -101,27 +104,7 @@ class SaleController extends Controller
 
             $productList[$product->id] = $property;
         }
-
-
-        // $productList[5] = [
-        //     'name'          => 'Last Hour',
-        //     'maxQuantity'   => 10,
-        //     'unitPrice'     => [
-        //         1 => 790,
-        //         2 => 740,
-        //     ],
-        // ];
-
-        // $productList[7] = [
-        //     'name'          => 'SBA Pearl',
-        //     'maxQuantity'   => 5,
-        //     'unitPrice'     => [
-        //         1 => 590,
-        //         2 => 540,
-        //     ],
-        // ];
-        // return PriceCategory::pluck('name', 'id');
-
+        // return District::with('areas')->get();
         return Inertia::render('Sale/SaleMemo', [
             'sale' => new Sale(),
             'outlets' => Outlet::active()->pluck('name', 'id'),
@@ -129,6 +112,10 @@ class SaleController extends Controller
             'products' => $productList,
             // 'customers'=> Customer::get(),
             // 'showProductList' => request()->search,
+            'search' => request()->search,
+            'areas' => Area::get(),
+            'districts' => District::with('areas')->get(),
+            'divisions' => Division::with('districts')->get(),
             'search' => request()->search,
         ]);
     }

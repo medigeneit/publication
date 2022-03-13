@@ -112,6 +112,32 @@
                             "
                         />
                     </div>
+                    <div class="flex gap-2 items-end mb-4">
+                        <Select
+                            class="block w-full"
+                            v-model="form.district_id"
+                             @input="selectDistrict"
+                        >
+                            <option value="">-- District --</option>
+                            <optgroup :label="division.name" v-for="division in divisions" :key="division.id">
+                                <option :value="district.id" v-for="district in division.districts" :key="district.id">
+                                    {{ `${district.id}-${district.name}` }}
+                                </option>
+                            </optgroup>
+                        </Select>
+                        <!-- {{ divisions }} -->
+                        <Select
+                            class="block w-full"
+                            v-model="form.area_id"
+                        >
+                            <option value="">-- Area --</option>
+
+                            <option :value="area.id" v-for="area in customAreas" :key="area.id">
+                                {{ area.name }}
+                                <!-- {{ customAreas }} -->
+                            </option>
+                        </Select>
+                    </div>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div class="flex gap-2 items-end mb-4">
                             <label for="address">Email</label>
@@ -560,6 +586,18 @@ export default {
             type: Object,
             default: {},
         },
+        areas: {
+            type: Object,
+            default: {},
+        },
+        districts: {
+            type: Object,
+            default: {},
+        },
+        divisions: {
+            type: Object,
+            default: {},
+        },
         search: {
             type: String,
             default: "",
@@ -587,7 +625,9 @@ export default {
                 selectedPriceType: [],
                 select_price: '',
                 phone: '',
-                reg: ''
+                reg: '',
+                area_id: '',
+                district_id: '',
             }),
             subtotal: 0,
             selected_subtotal: [],
@@ -597,7 +637,26 @@ export default {
             customers: {},
         };
     },
+    created(){
+        this.customAreas = this.areas
+        this.customDistricts = this.districts
+        // this.customDivisions = this.divisions
+    },
     methods: {
+        selectDistrict(event) {
+            if (!event.target.value) {
+                return (this.customAreas = this.areas);
+            }
+            this.customAreas = Object.values(this.customDistricts).find(
+                (district) => district.id == event.target.value
+            ).areas;
+            Object.values(this.customAreas).find(
+                (area) => console.log(area.name)
+            )
+            return (this.customAreas = Object.values(this.customDistricts).find(
+                (district) => district.id == event.target.value
+            ).areas);
+        },
         studentSearch(event) {
             if (event.target.value.length > 2) {
                 axios.get('/customer-list',  {
