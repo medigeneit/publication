@@ -36,9 +36,10 @@
                             @change="searchBarHandler"
                         >
                             <option value="">-- Memo Type --</option>
-                            <option value="1"> Doctor memo</option>
-                            <option value="2"> Client memo </option>
-                            <option value="3"> GenesisMemo </option>
+                            <!-- <option value="1"> Doctor memo</option> -->
+                            <option value="1"> Client memo </option>
+                            <option value="2"> Distributor </option>
+                            <option value="3"> Special </option>
                         </Select>
                     </div>
                     <div class="w-full flex items-center gap-2">
@@ -49,7 +50,9 @@
                         >
                             <option value="">-- Price Type --</option>
 
-                            <option :value="index" v-for="(priceType, index) in price_types" :key="index">{{ priceType }}</option>
+                            <option :value="index" v-for="(priceType, index) in priceTypes" :key="index">
+                                {{ priceType.name }}
+                            </option>
                         </Select>
                     </div>
                     <div class="w-full flex items-center gap-2">
@@ -121,7 +124,7 @@
                             <option value="">-- District --</option>
                             <optgroup :label="division.name" v-for="division in divisions" :key="division.id">
                                 <option :value="district.id" v-for="district in division.districts" :key="district.id">
-                                    {{ `${district.id}-${district.name}` }}
+                                    {{ district.name }}
                                 </option>
                             </optgroup>
                         </Select>
@@ -134,7 +137,6 @@
 
                             <option :value="area.id" v-for="area in customAreas" :key="area.id">
                                 {{ area.name }}
-                                <!-- {{ customAreas }} -->
                             </option>
                         </Select>
                     </div>
@@ -303,11 +305,11 @@
                                             saleableProduct.unitPrice[form.price_type]
                                         }}
                                     </span>
-                                    <!-- v-model="form.selectedPriceType[index]" subtotalCalculation(index) -->
+                                    
                                     <select name="" id="" v-model="selected_price[index]"  @change="priceSave(index); subtotalCalculation" v-else>
                                         <option value="">Select Price</option>
                                         <option :class="{hidden:!saleableProduct.unitPrice[index]} " :value="index" v-for="(priceType, index) in price_types" :key="index">
-                                            {{ `${priceType} - ${saleableProduct.unitPrice[index] ? saleableProduct.unitPrice[index] : 0} tk.` }}
+                                            {{ `${priceType.name} - ${saleableProduct.unitPrice[index] ? saleableProduct.unitPrice[index] : 0} tk.` }}
                                         </option>
                                     </select>
                                 </td>
@@ -621,7 +623,7 @@ export default {
                 subtotal: 0,
                 discount: 0,
                 discount_purpose: '',
-                memo_type : '',
+                memo_type : 1,
                 selectedPriceType: [],
                 select_price: '',
                 phone: '',
@@ -635,25 +637,52 @@ export default {
             discount: "",
             selected_price: [],
             customers: {},
+            customAreas: {},
+            priceTypes: {}
         };
     },
     created(){
-        this.customAreas = this.areas
-        this.customDistricts = this.districts
-        // this.customDivisions = this.divisions
+        this.customAreas = this.areas;
+        this.priceTypes = Object.values(this.price_types).filter((priceType) => priceType.is_special == 0);
     },
     methods: {
+        searchBarHandler() {
+            this.form.memo_type== 3 ? (this.regBar = true) : (this.regBar = false);
+
+            let specialPrice = Object.values(this.price_types).filter(
+                (priceType) => priceType.is_special == 1
+            );
+            
+            let distributorPrice = Object.values(this.price_types).filter(
+                (priceType) => priceType.is_special == 2
+            );
+
+            let notSpecialPrice = Object.values(this.price_types).filter(
+                (priceType) => priceType.is_special == 0
+            );
+
+            // this.priceTypes = this.form.memo_type== 2 ? specialPrice : notSpecialPrice;
+            if (this.form.memo_type== 3) {
+                this.priceTypes = specialPrice
+            } else if(this.form.memo_type== 2) {
+                this.priceTypes = distributorPrice
+            } else {
+                this.priceTypes = notSpecialPrice
+            }
+            // console.log(specialPrice, notSpecialPrice);
+        },
         selectDistrict(event) {
+            this.form.area_id = '';
             if (!event.target.value) {
                 return (this.customAreas = this.areas);
             }
-            this.customAreas = Object.values(this.customDistricts).find(
-                (district) => district.id == event.target.value
-            ).areas;
-            Object.values(this.customAreas).find(
-                (area) => console.log(area.name)
-            )
-            return (this.customAreas = Object.values(this.customDistricts).find(
+            let customDistricts =Object.values(this.divisions).find(
+               (division)=> Object.values(division.districts).find(
+                   (district) => district.id == event.target.value
+                )
+            ).districts;
+            
+            return (this.customAreas = Object.values(customDistricts).find(
                 (district) => district.id == event.target.value
             ).areas);
         },
@@ -687,27 +716,24 @@ export default {
             customer.innerHTML = '';
 
         },
-        searchBarHandler() {
-            this.form.memo_type== 3 ? (this.regBar = true) : (this.regBar = false);
-        },
         priceSave(index) {
             let saleableProduct = this.saleableProducts[index];
 
             saleableProduct.selected_price_type = this.selected_price[index];
-            
+            saleableProduct.selected_unit_price = saleableProduct.unitPrice[saleableProduct.selected_price_type];
             this.selected_subtotal.push(saleableProduct.unitPrice[saleableProduct.selected_price_type]);
-            
             this.subtotalCalculation();
         },
         selectProductHandler(productId) {
             let product = this.products[productId];
-
+            // console.log(product.unitPrice[this.form.price_type])
             if (!product.selected) {
                 this.saleableProducts.push({
                     productId: productId,
                     quantity: 1,
                     unitPrice: product.unitPrice,
-                    selected_price_type: ''
+                    selected_price_type: '',
+                    selected_unit_price: product.unitPrice[this.form.price_type] ,
                 });
             }
 

@@ -77,45 +77,28 @@ class SaleController extends Controller
             ->get();
 
 
-            $price_category =PriceCategory::pluck('name', 'id');
+            $price_category =PriceCategory::get();
 
             foreach ($products as $product) {
-            // $unit_price = (object) [
-            //     1 => (float) ($product->wholesale_price ?? 0),
-            //     2 => (float) ($product->retail_price ?? 0),
-            //     3 => (float) ($product->distribute_price ?? 0),
-            //     4 => (float) ($product->special_price ?? 0),
-            // ];
-
-
-            // $unit_price = $product->prices->pluck('name', 'id');
-            // return [$product->prices->pluck('amount', 'price_category_id'), $price_category ];
-            // return $product->prices->price_name;
-            // return $product->prices->pluck('amount', 'price_category');
 
             $property = (object)[
                 'name'          => (string) ($product->product_name ?? ''),
                 'maxQuantity'   => (int) rand(10, 20),
-                // 'unitPrice'     => (object) $unit_price,
                 'unitPrice'     => (object) $product->prices->pluck('amount', 'price_category_id'),
-                // 'prices'     => (object) $product->prices->pluck('amount', 'price_category.name'),
 
             ];
 
             $productList[$product->id] = $property;
         }
-        // return District::with('areas')->get();
+        // return Division::with('districts.areas')->get();
         return Inertia::render('Sale/SaleMemo', [
             'sale' => new Sale(),
             'outlets' => Outlet::active()->pluck('name', 'id'),
             'price_types' => $price_category,
             'products' => $productList,
-            // 'customers'=> Customer::get(),
-            // 'showProductList' => request()->search,
             'search' => request()->search,
             'areas' => Area::get(),
-            'districts' => District::with('areas')->get(),
-            'divisions' => Division::with('districts')->get(),
+            'divisions' => Division::with('districts.areas')->get(),
             'search' => request()->search,
         ]);
     }
