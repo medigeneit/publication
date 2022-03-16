@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SaleProductResource;
 use App\Http\Resources\SaleResource;
+use App\Models\AddressesOf;
 use App\Models\Area;
 use App\Models\Customer;
 use App\Models\District;
@@ -105,7 +106,30 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
+        // return $request->customer_phone;
         return $request;
+
+        $customer = Customer::updateOrCreate([
+            'phone'     => $request->customer_phone,
+        ],
+        [
+            'name'      => $request->customer_name,
+            'email'     => $request->customer_name,
+            'user_id'   => Auth::user()->id
+        ]);
+        if($request->area_id){
+            AddressesOf::updateOrCreate([
+                'customer_id'     => $customer->id,
+            ],
+            [
+                'area_id'      => $request->area_id,
+                'adress'     => $request->area_id,
+            ]);
+        }
+
+        return Customer::with('adress')->get();
+
+
 
         $sale = Sale::create($this->validateData($request) + [
             'user_id' => Auth::id()
