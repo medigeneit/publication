@@ -690,6 +690,11 @@ export default {
         },
         customerSearch(event) {
             if (event.target.value.length > 2) {
+                // axios.get('http://192.168.88.189:7000/publication/doctor-course-info?reg_no=22105608',  {
+                //     // params: { 
+                //     //     text: event.target.value 
+                //     // }
+                // })
                 axios.get('/customer-list',  {
                     params: { 
                         text: event.target.value 
