@@ -92,7 +92,7 @@ class CustomerController extends Controller
     public function customer_list(Request $request)
     {
         if ($request->memo_type == 3) {
-            # code...
+            # code...22107001
             return Http::get('https://api.genesisedu.info/publication/doctor-course-info?reg_no='. $request->text);
         }
 
