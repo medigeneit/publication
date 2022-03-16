@@ -80,13 +80,22 @@
                 <div class="flex justify-center items-center mb-4 mt-4">
                     <div>
                         <Input type="text" v-model="form.customer_phone" class="block w-44" placeholder="Phone" @input="customerSearch" />
-                        <div>
+                        <!-- <div>
                             <ul class="bg-gray-100 text-center mb-1" id="customers" v-for="(customer) in customers" :key="customer.id" @click="customerInfo(customer)">
+                                {{ customer }}
                                 {{ customer.name }} {{ customer.phone }}
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
-                    <Input type="text" v-if="regBar" v-model="form.reg" class="block w-44" placeholder="Registration" />
+                    <Input type="text" v-if="regBar" v-model="form.reg" class="block w-44" placeholder="Registration" @input="customerSearch" />
+                </div>
+                <div class="flex justify-center items-center mb-4 mt-4">
+                    <div>
+                        <ul class="bg-gray-100 text-center mb-1" id="customers" v-for="(customer) in customers" :key="customer.id" @click="customerInfo(customer)">
+                            {{ customer }}
+                            <!-- {{ customer.name }} {{ customer.phone }} -->
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="">
@@ -690,19 +699,16 @@ export default {
         },
         customerSearch(event) {
             if (event.target.value.length > 2) {
-                // axios.get('http://192.168.88.189:7000/publication/doctor-course-info?reg_no=22105608',  {
-                //     // params: { 
-                //     //     text: event.target.value 
-                //     // }
-                // })
                 axios.get('/customer-list',  {
                     params: { 
-                        text: event.target.value 
+                        text: event.target.value,
+                        memo_type:this.form.memo_type
                     }
                 })
                 .then((response) => {
                     this.customers = response.data;
                     console.log(this.customers);
+
                 })
                 .catch((err) => {
                     console.log(err);

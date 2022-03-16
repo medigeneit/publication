@@ -7,6 +7,7 @@ use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -21,7 +22,7 @@ class CustomerController extends Controller
             ->getQuery();
 
         return Inertia::render('Customer/Index', [
-            'customers' => CustomerResource::customer($customers->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'customers' => CustomerResource::collection($customers->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
@@ -90,6 +91,11 @@ class CustomerController extends Controller
 
     public function customer_list(Request $request)
     {
+        if ($request->memo_type == 3) {
+            # code...
+            return Http::get('https://api.genesisedu.info/publication/doctor-course-info?reg_no='. $request->text);
+        }
+
         return 
         Customer::query()
         ->when($request->text, function($query) use($request) {
