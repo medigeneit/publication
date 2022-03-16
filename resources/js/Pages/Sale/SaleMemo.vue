@@ -79,7 +79,7 @@
                 <!-- v-if="searchBar" -->
                 <div class="flex justify-center items-center mb-4 mt-4">
                     <div>
-                        <Input type="text" v-model="form.phone" class="block w-44" placeholder="Phone" @input="studentSearch" />
+                        <Input type="text" v-model="form.customer_phone" class="block w-44" placeholder="Phone" @input="studentSearch" />
                         <div>
                             <ul class="bg-gray-100 text-center mb-1" id="customers" @click="customerInfo(customers)">
                             </ul>
@@ -626,7 +626,7 @@ export default {
                 memo_type : 1,
                 selectedPriceType: [],
                 select_price: '',
-                phone: '',
+                // phone: '',
                 reg: '',
                 area_id: '',
                 district_id: '',
