@@ -79,9 +79,10 @@
                 <!-- v-if="searchBar" -->
                 <div class="flex justify-center items-center mb-4 mt-4">
                     <div>
-                        <Input type="text" v-model="form.customer_phone" class="block w-44" placeholder="Phone" @input="studentSearch" />
+                        <Input type="text" v-model="form.customer_phone" class="block w-44" placeholder="Phone" @input="customerSearch" />
                         <div>
-                            <ul class="bg-gray-100 text-center mb-1" id="customers" @click="customerInfo(customers)">
+                            <ul class="bg-gray-100 text-center mb-1" id="customers" v-for="(customer) in customers" :key="customer.id" @click="customerInfo(customer)">
+                                {{ customer.name }} {{ customer.phone }}
                             </ul>
                         </div>
                     </div>
@@ -638,7 +639,8 @@ export default {
             selected_price: [],
             customers: {},
             customAreas: {},
-            priceTypes: {}
+            priceTypes: {},
+            customers: '',
         };
     },
     created(){
@@ -686,7 +688,7 @@ export default {
                 (district) => district.id == event.target.value
             ).areas);
         },
-        studentSearch(event) {
+        customerSearch(event) {
             if (event.target.value.length > 2) {
                 axios.get('/customer-list',  {
                     params: { 
@@ -694,13 +696,8 @@ export default {
                     }
                 })
                 .then((response) => {
-                    let customer = document.getElementById('customers');
-                    customer.innerHTML = '';
-                    
-                    response.data.forEach((data)=> {
-                        this.customers = data;
-                        customer.innerHTML +=` ${data.name}, ${data.phone}` ;
-                    })
+                    this.customers = response.data;
+                    console.log(this.customers);
                 })
                 .catch((err) => {
                     console.log(err);
