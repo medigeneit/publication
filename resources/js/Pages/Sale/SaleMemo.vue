@@ -647,6 +647,8 @@ export default {
                 reg: '',
                 area_id: '',
                 district_id: '',
+                course: '',
+                batch: '',
             }),
             subtotal: 0,
             selected_subtotal: [],
