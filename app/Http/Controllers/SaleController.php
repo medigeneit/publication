@@ -20,6 +20,7 @@ use App\Traits\DateFilter;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
 class SaleController extends Controller
@@ -108,14 +109,15 @@ class SaleController extends Controller
     public function store(Request $request)
     {
         // return $request->customer_phone;
-        return $request;
+        // return Http::get('https://api.genesisedu.info/publication/doctor-course-info?reg_no=22107001');
+        // return $request;
 
         $customer = Customer::updateOrCreate([
             'phone'     => $request->customer_phone,
         ],
         [
             'name'      => $request->customer_name,
-            'email'     => $request->customer_name,
+            'email'     => $request->email,
             'user_id'   => Auth::user()->id
         ]);
         if($request->area_id){
@@ -124,9 +126,12 @@ class SaleController extends Controller
             ],
             [
                 'area_id'      => $request->area_id,
-                'adress'     => $request->area_id,
+                'address'     => $request->area_id,
             ]);
         }
+        // if($request->memo_type == 3){
+
+        // }
 
         return Customer::with('adress')->get();
 
