@@ -50,7 +50,7 @@
                         >
                             <option value="">-- Price Type --</option>
 
-                            <option :value="index" v-for="(priceType, index) in priceTypes" :key="index">
+                            <option :value="priceType.id" v-for="(priceType, index) in priceTypes" :key="priceType.id">
                                 {{ priceType.name }}
                             </option>
                         </Select>
@@ -87,13 +87,20 @@
                             </ul>
                         </div> -->
                     </div>
-                    <Input type="text" v-if="regBar" v-model="form.reg" class="block w-44" placeholder="Registration" @input="customerSearch" />
+                    <div class="flex relative" v-if="regBar">
+                        <Input type="text" v-model="form.reg" class="block w-44" placeholder="Registration"/>
+                        <button class="absolute right-0 top-2 text-sm" type="button" @click="customerSearch">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <div class="flex justify-center items-center mb-4 mt-4">
                     <div>
                         <ul class="bg-gray-100 text-center mb-1" id="customers" v-for="(customer) in customers" :key="customer.id" @click="customerInfo(customer)">
-                            {{ customer }}
-                            <!-- {{ customer.name }} {{ customer.phone }} -->
+                            <!-- {{ customer }} -->
+                                {{ customer.name }} {{ customer.phone }}
                         </ul>
                     </div>
                 </div>
@@ -318,8 +325,8 @@
                                     
                                     <select name="" id="" v-model="selected_price[index]"  @change="priceSave(index); subtotalCalculation" v-else>
                                         <option value="">Select Price</option>
-                                        <option :class="{hidden:!saleableProduct.unitPrice[index]} " :value="index" v-for="(priceType, index) in price_types" :key="index">
-                                            {{ `${priceType.name} - ${saleableProduct.unitPrice[index] ? saleableProduct.unitPrice[index] : 0} tk.` }}
+                                        <option :class="{hidden:!saleableProduct.unitPrice[priceType.id]} " :value="priceType.id" v-for="(priceType, index) in price_types" :key="priceType.id">
+                                            {{ `${priceType.name} - ${saleableProduct.unitPrice[priceType.id] ? saleableProduct.unitPrice[priceType.id] : 0} tk.` }}
                                         </option>
                                     </select>
                                 </td>
@@ -698,10 +705,10 @@ export default {
             ).areas);
         },
         customerSearch(event) {
-            if (event.target.value.length > 2) {
+            // if (event.target.value.length > 2) {
                 axios.get('/customer-list',  {
                     params: { 
-                        text: event.target.value,
+                        text: event.target.value ? event.target.value : this.form.reg,
                         memo_type:this.form.memo_type
                     }
                 })
@@ -713,13 +720,34 @@ export default {
                 .catch((err) => {
                     console.log(err);
                 })
-            }
+            // }
         },
         customerInfo(data) {
-            console.log(data.name);
+            let districts = this.districts
+            let district_id = '';
+            let area_id = '';
+
+            if (data.district) {
+                Object.keys(districts).map(function(key) {
+                    if(districts[key] === data.district.name) {
+                        district_id = key
+                    }
+                });
+    
+                area_id = Object.values(this.customAreas).find(
+                    (customArea) => customArea.name == data.upazila.name
+                ).id;
+            }
+            
+            
             this.form.customer_name = data.name;
             this.form.customer_phone = data.phone;
             this.form.email = data.email;
+            this.form.course = data.course ? data.course : ''
+            this.form.batch = data.batch ? data.batch : ''
+            this.form.customer_address = data.address ? data.address : ''
+            this.form.district_id = district_id;
+            this.form.area_id = area_id;
             let customer = document.getElementById('customers');
             customer.innerHTML = '';
 
@@ -734,7 +762,8 @@ export default {
         },
         selectProductHandler(productId) {
             let product = this.products[productId];
-            // console.log(product.unitPrice[this.form.price_type])
+            console.log(product.unitPrice[this.form.price_type])
+
             if (!product.selected) {
                 this.saleableProducts.push({
                     productId: productId,

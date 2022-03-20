@@ -100,6 +100,7 @@ class SaleController extends Controller
             'search' => request()->search,
             'areas' => Area::get(),
             'divisions' => Division::with('districts.areas')->get(),
+            'districts' => District::pluck('name', 'id'),
             'search' => request()->search,
         ]);
     }
