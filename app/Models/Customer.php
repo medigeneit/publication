@@ -17,4 +17,9 @@ class Customer extends Model
     {
         return $this->hasOne(AddressesOf::class,'customer_id');
     }
+
+    public function genesis_info()
+    {
+        return $this->hasOne(GenesisCustomerInfo::class,'customer_id');
+    }
 }
