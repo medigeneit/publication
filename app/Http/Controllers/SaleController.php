@@ -31,10 +31,14 @@ class SaleController extends Controller
     public function index()
     {
         $sales = Sale::query()
-            ->filter()
-            ->dateFilter()
-            ->search(['id', 'name'])
-            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+        ->with('customer','outlet','payments')
+        ->filter()
+        ->dateFilter()
+        ->search(['id', 'name'])
+        ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+
+        // return  SaleResource::collection($sales->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
+        // return $sales->get();
 
         return Inertia::render('Sale/Index', [
             'sales' => SaleResource::collection($sales->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),

@@ -29,7 +29,8 @@ class CreateSalesTable extends Migration
             // $table->text('due_condition')->nullable();
             $table->float('payable')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('address_id');
+            $table->unsignedBigInteger('address_id')->nullable();
+            $table->tinyInteger('memo_type')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
