@@ -11,11 +11,13 @@ use App\Models\Area;
 use App\Models\Customer;
 use App\Models\District;
 use App\Models\Division;
+use App\Models\GenesisCustomerInfo;
 use App\Models\Outlet;
 use App\Models\PriceCategory;
 use App\Models\Pricing;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleDetail;
 use App\Traits\DateFilter;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
@@ -79,9 +81,9 @@ class SaleController extends Controller
             ->get();
 
 
-            $price_category =PriceCategory::get();
+        $price_category = PriceCategory::get();
 
-            foreach ($products as $product) {
+        foreach ($products as $product) {
 
             $property = (object)[
                 'name'          => (string) ($product->product_name ?? ''),
@@ -112,26 +114,80 @@ class SaleController extends Controller
         // return Http::get('https://api.genesisedu.info/publication/doctor-course-info?reg_no=22107001');
         // return $request;
 
-        $customer = Customer::updateOrCreate([
-            'phone'     => $request->customer_phone,
-        ],
-        [
-            'name'      => $request->customer_name,
-            'email'     => $request->email,
-            'user_id'   => Auth::user()->id
-        ]);
-        if($request->area_id){
-            AddressesOf::updateOrCreate([
-                'customer_id'     => $customer->id,
+        $customer = Customer::updateOrCreate(
+            [
+                'phone'     => $request->customer_phone,
             ],
             [
-                'area_id'      => $request->area_id,
-                'address'     => $request->area_id,
-            ]);
+                'name'      => $request->customer_name,
+                'email'     => $request->email,
+                'user_id'   => Auth::user()->id
+            ]
+        );
+        if ($request->area_id) {
+            $adress = AddressesOf::updateOrCreate(
+                [
+                    'customer_id'     => $customer->id,
+                ],
+                [
+                    'area_id'      => $request->area_id,
+                    'address'     => $request->area_id,
+                ]
+            );
         }
-        // if($request->memo_type == 3){
+        // if($request->memo_type == 3 && $request->memo_type ){
+        //     GenesisCustomerInfo::updateOrCreate(
+        //         [
+        //             'reg_no' => $request->reg
+        //         ],[
 
+        //         ]
+        //     )
         // }
+
+        // if( !isempty($request->products) ){
+        //     GenesisCustomerInfo::updateOrCreate(
+        //         [
+        //             'reg_no' => $request->reg
+        //         ],[
+
+        //         ]
+        //     )
+        // }
+
+
+        if ($customer && $request->outlet_id && $request->subtotal) {
+            $sale = Sale::create(
+                [
+                    'outlet_id' => $request->outlet_id,
+                    'customer_id' => $customer->id,
+                    'discount' => $request->discount ?? 0,
+                    'discount_purpose' => $request->discount_purpose ?? null,
+                    'payable' =>( $request->subtotal - ($request->discount ?? 0)) ?? 0,
+                    'user_id' => Auth::user()->id,
+                    'address_id' => $adress->id ?? null,
+                    'memo_type' => $request->memo_type,
+                ]
+            );
+
+            if($sale){
+                $products = [];
+                $single_product = [];
+                foreach($request->products as $product){
+                    // return $product['quantity'];
+                    $single_product= [
+                        'product_id' => $product['productId'],
+                        'sale_id' => $sale->id,
+                        'quantity' => $product['quantity'],
+                        'price_type' => $product['selected_price_type'],
+                        'unit_price' => $product['selected_unit_price'],
+                    ];
+                    $products[]=$single_product;
+                }
+
+                $sale_detail = SaleDetail::insert($products);
+            }
+        }
 
         return Customer::with('adress')->get();
 
