@@ -30,12 +30,12 @@ class SaleResource extends JsonResource
             'customerName'      => (string) ($this->customer->name ?? ''),
             'customerPhone'     => (int) ($this->customer->phone ?? ''),
             'customerAddress'   => (string) ($this->customer_address ?? ''),
-            'payable'          => (float) ($this->payable ?? ''),
+            'payable'           => (float) ($this->payable ?? ''),
             'discount'          => (float) ($this->discount ?? ''),
             'discountPurpose'   => (string) ($this->discount_purpose ?? ''),
-            'paid'          => (float) ($paid_ammount ?? ''),
-            'due'   => (float) ( $due ?? ''),
-            'dueCondition'   => (string) ($this->payments->sortByDesc('created_at')->first()->due_condition ?? ''),
+            'paid'              => (float) ($paid_ammount ?? ''),
+            'due'               => (float) ( $due ?? ''),
+            'dueCondition'      => (string) ($this->payments->sortByDesc('created_at')->first()->due_condition ?? ''),
             'amount'            => (float) ($this->amount ?? ''),
             'createdBy'         => (string) ($this->user->name ?? '')
         ];
