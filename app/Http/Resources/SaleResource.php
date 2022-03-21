@@ -35,6 +35,7 @@ class SaleResource extends JsonResource
             'discountPurpose'   => (string) ($this->discount_purpose ?? ''),
             'paid'          => (float) ($paid_ammount ?? ''),
             'due'   => (float) ( $due ?? ''),
+            
             'dueCondition'   => (string) ($this->payments->sortByDesc('created_at')->first()->due_condition ?? ''),
             'amount'            => (float) ($this->amount ?? ''),
             'createdBy'         => (string) ($this->user->name ?? '')
