@@ -15,6 +15,8 @@ class Sale extends Model
 
     protected $guarded = [];
 
+    // protected $appends = ['paid','due'];
+
     public function scopeFilter($query)
     {
         return $query;
@@ -27,9 +29,34 @@ class Sale extends Model
     {
         return $this->belongsTo(Outlet::class);
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    // public function getPaidAttribute()
+    // {
+    //     $paid_ammount = 0;
+    //     foreach( $this->payments as $payment){
+    //         $paid_ammount += $payment->amount;
+    //     }
+    //     return $paid_ammount;
+    // }
+
+    // public function getDueAttribute()
+    // {
+    //     return $this->payable - $this->payment_history;
+    // }
+
+
 }

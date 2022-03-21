@@ -14,6 +14,15 @@ class SaleResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $paid_ammount = 0;
+        foreach( $this->payments as $payment){
+            $paid_ammount += $payment->amount;
+        }
+
+        $due = $this->payable - $paid_ammount;
+
+
         return [
             "id"                => (int) ($this->id),
             'outletId'          => (int) ($this->outlet_id ?? ''),
@@ -21,9 +30,12 @@ class SaleResource extends JsonResource
             'customerName'      => (string) ($this->customer_name ?? ''),
             'customerPhone'     => (int) ($this->customer_phone ?? ''),
             'customerAddress'   => (string) ($this->customer_address ?? ''),
-            'subTotal'          => (float) ($this->subtotal ?? ''),
+            'payable'          => (float) ($this->subtotal ?? ''),
             'discount'          => (float) ($this->discount ?? ''),
             'discountPurpose'   => (string) ($this->discount_purpose ?? ''),
+            'paid'          => (float) ($paid_ammount ?? ''),
+            'due'   => (float) ( $due ?? ''),
+            'dueCondition'   => (string) ($this->payments->sortByDesc('created_at')->first()->due_condition ?? ''),
             'amount'            => (float) ($this->amount ?? ''),
             'createdBy'         => (string) ($this->user->name ?? '')
         ];
