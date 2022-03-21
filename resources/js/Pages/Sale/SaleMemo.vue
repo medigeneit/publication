@@ -50,7 +50,7 @@
                         >
                             <option value="">-- Price Type --</option>
 
-                            <option :value="priceType.id" v-for="(priceType, index) in priceTypes" :key="priceType.id">
+                            <option :value="priceType.id" v-for="priceType in priceTypes" :key="priceType.id">
                                 {{ priceType.name }}
                             </option>
                         </Select>
@@ -79,7 +79,7 @@
                 <!-- v-if="searchBar" -->
                 <div class="flex justify-center items-center mb-4 mt-4">
                     <div>
-                        <Input type="text" v-model="form.customer_phone" class="block w-44" placeholder="Phone" @input="customerSearch" />
+                        <Input type="text" v-model="form.customer_phone" class="block w-44" placeholder="Phone" @input="customerSearch" required />
                         <!-- <div>
                             <ul class="bg-gray-100 text-center mb-1" id="customers" v-for="(customer) in customers" :key="customer.id" @click="customerInfo(customer)">
                                 {{ customer }}
@@ -117,6 +117,7 @@
                                 focus:ring-0 focus:outline-none
                                 w-full
                             "
+                            required
                         />
                     </div>
                     <div class="flex gap-2 items-end mb-4">
@@ -325,7 +326,7 @@
                                     
                                     <select name="" id="" v-model="selected_price[index]"  @change="priceSave(index); subtotalCalculation" v-else>
                                         <option value="">Select Price</option>
-                                        <option :class="{hidden:!saleableProduct.unitPrice[priceType.id]} " :value="priceType.id" v-for="(priceType, index) in price_types" :key="priceType.id">
+                                        <option :class="{hidden:!saleableProduct.unitPrice[priceType.id]} " :value="priceType.id" v-for="priceType in price_types" :key="priceType.id">
                                             {{ `${priceType.name} - ${saleableProduct.unitPrice[priceType.id] ? saleableProduct.unitPrice[priceType.id] : 0} tk.` }}
                                         </option>
                                     </select>

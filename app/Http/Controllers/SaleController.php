@@ -189,7 +189,7 @@ class SaleController extends Controller
             }
         }
 
-        return Customer::with('adress')->get();
+        // return Customer::with('adress')->get();
 
 
 
