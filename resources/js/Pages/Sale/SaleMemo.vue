@@ -796,8 +796,9 @@ export default {
             this.form.customer_address = data.address ? data.address : ''
             this.form.district_id = district_id;
             this.form.area_id = area_id;
-            let customer = document.getElementById('customers');
-            customer.innerHTML = '';
+            // let customer = document.getElementById('customers');
+            // customer.innerHTML = '';
+            this.customers = {}
 
         },
         priceSave(index) {
