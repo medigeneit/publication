@@ -13,6 +13,7 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\GenesisCustomerInfo;
 use App\Models\Outlet;
+use App\Models\Payment;
 use App\Models\PriceCategory;
 use App\Models\Pricing;
 use App\Models\Product;
@@ -39,7 +40,7 @@ class SaleController extends Controller
             ->search(['id', 'name'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
-        return  SaleResource::collection($sales->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
+        // return  SaleResource::collection($sales->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
         // return $sales->get();
 
         return Inertia::render('Sale/Index', [
@@ -120,6 +121,18 @@ class SaleController extends Controller
         // return Http::get('https://api.genesisedu.info/publication/doctor-course-info?reg_no=22107001');
         // return $request;
 
+        if ($request->paid && $request->sale_id) {
+            $payment = Payment::create([
+                'sale_id' => $request->sale_id,
+                'amount' => $request->paid,
+                'status' => 1,
+                'payment_type' => 1,
+                'due_condition' => $request->due_condition,
+            ]);
+            return redirect()
+                ->route('sales.show', $request->sale_id)
+                ->with('status', 'The record has been added successfully.');
+        }
         $customer = Customer::updateOrCreate(
             [
                 'phone'     => $request->customer_phone,
@@ -183,17 +196,24 @@ class SaleController extends Controller
                 $storage_products_update .= " ELSE quantity END";
                 // return $just_products;
 
-                $storage_update = Storage::where('outlet_id',$request->outlet_id)
-                ->whereIn('product_id',$just_products);
-
-
-                // $demo = $storage_update;
+                $storage_update = Storage::where('outlet_id', $request->outlet_id)
+                    ->whereIn('product_id', $just_products);
 
                 $storage_update->update([
                     'quantity' => DB::raw($storage_products_update)
                 ]);
 
                 // return $demo ->get();
+
+                if ($request->paid) {
+                    $payment = Payment::create([
+                        'sale_id' => $sale->id,
+                        'amount' => $request->paid,
+                        'status' => 1,
+                        'payment_type' => 1,
+                        'due_condition' => $request->due_condition,
+                    ]);
+                }
 
                 $sale_detail = SaleDetail::insert($sold_products);
             }
