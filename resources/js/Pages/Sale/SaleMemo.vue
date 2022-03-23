@@ -480,7 +480,48 @@
                     <div class="">
                         <go-to-list :href="route('sales.index')" />
                     </div>
-                    <Button class="" type="submit"> Submit </Button>
+                    <Button type="button" @click="modalShow = !modalShow">Pay Now</Button>
+                    <div class="fixed inset-0 z-50" v-if="modalShow" id="circulationWrapper">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Payment</div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                        <div class="mb-4">
+                                            <div>
+                                                Payable
+                                                <span class="float-right">{{ subtotal }}tk.</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                           <div>
+                                                Payment:
+                                            <Input id="type" type="number" class="float-right h-10 text-right w-20" v-model="form.paid" @input="paymentCalculation" required/>
+                                           </div>
+                                           <hr>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            Due: <span class="float-right">{{ form.due }}tk.</span>
+                                        </div>
+
+                                        <div class="mb-4">
+                                             <textarea class="w-full" type="text" rows="3" placeholder="Due Condition" v-model="form.due_condition"></textarea>
+                                        </div>
+                                        
+
+                                        <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
+                                            Submit
+                                        </Button>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="modalShow = false">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-30 z-40">
+                                <div class="w-full h-full" @click="modalShow = false"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
 
@@ -650,6 +691,9 @@ export default {
                 district_id: '',
                 course: '',
                 batch: '',
+                paid: '',
+                due : 0,
+                due_condition: ''
             }),
             subtotal: 0,
             selected_subtotal: [],
@@ -660,6 +704,7 @@ export default {
             customAreas: {},
             priceTypes: {},
             customers: '',
+            modalShow: false,
         };
     },
     created(){
@@ -853,7 +898,11 @@ export default {
             if(!this.subtotal) {
                 this.subtotal = 0
             }
+            this.form.paid = this.subtotal
             this.applyDiscount();
+        },
+        paymentCalculation() {
+           this.form.due =  this.subtotal -this.form.paid
         },
         submit() {
             this.form.products = this.saleableProducts;
