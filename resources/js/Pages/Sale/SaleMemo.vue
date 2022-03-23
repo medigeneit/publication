@@ -490,7 +490,7 @@
                                         <div class="mb-4">
                                             <div>
                                                 Payable
-                                                <span class="float-right">{{ subtotal }}tk.</span>
+                                                <span class="float-right">{{ payable }}tk.</span>
                                             </div>
                                         </div>
 
@@ -883,6 +883,7 @@ export default {
                 : (this.discount = "");
 
             this.payable = this.subtotal - (this.discount || 0);
+            this.form.paid = this.subtotal - (this.discount || 0);
         },
         subtotalCalculation() {
             let subtotal = 0;
@@ -899,6 +900,8 @@ export default {
             if(!this.subtotal) {
                 this.subtotal = 0
             }
+            console.log(this.payable);
+
             this.form.paid = this.subtotal
             this.applyDiscount();
         },
