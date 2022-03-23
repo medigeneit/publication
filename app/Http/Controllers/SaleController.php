@@ -197,9 +197,9 @@ class SaleController extends Controller
 
 
 
-        $sale = Sale::create($this->validateData($request) + [
-            'user_id' => Auth::id()
-        ]);
+        // $sale = Sale::create($this->validateData($request) + [
+        //     'user_id' => Auth::id()
+        // ]);
         return redirect()
             ->route('sales.show', $sale->id)
             ->with('status', 'The record has been added successfully.');
