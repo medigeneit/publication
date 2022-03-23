@@ -13,15 +13,18 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\GenesisCustomerInfo;
 use App\Models\Outlet;
+use App\Models\Payment;
 use App\Models\PriceCategory;
 use App\Models\Pricing;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use App\Models\Storage;
 use App\Traits\DateFilter;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
@@ -31,11 +34,11 @@ class SaleController extends Controller
     public function index()
     {
         $sales = Sale::query()
-        ->with('customer','outlet','payments')
-        ->filter()
-        ->dateFilter()
-        ->search(['id', 'name'])
-        ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+            ->with('customer', 'outlet', 'payments')
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         // return  SaleResource::collection($sales->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
         // return $sales->get();
@@ -118,6 +121,18 @@ class SaleController extends Controller
         // return Http::get('https://api.genesisedu.info/publication/doctor-course-info?reg_no=22107001');
         // return $request;
 
+        if ($request->paid && $request->sale_id) {
+            $payment = Payment::create([
+                'sale_id' => $request->sale_id,
+                'amount' => $request->paid,
+                'status' => 1,
+                'payment_type' => 1,
+                'due_condition' => $request->due_condition,
+            ]);
+            return redirect()
+                ->route('sales.show', $request->sale_id)
+                ->with('status', 'The record has been added successfully.');
+        }
         $customer = Customer::updateOrCreate(
             [
                 'phone'     => $request->customer_phone,
@@ -139,25 +154,6 @@ class SaleController extends Controller
                 ]
             );
         }
-        // if($request->memo_type == 3 && $request->memo_type ){
-        //     GenesisCustomerInfo::updateOrCreate(
-        //         [
-        //             'reg_no' => $request->reg
-        //         ],[
-
-        //         ]
-        //     )
-        // }
-
-        // if( !isempty($request->products) ){
-        //     GenesisCustomerInfo::updateOrCreate(
-        //         [
-        //             'reg_no' => $request->reg
-        //         ],[
-
-        //         ]
-        //     )
-        // }
 
 
         if ($customer && $request->outlet_id && $request->subtotal) {
@@ -167,29 +163,59 @@ class SaleController extends Controller
                     'customer_id' => $customer->id,
                     'discount' => $request->discount ?? 0,
                     'discount_purpose' => $request->discount_purpose ?? null,
-                    'payable' =>( $request->subtotal - ($request->discount ?? 0)) ?? 0,
+                    'payable' => ($request->subtotal - ($request->discount ?? 0)) ?? 0,
                     'user_id' => Auth::user()->id,
                     'address_id' => $adress->id ?? null,
                     'memo_type' => $request->memo_type,
                 ]
             );
 
-            if($sale){
-                $products = [];
-                $single_product = [];
-                foreach($request->products as $product){
+            if ($sale) {
+                $just_products = [];
+                $sold_products = [];
+                $sold_single_product = [];
+                $storage_products_update = ' CASE product_id ';
+
+                foreach ($request->products as $product) {
                     // return $product['quantity'];
-                    $single_product= [
+                    $sold_single_product = [
                         'product_id' => $product['productId'],
                         'sale_id' => $sale->id,
                         'quantity' => $product['quantity'],
                         'price_type' => $product['selected_price_type'],
                         'unit_price' => $product['selected_unit_price'],
                     ];
-                    $products[]=$single_product;
+                    $sold_products[] = $sold_single_product;
+                    $just_products[] = (int)$product['productId'];
+                    $storage_products_update .= ' when ' . $product['productId'] . ' then quantity - ' . $product['quantity'];
+
+
+                    // Storage::Update
                 }
 
-                $sale_detail = SaleDetail::insert($products);
+                $storage_products_update .= " ELSE quantity END";
+                // return $just_products;
+
+                $storage_update = Storage::where('outlet_id', $request->outlet_id)
+                    ->whereIn('product_id', $just_products);
+
+                $storage_update->update([
+                    'quantity' => DB::raw($storage_products_update)
+                ]);
+
+                // return $demo ->get();
+
+                if ($request->paid) {
+                    $payment = Payment::create([
+                        'sale_id' => $sale->id,
+                        'amount' => $request->paid,
+                        'status' => 1,
+                        'payment_type' => 1,
+                        'due_condition' => $request->due_condition,
+                    ]);
+                }
+
+                $sale_detail = SaleDetail::insert($sold_products);
             }
         }
 
