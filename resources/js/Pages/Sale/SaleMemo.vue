@@ -538,7 +538,7 @@
                     border
                     bg-white
                     p-4
-                    z-50
+                    z-30
                 "
             >
                 <li class="text-right mb-2">

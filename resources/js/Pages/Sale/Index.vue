@@ -22,7 +22,7 @@
                 <td class="py-3 px-2 text-left">{{ sale.payable }}</td>
                 <td class="py-3 px-2 text-left cursor-pointer" :title="sale.discountPurpose">{{ sale.discount }} {{ }}</td>
                 <td class="py-3 px-2 text-left">{{ sale.paid }}</td>
-                <td class="py-3 px-2 text-left">{{ sale.due }}</td>
+                <td class="py-3 px-2 text-left cursor-pointer" :title="sale.dueCondition">{{ sale.due }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('sales.show', sale.id)" />
