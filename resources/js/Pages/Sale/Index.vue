@@ -26,7 +26,7 @@
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('sales.show', sale.id)" />
-                        <action-button-edit :href="route('sales.edit', sale.id)" />
+                        <!-- <action-button-edit :href="route('sales.edit', sale.id)" /> -->
                     </div>
                 </td>
             </template>
