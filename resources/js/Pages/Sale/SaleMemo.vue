@@ -906,7 +906,7 @@ export default {
             this.applyDiscount();
         },
         paymentCalculation() {
-           this.form.due =  this.subtotal -this.form.paid
+           this.form.due =  this.payable -this.form.paid;
         },
         submit() {
             this.form.products = this.saleableProducts;

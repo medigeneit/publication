@@ -25788,15 +25788,7 @@ __webpack_require__.r(__webpack_exports__);
         align: 'left',
         sortable: 'customer_name'
       }, {
-        title: 'Customer Phone',
-        align: 'left',
-        sortable: 'customer_phone'
-      }, {
-        title: 'Customer Address',
-        align: 'left',
-        sortable: 'customer_address'
-      }, {
-        title: 'Subtotal',
+        title: 'Payable',
         align: 'left',
         sortable: 'subtotal'
       }, {
@@ -25804,13 +25796,12 @@ __webpack_require__.r(__webpack_exports__);
         align: 'left',
         sortable: 'discount'
       }, {
-        title: 'Discount Purpose',
-        align: 'left',
-        sortable: 'discount_purpose'
-      }, {
-        title: 'Amount',
+        title: 'Paid',
         align: 'left',
         sortable: 'amount'
+      }, {
+        title: 'Due',
+        align: 'left'
       }, {
         title: 'Action',
         align: 'center'
@@ -25922,9 +25913,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   data: function data() {
-    var _this$$inertia$form;
+    var _this$$inertia$form, _ref;
 
-    return _defineProperty({
+    return _ref = {
       saleableProducts: [],
       messages: [],
       selected: [],
@@ -25937,7 +25928,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         email: "",
         products: [],
         outlet_id: ''
-      }, _defineProperty(_this$$inertia$form, "price_type", ''), _defineProperty(_this$$inertia$form, "subtotal", 0), _defineProperty(_this$$inertia$form, "discount", 0), _defineProperty(_this$$inertia$form, "discount_purpose", ''), _defineProperty(_this$$inertia$form, "memo_type", 1), _defineProperty(_this$$inertia$form, "selectedPriceType", []), _defineProperty(_this$$inertia$form, "select_price", ''), _defineProperty(_this$$inertia$form, "reg", ''), _defineProperty(_this$$inertia$form, "area_id", ''), _defineProperty(_this$$inertia$form, "district_id", ''), _defineProperty(_this$$inertia$form, "course", ''), _defineProperty(_this$$inertia$form, "batch", ''), _this$$inertia$form)),
+      }, _defineProperty(_this$$inertia$form, "price_type", ''), _defineProperty(_this$$inertia$form, "subtotal", 0), _defineProperty(_this$$inertia$form, "discount", 0), _defineProperty(_this$$inertia$form, "discount_purpose", ''), _defineProperty(_this$$inertia$form, "memo_type", 1), _defineProperty(_this$$inertia$form, "selectedPriceType", []), _defineProperty(_this$$inertia$form, "select_price", ''), _defineProperty(_this$$inertia$form, "reg", ''), _defineProperty(_this$$inertia$form, "area_id", ''), _defineProperty(_this$$inertia$form, "district_id", ''), _defineProperty(_this$$inertia$form, "course", ''), _defineProperty(_this$$inertia$form, "batch", ''), _defineProperty(_this$$inertia$form, "paid", ''), _defineProperty(_this$$inertia$form, "due", 0), _defineProperty(_this$$inertia$form, "due_condition", ''), _this$$inertia$form)),
       subtotal: 0,
       selected_subtotal: [],
       regBar: false,
@@ -25946,7 +25937,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       customers: {},
       customAreas: {},
       priceTypes: {}
-    }, "customers", '');
+    }, _defineProperty(_ref, "customers", ''), _defineProperty(_ref, "modalShow", false), _ref;
   }
 }, _defineProperty(_components$created$p, "created", function created() {
   this.customAreas = this.areas;
@@ -26030,9 +26021,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.form.batch = data.batch ? data.batch : '';
     this.form.customer_address = data.address ? data.address : '';
     this.form.district_id = district_id;
-    this.form.area_id = area_id;
-    var customer = document.getElementById('customers');
-    customer.innerHTML = '';
+    this.form.area_id = area_id; // let customer = document.getElementById('customers');
+    // customer.innerHTML = '';
+
+    this.customers = {};
   },
   priceSave: function priceSave(index) {
     var saleableProduct = this.saleableProducts[index];
@@ -26101,6 +26093,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.discount > this.subtotal ? this.discount = this.subtotal : "";
     this.discount ? this.discount = parseInt(this.discount) : this.discount = "";
     this.payable = this.subtotal - (this.discount || 0);
+    this.form.paid = this.subtotal - (this.discount || 0);
   },
   subtotalCalculation: function subtotalCalculation() {
     var _this4 = this;
@@ -26116,7 +26109,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.subtotal = 0;
     }
 
+    console.log(this.payable);
+    this.form.paid = this.subtotal;
     this.applyDiscount();
+  },
+  paymentCalculation: function paymentCalculation() {
+    this.form.due = this.payable - this.form.paid;
   },
   submit: function submit() {
     this.form.products = this.saleableProducts;
@@ -41721,9 +41719,7 @@ var _hoisted_4 = {
 var _hoisted_5 = {
   "class": "py-3 px-2 text-left"
 };
-var _hoisted_6 = {
-  "class": "py-3 px-2 text-left"
-};
+var _hoisted_6 = ["title"];
 var _hoisted_7 = {
   "class": "py-3 px-2 text-left"
 };
@@ -41731,15 +41727,9 @@ var _hoisted_8 = {
   "class": "py-3 px-2 text-left"
 };
 var _hoisted_9 = {
-  "class": "py-3 px-2 text-left"
-};
-var _hoisted_10 = {
-  "class": "py-3 px-2 text-left"
-};
-var _hoisted_11 = {
   "class": "py-2.5 px-2"
 };
-var _hoisted_12 = {
+var _hoisted_10 = {
   "class": "flex justify-center items-center gap-1 md:gap-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -41779,21 +41769,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           /* TEXT */
           ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.outletName), 1
           /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.customerName), 1
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.customerName) + " ", 1
           /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.customerPhone), 1
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.customerPhone), 1
           /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.customerAddress), 1
+          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.payable), 1
           /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.subTotal), 1
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+            "class": "py-3 px-2 text-left cursor-pointer",
+            title: sale.discountPurpose
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.discount) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(), 9
+          /* TEXT, PROPS */
+          , _hoisted_6), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.paid), 1
           /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.discount), 1
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.due), 1
           /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.discountPurpose), 1
-          /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sale.amount), 1
-          /* TEXT */
-          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_action_button_show, {
+          ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_action_button_show, {
             href: _ctx.route('sales.show', sale.id)
           }, null, 8
           /* PROPS */
@@ -42150,17 +42141,81 @@ var _hoisted_72 = {
   "class": ""
 };
 
-var _hoisted_73 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Submit ");
+var _hoisted_73 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Pay Now");
 
 var _hoisted_74 = {
   key: 0,
-  "class": "fixed md:static inset-0 overflow-auto w-full max-w-sm rounded border bg-white p-4 z-50"
+  "class": "fixed inset-0 z-50",
+  id: "circulationWrapper"
 };
 var _hoisted_75 = {
+  "class": "relative w-full h-full flex justify-center items-center"
+};
+var _hoisted_76 = {
+  "class": "relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50"
+};
+
+var _hoisted_77 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "text-lg font-bold text-center"
+}, "Payment", -1
+/* HOISTED */
+);
+
+var _hoisted_78 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+  "class": "my-1"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_79 = {
+  "class": "p-3"
+};
+var _hoisted_80 = {
+  "class": "mb-4"
+};
+
+var _hoisted_81 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Payable ");
+
+var _hoisted_82 = {
+  "class": "float-right"
+};
+var _hoisted_83 = {
+  "class": "mb-4"
+};
+
+var _hoisted_84 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Payment: ");
+
+var _hoisted_85 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", null, null, -1
+/* HOISTED */
+);
+
+var _hoisted_86 = {
+  "class": "mb-4"
+};
+
+var _hoisted_87 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Due: ");
+
+var _hoisted_88 = {
+  "class": "float-right"
+};
+var _hoisted_89 = {
+  "class": "mb-4"
+};
+
+var _hoisted_90 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Submit ");
+
+var _hoisted_91 = {
+  "class": "absolute inset-0 bg-gray-500 bg-opacity-30 z-40"
+};
+var _hoisted_92 = {
+  key: 0,
+  "class": "fixed md:static inset-0 overflow-auto w-full max-w-sm rounded border bg-white p-4 z-50"
+};
+var _hoisted_93 = {
   "class": "text-right mb-2"
 };
-var _hoisted_76 = ["onClick"];
-var _hoisted_77 = {
+var _hoisted_94 = ["onClick"];
+var _hoisted_95 = {
   "class": "w-full"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -42184,7 +42239,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-        onSubmit: _cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+        onSubmit: _cache[22] || (_cache[22] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
           return $options.submit && $options.submit.apply($options, arguments);
         }, ["prevent"])),
         "class": "w-full max-w-3xl bg-white p-4 rounded"
@@ -42213,7 +42268,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onChange: $options.subtotalCalculation
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_11, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.priceTypes, function (priceType, index) {
+          return [_hoisted_11, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.priceTypes, function (priceType) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
               value: priceType.id,
               key: priceType.id
@@ -42464,7 +42519,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             $options.priceSave(index);
             $options.subtotalCalculation;
           }
-        }, [_hoisted_53, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.price_types, function (priceType, index) {
+        }, [_hoisted_53, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.price_types, function (priceType) {
           return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
             "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
               hidden: !saleableProduct.unitPrice[priceType.id]
@@ -42529,8 +42584,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8
       /* PROPS */
       , ["href"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
-        "class": "",
-        type: "submit"
+        type: "button",
+        onClick: _cache[17] || (_cache[17] = function ($event) {
+          return $data.modalShow = !$data.modalShow;
+        })
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [_hoisted_73];
@@ -42538,18 +42595,64 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 1
         /* STABLE */
 
-      })], 512
+      }), $data.modalShow ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_74, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_75, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_76, [_hoisted_77, _hoisted_78, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_79, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_80, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_81, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_82, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.payable) + "tk.", 1
+      /* TEXT */
+      )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_83, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_84, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+        id: "type",
+        type: "number",
+        "class": "float-right h-10 text-right w-20",
+        modelValue: $data.form.paid,
+        "onUpdate:modelValue": _cache[18] || (_cache[18] = function ($event) {
+          return $data.form.paid = $event;
+        }),
+        onInput: $options.paymentCalculation,
+        required: ""
+      }, null, 8
+      /* PROPS */
+      , ["modelValue", "onInput"])]), _hoisted_85]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_86, [_hoisted_87, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_88, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.form.due) + "tk.", 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_89, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+        "class": "w-full",
+        type: "text",
+        rows: "3",
+        placeholder: "Due Condition",
+        "onUpdate:modelValue": _cache[19] || (_cache[19] = function ($event) {
+          return $data.form.due_condition = $event;
+        })
+      }, null, 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.due_condition]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
+        type: "submit",
+        "class": "bg-gray-600 text-white px-2 py-1 rounded mt-2"
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+          return [_hoisted_90];
+        }),
+        _: 1
+        /* STABLE */
+
+      })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        "class": "absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40",
+        onClick: _cache[20] || (_cache[20] = function ($event) {
+          return $data.modalShow = false;
+        })
+      }, "×")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_91, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+        "class": "w-full h-full",
+        onClick: _cache[21] || (_cache[21] = function ($event) {
+          return $data.modalShow = false;
+        })
+      })])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 512
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.form.price_type && $data.form.outlet_id]])], 32
       /* HYDRATE_EVENTS */
-      ), $data.showProductList ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", _hoisted_74, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_75, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+      ), $data.showProductList ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", _hoisted_92, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_93, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
         "class": "text-red-500 cursor-pointer text-3xl inline-block",
-        onClick: _cache[18] || (_cache[18] = function ($event) {
+        onClick: _cache[23] || (_cache[23] = function ($event) {
           return $data.showProductList = false;
         })
       }, " × ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         placeholder: "Search...",
-        onInput: _cache[19] || (_cache[19] = function () {
+        onInput: _cache[24] || (_cache[24] = function () {
           return $options.searchProduct && $options.searchProduct.apply($options, arguments);
         }),
         "class": "px-2 py-2 w-full rounded border border-gray-500 focus:outline-none focus:ring-0"
@@ -42564,11 +42667,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: function onClick($event) {
             return $options.selectProductHandler(productId);
           }
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_77, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(product.name), 1
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_95, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(product.name), 1
         /* TEXT */
         )], 10
         /* CLASS, PROPS */
-        , _hoisted_76);
+        , _hoisted_94);
       }), 128
       /* KEYED_FRAGMENT */
       ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
