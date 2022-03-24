@@ -9,17 +9,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model
 {
-    use HasFactory,SoftDeletes,Timestamp;
+    use HasFactory, SoftDeletes, Timestamp;
 
     protected $guarded = [];
 
-    public function adress()
+    public function address()
     {
-        return $this->hasOne(AddressesOf::class,'customer_id');
+        return $this->hasOne(AddressesOf::class, 'customer_id');
     }
 
     public function genesis_info()
     {
-        return $this->hasOne(GenesisCustomerInfo::class,'customer_id');
+        // if ($this->memo_type == 3)
+        return $this->hasOne(GenesisCustomerInfo::class, 'customer_id');
     }
 }

@@ -17,7 +17,7 @@ class CreateGenesisCustomerInfosTable extends Migration
             $table->id();
             $table->string('reg_no');
             $table->unsignedBigInteger('customer_id')->index();
-            $table->bigInteger('course_id')->nullable();
+            $table->unsignedBigInteger('sale_id')->index();
             $table->string('course_name')->nullable();
             $table->bigInteger('batch_id')->nullable();
             $table->string('batch_name')->nullable();
