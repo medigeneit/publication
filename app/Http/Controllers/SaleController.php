@@ -34,11 +34,13 @@ class SaleController extends Controller
     public function index()
     {
         $sales = Sale::query()
-            ->with('customer', 'outlet', 'payments')
+            ->with('customer', 'outlet', 'payments', 'user')
             ->filter()
             ->dateFilter()
             ->search(['id', 'name'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+
+        SaleResource::withoutWrapping();
 
         // return  SaleResource::collection($sales->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
         // return $sales->get();
@@ -143,16 +145,25 @@ class SaleController extends Controller
                 'user_id'   => Auth::user()->id
             ]
         );
-        if ($request->area_id) {
+
+        if ($request->customer_address) {
             $adress = AddressesOf::updateOrCreate(
                 [
                     'customer_id'     => $customer->id,
                 ],
                 [
                     'area_id'      => $request->area_id,
-                    'address'     => $request->area_id,
+                    'address'     => $request->customer_address,
                 ]
             );
+        }
+
+        // return 22107785
+        $registerd = GenesisCustomerInfo::where('reg_no', $request->reg)->first();
+        if ($registerd) {
+            return redirect()
+                ->route('sales.show', $request->sale_id)
+                ->with('status', 'The record is already existed.');
         }
 
 
@@ -171,6 +182,18 @@ class SaleController extends Controller
             );
 
             if ($sale) {
+
+                if ($request->memo_type == 3 && $request->reg && !$registerd) {
+                    GenesisCustomerInfo::create([
+                        'reg_no' => $request->reg,
+                        'sale_id' => $sale->id,
+                        'customer_id' => $customer->id,
+                        'course_name' => $request->course,
+                        'batch_id' => $request->batch_id ?? null,
+                        'batch_name' => $request->batch,
+                    ]);
+                }
+
                 $just_products = [];
                 $sold_products = [];
                 $sold_single_product = [];
@@ -231,9 +254,25 @@ class SaleController extends Controller
             ->with('status', 'The record has been added successfully.');
     }
 
-    public function show(Sale $sale)
+    public function show($id)
     {
+        // return GenesisCustomerInfo::with('sale')->get();
+        // return Sale::with('genesis_info')->get();
+
+        // return $sale->with('outlet', 'customer.adress', 'genesis_info', 'user')
+        $sale = Sale::with(['outlet',
+        'customer.address.area.district.division',
+        'genesis_info',
+        'user',
+        'sale_details.product',
+        'sale_details.price_category',
+        ])
+        // ->when()
+        ->find($id);
+        // return $sale->customer;
         SaleResource::withoutWrapping();
+        SaleResource::$show = true;
+        return new SaleResource($sale);
 
         return Inertia::render('Sale/Show', [
             'sale' => new SaleResource($sale),

@@ -20,9 +20,9 @@ class Sale extends Model
     public function scopeFilter($query)
     {
         return $query;
-            // ->when(isset(request()->active), function($query) {
-            //     $query->where('active', request()->active);
-            // });
+        // ->when(isset(request()->active), function($query) {
+        //     $query->where('active', request()->active);
+        // });
     }
 
     public function outlet()
@@ -42,6 +42,16 @@ class Sale extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function genesis_info()
+    {
+        return $this->hasOne(GenesisCustomerInfo::class);
+    }
+
+    public function sale_details()
+    {
+        return $this->hasMany(SaleDetail::class);
     }
 
     // public function getPaidAttribute()
