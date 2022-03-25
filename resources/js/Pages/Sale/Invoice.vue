@@ -305,7 +305,7 @@
                                 ></td>
                             </tr>
                             <tr>
-                                <td colspan="2"></td>
+                                <td colspan="3"></td>
                                 <td
                                     colspan="2"
                                     class="
@@ -327,7 +327,75 @@
                                         bg-gray-50
                                     "
                                 >
-                                    {{ subtotal - discount }}
+                                    {{ sale.payable }}
+                                </td>
+                                <td
+                                    class="
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                ></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td
+                                    colspan="3"
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-l border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    Paid
+                                </td>
+                                <td
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    {{ sale.paid }}
+                                </td>
+                                <td
+                                    class="
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                ></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td
+                                    colspan="2"
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-l border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    Due
+                                </td>
+                                <td
+                                    class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50
+                                    "
+                                >
+                                    {{ sale.due }}
                                 </td>
                                 <td
                                     class="
