@@ -13,12 +13,10 @@
                     <h1 class="text-4xl font-bold">BANGLAMED PUBLICATION</h1>
                     <p>All kinds of medical book publications</p>
                     <p>
-                        234, Sonargaon Road, North Site of Katabon Mor, New
-                        Market, Dhaka-1205
+                        {{ sale.outletAddress }}
                     </p>
-                    <p>Mobile: 01404432517, 01404432518</p>
+                    <p>Mobile: {{ sale.outletPhone }}</p>
                 </div>
-
                 <div
                     class="
                         flex flex-col
@@ -30,78 +28,12 @@
                     "
                 >
                     <div class="w-full flex items-center gap-2">
-                        <Select
-                            class="block w-full"
-                            v-model="form.memo_type"
-                            @change="searchBarHandler"
-                        >
-                            <option value="">-- Memo Type --</option>
-                            <!-- <option value="1"> Doctor memo</option> -->
-                            <option value="1"> Client memo </option>
-                            <option value="2"> Distributor </option>
-                            <option value="3"> Special </option>
-                        </Select>
+                        <div class="w-full flex items-center gap-2">
+                            No : <b>{{ sale.id }}</b>
+                        </div>
                     </div>
-                    <div class="w-full flex items-center gap-2">
-                        <Select
-                            class="block w-full"
-                            v-model="form.price_type"
-                            @change="subtotalCalculation"
-                        >
-                            <option value="">-- Price Type --</option>
-
-                            <option :value="priceType.id" v-for="priceType in priceTypes" :key="priceType.id">
-                                {{ priceType.name }}
-                            </option>
-                        </Select>
-                    </div>
-                    <div class="w-full flex items-center gap-2">
-                        <Select
-                            id="outlet_id"
-                            class="block w-full"
-                            v-model="form.outlet_id"
-                        >
-                            <option value="">-- Select Salepoint --</option>
-                            <option
-                                :value="outletId"
-                                v-for="(outletName, outletId) in outlets"
-                                :key="outletId"
-                            >
-                                {{ outletName }}
-                            </option>
-                        </Select>
-                    </div>
-                    <div class="hidden w-full flex items-center gap-2">
-                        <Input type="date" class="block w-full" />
-                    </div>
-                </div>
-
-                <!-- v-if="searchBar" -->
-                <div class="flex justify-center items-center mb-4 mt-4">
-                    <div>
-                        <Input type="text" v-model="form.customer_phone" class="block w-44" placeholder="Phone" @input="customerSearch" required />
-                        <!-- <div>
-                            <ul class="bg-gray-100 text-center mb-1" id="customers" v-for="(customer) in customers" :key="customer.id" @click="customerInfo(customer)">
-                                {{ customer }}
-                                {{ customer.name }} {{ customer.phone }}
-                            </ul>
-                        </div> -->
-                    </div>
-                    <div class="flex relative" v-if="regBar">
-                        <Input type="text" v-model="form.reg" class="block w-44" placeholder="Registration"/>
-                        <button class="absolute right-0 top-2 text-sm" type="button" @click="customerSearch">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="flex justify-center items-center mb-4 mt-4">
-                    <div>
-                        <ul class="bg-gray-100 text-center mb-1" id="customers" v-for="(customer) in customers" :key="customer.id" @click="customerInfo(customer)">
-                            <!-- {{ customer }} -->
-                                {{ customer.name }} {{ customer.phone }}
-                        </ul>
+                    <div class="w-56 flex items-center gap-2 text-right">
+                        Date : {{ sale.createdAt }}
                     </div>
                 </div>
 
@@ -111,7 +43,7 @@
                         <input
                             id="name"
                             type="text"
-                            v-model="form.customer_name"
+                            :value="sale.customerName"
                             class="
                                 border-0 border-dotted border-b-2 border-black
                                 focus:ring-0 focus:outline-none
@@ -125,7 +57,7 @@
                         <input
                             id="address"
                             type="text"
-                            v-model="form.customer_address"
+                            :value="sale.customerAddress"
                             class="
                                 border-0 border-dotted border-b-2 border-black
                                 focus:ring-0 focus:outline-none
@@ -133,38 +65,13 @@
                             "
                         />
                     </div>
-                    <div class="flex gap-2 items-end mb-4">
-                        <Select
-                            class="block w-full"
-                            v-model="form.district_id"
-                             @input="selectDistrict"
-                        >
-                            <option value="">-- District --</option>
-                            <optgroup :label="division.name" v-for="division in divisions" :key="division.id">
-                                <option :value="district.id" v-for="district in division.districts" :key="district.id">
-                                    {{ district.name }}
-                                </option>
-                            </optgroup>
-                        </Select>
-                        <!-- {{ divisions }} -->
-                        <Select
-                            class="block w-full"
-                            v-model="form.area_id"
-                        >
-                            <option value="">-- Area --</option>
-
-                            <option :value="area.id" v-for="area in customAreas" :key="area.id">
-                                {{ area.name }}
-                            </option>
-                        </Select>
-                    </div>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div class="flex gap-2 items-end mb-4">
                             <label for="address">Email</label>
                             <input
                                 id="address"
                                 type="email"
-                                v-model="form.email"
+                                :value="sale.customerEmail"
                                 class="
                                     border-0
                                     border-dotted
@@ -175,12 +82,28 @@
                                 "
                             />
                         </div>
-                        <div class="flex gap-2 items-end mb-4" v-if="regBar">
+                        <div class="flex gap-2 items-end mb-4">
+                            <label for="address">Phone</label>
+                            <input
+                                id="address"
+                                type="email"
+                                :value="sale.customerPhone"
+                                class="
+                                    border-0
+                                    border-dotted
+                                    border-b-2
+                                    border-black
+                                    focus:ring-0 focus:outline-none
+                                    w-full
+                                "
+                            />
+                        </div>
+                        <div class="flex gap-2 items-end mb-4" v-if="sale.memoType == 3">
                             <label for="address">Course</label>
                             <input
                                 id="address"
                                 type="text"
-                                v-model="form.course"
+                                :value="sale.course"
                                 class="
                                     border-0
                                     border-dotted
@@ -191,12 +114,28 @@
                                 "
                             />
                         </div>
-                        <div class="flex gap-2 items-end mb-4" v-if="regBar">
+                        <div class="flex gap-2 items-end mb-4" v-if="sale.memoType == 3">
                             <label for="address">Batch</label>
                             <input
                                 id="address"
                                 type="text"
-                                v-model="form.batch"
+                                :value="sale.batch"
+                                class="
+                                    border-0
+                                    border-dotted
+                                    border-b-2
+                                    border-black
+                                    focus:ring-0 focus:outline-none
+                                    w-full
+                                "
+                            />
+                        </div>
+                        <div class="flex gap-2 items-end mb-4" v-if="sale.memoType == 3">
+                            <label for="address">Reg</label>
+                            <input
+                                id="address"
+                                type="text"
+                                :value="sale.reg"
                                 class="
                                     border-0
                                     border-dotted
@@ -210,45 +149,8 @@
                     </div>
                 </div>
 
-                <div v-show="form.price_type && form.outlet_id" class="py-2 text-right">
-                    <button
-                        type="button"
-                        @click="showProductList = !showProductList"
-                        class="border border-gray-700 px-2 py-1 rounded"
-                    >
-                        + Add Product
-                    </button>
-                </div>
-
-                <div
-                    v-show="form.price_type && form.outlet_id"
-                    class="pb-2 flex flex-col justify-center items-center gap-1"
-                >
-                    <span
-                        v-for="(message, index) of messages"
-                        :key="index"
-                        class="
-                            text-red-600 text-sm
-                            bg-red-200
-                            px-3
-                            py-1
-                            rounded
-                            inline-flex
-                            gap-2
-                            items-center
-                        "
-                    >
-                        <span>{{ message }}</span>
-                        <span
-                            class="text-base cursor-pointer"
-                            @click="messages.splice(index, 1)"
-                            >&times;</span
-                        >
-                    </span>
-                </div>
-
                 <div class="overflow-auto">
-                    <table v-show="form.price_type && form.outlet_id" class="w-full min-w-max">
+                    <table class="w-full min-w-max">
                         <thead>
                             <tr class="border-t border-b bg-gray-50">
                                 <th
@@ -272,11 +174,11 @@
                                     Unit Price
                                 </th>
                                 <th class="text-right px-2 py-2 w-28 border-r">
+                                    Price Type
+                                </th>
+                                <th class="text-right px-2 py-2 w-28 border-r">
                                     Amount
                                 </th>
-                                <th
-                                    class="text-center px-2 py-2 w-8 border-r"
-                                ></th>
                             </tr>
                         </thead>
 
@@ -284,8 +186,8 @@
                             <tr
                                 class="border-b"
                                 v-for="(
-                                    saleableProduct, index
-                                ) in saleableProducts"
+                                    soldProduct, index
+                                ) in sale.productDetails"
                                 :key="index"
                             >
                                 <td
@@ -300,12 +202,12 @@
                                 </td>
                                 <td class="text-left px-2 py-1 border-r">
                                     {{
-                                        products[saleableProduct.productId].name
+                                        soldProduct.name
                                     }}
                                 </td>
                                 <td class="border-r">
                                     <input
-                                        v-show="saleableProduct.productId"
+                                        
                                         type="number"
                                         class="
                                             w-20
@@ -314,62 +216,24 @@
                                             border-0
                                         "
                                         @input="checkQuantity(index)"
-                                        v-model="saleableProduct.quantity"
+                                        :value="soldProduct.quantity"
                                     />
                                 </td>
-                                <td class="text-right px-2 py-1 border-r">
-                                    <span v-show="saleableProduct.productId" v-if="saleableProduct.unitPrice[form.price_type]">
-                                        {{
-                                            saleableProduct.unitPrice[form.price_type]
-                                        }}
-                                    </span>
-                                    
-                                    <select name="" id="" v-model="selected_price[index]"  @change="priceSave(index); subtotalCalculation" v-else>
-                                        <option value="">Select Price</option>
-                                        <option :class="{hidden:!saleableProduct.unitPrice[priceType.id]} " :value="priceType.id" v-for="priceType in price_types" :key="priceType.id">
-                                            {{ `${priceType.name} - ${saleableProduct.unitPrice[priceType.id] ? saleableProduct.unitPrice[priceType.id] : 0} tk.` }}
-                                        </option>
-                                    </select>
+                                <td class="text-center px-2 py-1 border-r">
+                                        {{ soldProduct.priceType }}
                                 </td>
                                 <td class="text-right px-2 py-1 border-r">
-                                    <span v-show="saleableProduct.productId" v-if="saleableProduct.unitPrice[form.price_type]">
-                                        {{
-                                            saleableProduct.quantity *
-                                                saleableProduct.unitPrice[
-                                                    form.price_type
-                                                ] || 0
-                                        }}
-                                    </span>
-                                    <span v-show="saleableProduct.productId" v-else>
-                                        {{
-                                           saleableProduct.unitPrice[saleableProduct.selected_price_type]
-                                        }}
-                                    </span>
+                                        {{ soldProduct.unitPrice }}
                                 </td>
-                                <td class="border-r">
-                                    <div
-                                        class="
-                                            flex
-                                            justify-center
-                                            items-center
-                                            py-1
-                                        "
-                                    >
-                                        <button
-                                            class="text-red-500 text-2xl"
-                                            @click="removeProduct(index)"
-                                            type="button"
-                                        >
-                                            &times;
-                                        </button>
-                                    </div>
+                                <td class="text-right px-2 py-1 border-r">
+                                   {{ soldProduct.unitPrice * soldProduct.quantity }}
                                 </td>
                             </tr>
                         </tbody>
 
                         <tfoot>
                             <tr>
-                                <td colspan="2"></td>
+                                <td colspan="3"></td>
                                 <td
                                     colspan="2"
                                     class="
@@ -391,7 +255,9 @@
                                         bg-gray-50
                                     "
                                 >
-                                    {{ subtotal }}
+
+                                {{ sale.payable + sale.discount }}
+                                    <!-- {{ soldProduct.payable + soldProduct.discount }} -->
                                 </td>
                                 <td
                                     class="
@@ -404,10 +270,10 @@
                             </tr>
                             <tr>
                                 <td colspan="2" class="px-2 py-1">
-                                    <textarea class="w-full" type="text" rows="3" placeholder="Discount Purpose" v-model="form.discount_purpose"></textarea>
+                                    <div class="w-full" type="text" rows="3" >{{ sale.discountPurpose }}</div>
                                 </td>
                                 <td
-                                    colspan="2"
+                                    colspan="3"
                                     class="
                                         text-right
                                         px-2
@@ -418,13 +284,14 @@
                                 >
                                     Discount
                                 </td>
-                                <td class="border-b border-r bg-gray-50">
-                                    <input
-                                        type="number"
-                                        class="w-full text-right border-0 px-2"
-                                        @input="applyDiscount()"
-                                        v-model="discount"
-                                    />
+                                <td class="
+                                        text-right
+                                        px-2
+                                        py-1
+                                        border-b border-r
+                                        bg-gray-50"
+                                >
+                                    {{ sale.discount }}
                                 </td>
                                 <td
                                     class="
@@ -622,11 +489,11 @@ export default {
         Textarea,
     },
     created() {
-        this.saleableProducts.forEach((saleableProduct) => {
-            this.products[saleableProduct.productId] = {
+        this.soldProducts.forEach((soldProduct) => {
+            this.products[soldProduct.productId] = {
                 name: "",
-                quantity: saleableProduct.quantity,
-                unitPrice: saleableProduct.unitPrice,
+                quantity: soldProduct.quantity,
+                unitPrice: soldProduct.unitPrice,
             };
         });
     },
@@ -634,6 +501,10 @@ export default {
         buttonValue: {
             type: String,
             default: "Submit",
+        },
+        sale: {
+            type: Object,
+            default: {},
         },
         products: {
             type: Object,
@@ -666,7 +537,7 @@ export default {
     },
     data() {
         return {
-            saleableProducts: [],
+            soldProducts: [],
             messages: [],
             selected: [],
             showProductList: false,
@@ -802,11 +673,11 @@ export default {
 
         },
         priceSave(index) {
-            let saleableProduct = this.saleableProducts[index];
+            let soldProduct = this.soldProducts[index];
 
-            saleableProduct.selected_price_type = this.selected_price[index];
-            saleableProduct.selected_unit_price = saleableProduct.unitPrice[saleableProduct.selected_price_type];
-            this.selected_subtotal.push(saleableProduct.unitPrice[saleableProduct.selected_price_type]);
+            soldProduct.selected_price_type = this.selected_price[index];
+            soldProduct.selected_unit_price = soldProduct.unitPrice[soldProduct.selected_price_type];
+            this.selected_subtotal.push(soldProduct.unitPrice[soldProduct.selected_price_type]);
             this.subtotalCalculation();
         },
         selectProductHandler(productId) {
@@ -814,7 +685,7 @@ export default {
             console.log(product.unitPrice[this.form.price_type])
 
             if (!product.selected) {
-                this.saleableProducts.push({
+                this.soldProducts.push({
                     productId: productId,
                     quantity: 1,
                     unitPrice: product.unitPrice,
@@ -830,12 +701,12 @@ export default {
         selectedProductHandler() {
             this.selected = [];
 
-            this.saleableProducts.forEach((saleableProduct) => {
-                this.selected.push(saleableProduct.productId);
+            this.soldProducts.forEach((soldProduct) => {
+                this.selected.push(soldProduct.productId);
             });
         },
         removeProduct(numberOfIndex) {
-            this.saleableProducts.splice(numberOfIndex, 1);
+            this.soldProducts.splice(numberOfIndex, 1);
 
             this.selectedProductHandler();
 
@@ -850,7 +721,7 @@ export default {
             this.$inertia.get(url, {}, { preserveState: true });
         },
         checkQuantity(numberOfIndex) {
-            let productId = this.saleableProducts[numberOfIndex].productId;
+            let productId = this.soldProducts[numberOfIndex].productId;
 
             if (!productId) {
                 return;
@@ -858,9 +729,9 @@ export default {
 
             let product = this.products[productId];
 
-            let quantity = this.saleableProducts[numberOfIndex].quantity;
+            let quantity = this.soldProducts[numberOfIndex].quantity;
 
-            this.saleableProducts[numberOfIndex].quantity =
+            this.soldProducts[numberOfIndex].quantity =
                 product.maxQuantity >= quantity
                     ? quantity
                     : product.maxQuantity;
@@ -888,12 +759,12 @@ export default {
         subtotalCalculation() {
             let subtotal = 0;
 
-            this.saleableProducts.forEach((saleableProduct) => {
-                let price = saleableProduct.unitPrice[this.form.price_type]? saleableProduct.unitPrice[this.form.price_type] : saleableProduct.unitPrice[saleableProduct.selected_price_type] ;
+            this.soldProducts.forEach((soldProduct) => {
+                let price = soldProduct.unitPrice[this.form.price_type]? soldProduct.unitPrice[this.form.price_type] : soldProduct.unitPrice[soldProduct.selected_price_type] ;
                 
                 subtotal +=
                     price *
-                    saleableProduct.quantity;
+                    soldProduct.quantity;
             });
 
             this.subtotal = subtotal;
@@ -909,7 +780,7 @@ export default {
            this.form.due =  this.payable -this.form.paid;
         },
         submit() {
-            this.form.products = this.saleableProducts;
+            this.form.products = this.soldProducts;
             this.form.subtotal = this.subtotal;
             this.form.discount = this.discount;
 

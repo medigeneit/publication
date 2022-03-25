@@ -251,6 +251,7 @@ class SaleController extends Controller
         // ]);
         return redirect()
             ->route('sales.show', $sale->id)
+            // ->route('sales.index')
             ->with('status', 'The record has been added successfully.');
     }
 
@@ -272,9 +273,9 @@ class SaleController extends Controller
         // return $sale->customer;
         SaleResource::withoutWrapping();
         SaleResource::$show = true;
-        return new SaleResource($sale);
+        // return new SaleResource($sale);
 
-        return Inertia::render('Sale/Show', [
+        return Inertia::render('Sale/Invoice', [
             'sale' => new SaleResource($sale),
         ]);
     }
