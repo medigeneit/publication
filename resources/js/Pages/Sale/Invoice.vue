@@ -270,7 +270,9 @@
                             </tr>
                             <tr>
                                 <td colspan="2" class="px-2 py-1">
-                                    <div class="w-full" type="text" rows="3" >{{ sale.discountPurpose }}</div>
+                                    <div class="w-full" rows="3" >
+                                        {{ sale.discountPurpose }}
+                                    </div>
                                 </td>
                                 <td
                                     colspan="3"
