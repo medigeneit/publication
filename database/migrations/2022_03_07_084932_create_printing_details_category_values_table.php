@@ -17,6 +17,7 @@ class CreatePrintingDetailsCategoryValuesTable extends Migration
             $table->id();
             $table->string('name');
             $table->bigInteger('printing_details_category_key_id');
+            $table->boolean('active')->default(1);
             $table->softDeletes();
 
         });
