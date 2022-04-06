@@ -16,8 +16,9 @@ class CreateCostCategoryTable extends Migration
         Schema::create('cost_category', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('active')->default(1);
             $table->softDeletes();
-            
+
         });
     }
 

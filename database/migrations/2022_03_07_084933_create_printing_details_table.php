@@ -16,7 +16,7 @@ class CreatePrintingDetailsTable extends Migration
         Schema::create('printing_details', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('category_value_id');
-            $table->bigInteger('version_id');
+            $table->bigInteger('printing_id');
             $table->softDeletes();
 
         });
