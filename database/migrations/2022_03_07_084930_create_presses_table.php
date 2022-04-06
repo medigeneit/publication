@@ -14,7 +14,7 @@ class CreatePressesTable extends Migration
     public function up()
     {
         Schema::create('presses', function (Blueprint $table) {
-            $table->increments('id');
+            $table->smallIncrements('id');
             $table->string('name');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
