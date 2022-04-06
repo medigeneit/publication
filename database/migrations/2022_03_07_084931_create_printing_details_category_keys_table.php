@@ -14,7 +14,7 @@ class CreatePrintingDetailsCategoryKeysTable extends Migration
     public function up()
     {
         Schema::create('printing_details_category_keys', function (Blueprint $table) {
-            $table->id();
+            $table->smallIncrements('id');
             $table->string('name');
             $table->boolean('active')->default(1);
             $table->softDeletes();
