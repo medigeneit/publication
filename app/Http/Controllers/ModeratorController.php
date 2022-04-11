@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModeratorResource;
-use App\Models\Author;
-use App\Models\ModeratorType;
+use App\Models\Contributor;
+use App\Models\ContributionType;
 use App\Models\Moderator;
 use App\Models\Version;
 use App\Traits\DateFilter;
@@ -35,8 +35,8 @@ class ModeratorController extends Controller
             "data" => [
                 'moderator'     => new Moderator(),
                 'versions'      => Version::pluck('edition', 'id'),
-                'authors'       => Author::pluck('name', 'id'),
-                'moderatorType' => ModeratorType::pluck('name', 'id')
+                'contributors'       => Contributor::pluck('name', 'id'),
+                'ContributionType' => ContributionType::pluck('name', 'id')
             ]
         ]);
     }
@@ -116,5 +116,4 @@ class ModeratorController extends Controller
             //
         ]);
     }
-
 }

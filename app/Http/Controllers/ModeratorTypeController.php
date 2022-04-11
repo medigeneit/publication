@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModeratorTypeResource;
-use App\Models\ModeratorType;
+use App\Models\ContributionType;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,15 +16,15 @@ class ModeratorTypeController extends Controller
 
     public function index()
     {
-        $moderatorTypes = ModeratorType::query()
-                ->filter()
-                ->dateFilter()
-                ->search(['id', 'name'])
-                ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+        $moderatorTypes = ContributionType::query()
+            ->filter()
+            ->dateFilter()
+            ->search(['id', 'name'])
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
-                // return $moderatorTypes->get() ;
+        // return $moderatorTypes->get() ;
 
-        return Inertia::render('ModeratorType/Index', [
+        return Inertia::render('ContributionType/Index', [
             'ModeratorTypes' => ModeratorTypeResource::collection($moderatorTypes->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
@@ -32,52 +32,52 @@ class ModeratorTypeController extends Controller
 
     public function create()
     {
-        return Inertia::render('ModeratorType/Create', [
-            'ModeratorType' => new ModeratorType(),
+        return Inertia::render('ContributionType/Create', [
+            'ContributionType' => new ContributionType(),
         ]);
     }
 
     public function store(Request $request)
     {
-        $ModeratorType = ModeratorType::create($this->validateData($request) + [
+        $ContributionType = ContributionType::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
 
         return redirect()
-            ->route('moderator-types.show', $ModeratorType->id)
+            ->route('moderator-types.show', $ContributionType->id)
             ->with('status', 'The record has been added successfully.');
     }
 
-    public function show(ModeratorType $ModeratorType)
+    public function show(ContributionType $ContributionType)
     {
         ModeratorTypeResource::withoutWrapping();
 
-        return Inertia::render('ModeratorType/Show', [
-            'ModeratorType' => new ModeratorTypeResource($ModeratorType),
+        return Inertia::render('ContributionType/Show', [
+            'ContributionType' => new ModeratorTypeResource($ContributionType),
         ]);
     }
 
-    public function edit(ModeratorType $ModeratorType)
+    public function edit(ContributionType $ContributionType)
     {
-        return Inertia::render('ModeratorType/Edit', [
-            'ModeratorType' => $ModeratorType,
+        return Inertia::render('ContributionType/Edit', [
+            'ContributionType' => $ContributionType,
         ]);
     }
 
-    public function update(Request $request, ModeratorType $ModeratorType)
+    public function update(Request $request, ContributionType $ContributionType)
     {
-        $ModeratorType->update($this->validateData($request, $ModeratorType->id) + [
+        $ContributionType->update($this->validateData($request, $ContributionType->id) + [
             'user_id' => Auth::id()
         ]);
 
         return redirect()
-            ->route('moderator-types.show', $ModeratorType->id)
+            ->route('moderator-types.show', $ContributionType->id)
             ->with('status', 'The record has been update successfully.');
     }
 
-    public function destroy(ModeratorType $ModeratorType)
+    public function destroy(ContributionType $ContributionType)
     {
-        $ModeratorType->delete();
+        $ContributionType->delete();
 
         return redirect()
             ->route('moderator-types.index')
@@ -116,5 +116,4 @@ class ModeratorTypeController extends Controller
             'name' => 'required',
         ]);
     }
-
 }

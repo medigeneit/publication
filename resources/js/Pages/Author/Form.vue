@@ -57,7 +57,7 @@
 
             <div class="flex items-center justify-between">
                 <div class="">
-                    <go-to-list :href="route('authors.index')" />
+                    <go-to-list :href="route('contributors.index')" />
                 </div>
                 <Button
                     class=""
@@ -100,9 +100,9 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                name: this.data.author.name,
+                name: this.data.Contributor.name,
                 active:
-                    this.moduleAction == "store" ? 1 : this.data.author.active,
+                    this.moduleAction == "store" ? 1 : this.data.Contributor.active,
             }),
         };
     },
@@ -110,12 +110,12 @@ export default {
     methods: {
         submit() {
             if (this.moduleAction == "store") {
-                return this.form.post(this.route("authors.store"));
+                return this.form.post(this.route("contributors.store"));
             }
 
             if (this.moduleAction == "update") {
                 return this.form.put(
-                    this.route("authors.update", this.data.author.id)
+                    this.route("contributors.update", this.data.Contributor.id)
                 );
             }
         },

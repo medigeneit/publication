@@ -3,7 +3,7 @@
 
     <app-layout>
         <template #header>
-            Create Author Type
+            Create Contributor Type
         </template>
         
         <form-component :data="data" module-action="store" />
@@ -26,13 +26,13 @@ export default {
     data() {
         return {
             data: {
-                ModeratorType: this.ModeratorType,
+                ContributionType: this.ContributionType,
             }
         }
     },
 
     props: {
-        ModeratorType: { 
+        ContributionType: { 
             type: Object,
             default: {}
         }

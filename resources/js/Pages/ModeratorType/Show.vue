@@ -10,11 +10,11 @@
         
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
-                <show-table-row heading="ID">{{ ModeratorType.id }}</show-table-row>
-                <show-table-row heading="Name">{{ ModeratorType.name }}</show-table-row>
+                <show-table-row heading="ID">{{ ContributionType.id }}</show-table-row>
+                <show-table-row heading="Name">{{ ContributionType.name }}</show-table-row>
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
-                        <action-button-edit :href="route('moderator-types.edit', ModeratorType.id)" />
+                        <action-button-edit :href="route('moderator-types.edit', ContributionType.id)" />
                     </div>
                 </show-table-row>
             </table>
@@ -45,7 +45,7 @@ export default {
         AddNewButton,
     },
     props: {
-        ModeratorType: { type: Object, default: {} },
+        ContributionType: { type: Object, default: {} },
     },
 };
 </script>

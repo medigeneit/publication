@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account;
-use App\Models\Author;
+use App\Models\Contributor;
 use App\Models\Category;
 use App\Models\Distribution;
 use App\Models\Outlet;
@@ -18,11 +18,12 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function dashboard() {
+    public function dashboard()
+    {
         return Inertia::render('Dashboard', [
             'adminCount' => User::where('type', 1)->count(),
             'categoryCount' => Category::count(),
-            'authorCount' => Author::count(),
+            'ContributorCount' => Contributor::count(),
             'publisherCount' => Publisher::count(),
             'productCount' => Product::count(),
             'outletCount' => Outlet::count(),

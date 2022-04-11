@@ -94,7 +94,7 @@
                             </Select>
                         </div>
                         
-                        <div>
+                        <!-- <div>
                             <Label value="Page" />
                             <Input
                                 type="text"
@@ -124,7 +124,7 @@
                                 <option value="2">Dessert and Manual Binding</option>
                                 
                             </Select>
-                        </div>
+                        </div> -->
                     </div>
                     <h3 class="text-lg text-gray-600 font-bold">Volume Information</h3>
                     <div
@@ -197,8 +197,8 @@
                             (+) Add Volume
                         </Button>
                     </div>
-                    <h3 class="text-lg text-gray-600 font-bold">Printing Section</h3>
-                    <div
+                    <!-- <h3 class="text-lg text-gray-600 font-bold">Printing Section</h3> -->
+                    <!-- <div
                         class="
                             w-full
                             grid grid-cols-2
@@ -256,13 +256,12 @@
                                 v-model="form.storing_at"
                             >
                                 <option value="">-- Select Printing Press --</option>
-                                <!-- <option value="1">Juce and Auto Binding</option> -->
                                 <option v-for="(printingPress, printingId) in data.presses" :value="printingId" :key="printingId">{{ printingPress }}</option>
                             </Select>
                         </div>
 
-                    </div>
-                        <div
+                    </div> -->
+                        <!-- <div
                         class="
                             w-full
                             grid grid-cols-2
@@ -309,7 +308,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div> -->
                 </div>
                 <div class="w-full max-w-md">
                    <Moderators :form ="form" :data="data"/>
@@ -399,8 +398,8 @@ export default {
                 ],
                 moderators: [
                     {
-                        author_id: "",
-                        moderator_type: "",
+                        Contributor_id: "",
+                        contribution_type: "",
                         honorarium_type: "",
                         honorarium: "",
                     },
@@ -434,8 +433,8 @@ export default {
         },
         addModertor() {
             this.form.moderators.push({
-                authorId: "",
-                moderatorType: "",
+                ContributorId: "",
+                ContributionType: "",
                 honorariumType: "",
                 honorarium: "",
             });

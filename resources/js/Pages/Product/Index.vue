@@ -97,7 +97,7 @@
                                 <hr class="my-1">
                                 <div class="p-3">
                                     <div class="py-1.5 flex gap-2" v-for="(moderator, index) in product.moderators" :key="index">
-                                        {{ moderator.moderators_type.name }} :   {{ moderator.author.name }}
+                                        {{ moderator.contributions_type.name }} :   {{ moderator.Contributor.name }}
                                     </div>
                                 </div>
                                 <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
@@ -121,7 +121,7 @@
                                 <hr class="my-1">
                                 <div class="p-3">
                                     <div class="py-1.5 flex gap-2" v-for="(storage, index) in product.storages" :key="index">
-                                        <!-- {{ moderator.moderators_type.name }} :   {{ moderator.author.name }} -->
+                                        <!-- {{ moderator.contributions_type.name }} :   {{ moderator.Contributor.name }} -->
                                         {{ storage.outlet.name }} : {{ storage.quantity || 0 }}
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@ export default {
                     {title: 'Soft', align: 'left', sortable: 'soft'},
                     {title: 'Categrories', align: 'center'},
                     {title: 'Prices', align: 'right'},
-                    {title: 'Moderators', align: 'right', sortable: 'moderator_type'},
+                    {title: 'Moderators', align: 'right', sortable: 'contribution_type'},
                     {title: 'Storages', align: 'right'},
                     {title: 'Circulation', align: 'right'},
                     {title: 'Package', align: 'center'},

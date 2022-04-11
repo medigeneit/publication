@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
-use App\Models\Author;
+use App\Models\Contributor;
 use App\Models\Category;
 use App\Models\CategoryProduct;
-use App\Models\ModeratorType;
+use App\Models\ContributionType;
 use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\Publisher;
@@ -55,16 +55,16 @@ class ProductController extends Controller
                         $query->with([
                             'version.production.publisher:id,name',
                             'version.volumes:id,version_id',
-                            'version.moderators:id,author_id,moderator_type,version_id',
-                            'version.moderators.moderators_type:id,name',
-                            'version.moderators.author:id,name'
+                            'version.moderators:id,Contributor_id,contribution_type,version_id',
+                            'version.moderators.contributions_type:id,name',
+                            'version.moderators.Contributor:id,name'
                         ]);
                     },
                     Version::class => function ($query) {
                         $query->with([
-                            'moderators:id,author_id,moderator_type,version_id',
-                            'moderators.moderators_type:id,name',
-                            'moderators.author:id,name',
+                            'moderators:id,Contributor_id,contribution_type,version_id',
+                            'moderators.contributions_type:id,name',
+                            'moderators.Contributor:id,name',
                             'volumes',
                             'production.publisher:id,name'
                         ]);
@@ -259,12 +259,12 @@ class ProductController extends Controller
         return [
             'type' => Product::getTypes(),
             'active' => Product::getActiveProperties(),
-            'moderator_type' => ModeratorType::pluck('name','id'),
-            'author' => Author::query()
-                // ->when(request()->moderator_type,function($query){
-                //     $query->where('moderator_type',request()->moderator_type);
+            'contribution_type' => ContributionType::pluck('name', 'id'),
+            'Contributor' => Contributor::query()
+                // ->when(request()->contribution_type,function($query){
+                //     $query->where('contribution_type',request()->contribution_type);
                 // })
-                ->pluck('name','id'),
+                ->pluck('name', 'id'),
             'category' => Category::pluck('name', 'id'),
         ];
     }

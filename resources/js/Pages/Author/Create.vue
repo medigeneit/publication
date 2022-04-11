@@ -1,12 +1,12 @@
 <template>
-    <Head title="Author" />
+    <Head title="Contributor" />
 
     <app-layout>
         <template #header>
-            Create Author
+            Create Contributor
         </template>
         
-        <form-component :data="{ author, ModeratorType }" module-action="store" />
+        <form-component :data="{ Contributor, ContributionType }" module-action="store" />
     </app-layout>
 </template>
 
@@ -24,8 +24,8 @@ export default {
     },
 
     props: {
-        author: { type: Object, default: {} },
-        ModeratorType: { type: Object, default: {} },
+        Contributor: { type: Object, default: {} },
+        ContributionType: { type: Object, default: {} },
     },
 };
 </script>

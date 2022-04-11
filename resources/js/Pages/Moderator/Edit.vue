@@ -6,7 +6,7 @@
             Edit Moderator
         </template>
         
-        <form-component :data="{ moderator, moderatorType }" module-action="update" />
+        <form-component :data="{ moderator, ContributionType }" module-action="update" />
     </app-layout>
 </template>
 
@@ -25,7 +25,7 @@ export default {
 
     props: {
         moderator: { type: Object, default: {} },
-        moderatorType: { type: Object, default: {} },
+        ContributionType: { type: Object, default: {} },
     },
 };
 </script>

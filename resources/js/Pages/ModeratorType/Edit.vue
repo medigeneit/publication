@@ -1,9 +1,9 @@
 <template>
-    <Head title="Author Type" />
+    <Head title="Contributor Type" />
 
     <app-layout>
         <template #header>
-            Edit Author Type
+            Edit Contributor Type
         </template>
         
         <form-component :data="data" module-action="update" />
@@ -26,13 +26,13 @@ export default {
     data() {
         return {
             data:{
-                ModeratorType: this.ModeratorType,
+                ContributionType: this.ContributionType,
             }
         }
     },
 
     props: {
-        ModeratorType: { 
+        ContributionType: { 
             type: Object,
             default: {}
         }

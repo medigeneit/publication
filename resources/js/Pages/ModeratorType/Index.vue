@@ -1,9 +1,9 @@
 <template>
-    <Head title="Author Type" />
+    <Head title="Contributor Type" />
 
     <app-layout>
         <template #header>
-            Author Type List
+            Contributor Type List
         </template>
 
         <add-new-button :href="route('moderator-types.create')" />
@@ -13,12 +13,12 @@
                 <th class="py-3 px-2 text-left">Name</th>
                 <th class="py-3 px-2 text-center">Action</th>
             </template> -->
-            <template #default="{ item: ModeratorType }">
-                <td class="py-3 px-2 text-left">{{ ModeratorType.name }}</td>
+            <template #default="{ item: ContributionType }">
+                <td class="py-3 px-2 text-left">{{ ContributionType.name }}</td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
-                        <action-button-show :href="route('moderator-types.show', ModeratorType.id)" />
-                        <action-button-edit :href="route('moderator-types.edit', ModeratorType.id)" />
+                        <action-button-show :href="route('moderator-types.show', ContributionType.id)" />
+                        <action-button-edit :href="route('moderator-types.edit', ContributionType.id)" />
                     </div>
                 </td>
             </template>

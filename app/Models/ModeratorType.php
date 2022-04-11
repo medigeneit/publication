@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ModeratorType extends Model
+class ContributionType extends Model
 {
     use HasFactory, SoftDeletes, ScopeDateFilter, ScopeSearch, ScopeSort;
 
     protected $guarded = [];
 
-    
+
     public function scopeFilter($query)
     {
         return $query

@@ -11,7 +11,7 @@
                 productList,
                 versionType,
                 product_ids,
-                authors,
+                contributors,
                 moderatorTypes,
                 presses,
                 printing_details_category_keys
@@ -55,7 +55,7 @@ export default {
             type: Array,
             default: [],
         },
-        authors: {
+        contributors: {
             type: Object,
             default: {},
         },

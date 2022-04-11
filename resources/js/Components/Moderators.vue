@@ -4,17 +4,17 @@
         :key="index">
 
         <div class="mb-4">
-            <Label value="Author" />
+            <Label value="Contributor" />
             <Select
                 class="mt-1 block w-full"
-                v-model="form.moderators[index].author_id"
+                v-model="form.moderators[index].Contributor_id"
 
             >
-                <option value="">-- Select Author --</option>
+                <option value="">-- Select Contributor --</option>
                 <option
-                    :value="index" v-for="(author, index) in data.authors" :key="index"
+                    :value="index" v-for="(Contributor, index) in data.contributors" :key="index"
                 >
-                    {{ author }}
+                    {{ Contributor }}
                 </option>
             </Select>
         </div>
@@ -23,7 +23,7 @@
             <Label value="Moderator Type" />
             <Select
                 class="mt-1 block w-full"
-                v-model="form.moderators[index].moderator_type"
+                v-model="form.moderators[index].contribution_type"
 
             >
                 <option value="">-- Select Moderator --</option>
@@ -110,8 +110,8 @@ export default {
     methods: {
         addModertor() {
             this.form.moderators.push({
-                authorId: "",
-                moderatorType: "",
+                ContributorId: "",
+                ContributionType: "",
                 honorariumType: "",
                 honorarium: "",
             });

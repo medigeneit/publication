@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VersionResource;
-use App\Models\Author;
+use App\Models\Contributor;
 use App\Models\Moderator;
-use App\Models\ModeratorType;
+use App\Models\ContributionType;
 use App\Models\Product;
 use App\Models\Production;
 use App\Models\Version;
@@ -29,11 +29,11 @@ class VersionController extends Controller
         $versions = Version::query()
             ->filter()
             ->dateFilter()
-            ->with('volumes', 'user', 'production.publisher','moderators:id,author_id,moderator_type,version_id','moderators.moderators_type:id,name','moderators.author:id,name')
+            ->with('volumes', 'user', 'production.publisher', 'moderators:id,Contributor_id,contribution_type,version_id', 'moderators.contributions_type:id,name', 'moderators.Contributor:id,name')
             ->search(['id'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
-            // return $versions->get();
+        // return $versions->get();
 
         return Inertia::render('Version/Index', [
             'versions' => VersionResource::collection($versions->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -43,6 +43,8 @@ class VersionController extends Controller
 
     public function create()
     {
+        return Contributor::get();
+
         $products = Product::query()
             ->when(isset(request()->search), function ($query) {
                 $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
@@ -51,15 +53,15 @@ class VersionController extends Controller
             })
             ->get();
 
-        $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id','name']);
+        $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
 
 
         return Inertia::render('Version/Create', [
             'version'           => new Version(),
             'productionList'    => Production::pluck('name', 'id'),
             'productList'       => $products,
-            'authors'           => Author::pluck('name', 'id'),
-            'moderatorTypes'    => ModeratorType::pluck('name', 'id'),
+            'contributors'      => Contributor::pluck('name', 'id'),
+            'moderatorTypes'    => ContributionType::pluck('name', 'id'),
             'versionType'       => Version::getTypes(),
             'presses'           => Press::pluck('name', 'id'),
             'printing_details_category_keys' => $printing_details_category_keys
@@ -74,7 +76,7 @@ class VersionController extends Controller
     public function store(Request $request)
     {
         return $request;
-        
+
         $validate = $this->validateData($request) + [
             'user_id' => Auth::id()
         ];
@@ -108,21 +110,22 @@ class VersionController extends Controller
             ]
         );
 
-        if($request->moderators){
-        foreach ($request->moderators as $moderator) {
-            // return $moderator['authorId'];
-            $data = [
-                'version_id' => $version->id,
-                'author_id' => $moderator['author_id'],
-                'moderator_type' => $moderator['moderator_type'],
-                'honorarium_type' => $moderator['honorarium_type'],
-                'honorarium' => $moderator['honorarium'],
-            ];
+        if ($request->moderators) {
+            foreach ($request->moderators as $moderator) {
+                // return $moderator['ContributorId'];
+                $data = [
+                    'version_id' => $version->id,
+                    'Contributor_id' => $moderator['Contributor_id'],
+                    'contribution_type' => $moderator['contribution_type'],
+                    'honorarium_type' => $moderator['honorarium_type'],
+                    'honorarium' => $moderator['honorarium'],
+                ];
 
-            Moderator::create($data);
+                Moderator::create($data);
 
-            // return $moderator;
-        }}
+                // return $moderator;
+            }
+        }
 
 
         if (($request->volumes)) {
@@ -162,8 +165,8 @@ class VersionController extends Controller
                 'versionType'               => Version::getTypes(),
                 'version'                   => $version,
                 'volumes'                   => $version->volumes()->get(),
-                'authors'                   => Author::pluck('name', 'id'),
-                'moderatorTypes'            => ModeratorType::pluck('name', 'id'),
+                'contributors'              => Contributor::pluck('name', 'id'),
+                'moderatorTypes'            => ContributionType::pluck('name', 'id'),
                 'selectedModerators'        => $version->moderators()->get(),
                 // 'selectedModeratorTypes'    => $version->modera()->get(),
             ]
@@ -199,7 +202,7 @@ class VersionController extends Controller
             $this->volumeInsert($request, $version);
         }
 
-        if($request->moderators){
+        if ($request->moderators) {
             // return
             $this->moderatorInsert($request, $version);
         }
@@ -264,21 +267,21 @@ class VersionController extends Controller
         Moderator::where(['version_id' => $version->id])->delete();
 
         foreach ($request->moderators as $moderator) {
-            if($moderator['author_id'] && $moderator['moderator_type'] && $moderator['honorarium_type'])
-            // return $moderator['author_id'];
-            $moderator = Moderator::onlyTrashed()->updateOrCreate(
-                [
-                    'version_id' => $version->id,
-                ],
-                [
-                    'author_id' => $moderator['author_id'],
-                    'moderator_type' => $moderator['moderator_type'],
-                    'honorarium_type' => $moderator['honorarium_type'],
-                    'honorarium' => $moderator['honorarium'],
-                    'deleted_at'    => null
+            if ($moderator['Contributor_id'] && $moderator['contribution_type'] && $moderator['honorarium_type'])
+                // return $moderator['Contributor_id'];
+                $moderator = Moderator::onlyTrashed()->updateOrCreate(
+                    [
+                        'version_id' => $version->id,
+                    ],
+                    [
+                        'Contributor_id' => $moderator['Contributor_id'],
+                        'contribution_type' => $moderator['contribution_type'],
+                        'honorarium_type' => $moderator['honorarium_type'],
+                        'honorarium' => $moderator['honorarium'],
+                        'deleted_at'    => null
 
-                ]
-            );
+                    ]
+                );
 
             // return $moderator;
         }

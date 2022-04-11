@@ -1,41 +1,41 @@
 <template>
-    <Head title="author" />
+    <Head title="Contributor" />
 
     <app-layout>
         <template #header>
-            {{ author.name }}
+            {{ Contributor.name }}
         </template>
 
-        <add-new-button :href="route('authors.create')" class="mb-4" />
+        <add-new-button :href="route('contributors.create')" class="mb-4" />
         
         <div class="overflow-auto bg-white border">
             <table class="table-auto">
-                <show-table-row heading="ID">{{ author.id }}</show-table-row>
+                <show-table-row heading="ID">{{ Contributor.id }}</show-table-row>
 
-                <show-table-row heading="Name">{{ author.name }}</show-table-row>
+                <show-table-row heading="Name">{{ Contributor.name }}</show-table-row>
 
-                <show-table-row heading="Honorarium">{{ author.honorarium }} tk.</show-table-row>
+                <show-table-row heading="Honorarium">{{ Contributor.honorarium }} tk.</show-table-row>
 
                 <show-table-row heading="Active">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : author.active, 'bg-red-500' : !author.active }">
-                        {{ author.activeValue }}
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : Contributor.active, 'bg-red-500' : !Contributor.active }">
+                        {{ Contributor.activeValue }}
                     </span>
                 </show-table-row>
 
                 <show-table-row heading="Created By">
-                    {{ author.createdBy }}
+                    {{ Contributor.createdBy }}
                 </show-table-row>
 
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
-                        <action-button-edit :href="route('authors.edit', author.id)" />
+                        <action-button-edit :href="route('contributors.edit', Contributor.id)" />
                     </div>
                 </show-table-row>
             </table>
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('authors.index')"/>
+            <go-to-list :href="route('contributors.index')"/>
         </div>
     </app-layout>
 </template>
@@ -59,7 +59,7 @@ export default {
         AddNewButton,
     },
     props: {
-        author: { type: Object, default: {} },
+        Contributor: { type: Object, default: {} },
     },
 };
 </script>

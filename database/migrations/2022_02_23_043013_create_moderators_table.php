@@ -16,8 +16,8 @@ class CreateModeratorsTable extends Migration
         Schema::create('moderators', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('version_id');
-            $table->unsignedBigInteger('author_id');
-            $table->bigInteger('moderator_type');
+            $table->unsignedBigInteger('Contributor_id');
+            $table->bigInteger('contribution_type');
             $table->tinyInteger('honorarium_type')->comment('1=One Time, 2=Percentage');
             $table->float('honorarium')->nullable();
             $table->timestamps();

@@ -1,27 +1,27 @@
 <template>
-    <Head title="Author" />
+    <Head title="Contributor" />
 
     <app-layout>
         <template #header>
-            Author List
+            Contributor List
         </template>
 
-        <add-new-button :href="route('authors.create')" />
+        <add-new-button :href="route('contributors.create')" />
 
-        <data-table :collections="authors" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
-            <template #default="{ item: author }">
-                <td class="py-2 px-2 text-left">{{ author.id }}</td>
-                <td class="py-2 px-2 text-left">{{ author.name }}</td>
+        <data-table :collections="contributors" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
+            <template #default="{ item: Contributor }">
+                <td class="py-2 px-2 text-left">{{ Contributor.id }}</td>
+                <td class="py-2 px-2 text-left">{{ Contributor.name }}</td>
                 <td class="py-2 px-2 text-center">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : author.active, 'bg-red-500' : !author.active }">
-                        {{ author.activeValue }}
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : Contributor.active, 'bg-red-500' : !Contributor.active }">
+                        {{ Contributor.activeValue }}
                     </span>
                 </td>
-                <td class="py-2 px-2 text-right">{{ author.honorarium }} TK</td>
+                <td class="py-2 px-2 text-right">{{ Contributor.honorarium }} TK</td>
                 <td class="py-2.5 px-2"> 
                     <div class="flex justify-center items-center gap-1 md:gap-2">
-                        <action-button-show :href="route('authors.show', author.id)" />
-                        <action-button-edit :href="route('authors.edit', author.id)" />
+                        <action-button-show :href="route('contributors.show', Contributor.id)" />
+                        <action-button-edit :href="route('contributors.edit', Contributor.id)" />
                     </div>
                 </td>
             </template>
@@ -48,7 +48,7 @@ export default {
         AddNewButton,
     },
     props: {
-        authors: { type: Object, default: {} },
+        contributors: { type: Object, default: {} },
         filters: { type: Object, default: {} },
     },
         data() {

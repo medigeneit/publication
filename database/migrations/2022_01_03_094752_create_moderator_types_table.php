@@ -13,7 +13,7 @@ class CreateModeratorTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('moderator_types', function (Blueprint $table) {
+        Schema::create('contribution_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->tinyInteger('active')->default(1);
@@ -30,6 +30,6 @@ class CreateModeratorTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('author_types');
+        Schema::dropIfExists('Contributor_types');
     }
 }

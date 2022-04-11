@@ -20,35 +20,32 @@ class Moderator extends Model
     public function scopeFilter($query)
     {
         return $query
-            ->when(isset(request()->active), function($query) {
+            ->when(isset(request()->active), function ($query) {
                 $query->where('active', request()->active);
             });
-
     }
 
     // static $appends ['product_name'];
-    // protected $appends = ['mentor_type_name','author_name'];
+    // protected $appends = ['mentor_type_name','Contributor_name'];
 
 
 
 
     public function getMentorTypeNameAttribute()
     {
-        return $this->moderators_type->name ?? '';
+        return $this->contributions_type->name ?? '';
     }
-    public function getAuthorNameAttribute()
+    public function getContributorNameAttribute()
     {
-        return $this->author->name ?? '';
+        return $this->Contributor->name ?? '';
     }
 
-    public function moderators_type()
+    public function contributions_type()
     {
-        return $this->belongsTo(ModeratorType::class, 'moderator_type');
+        return $this->belongsTo(ContributionType::class, 'contribution_type');
     }
-    public function author()
+    public function Contributor()
     {
-        return $this->belongsTo(Author::class, );
+        return $this->belongsTo(Contributor::class,);
     }
-
 }
-

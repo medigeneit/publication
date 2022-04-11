@@ -25,7 +25,7 @@ export default {
 
     props: {
         data: { type: Object, default: {} },
-        moderatorType: { type: Object, default: {} },
+        ContributionType: { type: Object, default: {} },
     },
 };
 </script>

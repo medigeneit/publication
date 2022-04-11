@@ -57,7 +57,7 @@
                                 <hr class="my-1">
                                 <div class="p-3">
                                     <div class="py-1.5 flex gap-2 mr-10" v-for="(moderator, index) in version.moderators" :key="index">
-                                        {{ moderator.moderators_type.name }} :   {{ moderator.author.name }}
+                                        {{ moderator.contributions_type.name }} :   {{ moderator.Contributor.name }}
                                     </div>
                                 </div>
                                 <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>

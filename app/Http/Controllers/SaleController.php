@@ -63,16 +63,16 @@ class SaleController extends Controller
                         $query->with([
                             'version.production.publisher:id,name',
                             'version.volumes:id,version_id',
-                            'version.moderators:id,author_id,moderator_type,version_id',
-                            'version.moderators.moderators_type:id,name',
-                            'version.moderators.author:id,name'
+                            'version.moderators:id,Contributor_id,contribution_type,version_id',
+                            'version.moderators.contributions_type:id,name',
+                            'version.moderators.Contributor:id,name'
                         ]);
                     },
                     Version::class => function ($query) {
                         $query->with([
-                            'moderators:id,author_id,moderator_type,version_id',
-                            'moderators.moderators_type:id,name',
-                            'moderators.author:id,name',
+                            'moderators:id,Contributor_id,contribution_type,version_id',
+                            'moderators.contributions_type:id,name',
+                            'moderators.Contributor:id,name',
                             'volumes',
                             'production.publisher:id,name'
                         ]);
@@ -261,15 +261,16 @@ class SaleController extends Controller
         // return Sale::with('genesis_info')->get();
 
         // return $sale->with('outlet', 'customer.adress', 'genesis_info', 'user')
-        $sale = Sale::with(['outlet',
-        'customer.address.area.district.division',
-        'genesis_info',
-        'user',
-        'sale_details.product',
-        'sale_details.price_category',
+        $sale = Sale::with([
+            'outlet',
+            'customer.address.area.district.division',
+            'genesis_info',
+            'user',
+            'sale_details.product',
+            'sale_details.price_category',
         ])
-        // ->when()
-        ->find($id);
+            // ->when()
+            ->find($id);
         // return $sale->customer;
         SaleResource::withoutWrapping();
         SaleResource::$show = true;
