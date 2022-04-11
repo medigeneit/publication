@@ -15,7 +15,7 @@ class CreateVersionCostsTable extends Migration
     {
         Schema::create('version_costs', function (Blueprint $table) {
             $table->id();
-            $table->integer('cost_category_id');
+            $table->smallInteger('cost_category_id');
             $table->bigInteger('printing_id');
             $table->integer('quantity')->nullable();
             $table->float('rate')->nullable();
