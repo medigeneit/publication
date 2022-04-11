@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AccountCategoryController;
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\ContributorController;
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\ModeratorTypeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CirculationController;
@@ -67,7 +67,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'versions'                  => VersionController::class,
         'printing-details'          => PrintingDetaislController::class,
         'categories'                => CategoryController::class,
-        'contributors'                   => ContributorController::class,
+        'authors'                   => AuthorController::class,
         'products'                  => ProductController::class,
         'packages'                  => PackageController::class,
         'sales'                     => SaleController::class,
