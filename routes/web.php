@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AccountCategoryController;
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\ModeratorTypeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CirculationController;
@@ -14,7 +14,9 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PressController;
 use App\Http\Controllers\PriceCategoryController;
+use App\Http\Controllers\PrintingDetaislController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\PublisherController;
@@ -61,10 +63,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'users'                     => UserController::class,
         'publishers'                => PublisherController::class,
         'productions'               => ProductionController::class,
+        'presses'                   => PressController::class,
         'versions'                  => VersionController::class,
-
+        'printing-details'          => PrintingDetaislController::class,
         'categories'                => CategoryController::class,
-        'authors'                   => AuthorController::class,
+        'contributors'                   => ContributorController::class,
         'products'                  => ProductController::class,
         'packages'                  => PackageController::class,
         'sales'                     => SaleController::class,
