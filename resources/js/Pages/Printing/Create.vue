@@ -8,8 +8,11 @@
             :data="{ 
                 printing_details_category_keys,
                 printing,
-                cost_categories,
-                presses
+                costCategories,
+                presses,
+                pressContributors,
+                authors,
+                moderatorTypes,
             }"
             module-action="store"
         />
@@ -41,11 +44,19 @@ export default {
             default: {},
         },
 
-        cost_categories: {
+        costCategories: {
             type: Object,
             default: {},
         },
         presses: {
+            type: Object,
+            default: {},
+        },
+         authors: {
+            type: Object,
+            default: {},
+        },
+        moderatorTypes: {
             type: Object,
             default: {},
         },
