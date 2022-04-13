@@ -13,6 +13,7 @@
                 pressContributors,
                 authors,
                 moderatorTypes,
+                version
             }"
             module-action="store"
         />
@@ -60,6 +61,10 @@ export default {
             type: Object,
             default: {},
         },
+        version:{
+            type: Number,
+            default: '',
+        }
     },
 };
 </script>

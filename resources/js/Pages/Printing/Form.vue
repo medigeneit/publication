@@ -29,7 +29,7 @@
                     </div>
                     <div class="w-full flex gap-6">
                         <div class="w-full max-w-3xl p-4 bg-white border shadow rounded">
-                            <h3 class="text-lg text-gray-600 font-bold">Printing Section</h3>
+                            <h3 class="text-lg text-gray-600 font-bold">Printing Details</h3>
                             <div class="w-full text-right mb-2">
                                 <Button @click="modalHandler" type="button" class="btn-danger border-4">
                                 + Add Filed
@@ -220,7 +220,7 @@
                                     <Label value="Storing At" />
                                     <Select
                                         class="mt-1 block w-full"
-                                        v-model="form.storing_at"
+                                        v-model="form.plate_stored_at"
                                     >
                                         <option value="">-- Select Printing Press --</option>
                                         <option v-for="(printingPress, printingId) in data.presses" :value="printingId" :key="printingId">{{ printingPress }}</option>
@@ -294,6 +294,8 @@ export default {
             form: this.$inertia.form({
 
                 printing_details_category_key_id: this.data.printing_details_category_keys.id || "",
+
+                version_id: this.data.version,
 
                 name: '',
 

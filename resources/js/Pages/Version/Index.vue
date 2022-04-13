@@ -14,6 +14,9 @@
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('versions.show', version.id)" />
                         <action-button-edit :href="route('versions.edit', version.id)" />
+                         <nav-link class="" :href="route('cost-categories',version.id)">
+                             Cost Details
+                        </nav-link>
                     </div>
                 </td>
                 <td class="py-3 px-2 text-left">{{ version.id }}</td>
@@ -85,6 +88,7 @@ import DataTable from "@/Components/DataTable.vue";
 import ActionButtonShow from "@/Components/ActionButtonShow.vue";
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import AddNewButton from '@/Components/AddNewButton.vue';
+import NavLink from "@/Components/NavLink.vue";
 
 export default {
     components: {
@@ -95,6 +99,7 @@ export default {
         ActionButtonShow,
         ActionButtonEdit,
         AddNewButton,
+        NavLink
     },
     props: {
         versions: { type: Object, default: {} },

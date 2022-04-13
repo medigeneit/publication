@@ -316,6 +316,11 @@
                 </div>
             </div>
 
+             <!-- <div class="w-full max-w-md">
+                  <nav-link class="" :href="route('printing-details.create',data.version.id)">
+                        Cost Details
+                 </nav-link>
+            </div> -->
             <hr class="w-full my-4" />
 
             <div class="flex items-center justify-between">
@@ -347,6 +352,7 @@ import Select from "@/Components/Select.vue";
 import ActiveInput from "@/Components/ActiveInput.vue";
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import Moderators from "@/Components/Moderators.vue";
+import NavLink from "@/Components/NavLink.vue";
 
 export default {
     components: {
@@ -358,7 +364,8 @@ export default {
         Select,
         ActiveInput,
         ActionButtonEdit,
-        Moderators
+        Moderators,
+        NavLink
     },
 
     props: {
