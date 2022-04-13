@@ -18,14 +18,14 @@
     <nav-link-wrapper
         title="Production Management"
         :active="route().current(
-            '(publishers|productions|versions|moderator-types|authors|moderators|categories|price-categories|products|packages).*'
+            '(publishers|productions|versions|moderator-types|contributors|moderators|categories|price-categories|products|packages|printing-details).*'
             )"
     >
         <nav-link-wrapper
             title="Publication"
             :active="
                 route().current(
-                    '(categories|price-categories|packages|authors|publishers|moderator-types).*'
+                    '(categories|price-categories|packages|authors|publishers|moderator-types|presses).*'
                 )
             "
         >
@@ -66,6 +66,11 @@
             >
                 Packages
             </nav-link> -->
+              <nav-link
+                :href="route('presses.index')"
+                :active="route().current('presses.*')">
+                Presses  
+            </nav-link>
         </nav-link-wrapper>
 
         <nav-link
@@ -79,6 +84,13 @@
             :active="route().current('versions.*')"
         >
             Release Versions
+        </nav-link>
+
+        <nav-link
+            :href="route('printing-details.index')"
+            :active="route().current('printing-details.*')"
+        >
+            Printing-details
         </nav-link>
         
         <nav-link
