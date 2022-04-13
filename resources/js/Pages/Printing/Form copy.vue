@@ -135,9 +135,13 @@
                                         </tr>
                                     </tbody>
                                 </table>
+<<<<<<< HEAD
+
                             </div>
+=======
                                 
                             </div> -->
+>>>>>>> printingDetails2
                         </div>
 
                     </div>

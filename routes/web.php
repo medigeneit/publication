@@ -55,9 +55,12 @@ Route::get('/typing-test', function () {
     return Inertia::render('TypingTest');
 })->middleware(['auth', 'admin'])->name('typing-test');
 
+
 require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/cost-categories/{version}', [PrintingDetaislController::class, 'create'])->name('cost-categories');
 
     Route::resources([
         'users'                     => UserController::class,
