@@ -86,6 +86,34 @@
                                     <tbody>
                                         <tr
                                             class=""
+                                            v-for="(printingDetail, index) in data.printing_details_category_keys"
+                                            :key="printingDetail.id"
+                                        >
+                                            <td class="text-right px-2 py-1 text-sm">   
+                                                {{ printingDetail.name }}
+                                            </td>
+                                            <td class="text-left px-2 py-1" >
+                                                <Select
+                                                    class="mt-1 block w-full"
+                                                    v-model="form.category_value_id[index]"
+                                                    @change="test"
+                                                >
+                                                <option value="">Select Value</option>
+                                                <option :value="priceCategoryValue.id" v-for="(priceCategoryValue) in printingDetail.values" :key="priceCategoryValue.id">
+                                                    {{ priceCategoryValue.name }}
+                                                </option>
+                                                </Select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                            <!-- <div class="w-full bg-white gap-4 p-4">
+                                <table class="w-full min-w-max">
+                                    <tbody>
+                                        <tr
+                                            class=""
                                             v-for="printingDetail in form.printing_details"
                                             :key="printingDetail.printing_detail_id"
                                         >
@@ -95,7 +123,7 @@
                                             <td class="text-left px-2 py-1" >
                                                 <Select
                                                     class="mt-1 block w-full"
-                                                    v-model="printingDetail.value_id"
+                                                    v-model="printingDetail.category_value_id"
                                                     @change="test"
                                                 >
                                                 <option value="">Select Value</option>
@@ -108,7 +136,7 @@
                                     </tbody>
                                 </table>
                                 
-                            </div>
+                            </div> -->
                         </div>
                     
                     </div>
@@ -303,6 +331,8 @@ export default {
 
                 ],
 
+                category_value_id:[],
+
                 key: " ",
 
                 copy_quantity:" ",
@@ -321,7 +351,7 @@ export default {
 
                 cost_details: [],
 
-                 moderators: [
+                 contributors: [
                     {
                         authorId: "",
                         moderatorType: "",
@@ -363,14 +393,14 @@ export default {
                 printing_detail_id: printing_details['id'],
                 printing_detail_name: printing_details['name'],
                 options: printing_details['values'],
-                value_id: '',
+                category_value_id: '',
             });
         });
 
 
         for(let index in this.data.selectedModerators) {
             console.log(this.data.selectedModerators[index]);
-            this.form.moderators[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
+            this.form.contributors[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
         }
     },
 
@@ -396,7 +426,7 @@ export default {
         },
 
         addModertor() {
-            this.form.moderators.push({
+            this.form.contributors.push({
                 authorId: "",
                 moderatorType: "",
             });

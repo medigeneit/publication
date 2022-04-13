@@ -10,9 +10,12 @@ use App\Models\Moderator;
 use App\Models\ModeratorType;
 use App\Models\Press;
 use App\Models\Printing;
+use App\Models\PrintingContributor;
+use App\Models\PrintingDetail;
 use App\Models\PrintingDetailsCategoryKey;
 use App\Models\PrintingDetailsCategoryValue;
 use App\Models\Version;
+use App\Models\VersionCost;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -55,14 +58,6 @@ class PrintingDetaislController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->version_id;
-
-        // return $request->press;
-        // return $request->plate_stored_at;
-        // return $request->page_amount;
-        // return $request->order_date;
-        // return $request->page_amount;
-        // return $request->copy_quantity;
 
         if ($request->key) {
             $keyId = PrintingDetailsCategoryKey::create([
@@ -79,17 +74,54 @@ class PrintingDetaislController extends Controller
             }
         };
 
-        Printing::create([
-            'version_id' => $request->version_id,
-            'press_id'   => $request->press,
-            'copy_quantity' => $request->copy_quantity,
-            'page_amount' => $request->page_amount,
-            'order_date' => $request->order_date,
-            'plate_stored_at' => $request->plate_stored_at,
-        ]);
+        if ($request->copy_quantity && $request->version_id && $request->press) {
+            $printing =  Printing::create([
+                'version_id' => $request->version_id,
+                'press_id'   => $request->press,
+                'copy_quantity' => $request->copy_quantity,
+                'page_amount' => $request->page_amount,
+                'order_date' => $request->order_date,
+                'plate_stored_at' => $request->plate_stored_at,
+            ]);
 
 
-        return back();
+            if (is_array($request->category_value_id)) {
+                foreach ($request->category_value_id as $value) {
+                    if ($value != Null) {
+                        $printing_details_id = PrintingDetail::create([
+                            'category_value_id' => $value,
+                            'printing_id'   => $printing->id,
+                        ]);
+                    }
+                }
+            }
+
+            foreach ($request->cost_details as $cost_detail) {
+                if ($cost_detail != Null) {
+                    VersionCost::create([
+                        'cost_category_id'    => $cost_detail['cost_category_id'],
+                        'quantity'            => $cost_detail['quantity'],
+                        'rate'                => $cost_detail['rate'],
+                        'subtotal'            => $cost_detail['subtotal'],
+                        'printing_id'         => $printing->id,
+                    ]);
+                }
+            }
+
+            foreach ($request->contributors as $contributor) {
+                if ($contributor != Null) {
+                    PrintingContributor::create([
+                        'printing_id' => $printing->id,
+                        'author_id' => $contributor['authorId'],
+                        'moderator_type_id' => $contributor['moderatorType']
+                    ]);
+                }
+            }
+        }
+
+
+
+        return 123;
 
         // $printing = Printing::create($this->validateData($request));
 

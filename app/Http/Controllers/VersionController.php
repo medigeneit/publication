@@ -13,6 +13,7 @@ use App\Models\Version;
 use App\Models\PackageProduct;
 use App\Models\Press;
 use App\Models\PrintingDetailsCategoryKey;
+use App\Models\VersionCost;
 use App\Models\Volume;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
@@ -29,11 +30,11 @@ class VersionController extends Controller
         $versions = Version::query()
             ->filter()
             ->dateFilter()
-            ->with('volumes', 'user', 'production.publisher','moderators:id,author_id,moderator_type,version_id','moderators.moderators_type:id,name','moderators.author:id,name')
+            ->with('volumes', 'user', 'production.publisher', 'moderators:id,author_id,moderator_type,version_id', 'moderators.moderators_type:id,name', 'moderators.author:id,name')
             ->search(['id'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
-            // return $versions->get();
+        // return $versions->get();
 
         return Inertia::render('Version/Index', [
             'versions' => VersionResource::collection($versions->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -51,7 +52,7 @@ class VersionController extends Controller
             })
             ->get();
 
-        $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id','name']);
+        $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
 
 
         return Inertia::render('Version/Create', [
@@ -74,7 +75,7 @@ class VersionController extends Controller
     public function store(Request $request)
     {
         return $request;
-        
+
         $validate = $this->validateData($request) + [
             'user_id' => Auth::id()
         ];
@@ -108,21 +109,22 @@ class VersionController extends Controller
             ]
         );
 
-        if($request->moderators){
-        foreach ($request->moderators as $moderator) {
-            // return $moderator['authorId'];
-            $data = [
-                'version_id' => $version->id,
-                'author_id' => $moderator['author_id'],
-                'moderator_type' => $moderator['moderator_type'],
-                'honorarium_type' => $moderator['honorarium_type'],
-                'honorarium' => $moderator['honorarium'],
-            ];
+        if ($request->moderators) {
+            foreach ($request->moderators as $moderator) {
+                // return $moderator['authorId'];
+                $data = [
+                    'version_id' => $version->id,
+                    'author_id' => $moderator['author_id'],
+                    'moderator_type' => $moderator['moderator_type'],
+                    'honorarium_type' => $moderator['honorarium_type'],
+                    'honorarium' => $moderator['honorarium'],
+                ];
 
-            Moderator::create($data);
+                Moderator::create($data);
 
-            // return $moderator;
-        }}
+                // return $moderator;
+            }
+        }
 
 
         if (($request->volumes)) {
@@ -146,6 +148,8 @@ class VersionController extends Controller
 
     public function edit(Version $version)
     {
+        // return VersionCost::get();
+
         $products = Product::query()
             ->when(isset(request()->search), function ($query) {
                 $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
@@ -199,7 +203,7 @@ class VersionController extends Controller
             $this->volumeInsert($request, $version);
         }
 
-        if($request->moderators){
+        if ($request->moderators) {
             // return
             $this->moderatorInsert($request, $version);
         }
@@ -264,21 +268,21 @@ class VersionController extends Controller
         Moderator::where(['version_id' => $version->id])->delete();
 
         foreach ($request->moderators as $moderator) {
-            if($moderator['author_id'] && $moderator['moderator_type'] && $moderator['honorarium_type'])
-            // return $moderator['author_id'];
-            $moderator = Moderator::onlyTrashed()->updateOrCreate(
-                [
-                    'version_id' => $version->id,
-                ],
-                [
-                    'author_id' => $moderator['author_id'],
-                    'moderator_type' => $moderator['moderator_type'],
-                    'honorarium_type' => $moderator['honorarium_type'],
-                    'honorarium' => $moderator['honorarium'],
-                    'deleted_at'    => null
+            if ($moderator['author_id'] && $moderator['moderator_type'] && $moderator['honorarium_type'])
+                // return $moderator['author_id'];
+                $moderator = Moderator::onlyTrashed()->updateOrCreate(
+                    [
+                        'version_id' => $version->id,
+                    ],
+                    [
+                        'author_id' => $moderator['author_id'],
+                        'moderator_type' => $moderator['moderator_type'],
+                        'honorarium_type' => $moderator['honorarium_type'],
+                        'honorarium' => $moderator['honorarium'],
+                        'deleted_at'    => null
 
-                ]
-            );
+                    ]
+                );
 
             // return $moderator;
         }

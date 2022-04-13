@@ -1,12 +1,12 @@
 <template>
-    <div class="w-full grid grid-cols-2 bg-white gap-4 p-4" v-for="(moderator, index) in form.moderators"
+    <div class="w-full grid grid-cols-2 bg-white gap-4 p-4" v-for="(moderator, index) in form.contributors"
         :key="index">
 
         <div class="mb-4">
             <Label value="Contributor" />
             <Select
                 class="mt-1 block w-full"
-                v-model="form.moderators[index].authorId"
+                v-model="form.contributors[index].authorId"
 
             >
                 <option value="">-- Select Author --</option>
@@ -22,7 +22,7 @@
             <Label value="Contributor Type" />
             <Select
                 class="mt-1 block w-full"
-                v-model="form.moderators[index].moderatorType">
+                v-model="form.contributors[index].moderatorType">
                 <option value="">-- Select Moderator --</option>
                 <option :value="type" v-for="(moderator, type) in data.moderatorTypes" :key="type">
                     {{ moderator }}
@@ -69,7 +69,7 @@ export default {
 
     methods: {
         addModertor() {
-            this.form.moderators.push({
+            this.form.contributors.push({
                 authorId: "",
                 moderatorType: "",
             });
