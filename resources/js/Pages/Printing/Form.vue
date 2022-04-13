@@ -35,7 +35,7 @@
                                 + Add Filed
                             </Button>
                                 <div class="fixed inset-0 hidden z-50">
-                                    <div class="relative w-full h-full flex justify-center items-center">   
+                                    <div class="relative w-full h-full flex justify-center items-center">
                                         <div class="relative p-2 w-full mx-auto max-w-lg bg-white rounded border shadow z-50">
                                             <div class="text-lg font-bold text-center">Printing key and value added</div>
                                             <hr class="my-1">
@@ -67,7 +67,7 @@
                                                                 (+) Add
                                                             </Button>
                                                         </div>
-                                
+
                                                         <Button type="submit">Submit</Button>
                                                     </div>
                                                 </div>
@@ -89,7 +89,7 @@
                                             v-for="printingDetail in form.printing_details"
                                             :key="printingDetail.printing_detail_id"
                                         >
-                                            <td class="text-right px-2 py-1 text-sm">   
+                                            <td class="text-right px-2 py-1 text-sm">
                                                 {{ printingDetail.printing_detail_name }}
                                             </td>
                                             <td class="text-left px-2 py-1" >
@@ -107,12 +107,12 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                
+
                             </div>
                         </div>
-                    
+
                     </div>
-        
+
                     <div class="w-full flex gap-4 mt-2">
                         <div class="w-full max-w-7xl space-y-4">
                             <div class="w-full flex gap-6">
@@ -151,17 +151,17 @@
                                                         v-model="costDetail.subtotal"
                                                         />
                                                     </td>
-                                                    
+
                                                 </tr>
                                             </tbody>
                                         </table>
 
                                     </div>
                                 </div>
-                            
+
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div>
@@ -234,7 +234,7 @@
                 </div>
                 </div>
             </div>
-            
+
             <div class="flex items-center justify-between">
                 <div class="">
                     <go-to-list />
@@ -248,7 +248,7 @@
                 </Button>
             </div>
         </form>
-        
+
     </div>
 </template>
 
@@ -314,7 +314,7 @@ export default {
                 bind_caterory_name:" ",
 
                 values: [''],
- 
+
                 press: " ",
 
                 cost_details: [],
@@ -403,7 +403,7 @@ export default {
         copyVolume(id) {
             appendableDiv.innerHTML += singleWrapper;
         },
-        
+
         modalHandler(event) {
             event.target.nextElementSibling.classList.toggle('hidden');
         },
@@ -425,4 +425,3 @@ export default {
     },
 };
 </script>
-<style src="@vueform/multiselect/themes/default.css"></style>
