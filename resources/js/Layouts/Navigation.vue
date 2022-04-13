@@ -41,7 +41,7 @@
             >
                 Price Category
             </nav-link>
-            
+
             <nav-link
                 :href="route('authors.index')"
                 :active="route().current('authors.*')"
@@ -69,7 +69,7 @@
               <nav-link
                 :href="route('presses.index')"
                 :active="route().current('presses.*')">
-                Presses  
+                Presses
             </nav-link>
         </nav-link-wrapper>
 
@@ -92,7 +92,7 @@
         >
             Printing-details
         </nav-link>
-        
+
         <nav-link
             :href="route('products.index')"
             :active="route().current('products.*')"
@@ -101,7 +101,7 @@
         </nav-link>
     </nav-link-wrapper>
 
-    
+
 
     <nav-link-wrapper
         title="Stock & Circulation"

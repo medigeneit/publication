@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PrintingResource;
+use App\Models\Author;
 use App\Models\CostCategory;
+use App\Models\Moderator;
+use App\Models\ModeratorType;
 use App\Models\Press;
 use App\Models\Printing;
 use App\Models\PrintingDetailsCategoryKey;
@@ -34,6 +37,7 @@ class PrintingDetaislController extends Controller
 
     public function create()
     {
+
         $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
         $presses = Press::where('active', 1)->pluck('name', 'id');
         $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
@@ -41,14 +45,16 @@ class PrintingDetaislController extends Controller
         return Inertia::render('Printing/Create', [
             'printing'                         => new PrintingDetailsCategoryValue(),
             'printing_details_category_keys'   => $printing_details_category_keys,
-            'cost_categories'                  => $cost_categories,
-            'presses'                          => $presses
+            'costCategories'                   => $cost_categories,
+            'presses'                          => $presses,
+            'authors'                          => Author::pluck('name', 'id'),
+            'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
         ]);
     }
 
     public function store(Request $request)
     {
-        // return $request->values;
+        return $request->moderators;
 
         if ($request->key) {
             $keyId = PrintingDetailsCategoryKey::create([
