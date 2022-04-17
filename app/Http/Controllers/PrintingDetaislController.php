@@ -157,7 +157,15 @@ class PrintingDetaislController extends Controller
 
     public function edit($id)
     {
-        $printing = Printing::find($id);
+        // return
+        $printing = Printing::with([
+            'press:id,name',
+            'buinding_type',
+            'version_cost.cost_category',
+            'printing_details:id,name,printing_details_category_key_id',
+            'printing_contributors.contributor:id,name',
+            'printing_contributors.contribution:id,name'
+        ])->find($id);
 
         return Inertia::render('Printing/Edit', [
             'data' => [

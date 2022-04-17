@@ -93,7 +93,7 @@
                                 </option>
                             </Select>
                         </div>
-                        
+
                     </div>
                     <h3 class="text-lg text-gray-600 font-bold">Volume Information</h3>
                     <div
@@ -170,10 +170,10 @@
                         <div v-for="(printingDetail, index) in data.printingDetails" :key="index" >
                             <div class="flex justify-between border-2 rounded mt-4 p-4">
                                 <div>
-                                    <span>Copy Quentity : {{ printingDetail.copy_quantity}} pc</span><br>
-                                    <span>Page Amount : {{ printingDetail.page_amount}} pages</span><br>
-                                    <span>Order Date : {{ this.formatDate(printingDetail.order_date) }}</span><br>
-                                    <span>Store By : {{ printingDetail.store_by.name }}</span>
+                                    <span>Copy Quentity : {{ printingDetail.copy_quantity ?? 0}} pc</span><br>
+                                    <span>Page Amount : {{ printingDetail.page_amount ?? 0}} pages</span><br>
+                                    <span>Order Date : {{ this.formatDate(printingDetail.order_date ?? '') }}</span><br>
+                                    <!-- <span>Store By : {{ printingDetail.store_by.name ?? '' }}</span> -->
                                 </div>
                                 <div>
                                     <action-button-edit :href="route('printing-details.edit', printingDetail.id)" />
@@ -290,7 +290,7 @@ export default {
             }),
 
             storigngAtVisibility : false,
-           
+
         };
     },
     created() {
@@ -342,7 +342,7 @@ export default {
             if (day.length < 2) {
                 day = '0' + day;
             }
-                
+
             return [year, month, day].join('-');
         },
 

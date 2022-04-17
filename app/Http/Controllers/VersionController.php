@@ -170,7 +170,7 @@ class VersionController extends Controller
                 'authors'                   => Author::pluck('name', 'id'),
                 'moderatorTypes'            => ModeratorType::pluck('name', 'id'),
                 'selectedModerators'        => $version->moderators()->get(),
-                'printingDetails'           => Printing::where('version_id', $version->id)->with('storeBy:id,name')->get(),
+                'printingDetails'           => Printing::where('version_id', $version->id)->get(),
                 // 'selectedModeratorTypes'    => $version->modera()->get(),
             ]
         ]);

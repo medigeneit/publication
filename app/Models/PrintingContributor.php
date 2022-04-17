@@ -13,4 +13,13 @@ class PrintingContributor extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+
+    public function contributor()
+    {
+        return $this->belongsTo(Author::class,'author_id','id');
+    }
+    public function contribution()
+    {
+        return $this->belongsTo(ModeratorType::class,'moderator_type_id','id');
+    }
 }
