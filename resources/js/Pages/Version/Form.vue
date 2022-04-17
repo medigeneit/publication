@@ -94,37 +94,6 @@
                             </Select>
                         </div>
                         
-                        <div>
-                            <Label value="Page" />
-                            <Input
-                                type="text"
-                                class="mt-1 block w-full"
-                                v-model="form.page"
-                            />
-                        </div>
-                        
-                        <div>
-                            <Label value="Copy Quantity" />
-                            <Input
-                                type="number"
-                                class="mt-1 block w-full"
-                                v-model="form.copy_quantity"
-                            />
-                        </div>
-
-                        <div>
-                            <Label value="Binding Type" />
-                            <Select
-                                class="mt-1 block w-full"
-                                v-model="form.binding_type"
-                                required
-                            >
-                                <option value="">-- Select Binding Type --</option>
-                                <option value="1">Juce and Auto Binding</option>
-                                <option value="2">Dessert and Manual Binding</option>
-                                
-                            </Select>
-                        </div>
                     </div>
                     <h3 class="text-lg text-gray-600 font-bold">Volume Information</h3>
                     <div
@@ -177,7 +146,6 @@
                                 v-model="form.volumes[index].crl"
                             />
                         </div>
-
                         <!-- <div>
                             <Label value="Link" />
                             <Input
@@ -197,6 +165,23 @@
                             (+) Add Volume
                         </Button>
                     </div>
+
+                    <div>
+                        <div v-for="(printingDetail, index) in data.printingDetails" :key="index" >
+                            <div class="flex justify-between border-2 rounded mt-4 p-4">
+                                <div>
+                                    <span>Copy Quentity : {{ printingDetail.copy_quantity}} pc</span><br>
+                                    <span>Page Amount : {{ printingDetail.page_amount}} pages</span><br>
+                                    <span>Order Date : {{ this.formatDate(printingDetail.order_date) }}</span><br>
+                                    <span>Store By : {{ printingDetail.store_by.name }}</span>
+                                </div>
+                                <div>
+                                    <action-button-edit :href="route('printing-details.edit', printingDetail.id)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="w-full max-w-md">
                    <Moderators :form ="form" :data="data"/>
@@ -240,6 +225,7 @@ import ActiveInput from "@/Components/ActiveInput.vue";
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import Moderators from "@/Components/Moderators.vue";
 import NavLink from "@/Components/NavLink.vue";
+import DataTable from "@/Components/DataTable.vue";
 
 export default {
     components: {
@@ -252,7 +238,8 @@ export default {
         ActiveInput,
         ActionButtonEdit,
         Moderators,
-        NavLink
+        NavLink,
+        DataTable
     },
 
     props: {
@@ -301,7 +288,9 @@ export default {
                 ],
                 moduleAction: this.moduleAction
             }),
-            storigngAtVisibility : false
+
+            storigngAtVisibility : false,
+           
         };
     },
     created() {
@@ -337,6 +326,24 @@ export default {
 
         copyVolume(id) {
             appendableDiv.innerHTML += singleWrapper;
+        },
+
+        formatDate(input) {
+
+            let date = new Date(input);
+            let month = '' + (date.getMonth() + 1);
+            let day = '' + date.getDate();
+            let year = date.getFullYear();
+
+            if (month.length < 2) {
+                month = '0' + month;
+            }
+
+            if (day.length < 2) {
+                day = '0' + day;
+            }
+                
+            return [year, month, day].join('-');
         },
 
         submit() {

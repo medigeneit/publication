@@ -12,6 +12,7 @@ use App\Models\Production;
 use App\Models\Version;
 use App\Models\PackageProduct;
 use App\Models\Press;
+use App\Models\Printing;
 use App\Models\PrintingDetailsCategoryKey;
 use App\Models\VersionCost;
 use App\Models\Volume;
@@ -148,7 +149,7 @@ class VersionController extends Controller
 
     public function edit(Version $version)
     {
-        // return VersionCost::get();
+        // return Printing::where('version_id', $version->id)->with('storeBy:id,name')->get();
 
         $products = Product::query()
             ->when(isset(request()->search), function ($query) {
@@ -169,6 +170,7 @@ class VersionController extends Controller
                 'authors'                   => Author::pluck('name', 'id'),
                 'moderatorTypes'            => ModeratorType::pluck('name', 'id'),
                 'selectedModerators'        => $version->moderators()->get(),
+                'printingDetails'           => Printing::where('version_id', $version->id)->with('storeBy:id,name')->get(),
                 // 'selectedModeratorTypes'    => $version->modera()->get(),
             ]
         ]);

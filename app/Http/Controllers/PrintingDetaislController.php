@@ -20,6 +20,7 @@ use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use phpDocumentor\Reflection\Types\Null_;
+use PhpParser\Node\Stmt\Return_;
 use PHPUnit\Util\Printer;
 
 class PrintingDetaislController extends Controller
@@ -39,7 +40,7 @@ class PrintingDetaislController extends Controller
         ]);
     }
 
-    public function create($version)
+    public function createWithVerion($version)
     {
         $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
         $presses = Press::where('active', 1)->pluck('name', 'id');
@@ -53,6 +54,21 @@ class PrintingDetaislController extends Controller
             'authors'                          => Author::pluck('name', 'id'),
             'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
             'version'                          => $version
+        ]);
+    }
+    public function create()
+    {
+        $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
+        $presses = Press::where('active', 1)->pluck('name', 'id');
+        $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
+
+        return Inertia::render('Printing/Create', [
+            'printing'                         => new PrintingDetailsCategoryValue(),
+            'printing_details_category_keys'   => $printing_details_category_keys,
+            'costCategories'                   => $cost_categories,
+            'presses'                          => $presses,
+            'authors'                          => Author::pluck('name', 'id'),
+            'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
         ]);
     }
 
@@ -139,15 +155,29 @@ class PrintingDetaislController extends Controller
         ]);
     }
 
-    public function edit(Printing $printing)
+    public function edit($id)
     {
+        $printing = Printing::find($id);
+
         return Inertia::render('Printing/Edit', [
-            'printing' => $printing,
+            'data' => [
+                'printing'                         =>  $printing,
+                'printing_details_category_keys'   =>  PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']),
+                'costCategories'                   => CostCategory::where('active', 1)->pluck('name', 'id'),
+                'presses'                          => Press::where('active', 1)->pluck('name', 'id'),
+                'authors'                          => Author::pluck('name', 'id'),
+                'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
+
+            ]
         ]);
     }
 
+
+
+
     public function update(Request $request, Printing $printing)
     {
+        return 2134;
         $printing->update($this->validateData($request, $printing->id));
 
         return redirect()

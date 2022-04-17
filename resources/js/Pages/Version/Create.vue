@@ -14,7 +14,8 @@
                 authors,
                 moderatorTypes,
                 presses,
-                printing_details_category_keys
+                printing_details_category_keys,
+                printingDetails
             }"
             module-action="store"
         />
@@ -68,6 +69,10 @@ export default {
             default: {},
         },
         printing_details_category_keys: {
+            type: Array,
+            default: [],
+        },
+        printingDetails: {
             type: Array,
             default: [],
         },

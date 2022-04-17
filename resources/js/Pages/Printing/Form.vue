@@ -217,7 +217,6 @@
                                         <option v-for="(printingPress, printingId) in data.presses" :value="printingId" :key="printingId">{{ printingPress }}</option>
                                     </Select>
                                 </div>
-
                                 <div class="flex flex-col justify-start">
                                     <Label value="প্লেট সংরক্ষন করা হবে কিনা" />
                                     <div class="flex ml-10">
@@ -352,7 +351,7 @@ export default {
 
                 cost_details: [],
 
-                 contributors: [
+                contributors: [
                     {
                         authorId: "",
                         moderatorType: "",
@@ -373,10 +372,14 @@ export default {
         };
     },
     created() {
-        for(let index in this.data.printing) {
-            console.log('printings', index);
-            this.form.printing[index] = this.data.printing[index] ? this.data.printing[index] :'';
-        }
+
+        // for(let index in this.data.printing.id) {
+
+        //     console.log('printings', index);
+
+        //     console.log('printings', index);
+        //     this.form.printing[index] = this.data.printing[index] ? this.data.printing[index] :'';
+        // }
 
         Object.entries(this.data.costCategories).forEach((cost_category) => {
             this.form.cost_details.push({
@@ -451,7 +454,7 @@ export default {
 
             if (this.moduleAction == "update") {
                 return this.form.put(
-                    this.route("printing-details.update", this.data.version.id)
+                    this.route("printing-details.update", this.data.printing.id)
                 );
             }
         },

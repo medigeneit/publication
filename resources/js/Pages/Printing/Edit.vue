@@ -1,10 +1,11 @@
 <template>
-    <Head title="Version" />
+    <Head title="Printing Details" />
 
     <app-layout>
         <template #header>
             Edit Version
         </template>
+        <!-- {{ data }} -->
         
         <form-component :data="data" module-action="update" />
     </app-layout>
