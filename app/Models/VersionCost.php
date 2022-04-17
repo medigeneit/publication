@@ -13,4 +13,9 @@ class VersionCost extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+
+    public function cost_category()
+    {
+        return $this->belongsTo(CostCategory::class);
+    }
 }

@@ -13,6 +13,31 @@ class Printing extends Model
 
     public function storeBy()
     {
-        return $this->hasOne(Author::class, 'id', 'plate_stored_at');
+        return $this->hasOne(Author::class, 'id', 'user_id');
+    }
+    public function press()
+    {
+        return $this->hasOne(Press::class, 'id', 'press_id');
+    }
+    public function stored_at()
+    {
+        return $this->hasOne(Press::class, 'id', 'plate_stored_at');
+    }
+    public function buinding_type()
+    {
+        return $this->hasOne(BindingType::class, 'id', 'binding_type_id');
+    }
+    public function version_cost()
+    {
+        return $this->hasMany(VersionCost::class,'printing_id', 'id');
+    }
+    public function printing_details()
+    {
+        return $this->belongsToMany(PrintingDetailsCategoryValue::class, 'printing_details', 'printing_id', 'category_value_id');
+    }
+
+    public function printing_contributors()
+    {
+        return $this->hasMany(PrintingContributor::class,'printing_id', 'id');
     }
 }
