@@ -20,6 +20,7 @@ class CreatePrintingTable extends Migration
             $table->integer('copy_quantity');
             $table->smallInteger('page_amount');
             $table->smallInteger('plate_stored_at')->nullable();
+            $table->smallInteger('binding_type_id')->nullable();
             $table->dateTime('order_date')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
