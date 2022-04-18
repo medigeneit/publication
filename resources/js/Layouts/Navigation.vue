@@ -87,8 +87,8 @@
         </nav-link>
 
         <nav-link
-            :href="route('printing-details.index')"
-            :active="route().current('printing-details.*')"
+            :href="route('printing-costs.index')"
+            :active="route().current('printing-costs.*')"
         >
             Printing-details
         </nav-link>

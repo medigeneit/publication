@@ -13,7 +13,8 @@
                 pressContributors,
                 authors,
                 moderatorTypes,
-                version
+                version,
+                bindingTypes
             }"
             module-action="store"
         />
@@ -62,6 +63,10 @@ export default {
             default: {},
         },
         version:{
+            type: Number,
+            default: '',
+        },
+        bindingTypes:{
             type: Number,
             default: '',
         }

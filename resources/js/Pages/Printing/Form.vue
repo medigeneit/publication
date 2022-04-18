@@ -7,7 +7,7 @@
                     <div class="w-full  mt-2 mb-2">
                         <div class="max-w-3xl p-2 gap-4 bg-white border shadow rounded">
                             <Label class="text-lg text-gray-600 font-bold" value="Document Details" />
-                            <div class="flex gap-4">
+                            <div class="grid grid-cols-3 gap-2">
                                 <div class="">
                                     <Label value="Date" />
                                     <Input type="date" class="mt-1 block w-full" v-model="form.order_date"/>
@@ -21,8 +21,16 @@
                                         <Input type="text" class="mt-1 block w-full" v-model="form.copy_quantity"/>
                                 </div>
                                 <div>
-                                        <Label value="Binding Category" />
-                                        <Input type="text" class="mt-1 block w-full" v-model="form.bind_caterory_name" />
+                                        <Label value="Re-Print Quentity Alert" />
+                                        <Input type="text" class="mt-1 block w-full" v-model="form.re_print_quentity_alert"/>
+                                </div>
+                                <div>
+                                    <Label value="Binding Category" />
+                                    <Select class="mt-1 block w-full"
+                                        v-model="form.binding_type_id">
+                                        <option value="">-- Select Printing Press --</option>
+                                        <option v-for="(bindingType, bindingTypeId) in data.bindingTypes" :value="bindingType.id" :key="bindingTypeId">{{ bindingType.name }}</option>
+                                    </Select>
                                 </div>
                             </div>
                         </div>
@@ -80,28 +88,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- {{ form.printing_details }} -->
                             <div class="w-full bg-white gap-4 p-4">
                                 <table class="w-full min-w-max">
                                     <tbody>
                                         <tr
                                             class=""
-                                            v-for="(printingDetail, index) in data.printing_details_category_keys"
+                                            v-for="(printingDetail, index) in form.printing_details"
                                             :key="printingDetail.id"
                                         >
                                             <td class="text-right px-2 py-1 text-sm">   
-                                                {{ printingDetail.name }}
+                                                {{ printingDetail.printing_detail_name }}
                                             </td>
                                             <td class="text-left px-2 py-1" >
                                                 <Select
                                                     class="mt-1 block w-full"
-                                                    v-model="form.category_value_id[index]"
-                                                    @change="test"
+                                                    v-model="form.printing_details[index].category_value_id"
                                                 >
-                                                <option value="">Select Value</option>
-                                                <option :value="priceCategoryValue.id" v-for="(priceCategoryValue) in printingDetail.values" :key="priceCategoryValue.id">
-                                                    {{ priceCategoryValue.name }}
-                                                </option>
+                                                    <option value="">Select Value</option>
+                                                    <option :value="priceCategoryValue.id" v-for="(priceCategoryValue, printingDetailId) in printingDetail.options" :key="printingDetailId">
+                                                        {{ priceCategoryValue.name }}
+                                                    </option>
                                                 </Select>
                                             </td>
                                         </tr>
@@ -141,7 +147,7 @@
                         </div>
 
                     </div>
-
+<!-- {{ data.printing.copy_quantity }} -->
                     <div class="w-full flex gap-4 mt-2">
                         <div class="w-full max-w-7xl space-y-4">
                             <div class="w-full flex gap-6">
@@ -214,7 +220,7 @@
                                         v-model="form.press"
                                     >
                                         <option value="">-- Select Printing Press --</option>
-                                        <option v-for="(printingPress, printingId) in data.presses" :value="printingId" :key="printingId">{{ printingPress }}</option>
+                                        <option v-for="(printingPress, printingId) in data.presses" :value="printingPress.id" :key="printingId">{{ printingPress.name }}</option>
                                     </Select>
                                 </div>
                                 <div class="flex flex-col justify-start">
@@ -246,12 +252,13 @@
                                 </div>
                                 <div v-if="storigngAtVisibility">
                                     <Label value="Storing At" />
+                                    {{ data.printing.plate_stored_at }}
                                     <Select
                                         class="mt-1 block w-full"
                                         v-model="form.plate_stored_at"
                                     >
                                         <option value="">-- Select Printing Press --</option>
-                                        <option v-for="(printingPress, printingId) in data.presses" :value="printingId" :key="printingId">{{ printingPress }}</option>
+                                        <option v-for="(printingPress, printingId) in data.presses" :value="printingPress.id" :key="printingId">{{ printingPress.name }}</option>
                                     </Select>
                                 </div>
                             </div>
@@ -321,42 +328,43 @@ export default {
 
             form: this.$inertia.form({
 
-                printing_details_category_key_id: this.data.printing_details_category_keys.id || "",
+                category_value_id: this.data.printing_details_category_keys.id || "",
 
                 version_id: this.data.version,
 
                 name: '',
 
-                printing_details: [
-
-                ],
-
-                category_value_id:[],
+                printing_details: [],
 
                 key: " ",
 
-                copy_quantity:" ",
+                copy_quantity: this.data.printing.copy_quantity || '',
 
-                page_amount:" ",
+                page_amount:this.data.printing.page_amount || '',
 
-                plate_stored_at:" ",
+                order_date: this.formatDate(this.data.printing.order_date) || '',
 
-                order_date:" ",
+                binding_type_id: this.data.printing.binding_type_id || '',
 
-                bind_caterory_name:" ",
+                re_print_quentity_alert:[],
+
+                plate_stored_at: this.data.printing.plate_stored_at || '',
 
                 values: [''],
 
-                press: " ",
+                press: this.data.printing.press_id || '',
 
                 cost_details: [],
 
+
                 contributors: [
                     {
-                        authorId: "",
-                        moderatorType: "",
+                        author_id: "",
+                        moderator_type_id: "",
                     },
                 ],
+
+                cateroyValue: [],
 
                 is_place_storable:" ",
                 active: this.moduleAction == "store" ? 1 : this.data.printing.active,
@@ -382,30 +390,79 @@ export default {
         // }
 
         Object.entries(this.data.costCategories).forEach((cost_category) => {
-            this.form.cost_details.push({
-                cost_category_id: cost_category[0],
-                cost_category_name: cost_category[1],
-                quantity: '',
-                rate: '',
-                subtotal: '',
-            });
+
+            if(this.data.printing.version_cost){
+                let versionCostData = Object.values(this.data.printing.version_cost.filter(item => {
+                return item.cost_category_id == cost_category[0];
+                }))[0]; 
+
+                this.form.cost_details.push({
+                    cost_category_id: cost_category[0],
+                    cost_category_name: cost_category[1],
+                    quantity: versionCostData ? versionCostData.quantity : '',
+                    rate: versionCostData ? versionCostData.rate : '',
+                    subtotal: versionCostData ? versionCostData.subtotal : '',
+                });
+            }
+            if(!this.data.printing.version_cost){
+                this.form.cost_details.push({
+                            cost_category_id: cost_category[0],
+                            cost_category_name: cost_category[1],
+                            quantity: '',
+                            rate: '',
+                            subtotal: '',
+                        });
+            }
+            
         });
 
         Object.values(this.data.printing_details_category_keys).forEach((printing_details) => {
-            console.log(printing_details)
-            this.form.printing_details.push({
-                printing_detail_id: printing_details['id'],
-                printing_detail_name: printing_details['name'],
-                options: printing_details['values'],
-                category_value_id: '',
-            });
+            if(this.data.printing.printing_details){
+                let selectedPrintData = Object.values(this.data.printing.printing_details).filter(item => {
+                return item.printing_details_category_key_id == printing_details['id'];
+                })[0];
+
+                this.form.printing_details.push({
+                    printing_detail_id: printing_details['id'],
+                    printing_detail_name: printing_details['name'],
+                    options: printing_details['values'],
+                    category_value_id: selectedPrintData ? selectedPrintData.id : '',
+                });
+            }
+            if(!this.data.printing.printing_details){
+                this.form.printing_details.push({
+                        printing_detail_id: printing_details['id'],
+                        printing_detail_name: printing_details['name'],
+                        options: printing_details['values'],
+                        category_value_id: '',
+                    });
+            }
+
+            
         });
 
 
-        for(let index in this.data.selectedModerators) {
-            console.log(this.data.selectedModerators[index]);
-            this.form.contributors[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
+        // for(let index in this.data.selectedModerators) {
+        //     console.log(this.data.selectedModerators[index]);
+        //     this.form.contributors[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
+        // }
+
+
+        //  for(let index in this.data.printing.version_cost) {
+        //     console.log(this.data.printing.version_cost[index]);
+        //     this.form.cost_details[index] = this.data.printing.version_cost[index] ? this.data.printing.version_cost[index] : '';
+        // }
+
+         for(let index in this.data.printing.printing_details) {
+            // console.log(this.data.printing.printing_details[index])
+            this.form.cateroyValue[index] = this.data.printing.printing_details[index] ? this.data.printing.printing_details[index] : '';
         }
+
+         for(let index in this.data.printing.printing_contributors) {
+            // console.log(this.data.printing.printing_contributors[index])
+            this.form.contributors[index] = this.data.printing.printing_contributors[index] ? this.data.printing.printing_contributors[index] : '';
+        }
+
     },
 
     methods: {
@@ -431,8 +488,8 @@ export default {
 
         addModertor() {
             this.form.contributors.push({
-                authorId: "",
-                moderatorType: "",
+                author_id: "",
+                moderator_type_id: "",
             });
         },
 
@@ -447,14 +504,32 @@ export default {
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
 
+        formatDate(input) {
+
+            let date = new Date(input);
+            let month = '' + (date.getMonth() + 1);
+            let day = '' + date.getDate();
+            let year = date.getFullYear();
+
+            if (month.length < 2) {
+                month = '0' + month;
+            }
+
+            if (day.length < 2) {
+                day = '0' + day;
+            }
+
+            return [year, month, day].join('-');
+        },
+
         submit() {
             if (this.moduleAction == "store") {
-                return this.form.post(this.route("printing-details.store"));
+                return this.form.post(this.route("printing-costs.store"));
             }
 
             if (this.moduleAction == "update") {
                 return this.form.put(
-                    this.route("printing-details.update", this.data.printing.id)
+                    this.route("printing-costs.update", this.data.printing.id)
                 );
             }
         },

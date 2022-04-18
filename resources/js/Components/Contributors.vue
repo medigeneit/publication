@@ -6,7 +6,7 @@
             <Label value="Contributor" />
             <Select
                 class="mt-1 block w-full"
-                v-model="form.contributors[index].authorId"
+                v-model="form.contributors[index].author_id"
 
             >
                 <option value="">-- Select Author --</option>
@@ -22,7 +22,7 @@
             <Label value="Contributor Type" />
             <Select
                 class="mt-1 block w-full"
-                v-model="form.contributors[index].moderatorType">
+                v-model="form.contributors[index].moderator_type_id">
                 <option value="">-- Select Moderator --</option>
                 <option :value="type" v-for="(moderator, type) in data.moderatorTypes" :key="type">
                     {{ moderator }}
@@ -70,8 +70,8 @@ export default {
     methods: {
         addModertor() {
             this.form.contributors.push({
-                authorId: "",
-                moderatorType: "",
+                author_id: "",
+                moderator_type_id: "",
             });
         },
     }

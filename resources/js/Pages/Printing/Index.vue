@@ -6,7 +6,7 @@
             Printing List
         </template>
 
-        <add-new-button :href="route('printing-details.create')" />
+        <add-new-button :href="route('printing-costs.create')" />
 
         <data-table :collections="printings" :filters="filters" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: printing }">

@@ -26,9 +26,7 @@
                                 <option value="">-- Select Production --</option>
                                 <option
                                     :value="productionId"
-                                    v-for="(
-                                        productionName, productionId
-                                    ) in data.productionList"
+                                    v-for="(productionName, productionId) in data.productionList"
                                     :key="productionId"
                                 >
                                     {{ productionName }}
@@ -176,7 +174,9 @@
                                     <!-- <span>Store By : {{ printingDetail.store_by.name ?? '' }}</span> -->
                                 </div>
                                 <div>
-                                    <action-button-edit :href="route('printing-details.edit', printingDetail.id)" />
+                                    <action-button-edit :href="route('printing-costs.edit', printingDetail.id)" />
+
+                                    <action-button-show :href="route('printing-costs.show', printingDetail.id)" />
                                 </div>
                             </div>
                         </div>
@@ -219,6 +219,7 @@ import Button from "@/Components/Button.vue";
 import Input from "@/Components/Input.vue";
 import Label from "@/Components/Label.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
+import ActionButtonShow from "@/Components/ActionButtonShow.vue";
 import GoToList from "@/Components/GoToList.vue";
 import Select from "@/Components/Select.vue";
 import ActiveInput from "@/Components/ActiveInput.vue";
@@ -239,7 +240,8 @@ export default {
         ActionButtonEdit,
         Moderators,
         NavLink,
-        DataTable
+        DataTable,
+        ActionButtonShow
     },
 
     props: {

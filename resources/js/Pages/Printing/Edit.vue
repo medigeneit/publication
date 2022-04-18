@@ -5,7 +5,7 @@
         <template #header>
             Edit Version
         </template>
-        <!-- {{ data }} -->
+        <!-- {{ data.printing.version_cost }} -->
         
         <form-component :data="data" module-action="update" />
     </app-layout>

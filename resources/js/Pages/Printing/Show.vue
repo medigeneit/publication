@@ -2,35 +2,59 @@
     <Head title="Print" />
 
     <app-layout>
-        <!-- <template #header>
-            {{ version.name }}
-        </template> -->
 
-        <add-new-button :href="route('printing-details.create')" class="mb-4" />
+        <add-new-button :href="route('printing-costs.create')" class="mb-4" />
         
         <div class="overflow-auto bg-white border">
+
+
             <table class="table-auto">
                 <show-table-row heading="ID">
-                    {{ version.id }}
-                </show-table-row>
-                <show-table-row heading="Name">
-                    {{ version.name }}
+                    {{ printing_cost.id }}
                 </show-table-row>
 
-                <show-table-row heading="Created By">
-                    {{ version.createdBy }}
-
+                <show-table-row heading="Order Date">
+                    {{ printing_cost.order_date }}
                 </show-table-row>
+
+                <show-table-row heading="Page Amount">
+                    {{ printing_cost.page_amount }} pages
+                </show-table-row>
+
+                <show-table-row heading="Page Amount">
+                    {{ printing_cost.copy_quantity }} pc
+                </show-table-row>
+
+                <show-table-row heading="Press">
+                    {{ printing_cost.press }} 
+                </show-table-row>
+
+                <show-table-row heading="Building Cost">
+                    {{ printing_cost.buinding_type }}
+                </show-table-row>
+
+                <show-table-row heading="Version Cost">
+                      {{ printing_cost.version_cost }} 
+                </show-table-row>
+
+                <show-table-row heading="Printing Details">
+                      {{ printing_cost.printing_details }} 
+                </show-table-row>
+
+                <show-table-row heading="Printing Contributors">
+                      {{ printing_cost.printing_contributors }} 
+                </show-table-row>
+
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
-                        <action-button-edit :href="route('printing-details.edit', printing.id)" />
+                        <action-button-edit :href="route('printing-costs.edit', printing_cost.id)" />
                     </div>
                 </show-table-row>
             </table>
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('printing-details.index')"/>
+            <go-to-list :href="route('printing-costs.index')"/>
         </div>
     </app-layout>
 </template>
@@ -54,7 +78,7 @@ export default {
         AddNewButton,
     },
     props: {
-        printing: { type: Object, default: {} },
+        printing_cost: { type: Object, default: {} },
         filters: { type: Object, default: {} }
     },
 };

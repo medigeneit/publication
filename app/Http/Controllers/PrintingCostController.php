@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PrintingResource;
 use App\Models\Author;
+use App\Models\BindingType;
 use App\Models\CostCategory;
 use App\Models\Moderator;
 use App\Models\ModeratorType;
@@ -23,7 +24,7 @@ use phpDocumentor\Reflection\Types\Null_;
 use PhpParser\Node\Stmt\Return_;
 use PHPUnit\Util\Printer;
 
-class PrintingDetaislController extends Controller
+class PrintingCostController extends Controller
 {
     use DateFilter;
 
@@ -42,38 +43,42 @@ class PrintingDetaislController extends Controller
 
     public function createWithVerion($version)
     {
+        // return $version;
         $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
-        $presses = Press::where('active', 1)->pluck('name', 'id');
         $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
 
         return Inertia::render('Printing/Create', [
             'printing'                         => new PrintingDetailsCategoryValue(),
             'printing_details_category_keys'   => $printing_details_category_keys,
             'costCategories'                   => $cost_categories,
-            'presses'                          => $presses,
+            'presses'                          => Press::where('active', 1)->get(),
             'authors'                          => Author::pluck('name', 'id'),
             'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
+            'bindingTypes'                     => BindingType::get(),
             'version'                          => $version
         ]);
     }
     public function create()
     {
+        // return BindingType::get();
+
         $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
-        $presses = Press::where('active', 1)->pluck('name', 'id');
         $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
 
         return Inertia::render('Printing/Create', [
             'printing'                         => new PrintingDetailsCategoryValue(),
             'printing_details_category_keys'   => $printing_details_category_keys,
             'costCategories'                   => $cost_categories,
-            'presses'                          => $presses,
+            'presses'                          => Press::where('active', 1)->get(),
             'authors'                          => Author::pluck('name', 'id'),
             'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
+            'bindingTypes'                     => BindingType::get()
         ]);
     }
 
     public function store(Request $request)
     {
+        // return $request;
 
         if ($request->key) {
             $keyId = PrintingDetailsCategoryKey::create([
@@ -101,14 +106,14 @@ class PrintingDetaislController extends Controller
             ]);
 
 
-            if (is_array($request->category_value_id)) {
-                foreach ($request->category_value_id as $value) {
-                    if ($value != Null) {
-                        $printing_details_id = PrintingDetail::create([
-                            'category_value_id' => $value,
-                            'printing_id'   => $printing->id,
-                        ]);
-                    }
+            $category_value_ids = collect($request->printing_details)->pluck('category_value_id');
+            $temp = [];
+            foreach ($category_value_ids as $value) {
+                if ($value != Null) {
+                    $temp[] = PrintingDetail::create([
+                        'category_value_id' => $value,
+                        'printing_id'   => $printing->id,
+                    ]);
                 }
             }
 
@@ -128,8 +133,8 @@ class PrintingDetaislController extends Controller
                 if ($contributor != Null) {
                     PrintingContributor::create([
                         'printing_id' => $printing->id,
-                        'author_id' => $contributor['authorId'],
-                        'moderator_type_id' => $contributor['moderatorType']
+                        'author_id' => $contributor['author_id'],
+                        'moderator_type_id' => $contributor['moderator_type_id']
                     ]);
                 }
             }
@@ -146,19 +151,10 @@ class PrintingDetaislController extends Controller
         //     ->with('status', 'The record has been added successfully.');
     }
 
-    public function show(Printing $printing)
-    {
-        PrintingResource::withoutWrapping();
-
-        return Inertia::render('Printing/Show', [
-            'printing' => new PrintingResource($printing),
-        ]);
-    }
-
-    public function edit($id)
+    public function show($id)
     {
         // return
-        $printing = Printing::with([
+        $printing_cost = Printing::class::with([
             'press:id,name',
             'buinding_type',
             'version_cost.cost_category',
@@ -167,14 +163,35 @@ class PrintingDetaislController extends Controller
             'printing_contributors.contribution:id,name'
         ])->find($id);
 
+        PrintingResource::withoutWrapping();
+
+        return Inertia::render('Printing/Show', [
+            'printing_cost' => new PrintingResource($printing_cost),
+        ]);
+    }
+
+    public function edit($id)
+    {
+        // return $printing_cost;
+        // return  
+        $printing = Printing::with([
+            'press:id,name',
+            'buinding_type',
+            'version_cost',
+            'printing_details:id,name,printing_details_category_key_id',
+            'printing_contributors'
+        ])->find($id);
+        // return $printing->printing_details->printing_details_category_key_id;
+
         return Inertia::render('Printing/Edit', [
             'data' => [
-                'printing'                         =>  $printing,
-                'printing_details_category_keys'   =>  PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']),
+                'printing'                         => $printing,
+                'printing_details_category_keys'   => PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']),
                 'costCategories'                   => CostCategory::where('active', 1)->pluck('name', 'id'),
-                'presses'                          => Press::where('active', 1)->pluck('name', 'id'),
+                'presses'                          => Press::where('active', 1)->get(),
                 'authors'                          => Author::pluck('name', 'id'),
                 'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
+                'bindingTypes'                     => BindingType::get()
 
             ]
         ]);
@@ -183,14 +200,85 @@ class PrintingDetaislController extends Controller
 
 
 
-    public function update(Request $request, Printing $printing)
+    public function update(Request $request, Printing $printingCost)
     {
-        return 2134;
-        $printing->update($this->validateData($request, $printing->id));
+        // return $request->press;
 
-        return redirect()
-            ->route('collections.show', $printing->id)
-            ->with('status', 'The record has been update successfully.');
+        // return !empty($request->printing_details);
+        // return gettype(collect($request->printing_details));
+        // return  $printingCost->print_details()->get(); ;
+        // return $request;
+
+        $printingCost->version_cost()->delete();
+        $printingCost->print_details()->delete();
+        $printingCost->printing_contributors()->delete();
+        //  $printingCost->delete();
+
+        if ($request->copy_quantity  && $request->press) {
+            $printingCost->update([
+                'press_id'   => $request->press,
+                'copy_quantity' => $request->copy_quantity,
+                'page_amount' => $request->page_amount,
+                'order_date' => $request->order_date,
+                'plate_stored_at' => $request->plate_stored_at,
+                'binding_type_id' => $request->binding_type_id,
+            ]);
+        }
+
+        // return  collect($request->printing_details)->pluck('category_value_id');
+        // return
+        $category_value_ids = collect($request->printing_details)->pluck('category_value_id');
+
+        $temp = [];
+        foreach ($category_value_ids as $value) {
+            if ($value != Null) {
+                $temp[] = PrintingDetail::withTrashed()
+                    ->updateOrCreate([
+                        'printing_id'   => $printingCost->id,
+                        'category_value_id' => $value,
+                    ], [
+                        'deleted_at' => NULL,
+                    ]);
+            }
+        }
+
+
+        foreach ($request->cost_details as $cost_detail) {
+            if ($cost_detail != Null) {
+                VersionCost::withTrashed()
+                    ->updateOrCreate([
+                        'cost_category_id'    => $cost_detail['cost_category_id'],
+                        'printing_id'         => $printingCost->id,
+                    ], [
+                        'quantity'            => $cost_detail['quantity'],
+                        'rate'                => $cost_detail['rate'],
+                        'subtotal'            => $cost_detail['subtotal'],
+                        'deleted_at' => NULL,
+                    ]);
+            }
+        }
+
+        foreach ($request->contributors as $contributor) {
+            if ($contributor != Null && $contributor['author_id'] != null && $contributor['moderator_type_id'] != null) {
+                PrintingContributor::withTrashed()
+                    ->updateOrCreate([
+                        'printing_id' => $printingCost->id,
+                        'author_id' => $contributor['author_id'],
+                        'moderator_type_id' => $contributor['moderator_type_id'],
+                    ], [
+                        'deleted_at' => NULL,
+                    ]);
+            }
+        }
+
+        return back();
+
+
+        // $printing->update($this->validateData($request, $printing->id));
+
+        // return redirect()
+        //     ->route('collections.show', $printing->id)
+        //     ->with('status', 'The record has been update successfully.');
     }
 
     public function destroy(Printing $printing)

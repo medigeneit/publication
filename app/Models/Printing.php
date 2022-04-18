@@ -11,7 +11,7 @@ class Printing extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = [];
 
-    public function storeBy()
+    public function user()
     {
         return $this->hasOne(Author::class, 'id', 'user_id');
     }
@@ -29,15 +29,19 @@ class Printing extends Model
     }
     public function version_cost()
     {
-        return $this->hasMany(VersionCost::class,'printing_id', 'id');
+        return $this->hasMany(VersionCost::class, 'printing_id', 'id');
     }
     public function printing_details()
     {
-        return $this->belongsToMany(PrintingDetailsCategoryValue::class, 'printing_details', 'printing_id', 'category_value_id');
+        return $this->belongsToMany(PrintingDetailsCategoryValue::class, 'printing_details', 'printing_id', 'category_value_id',)->whereNull('printing_details.deleted_at');
+    }
+    public function print_details()
+    {
+        return $this->hasMany(PrintingDetail::class);
     }
 
     public function printing_contributors()
     {
-        return $this->hasMany(PrintingContributor::class,'printing_id', 'id');
+        return $this->hasMany(PrintingContributor::class, 'printing_id', 'id');
     }
 }

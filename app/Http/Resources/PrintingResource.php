@@ -16,8 +16,15 @@ class PrintingResource extends JsonResource
     {
 
         return [
-            'id'                    => (int) $this->id,
-            'name'                  => (string) ($this->name ?? ''),
+            'id'                     => (int) $this->id,
+            'order_date'             => (int) ($this->order_date ?? ''),
+            'copy_quantity'          => (int) ($this->copy_quantity ?? ''),
+            'page_amount'            => (int) ($this->page_amount ?? ''),
+            'press'                  => (string) ($this->press->name ?? ''),
+            'buinding_type'          => (string) ($this->buinding_type->name ?? ''),
+            'version_cost'           => (string) ($this->version_cost ?? ''),
+            'printing_details'       => (string) ($this->printing_details ?? ''),
+            'printing_contributors'  => (string) ($this->printing_contributors ?? ''),
         ];
     }
 }

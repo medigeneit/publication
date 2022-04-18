@@ -16,6 +16,7 @@ use App\Http\Controllers\OutletController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PressController;
 use App\Http\Controllers\PriceCategoryController;
+use App\Http\Controllers\PrintingCostController;
 use App\Http\Controllers\PrintingDetaislController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductionController;
@@ -60,7 +61,7 @@ require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/cost-categories/{version}', [PrintingDetaislController::class, 'createWithVerion'])->name('cost-categories');
+    Route::get('/cost-categories/{version}', [PrintingCostController::class, 'createWithVerion'])->name('cost-categories');
 
     Route::resources([
         'users'                     => UserController::class,
@@ -68,7 +69,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'productions'               => ProductionController::class,
         'presses'                   => PressController::class,
         'versions'                  => VersionController::class,
-        'printing-details'          => PrintingDetaislController::class,
+        'printing-costs'            => PrintingCostController::class,
         'categories'                => CategoryController::class,
         'authors'                   => AuthorController::class,
         'products'                  => ProductController::class,
