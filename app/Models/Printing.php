@@ -11,9 +11,9 @@ class Printing extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = [];
 
-    public function user()
+    public function plate_store()
     {
-        return $this->hasOne(Author::class, 'id', 'user_id');
+        return $this->belongsTo(Author::class, 'plate_stored_at', 'id');
     }
     public function press()
     {
@@ -43,5 +43,10 @@ class Printing extends Model
     public function printing_contributors()
     {
         return $this->hasMany(PrintingContributor::class, 'printing_id', 'id');
+    }
+
+    public function version()
+    {
+        return $this->belongsTo(Version::class);
     }
 }

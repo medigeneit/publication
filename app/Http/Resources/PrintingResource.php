@@ -20,11 +20,14 @@ class PrintingResource extends JsonResource
             'order_date'             => (int) ($this->order_date ?? ''),
             'copy_quantity'          => (int) ($this->copy_quantity ?? ''),
             'page_amount'            => (int) ($this->page_amount ?? ''),
+            'plate_stored_at'        => (object) ($this->plate_store ?? ''),
             'press'                  => (string) ($this->press->name ?? ''),
             'buinding_type'          => (string) ($this->buinding_type->name ?? ''),
-            'version_cost'           => (string) ($this->version_cost ?? ''),
-            'printing_details'       => (string) ($this->printing_details ?? ''),
-            'printing_contributors'  => (string) ($this->printing_contributors ?? ''),
+            'version_cost'           => (object) ($this->version_cost ?? ''),
+            'print_details'          => (object) ($this->print_details ?? ''),
+            'print_details'          => (object) ($this->print_details ?? ''),
+            'printing_contributors'  => (object) ($this->printing_contributors ?? ''),
+            'book_name'              => (object)($this->version->production)
         ];
     }
 }

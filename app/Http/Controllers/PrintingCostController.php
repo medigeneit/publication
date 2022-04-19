@@ -78,7 +78,6 @@ class PrintingCostController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
 
         if ($request->key) {
             $keyId = PrintingDetailsCategoryKey::create([
@@ -103,6 +102,7 @@ class PrintingCostController extends Controller
                 'page_amount' => $request->page_amount,
                 'order_date' => $request->order_date,
                 'plate_stored_at' => $request->plate_stored_at,
+                'alert_quantity'    => $request->alert_quantity,
             ]);
 
 
@@ -142,7 +142,9 @@ class PrintingCostController extends Controller
 
 
 
-        return back();
+        return redirect()
+            ->route('printing-costs.show', $printing->id,)
+            ->with('status', 'The record has been added successfully.');
 
         // $printing = Printing::create($this->validateData($request));
 
@@ -155,10 +157,12 @@ class PrintingCostController extends Controller
     {
         // return
         $printing_cost = Printing::class::with([
+            'plate_store:id,name',
             'press:id,name',
             'buinding_type',
+            'version.production',
             'version_cost.cost_category',
-            'printing_details:id,name,printing_details_category_key_id',
+            'print_details.printing_details_category_value.printing_category_keys:id,name',
             'printing_contributors.contributor:id,name',
             'printing_contributors.contribution:id,name'
         ])->find($id);
@@ -202,13 +206,7 @@ class PrintingCostController extends Controller
 
     public function update(Request $request, Printing $printingCost)
     {
-        // return $request->press;
-
-        // return !empty($request->printing_details);
-        // return gettype(collect($request->printing_details));
-        // return  $printingCost->print_details()->get(); ;
-        // return $request;
-
+        // return $request->alert_quentity;
         $printingCost->version_cost()->delete();
         $printingCost->print_details()->delete();
         $printingCost->printing_contributors()->delete();
@@ -216,12 +214,13 @@ class PrintingCostController extends Controller
 
         if ($request->copy_quantity  && $request->press) {
             $printingCost->update([
-                'press_id'   => $request->press,
-                'copy_quantity' => $request->copy_quantity,
-                'page_amount' => $request->page_amount,
-                'order_date' => $request->order_date,
-                'plate_stored_at' => $request->plate_stored_at,
-                'binding_type_id' => $request->binding_type_id,
+                'press_id'          => $request->press,
+                'copy_quantity'     => $request->copy_quantity,
+                'page_amount'       => $request->page_amount,
+                'order_date'        => $request->order_date,
+                'plate_stored_at'   => $request->plate_stored_at,
+                'binding_type_id'   => $request->binding_type_id,
+                'alert_quantity'    => $request->alert_quantity,
             ]);
         }
 
@@ -271,14 +270,9 @@ class PrintingCostController extends Controller
             }
         }
 
-        return back();
-
-
-        // $printing->update($this->validateData($request, $printing->id));
-
-        // return redirect()
-        //     ->route('collections.show', $printing->id)
-        //     ->with('status', 'The record has been update successfully.');
+        return redirect()
+            ->route('printing-costs.show', $printingCost->id,)
+            ->with('status', 'The record has been update successfully.');
     }
 
     public function destroy(Printing $printing)

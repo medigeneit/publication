@@ -28,10 +28,11 @@ class VersionController extends Controller
 
     public function index()
     {
+
         $versions = Version::query()
             ->filter()
             ->dateFilter()
-            ->with('volumes', 'user', 'production.publisher', 'moderators:id,author_id,moderator_type,version_id', 'moderators.moderators_type:id,name', 'moderators.author:id,name')
+            ->with('volumes', 'printings', 'printings.stored_at', 'user', 'production.publisher', 'moderators:id,author_id,moderator_type,version_id', 'moderators.moderators_type:id,name', 'moderators.author:id,name')
             ->search(['id'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 

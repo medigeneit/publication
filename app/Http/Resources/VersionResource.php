@@ -25,6 +25,7 @@ class VersionResource extends JsonResource
             'releaseDate'           => (string) ($release_date ?? ''),
             'publisherName'         => (string) ($this->production->publisher->name ?? ''),
             'productionCost'        => (float) ($this->production_cost ?? ''),
+            'printings'             => (object) ($this->printings ?? ''),
             'volumes'               => (object) ($this->volumes ?? ''),
             'volumesCount'          => (int) ($this->volumes->count() ?? ''),
             'createdBy'             => (string) ($this->user->name),

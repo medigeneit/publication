@@ -22,7 +22,7 @@
                                 </div>
                                 <div>
                                         <Label value="Re-Print Quentity Alert" />
-                                        <Input type="text" class="mt-1 block w-full" v-model="form.re_print_quentity_alert"/>
+                                        <Input type="text" class="mt-1 block w-full" v-model="form.alert_quantity"/>
                                 </div>
                                 <div>
                                     <Label value="Binding Category" />
@@ -346,7 +346,7 @@ export default {
 
                 binding_type_id: this.data.printing.binding_type_id || '',
 
-                re_print_quentity_alert:[],
+                alert_quantity: this.data.printing.alert_quantity || '',
 
                 plate_stored_at: this.data.printing.plate_stored_at || '',
 

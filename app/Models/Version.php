@@ -66,4 +66,9 @@ class Version extends Model
     {
         return $this->morphMany(Product::class, 'productable');
     }
+
+    public function printings()
+    {
+        return $this->hasMany(Printing::class);
+    }
 }
