@@ -1,8 +1,8 @@
 <template>
-    <div class="w-full grid grid-cols-2 bg-white gap-4 p-4" v-for="(moderator, index) in form.contributors"
+    <div class="w-full flex justify-between items-center bg-white gap-2 p-2" v-for="(moderator, index) in form.contributors"
         :key="index">
 
-        <div class="mb-4">
+        <div class="md:w-1/2">
             <Label value="Contributor" />
             <Select
                 class="mt-1 block w-full"
@@ -18,7 +18,7 @@
             </Select>
         </div>
 
-        <div class="mb-4">
+        <div class="md:w-1/2">
             <Label value="Contributor Type" />
             <Select
                 class="mt-1 block w-full"
@@ -29,7 +29,11 @@
                 </option>
             </Select>
         </div>
-        
+         <div class="text-center mt-4">
+            <button class="text-red-500 text-2xl" @click="removeProduct(index)" type="button" >
+                    &times;
+            </button>
+        </div>
     </div>
     <div class="w-full text-right">
         <Button
@@ -40,6 +44,7 @@
             (+) Add Moderator
         </Button>
     </div>
+    
 </template>
 
 <script>
@@ -73,6 +78,11 @@ export default {
                 author_id: "",
                 moderator_type_id: "",
             });
+        },
+
+        removeProduct(index) {
+            this.form.contributors.splice(index, 1);
+
         },
     }
 }

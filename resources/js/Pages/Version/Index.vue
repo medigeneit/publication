@@ -36,7 +36,7 @@
                                             <span>Copy Quantity: {{ printing.copy_quantity }} Pc</span>
                                             <span>Page Amount: {{ printing.page_amount }} Pages</span>
                                             <span>Order Date: {{ this.formatDate(printing.order_date) }} </span>
-                                            <span>Stored At: {{ printing.stored_at.name }} </span>
+                                            <span v-if="printing.stored_at">Stored At: {{ printing.stored_at.name  }} </span>
                                         </div>
                                     </div>
                                     <div class="mt-2">

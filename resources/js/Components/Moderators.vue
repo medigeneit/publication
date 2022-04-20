@@ -3,6 +3,12 @@
     <div class="w-full p-4 bg-white border shadow rounded" v-for="(moderator, index) in form.moderators"
         :key="index">
 
+        <div class="text-right mt-0">
+            <button class="text-red-400 hover:text-red-600 text-2xl" @click="removeProduct(index)" type="button" >
+                    &times;
+            </button>
+        </div>
+
         <div class="mb-4">
             <Label value="Author" />
             <Select
@@ -70,6 +76,7 @@
                 
             />
         </div>
+
     </div>
     <div class="w-full text-right">
         <Button
@@ -115,6 +122,10 @@ export default {
                 honorariumType: "",
                 honorarium: "",
             });
+        },
+        removeProduct(index) {
+            this.form.moderators.splice(index, 1);
+
         },
     }
 }

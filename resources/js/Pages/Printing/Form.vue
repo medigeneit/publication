@@ -183,10 +183,34 @@
                                                     <td class="">
                                                         <Input  type="number"
                                                         class="mt-1 py-1 block w-full"
-                                                        v-model="costDetail.subtotal"
+                                                        v-model="costDetail.amount"
+                                                        @change="checkSubtotal(index)"
                                                         />
                                                     </td>
-
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>Others  </td>
+                                                    <td>
+                                                        <Input  type="number"
+                                                        class="mt-1 py-1 block w-full"
+                                                        :value="form.others"
+                                                        v-model="form.others"
+                                                        @change="checkOthers(index)"  
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>Subtotal</td>
+                                                    <td>
+                                                        <Input  type="number"
+                                                        class="mt-1 py-1 block w-full"
+                                                        v-model="form.sum"
+                                                        />
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -356,6 +380,9 @@ export default {
 
                 cost_details: [],
 
+                others:'',
+
+                sum:0,
 
                 contributors: [
                     {
@@ -372,11 +399,11 @@ export default {
             }),
             storigngAtVisibility : false ,
             value: null,
-            options: [
-            'Batman',
-            'Robin',
-            'Joker',
-            ],
+            // options: [
+            // 'Batman',
+            // 'Robin',
+            // 'Joker',
+            // ],
         };
     },
     created() {
@@ -469,9 +496,25 @@ export default {
 
         checkSubtotal(index) {
             let data = this.form.cost_details[index];
+
+            console.log(typeof(data.amount));
+
             if(data.quantity && data.rate) {
-                data.subtotal = data.quantity * data.rate;
+                data.amount = data.quantity * data.rate;
+                this.form.sum += data.amount
             }
+
+            if(!data.quantity && !data.rate){
+                this.form.sum += Number(data.amount)
+            }
+        },
+
+        checkOthers(index){
+            let other = this.form.others
+            let total = this.form.sum
+
+            console.log(typeof(other))
+            console.log(this.form.sum = total + Number(other))
         },
 
         test() {

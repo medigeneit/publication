@@ -11,17 +11,17 @@ class Printing extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = [];
 
-    public function plate_store()
-    {
-        return $this->belongsTo(Author::class, 'plate_stored_at', 'id');
-    }
+    // public function plate_store()
+    // {
+    //     return $this->belongsTo(Press::class, 'plate_stored_at', 'id');
+    // }
     public function press()
     {
         return $this->hasOne(Press::class, 'id', 'press_id');
     }
     public function stored_at()
     {
-        return $this->hasOne(Press::class, 'id', 'plate_stored_at');
+        return $this->belongsTo(Press::class, 'plate_stored_at', 'id');
     }
     public function buinding_type()
     {

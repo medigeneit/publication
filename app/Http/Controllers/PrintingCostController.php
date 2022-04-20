@@ -157,7 +157,7 @@ class PrintingCostController extends Controller
     {
         // return
         $printing_cost = Printing::class::with([
-            'plate_store:id,name',
+            'stored_at:id,name',
             'press:id,name',
             'buinding_type',
             'version.production',

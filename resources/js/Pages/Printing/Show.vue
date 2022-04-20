@@ -2,7 +2,7 @@
     <Head title="Print" />
 
     <app-layout>
-        <div class="text-center">
+        <div class="flex justify-center items-center print:hidden">
             <button type="button" onclick="window.print()" class="px-3 py-2 rounded bg-gray-500 text-white">
                 Print
             </button>
@@ -26,7 +26,7 @@
         </div>
 
         <div class="overflow-auto">
-            <table class="w-1/2 table table-auto border border-b-0 print:border-black print:text-black">
+            <table class="w-1/2 table table-auto  border-b-0  print:text-black">
                 <thead class="bg-gray-100 print:bg-transparent">
                     <tr class="border-b print:border-black">
                         <th scope="col" class="border border-black px-6 py-3">
@@ -93,7 +93,7 @@
             </table>
         </div>
         <div class="overflow-auto mt-4">
-            <table class="w-1/2 table table-auto border border-b-0 border-black text-black">
+            <table class="w-1/2 table table-auto border border-b-0 border-black print:border-gray-500 text-black">
                 <tbody>
                     <tr class="bg-gray-100 print:bg-transparent" v-for="(print_detail, index) in printing_cost.print_details" :key="index">
                         <th scope="row" class="text-left px-3 py-2 border-b border-black">
@@ -118,11 +118,11 @@
                             {{ print_notes.contributor.name }}
                         </td>
                     </tr>
-                    <tr class="bg-gray-100 print:bg-transparent">
+                     <tr class="bg-gray-100 print:bg-transparent">
                         <th scope="row" class="text-left px-3 py-2 border-b border-black">
                             প্লেট সংরক্ষন করা হবে কিনা
                         </th>
-                        <td v-if="printing_cost.plate_stored_at.id" class="text-left text-sm print:text-md px-3 py-2 border-b border-l border-black">
+                        <td v-if="printing_cost.stored_at.id" class="text-left text-sm print:text-md px-3 py-2 border-b border-l border-black">
                             Yes 
                         </td>
                         <td class="text-left text-sm print:text-md px-3 py-2 border-b border-l border-black" v-else>
@@ -134,7 +134,7 @@
                             কোথায় সংরক্ষন করা হবে
                         </th>
                         <td class="text-left text-sm print:text-md px-3 py-2 border-b border-l border-black">
-                            {{ printing_cost.plate_stored_at.name }}
+                            {{ printing_cost.stored_at.name }}
                         </td>
                     </tr>
                 </tbody>
