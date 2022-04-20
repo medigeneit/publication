@@ -31,8 +31,8 @@
                                 <div class="text-lg font-bold text-center">Cost Details</div>
                                 <hr class="my-1">
                                 <div class="p-3">
-                                    <div class="py-1.5 flex gap-2 bg-gray-200" v-for="(printing, index) in version.printings" :key="index">
-                                        <div class="w-full flex flex-col text-left p-2">
+                                    <div class="py-1.5 flex gap-2 " v-for="(printing, index) in version.printings" :key="index">
+                                        <div class="w-full bg-gray-200 flex flex-col text-left p-2">
                                             <span>Copy Quantity: {{ printing.copy_quantity }} Pc</span>
                                             <span>Page Amount: {{ printing.page_amount }} Pages</span>
                                             <span>Order Date: {{ this.formatDate(printing.order_date) }} </span>
