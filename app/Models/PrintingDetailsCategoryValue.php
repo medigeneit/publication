@@ -21,10 +21,15 @@ class PrintingDetailsCategoryValue extends Model
 
     public function printing_category_keys()
     {
-        return $this->belongsTo(PrintingDetailsCategoryKey::class,'printing_details_category_key_id','id');
+        return $this->belongsTo(PrintingDetailsCategoryKey::class, 'printing_details_category_key_id', 'id');
     }
     public function values()
     {
-        return $this->hasMany(PrintingDetailsCategoryValue::class,'printing_details_category_key_id','id');
+        return $this->hasMany(PrintingDetailsCategoryValue::class, 'printing_details_category_key_id', 'id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(PrintingDetailsCategoryValue::class, 'printing_details_category_key_id', 'id');
     }
 }

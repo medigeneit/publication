@@ -25,7 +25,7 @@
             title="Publication"
             :active="
                 route().current(
-                    '(categories|price-categories|packages|authors|publishers|moderator-types|presses).*'
+                    '(categories|price-categories|packages|authors|publishers|moderator-types|presses|version-variables).*'
                 )
             "
         >
@@ -66,6 +66,13 @@
             >
                 Packages
             </nav-link> -->
+            <nav-link
+                :href="route('version-variables.index')"
+                :active="route().current('version-variables.*')"
+            >
+                Version Variables
+            </nav-link>
+
               <nav-link
                 :href="route('presses.index')"
                 :active="route().current('presses.*')">

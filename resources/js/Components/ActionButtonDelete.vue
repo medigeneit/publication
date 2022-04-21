@@ -22,7 +22,7 @@ export default {
     methods: {
         submit() {
             if(confirm("Do you really want to delete?")){
-                return this.$inertia.delete(this.href);
+                return this.$inertia.get(this.href);
             }
         }
     }

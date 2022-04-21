@@ -17,6 +17,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PressController;
 use App\Http\Controllers\PriceCategoryController;
 use App\Http\Controllers\PrintingCostController;
+use App\Http\Controllers\PrintingDetailsCategoryValueController;
 use App\Http\Controllers\PrintingDetaislController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductionController;
@@ -25,6 +26,8 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VersionController;
+use App\Http\Controllers\VersionVariableControllor;
+use App\Models\PrintingDetailsCategoryValue;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -62,12 +65,13 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/cost-categories/{version}', [PrintingCostController::class, 'createWithVerion'])->name('cost-categories');
-
     Route::resources([
         'users'                     => UserController::class,
         'publishers'                => PublisherController::class,
         'productions'               => ProductionController::class,
         'presses'                   => PressController::class,
+        'version-variables'         => VersionVariableControllor::class,
+        'printing-detail-categories' => PrintingDetailsCategoryValueController::class,
         'versions'                  => VersionController::class,
         'printing-costs'            => PrintingCostController::class,
         'categories'                => CategoryController::class,
