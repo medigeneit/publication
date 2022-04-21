@@ -12,8 +12,14 @@ class PrintingDetailsCategoryValue extends Model
 
     protected $guarded = [];
 
+    public $timestamps = false;
+
     public function printing_category_keys()
     {
         return $this->belongsTo(PrintingDetailsCategoryKey::class,'printing_details_category_key_id','id');
+    }
+    public function values()
+    {
+        return $this->hasMany(PrintingDetailsCategoryValue::class,'printing_details_category_key_id','id');
     }
 }
