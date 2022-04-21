@@ -14,6 +14,11 @@ class PrintingDetailsCategoryValue extends Model
 
     public $timestamps = false;
 
+    public function scopeOnlyKeyes($query)
+    {
+        return $query->whereNull('printing_details_category_key_id');
+    }
+
     public function printing_category_keys()
     {
         return $this->belongsTo(PrintingDetailsCategoryKey::class,'printing_details_category_key_id','id');

@@ -45,9 +45,9 @@ class PrintingCostController extends Controller
     {
         // return $version;
         $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
-        // return
         // $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
-        $printing_details_category_keys = PrintingDetailsCategoryValue::with('values:id,name,printing_details_category_key_id')->whereNull('printing_details_category_key_id')->get(['id', 'name']);
+        // return
+        $printing_details_category_keys = PrintingDetailsCategoryValue::with('values:id,name,printing_details_category_key_id')->onlyKeyes()->get(['id', 'name']);
 
         return Inertia::render('Printing/Create', [
             'printing'                         => new PrintingDetailsCategoryValue(),
@@ -189,7 +189,7 @@ class PrintingCostController extends Controller
         ])->find($id);
         // return $printing->printing_details->printing_details_category_key_id;
 
-        $printing_details_category_keys = PrintingDetailsCategoryValue::with('values:id,name,printing_details_category_key_id')->whereNull('printing_details_category_key_id')->get(['id', 'name']);
+        $printing_details_category_keys = PrintingDetailsCategoryValue::with('values:id,name,printing_details_category_key_id')->onlyKeyes()->get(['id', 'name']);
 
         return Inertia::render('Printing/Edit', [
             'data' => [
