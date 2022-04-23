@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BindingTypeResource;
 use App\Http\Resources\CostCategoryResource;
 use App\Http\Resources\PrintingDetailCategoryResource;
 use App\Http\Resources\VersionVariableResource;
+use App\Models\BindingType;
 use App\Models\CostCategory;
 use App\Models\PrintingDetail;
 use App\Models\PrintingDetailsCategoryKey;
@@ -28,6 +30,10 @@ class VersionVariableControllor extends Controller
             ->search()->filter()
             ->getQuery();
 
+        $bindingTypes = $this->setQuery(BindingType::query())
+            ->search()->filter()
+            ->getQuery();
+
         $printingDetailsCategoryValue = PrintingDetailsCategoryValue::query()
             ->with('values:id,name,printing_details_category_key_id,active')
             ->onlyKeyes()
@@ -35,6 +41,7 @@ class VersionVariableControllor extends Controller
 
         return Inertia::render('VersionVariable/Index', [
             'costCategories' => CostCategoryResource::collection($costCategories->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'bindingTypes' => BindingTypeResource::collection($bindingTypes->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'printingDetailsCategoryValue' => PrintingDetailCategoryResource::collection($printingDetailsCategoryValue),
             'filters' => $this->getFilterProperty(),
         ]);

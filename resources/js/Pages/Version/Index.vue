@@ -40,7 +40,7 @@
                                         </div>
                                     </div>
                                     <div class="mt-2">
-                                        <nav-link class="bg-green-500 hover:bg-green-600" :href="route('cost-categories',version.id)">
+                                        <nav-link class="bg-green-500 hover:bg-green-600" :href="route('printing-cost-categories',version.id)">
                                             Add New
                                         </nav-link>
                                     </div>

@@ -10,5 +10,7 @@ class CostCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public  $timespams = false;
+
     protected $guarded = [];
 }

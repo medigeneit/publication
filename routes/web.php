@@ -3,9 +3,11 @@
 use App\Http\Controllers\AccountCategoryController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BindingTypeController;
 use App\Http\Controllers\ModeratorTypeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CirculationController;
+use App\Http\Controllers\CostCategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DistributionController;
@@ -27,6 +29,7 @@ use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VersionController;
 use App\Http\Controllers\VersionVariableControllor;
+use App\Models\BindingType;
 use App\Models\PrintingDetailsCategoryValue;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -64,7 +67,7 @@ require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/cost-categories/{version}', [PrintingCostController::class, 'createWithVerion'])->name('cost-categories');
+    Route::get('/printing-cost-categories/{version}', [PrintingCostController::class, 'createWithVerion'])->name('printing-cost-categories');
     Route::resources([
         'users'                     => UserController::class,
         'publishers'                => PublisherController::class,
@@ -72,6 +75,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'presses'                   => PressController::class,
         'version-variables'         => VersionVariableControllor::class,
         'printing-detail-categories' => PrintingDetailsCategoryValueController::class,
+        'cost-categories'           => CostCategoryController::class,
+        'binding-types'             => BindingTypeController::class,
         'versions'                  => VersionController::class,
         'printing-costs'            => PrintingCostController::class,
         'categories'                => CategoryController::class,
