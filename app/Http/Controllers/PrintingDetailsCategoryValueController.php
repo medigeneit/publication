@@ -19,37 +19,44 @@ class PrintingDetailsCategoryValueController extends Controller
         return PrintingDetailsCategoryValue::where('id', request()->printing_details_category_key_id)->first() ?? [];
 
         return Inertia::render('VersionVariable/Create', [
-            'printingDetailCategory'  => new PrintingDetailsCategoryValue(),
+            'printingDetailsCategoryValue'  => new PrintingDetailsCategoryValue(),
             'parent'    => PrintingDetailsCategoryValue::where('id', request()->printing_details_category_key_id)->first() ?? [],
         ]);
     }
 
     public function store(Request $request)
     {
-        return 123;
+        PrintingDetailsCategoryValue::create($this->validateData($request));
+        return back();
     }
 
 
     public function edit($id)
     {
-        return 123;
+        // return PrintingDetailsCategoryValue::find($id);
 
-        return Inertia::render('VersionVariable/ValueEdit', [
+        return Inertia::render('VersionVariable/Edit', [
             'printingDetailsCategoryValue' => PrintingDetailsCategoryValue::find($id),
+            'parent'    => PrintingDetailsCategoryValue::where('id', request()->printing_details_category_key_id)->first() ?? [],
         ]);
     }
 
-    public function update(Request $request, PrintingDetailsCategoryValue $printingDetailsCategoryValue)
+    public function update(Request $request, PrintingDetailsCategoryValue $printing_detail_category)
     {
-        // $printingDetailsCategoryValue->update($this->validateData($request, $printingDetailsCategoryValue->id));
+        // return $printing_detail_category;
+
+        $printing_detail_category->update($this->validateData($request, $printing_detail_category->id));
+
+        // return back();
 
         return redirect()
-            ->route('collections.show', $printingDetailsCategoryValue->id)
+            ->route('version-variables.index', $printing_detail_category->id)
             ->with('status', 'The record has been update successfully.');
     }
 
     public function destroy($id)
     {
+        return 123;
         PrintingDetailsCategoryValue::find($id)->delete();
         return back();
     }
@@ -58,7 +65,12 @@ class PrintingDetailsCategoryValueController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            //
+            'name' => [
+                'required',
+                'string'
+            ],
+            'printing_details_category_key_id' => [],
+            'active' => []
         ]);
     }
 }

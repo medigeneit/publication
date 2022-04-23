@@ -30,6 +30,7 @@
                     <button v-show="!openForm" class="px-2 py-0.5 border rounded bg-gray-600 text-white mb-4" @click="addNewSubcategory(0)">
                         + Add New Category
                     </button>
+
                     <ul v-show="!openForm">
                         <category-tree :main-parent="true" :collection="printingDetailsCategoryValue.data" :add-new-subcategory="addNewSubcategory" >
                             <template #default="{ item: subcategory  }">

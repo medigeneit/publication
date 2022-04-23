@@ -246,6 +246,7 @@ export default {
 
     props: {
         moduleAction: String,
+
         buttonValue: {
             type: String,
             default: "Submit",

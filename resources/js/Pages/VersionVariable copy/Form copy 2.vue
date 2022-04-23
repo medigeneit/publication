@@ -9,11 +9,19 @@
                 <div class="px-3 py-2 border border-gray-300 rounded-md shadow-sm mt-1 block w-full">
                     {{ parentName }}
                 </div>
-            </div>
-            <div class="mb-4">
+            </div> 
+            {{ data.printingDetailsCategoryValue }}
+            <div class="mb-4" v-if="(moduleAction != 'update')">
                 <Label v-if="!parentName" for="name" value="Category Name" />
                 <Label v-else for="name" value="Subcategory Name" />
                 <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required />
+            </div>
+             <div class="mb-4" v-if="(moduleAction == 'update')">
+                <div>
+                    <Label  for="name" value="Subcategory Name" />
+                    <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required />
+                </div>
+                <active-input v-model="form.active" />
             </div>
             <div class="flex justify-between">
                 <slot name="footer">
@@ -64,10 +72,9 @@ export default {
     data() {
         return {
             parentName: this.data.parent.name || '',
-
             form: this.$inertia.form({
                 name: '',
-                printing_details_category_key_id: this.data.parent.id || '',
+                printing_details_category_key_id: this.data.parent.id || 0,
                 moduleAction: this.moduleAction
             }),
         };
@@ -75,7 +82,15 @@ export default {
 
     methods: {
         submit() {
-            return this.form.post(this.route('printing-detail-categories.store'));
+           if (!this.moduleAction != "store"){
+               return this.form.post(this.route('printing-detail-categories.store'));
+            }
+
+            if (this.moduleAction == "update") {
+                return this.form.put(
+                    this.route("printing-detail-categories.update", this.form.printing_details_category_key_id)
+                );
+            }
         },
     },
 };

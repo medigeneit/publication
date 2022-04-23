@@ -29,7 +29,7 @@ class VersionVariableControllor extends Controller
             ->getQuery();
 
         $printingDetailsCategoryValue = PrintingDetailsCategoryValue::query()
-            ->with('values:id,name,printing_details_category_key_id')
+            ->with('values:id,name,printing_details_category_key_id,active')
             ->onlyKeyes()
             ->get();
 
@@ -49,7 +49,11 @@ class VersionVariableControllor extends Controller
 
     public function store(Request $request)
     {
-        // $versionVariable = VersionVariable::create($this->validateData($request));
+        // return $request;
+
+        $versionVariable = PrintingDetailsCategoryValue::create($this->validateData($request));
+
+        return back();
 
         // return redirect()
         //     ->route('collections.show', $versionVariable->id)
@@ -72,14 +76,10 @@ class VersionVariableControllor extends Controller
     //     ]);
     // }
 
-    // public function update(Request $request, VersionVariable $versionVariable)
-    // {
-    //     $versionVariable->update($this->validateData($request, $versionVariable->id));
-
-    //     return redirect()
-    //         ->route('collections.show', $versionVariable->id)
-    //         ->with('status', 'The record has been update successfully.');
-    // }
+    public function update(Request $request)
+    {
+        return 123;
+    }
 
     public function destroy(Request $request)
     {
@@ -121,7 +121,12 @@ class VersionVariableControllor extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            //
+            'name' => [
+                'required',
+                'string'
+            ],
+            'printing_details_category_key_id' => ['Nu'],
+            'action' => []
         ]);
     }
 }

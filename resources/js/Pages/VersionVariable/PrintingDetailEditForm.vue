@@ -4,16 +4,14 @@
         <ValidationErrors class="mb-4" />
 
         <form @submit.prevent="submit">
-            <div class="mb-4" v-if="parentName">
-                <Label for="parent_name" value="Parent Name" />
-                <div class="px-3 py-2 border border-gray-300 rounded-md shadow-sm mt-1 block w-full">
-                    {{ parentName }}
-                </div>
-            </div>
             <div class="mb-4">
-                <Label v-if="!parentName" for="name" value="Category Name" />
-                <Label v-else for="name" value="Subcategory Name" />
-                <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required />
+                <div>
+                    <Label  for="name" value="Subcategory Name" />
+                    <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required />
+                </div>
+                <div>
+                    <active-input v-model="form.active" />
+                </div>
             </div>
             <div class="flex justify-between">
                 <slot name="footer">
@@ -30,6 +28,7 @@ import Button from "@/Components/Button.vue";
 import Input from "@/Components/Input.vue";
 import Label from "@/Components/Label.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
+import ActiveInput from "@/Components/ActiveInput.vue";
 import DataTable from "@/Components/DataTable.vue";
 import GoToList from "@/Components/GoToList.vue";
 import Select from "@/Components/Select.vue";
@@ -44,7 +43,8 @@ export default {
         GoToList,
         Select,
         Textarea,
-        DataTable
+        DataTable,
+        ActiveInput
     },
 
     props: {
@@ -63,11 +63,10 @@ export default {
 
     data() {
         return {
-            parentName: this.data.parent.name || '',
-
             form: this.$inertia.form({
-                name: '',
-                printing_details_category_key_id: this.data.parent.id || '',
+                name: this.data.printingDetailsCategoryValue.name || '',
+                printing_details_category_key_id: this.data.printingDetailsCategoryValue.printing_details_category_key_id || '',
+                active: this.data.printingDetailsCategoryValue.active || 0,
                 moduleAction: this.moduleAction
             }),
         };
@@ -75,7 +74,11 @@ export default {
 
     methods: {
         submit() {
-            return this.form.post(this.route('printing-detail-categories.store'));
+            if (this.moduleAction == "update") {
+                return this.form.put(
+                    this.route("printing-detail-categories.update", this.data.printingDetailsCategoryValue.id)
+                );
+            }
         },
     },
 };

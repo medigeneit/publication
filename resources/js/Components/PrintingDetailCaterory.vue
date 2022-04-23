@@ -2,7 +2,7 @@
     <div v-if="!mainParent" class="absolute -left-2 md:-left-4 -top-1 bottom-11 border-l-2"></div>
     <li v-for="(item, index) in collection" :key="index" class="my-1 relative">
         <div v-if="! mainParent" class="absolute -left-2 md:-left-4 w-2 md:w-4 h-7 -top-1 border-l-2 border-b-2 rounded-bl-3xl"></div>
-        <div class="parent flex items-center bg-white shadow rounded border p-2" draggable="true">
+        <div class="parent flex items-center bg-white shadow rounded border p-2" draggable="true" >
             <div v-if="!lastChild">
                 <svg v-if="item.values.length" @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer transform rotate-180 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
@@ -11,9 +11,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
                 </svg>
             </div>
-            <div class="w-full flex justify-between">
+            <div class="w-full flex justify-between" :class="{ 'bg-gray-300 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed' : item.active == false }">
+                <!-- :class="{ 'bg-gray-300 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed' : item.values.active == false }" -->
+                <!-- {{ item }} -->
                 <div class="px-2">{{ item.name }}</div>
-                <div v-if="!lastChild" class="flex justify-center items-center cursor-pointer text-green-600">
+                <div v-if="!lastChild" class="flex justify-center items-center cursor-pointer text-green-600" >
                    <!-- <add-new-icon :href="route('printing-detail-categories.create')" @click="addNewSubcategoryHandlar($event, item.id, item.name)"/> -->
                    <div v-if="!lastChild" class="flex">
                         <div v-if="!lastChild" class="flex justify-center items-center cursor-pointer text-green-600" @click="addNewSubcategoryHandlar($event, item.id, item.name)">
