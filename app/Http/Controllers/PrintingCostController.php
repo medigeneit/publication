@@ -81,20 +81,22 @@ class PrintingCostController extends Controller
     public function store(Request $request)
     {
 
-        if ($request->key) {
-            $keyId = PrintingDetailsCategoryValue::create([
-                'name' => $request->key
-            ]);
-        }
-        if (is_array($request->values)) {
-            foreach ($request->values as $value) {
-                if ($value != Null)
-                    PrintingDetailsCategoryValue::create([
-                        'name' => $value,
-                        'printing_details_category_key_id' => $keyId->id
-                    ]);
-            }
-        };
+        // if ($request->key) {
+        //     $keyId = PrintingDetailsCategoryValue::create([
+        //         'name' => $request->key
+        //     ]);
+        // }
+        // if (is_array($request->values)) {
+        //     foreach ($request->values as $value) {
+        //         if ($value != Null)
+        //             PrintingDetailsCategoryValue::create([
+        //                 'name' => $value,
+        //                 'printing_details_category_key_id' => $keyId->id
+        //             ]);
+        //     }
+        // };
+
+        // return $request;
 
         if ($request->copy_quantity && $request->version_id && $request->press) {
             $printing =  Printing::create([
@@ -119,8 +121,10 @@ class PrintingCostController extends Controller
                 }
             }
 
+            $total_cost = 0;
             foreach ($request->cost_details as $cost_detail) {
                 if ($cost_detail != Null) {
+                    $total_cost += $cost_detail['subtotal'];
                     VersionCost::create([
                         'cost_category_id'    => $cost_detail['cost_category_id'],
                         'quantity'            => $cost_detail['quantity'],
@@ -130,6 +134,13 @@ class PrintingCostController extends Controller
                     ]);
                 }
             }
+
+            $total_cost += $request->others;
+            $cost_per_unit = $total_cost/(($request->copy_quantity != 0 || $request->copy_quantity != NULL) ? $request->copy_quantity : 1);
+            $printing->update([
+                'others_cost' => $request->others,
+                'cost_per_unit' => $cost_per_unit
+            ]);
 
             foreach ($request->contributors as $contributor) {
                 if ($contributor != Null) {
@@ -210,7 +221,7 @@ class PrintingCostController extends Controller
 
     public function update(Request $request, Printing $printingCost)
     {
-        // return $request->alert_quentity;
+        // return $request;
         $printingCost->version_cost()->delete();
         $printingCost->print_details()->delete();
         $printingCost->printing_contributors()->delete();
@@ -245,9 +256,11 @@ class PrintingCostController extends Controller
             }
         }
 
+        $total_cost = 0;
 
         foreach ($request->cost_details as $cost_detail) {
             if ($cost_detail != Null) {
+                $total_cost += $cost_detail['amount'];
                 VersionCost::withTrashed()
                     ->updateOrCreate([
                         'cost_category_id'    => $cost_detail['cost_category_id'],
@@ -255,11 +268,19 @@ class PrintingCostController extends Controller
                     ], [
                         'quantity'            => $cost_detail['quantity'],
                         'rate'                => $cost_detail['rate'],
-                        'subtotal'            => $cost_detail['subtotal'],
+                        'subtotal'            => $cost_detail['amount'],
                         'deleted_at' => NULL,
                     ]);
             }
         }
+
+        $total_cost += $request->others;
+        // return $total_cost;
+            $cost_per_unit = $total_cost/(($request->copy_quantity != 0 || $request->copy_quantity != NULL) ? $request->copy_quantity : 1);
+            $printingCost->update([
+                'others_cost' => $request->others,
+                'cost_per_unit' => $cost_per_unit
+            ]);
 
         foreach ($request->contributors as $contributor) {
             if ($contributor != Null && $contributor['author_id'] != null && $contributor['moderator_type_id'] != null) {
