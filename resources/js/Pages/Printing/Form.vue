@@ -38,7 +38,7 @@
                     <div class="w-full flex gap-6">
                         <div class="w-full max-w-3xl p-4 bg-white border shadow rounded">
                             <h3 class="text-lg text-gray-600 font-bold">Printing Details</h3>
-                            <div class="w-full text-right mb-2">
+                            <!-- <div class="w-full text-right mb-2">
                                 <Button @click="modalHandler" type="button" class="btn-danger border-4">
                                 + Add Filed
                             </Button>
@@ -87,7 +87,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="w-full bg-white gap-4 p-4">
                                 <table class="w-full min-w-max">
                                     <tbody>
@@ -115,39 +115,10 @@
                                 </table>
                                 
                             </div>
-                            <!-- <div class="w-full bg-white gap-4 p-4">
-                                <table class="w-full min-w-max">
-                                    <tbody>
-                                        <tr
-                                            class=""
-                                            v-for="printingDetail in form.printing_details"
-                                            :key="printingDetail.printing_detail_id"
-                                        >
-                                            <td class="text-right px-2 py-1 text-sm">
-                                                {{ printingDetail.printing_detail_name }}
-                                            </td>
-                                            <td class="text-left px-2 py-1" >
-                                                <Select
-                                                    class="mt-1 block w-full"
-                                                    v-model="printingDetail.category_value_id"
-                                                    @change="test"
-                                                >
-                                                <option value="">Select Value</option>
-                                                <option :value="priceCategoryValue.id" v-for="(priceCategoryValue) in printingDetail.options" :key="priceCategoryValue.id">
-                                                    {{ priceCategoryValue.name }}
-                                                </option>
-                                                </Select>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                                
-                            </div> -->
+                           
                         </div>
 
                     </div>
-<!-- {{ data.printing.copy_quantity }} -->
                     <div class="w-full flex gap-4 mt-2">
                         <div class="w-full max-w-7xl space-y-4">
                             <div class="w-full flex gap-6">

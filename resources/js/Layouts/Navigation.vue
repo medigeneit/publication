@@ -18,7 +18,7 @@
     <nav-link-wrapper
         title="Production Management"
         :active="route().current(
-            '(publishers|productions|versions|moderator-types|contributors|moderators|categories|price-categories|products|packages|printing-details).*'
+            '(publishers|productions|versions|moderator-types|contributors|moderators|categories|price-categories|products|packages).*'
             )"
     >
         <nav-link-wrapper
@@ -93,12 +93,12 @@
             Release Versions
         </nav-link>
 
-        <nav-link
+        <!-- <nav-link
             :href="route('printing-costs.index')"
             :active="route().current('printing-costs.*')"
         >
             Printing-details
-        </nav-link>
+        </nav-link> -->
 
         <nav-link
             :href="route('products.index')"

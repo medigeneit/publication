@@ -27,27 +27,18 @@ use PHPUnit\Util\Printer;
 class PrintingCostController extends Controller
 {
     use DateFilter;
-
-    public function index()
-    {
-        $printings = $this->setQuery(PrintingDetailsCategoryValue::query())
-            ->search()->filter()
-            //->dateFilter()
-            ->getQuery();
-
-        return Inertia::render('Printing/Index', [
-            'printings' => PrintingResource::collection($printings->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
-            'filters' => $this->getFilterProperty(),
-        ]);
-    }
-
     public function createWithVerion($version)
     {
-        // return $version;
         $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
-        // $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
-        // return
-        $printing_details_category_keys = PrintingDetailsCategoryValue::with('values:id,name,printing_details_category_key_id')->onlyKeyes()->get(['id', 'name']);
+        $printing_details_category_keys = PrintingDetailsCategoryValue::with([
+            'values' => function ($q) {
+                $q->where('active', 1);
+            }
+        ])
+            ->onlyKeyes()
+            ->where('active', 1)
+            ->get(['id', 'name']);
+
 
         return Inertia::render('Printing/Create', [
             'printing'                         => new PrintingDetailsCategoryValue(),
@@ -60,44 +51,9 @@ class PrintingCostController extends Controller
             'version'                          => $version
         ]);
     }
-    public function create()
-    {
-        // return BindingType::get();
-
-        $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
-        $printing_details_category_keys = PrintingDetailsCategoryKey::with('values:id,name,printing_details_category_key_id')->get(['id', 'name']);
-
-        return Inertia::render('Printing/Create', [
-            'printing'                         => new PrintingDetailsCategoryValue(),
-            'printing_details_category_keys'   => $printing_details_category_keys,
-            'costCategories'                   => $cost_categories,
-            'presses'                          => Press::where('active', 1)->get(),
-            'authors'                          => Author::pluck('name', 'id'),
-            'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
-            'bindingTypes'                     => BindingType::get()
-        ]);
-    }
 
     public function store(Request $request)
     {
-
-        // if ($request->key) {
-        //     $keyId = PrintingDetailsCategoryValue::create([
-        //         'name' => $request->key
-        //     ]);
-        // }
-        // if (is_array($request->values)) {
-        //     foreach ($request->values as $value) {
-        //         if ($value != Null)
-        //             PrintingDetailsCategoryValue::create([
-        //                 'name' => $value,
-        //                 'printing_details_category_key_id' => $keyId->id
-        //             ]);
-        //     }
-        // };
-
-        // return $request;
-
         if ($request->copy_quantity && $request->version_id && $request->press) {
             $printing =  Printing::create([
                 'version_id' => $request->version_id,
@@ -159,11 +115,6 @@ class PrintingCostController extends Controller
             ->route('printing-costs.show', $printing->id,)
             ->with('status', 'The record has been added successfully.');
 
-        // $printing = Printing::create($this->validateData($request));
-
-        // return redirect()
-        //     ->route('collections.show', $printing->id)
-        //     ->with('status', 'The record has been added successfully.');
     }
 
     public function show($id)
@@ -179,7 +130,7 @@ class PrintingCostController extends Controller
             'printing_contributors.contributor:id,name',
             'printing_contributors.contribution:id,name',
             // 'version.moderators',
-            'version.moderators:id,author_id,moderator_type,version_id', 
+            'version.moderators:id,author_id,moderator_type,version_id',
             'version.moderators.moderators_type:id,name',
             'version.moderators.author:id,name',
         ])->find($id);
@@ -205,7 +156,11 @@ class PrintingCostController extends Controller
         ])->find($id);
         // return $printing->printing_details->printing_details_category_key_id;
 
-        $printing_details_category_keys = PrintingDetailsCategoryValue::with('values:id,name,printing_details_category_key_id')->onlyKeyes()->get(['id', 'name']);
+        $printing_details_category_keys = PrintingDetailsCategoryValue::with([
+            'values' => function ($q) {
+                $q->where('active', 1);
+            }
+        ])->onlyKeyes()->get(['id', 'name']);
 
         return Inertia::render('Printing/Edit', [
             'data' => [
@@ -226,8 +181,6 @@ class PrintingCostController extends Controller
 
     public function update(Request $request, Printing $printingCost)
     {
-        // return $request;
-
         $printingCost->version_cost()->delete();
         $printingCost->print_details()->delete();
         $printingCost->printing_contributors()->delete();
@@ -313,32 +266,6 @@ class PrintingCostController extends Controller
         return redirect()
             ->route('collections.index')
             ->with('status', 'The record has been delete successfully.');
-    }
-
-    protected function search()
-    {
-        $this->getQuery()
-            ->when(request()->search, function ($query, $search) {
-                $query->where(function ($query) use ($search) {
-                    $query->where('id', 'regexp', $search);
-                });
-            });
-
-        return $this;
-    }
-
-    protected function filter()
-    {
-        $this->getQuery();
-
-        return $this;
-    }
-
-    protected function getFilterProperty()
-    {
-        return [
-            //
-        ];
     }
 
     private function validateData($request, $id = '')
