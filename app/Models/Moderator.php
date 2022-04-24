@@ -43,11 +43,11 @@ class Moderator extends Model
 
     public function moderators_type()
     {
-        return $this->belongsTo(ModeratorType::class, 'moderator_type');
+        return $this->belongsTo(ModeratorType::class, 'moderator_type','id');
     }
     public function author()
     {
-        return $this->belongsTo(Author::class, );
+        return $this->belongsTo(Author::class);
     }
 
 }

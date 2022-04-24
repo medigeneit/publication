@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-100">
-        <header class="bg-white w-full shadow z-40 px-2">
+        <header class="bg-white w-full shadow z-40 px-2 print:hidden">
             <div class="flex justify-between items-center h-16">
                 <!-- Hamburger -->
                 <div class="flex items-center gap-2">
@@ -15,7 +15,7 @@
 
 
                 <!-- Page Heading -->
-                <h3 class="px-2 text-blue-800 text-xs sm:text-sm h-16 overflow-hidden flex justify-center items-center">
+                <h3 class="px-2 text-blue-800 text-xs sm:text-sm h-16 overflow-hidden print:overflow-visible flex justify-center items-center">
                     <slot name="header" />
                 </h3>
 
@@ -51,8 +51,8 @@
             </div>
         </header>
 
-        <div class="w-full flex z-30 overflow-hidden">
-            <nav class="bg-white shadow w-full sm:max-w-max fixed sm:static top-16 left-0 overflow-hidden z-30">
+        <div class="w-full flex z-30 overflow-hidden print:overflow-visible">
+            <nav class="bg-white shadow w-full sm:max-w-max fixed sm:static top-16 left-0 overflow-hidden print:overflow-visible z-30 print:hidden">
                 <!-- Navigation Menu -->
                 <div :class="{'block sm:hidden': showingNavigationDropdown, 'hidden sm:block': ! showingNavigationDropdown}" class="h-screen -mt-16 pt-16 overflow-auto">
                     <navigation />
@@ -61,7 +61,7 @@
 
             <!-- Page Content -->
             <main class="w-full h-screen -mt-16 pt-16 overflow-hidden">
-                <div class="h-full p-2 sm:p-4 overflow-x-auto overflow-y-scroll">
+                <div class="h-full p-2 sm:p-4 overflow-x-auto overflow-y-scroll print:overflow-hidden">
                     <slot />
                 </div>
             </main>

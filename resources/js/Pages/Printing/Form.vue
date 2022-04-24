@@ -211,6 +211,7 @@
                                                         v-model="form.sum"
                                                         />
                                                     </td>
+                                                    {{ total }}
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -380,9 +381,9 @@ export default {
 
                 cost_details: [],
 
-                others:'',
+                others:this.data.printing.others_cost || '',
 
-                sum:0,
+                sum: this.total,
 
                 contributors: [
                     {
@@ -460,34 +461,27 @@ export default {
             this.form.contributors[index] = this.data.printing.printing_contributors[index] ? this.data.printing.printing_contributors[index] : '';
         }
 
+        this.checkTotal();
+
     },
 
     methods: {
 
         checkSubtotal(index) {
             let row = this.form.cost_details[index];
-
             if(row.rate && row.quantity) {
                 row.amount = row.rate * row.quantity;
-            
                 this.checkTotal();
             }
         },
 
         checkTotal() {
             let sum = 0;
-
             Object.values(this.form.cost_details).forEach((cost) => {
                 sum += parseInt(cost.amount) || 0;
             })
-
             sum += parseInt(this.form.others) || 0;
-
             this.form.sum = sum;
-        },
-
-        test() {
-            console.log(this.form.price_details);
         },
 
         checkSelect(select_index, option_id) {

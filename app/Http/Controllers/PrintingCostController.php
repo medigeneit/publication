@@ -80,7 +80,7 @@ class PrintingCostController extends Controller
 
     public function store(Request $request)
     {
- 
+
         // if ($request->key) {
         //     $keyId = PrintingDetailsCategoryValue::create([
         //         'name' => $request->key
@@ -124,19 +124,19 @@ class PrintingCostController extends Controller
             $total_cost = 0;
             foreach ($request->cost_details as $cost_detail) {
                 if ($cost_detail != Null) {
-                    $total_cost += $cost_detail['subtotal'];
+                    $total_cost += $cost_detail['amount'];
                     VersionCost::create([
                         'cost_category_id'    => $cost_detail['cost_category_id'],
                         'quantity'            => $cost_detail['quantity'],
                         'rate'                => $cost_detail['rate'],
-                        'subtotal'            => $cost_detail['subtotal'],
+                        'amount'            => $cost_detail['amount'],
                         'printing_id'         => $printing->id,
                     ]);
                 }
             }
 
             $total_cost += $request->others;
-            $cost_per_unit = $total_cost/(($request->copy_quantity != 0 || $request->copy_quantity != NULL) ? $request->copy_quantity : 1);
+            $cost_per_unit = $total_cost / (($request->copy_quantity != 0 || $request->copy_quantity != NULL) ? $request->copy_quantity : 1);
             $printing->update([
                 'others_cost' => $request->others,
                 'cost_per_unit' => $cost_per_unit
@@ -168,20 +168,25 @@ class PrintingCostController extends Controller
 
     public function show($id)
     {
-        // return
+        // return 
         $printing_cost = Printing::with([
             'stored_at:id,name',
             'press:id,name',
             'buinding_type',
             'version.production',
             'version_cost.cost_category',
-            'print_details.printing_details_category_value.printing_category_keys:id,name',
+            'print_details.printing_details_category_value.parent',
             'printing_contributors.contributor:id,name',
-            'printing_contributors.contribution:id,name'
+            'printing_contributors.contribution:id,name',
+            // 'version.moderators',
+            'version.moderators:id,author_id,moderator_type,version_id', 
+            'version.moderators.moderators_type:id,name',
+            'version.moderators.author:id,name',
         ])->find($id);
 
-        PrintingResource::withoutWrapping();
+        // return $printing_cost->version->moderators;
 
+        PrintingResource::withoutWrapping();
         return Inertia::render('Printing/Show', [
             'printing_cost' => new PrintingResource($printing_cost),
         ]);
@@ -221,8 +226,8 @@ class PrintingCostController extends Controller
 
     public function update(Request $request, Printing $printingCost)
     {
-        return $request;
-        
+        // return $request;
+
         $printingCost->version_cost()->delete();
         $printingCost->print_details()->delete();
         $printingCost->printing_contributors()->delete();
@@ -269,7 +274,7 @@ class PrintingCostController extends Controller
                     ], [
                         'quantity'            => $cost_detail['quantity'],
                         'rate'                => $cost_detail['rate'],
-                        'subtotal'            => $cost_detail['amount'],
+                        'amount'            => $cost_detail['amount'],
                         'deleted_at' => NULL,
                     ]);
             }
@@ -277,11 +282,11 @@ class PrintingCostController extends Controller
 
         $total_cost += $request->others;
         // return $total_cost;
-            $cost_per_unit = $total_cost/(($request->copy_quantity != 0 || $request->copy_quantity != NULL) ? $request->copy_quantity : 1);
-            $printingCost->update([
-                'others_cost' => $request->others,
-                'cost_per_unit' => $cost_per_unit
-            ]);
+        $cost_per_unit = $total_cost / (($request->copy_quantity != 0 || $request->copy_quantity != NULL) ? $request->copy_quantity : 1);
+        $printingCost->update([
+            'others_cost' => $request->others,
+            'cost_per_unit' => $cost_per_unit
+        ]);
 
         foreach ($request->contributors as $contributor) {
             if ($contributor != Null && $contributor['author_id'] != null && $contributor['moderator_type_id'] != null) {
@@ -297,7 +302,7 @@ class PrintingCostController extends Controller
         }
 
         return redirect()
-            ->route('printing-costs.show', $printingCost->id,)
+            ->route('printing-costs.show', $printingCost->id)
             ->with('status', 'The record has been update successfully.');
     }
 
