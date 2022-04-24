@@ -23,7 +23,7 @@ class CostCategoryController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        CostCategory::create($this->validateData($request));
+        CostCategory::insert($this->validateData($request));
 
         return redirect()
             ->route('version-variables.index')

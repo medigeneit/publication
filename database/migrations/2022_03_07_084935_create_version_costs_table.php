@@ -19,7 +19,7 @@ class CreateVersionCostsTable extends Migration
             $table->bigInteger('printing_id');
             $table->integer('quantity')->nullable();
             $table->float('rate')->nullable();
-            $table->float('subtotal')->nullable();
+            $table->float('amount')->nullable();
             $table->softDeletes();
         });
     }
