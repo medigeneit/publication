@@ -40,9 +40,9 @@
                                         </div>
                                     </div>
                                     <div class="mt-2">
-                                        <nav-link class="bg-green-500 hover:bg-green-600" :href="route('printing-cost-categories',version.id)">
+                                        <a class="p-2 rounded text-white bg-green-500 hover:bg-green-600" :href="route('printing-cost-categories',version.id)" target="_blank">
                                             Add New
-                                        </nav-link>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
