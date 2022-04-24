@@ -165,46 +165,46 @@
                                             </thead>
                                             <tbody>
                                                 <tr v-for="(costDetail, index) in form.cost_details" :key="index">
-                                                    <td class="p-2 text-xs">{{ costDetail.cost_category_name }}</td>
-                                                    <td class="">
+                                                    <td class="p-2 text-xs border-b">{{ costDetail.cost_category_name }}</td>
+                                                    <td class="border-b">
                                                         <Input  type="number"
                                                         class="mt-1 py-1 block w-full"
                                                         v-model="costDetail.quantity"
                                                         @change="checkSubtotal(index)"
                                                         />
                                                     </td>
-                                                    <td class="">
+                                                    <td class="border-b">
                                                         <Input  type="number"
                                                         class="mt-1 py-1 block w-full"
                                                         v-model="costDetail.rate"
                                                         @change="checkSubtotal(index)"
                                                         />
                                                     </td>
-                                                    <td class="">
+                                                    <td class="border-b">
                                                         <Input  type="number"
                                                         class="mt-1 py-1 block w-full"
                                                         v-model="costDetail.amount"
-                                                        @change="checkSubtotal(index)"
+                                                        @change="checkTotal"
                                                         />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>Others  </td>
+                                                    <td class="text-right">Others : </td>
                                                     <td>
                                                         <Input  type="number"
                                                         class="mt-1 py-1 block w-full"
                                                         :value="form.others"
                                                         v-model="form.others"
-                                                        @change="checkOthers(index)"  
+                                                        @change="checkTotal"  
                                                         />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>Subtotal</td>
+                                                    <td class="text-right">Total : </td>
                                                     <td>
                                                         <Input  type="number"
                                                         class="mt-1 py-1 block w-full"
@@ -398,23 +398,10 @@ export default {
                 moduleAction: this.moduleAction
             }),
             storigngAtVisibility : false ,
-            value: null,
-            // options: [
-            // 'Batman',
-            // 'Robin',
-            // 'Joker',
-            // ],
+            value: '',
         };
     },
     created() {
-
-        // for(let index in this.data.printing.id) {
-
-        //     console.log('printings', index);
-
-        //     console.log('printings', index);
-        //     this.form.printing[index] = this.data.printing[index] ? this.data.printing[index] :'';
-        // }
 
         Object.entries(this.data.costCategories).forEach((cost_category) => {
 
@@ -428,7 +415,7 @@ export default {
                     cost_category_name: cost_category[1],
                     quantity: versionCostData ? versionCostData.quantity : '',
                     rate: versionCostData ? versionCostData.rate : '',
-                    subtotal: versionCostData ? versionCostData.subtotal : '',
+                    amount: versionCostData ? versionCostData.amount : '',
                 });
             }
             if(!this.data.printing.version_cost){
@@ -437,7 +424,7 @@ export default {
                             cost_category_name: cost_category[1],
                             quantity: '',
                             rate: '',
-                            subtotal: '',
+                            amount: '',
                         });
             }
             
@@ -464,29 +451,12 @@ export default {
                         category_value_id: '',
                     });
             }
-
-            
         });
 
-
-        // for(let index in this.data.selectedModerators) {
-        //     console.log(this.data.selectedModerators[index]);
-        //     this.form.contributors[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
-        // }
-
-
-        //  for(let index in this.data.printing.version_cost) {
-        //     console.log(this.data.printing.version_cost[index]);
-        //     this.form.cost_details[index] = this.data.printing.version_cost[index] ? this.data.printing.version_cost[index] : '';
-        // }
-
          for(let index in this.data.printing.printing_details) {
-            // console.log(this.data.printing.printing_details[index])
             this.form.cateroyValue[index] = this.data.printing.printing_details[index] ? this.data.printing.printing_details[index] : '';
         }
-
          for(let index in this.data.printing.printing_contributors) {
-            // console.log(this.data.printing.printing_contributors[index])
             this.form.contributors[index] = this.data.printing.printing_contributors[index] ? this.data.printing.printing_contributors[index] : '';
         }
 
@@ -495,26 +465,25 @@ export default {
     methods: {
 
         checkSubtotal(index) {
-            let data = this.form.cost_details[index];
+            let row = this.form.cost_details[index];
 
-            console.log(typeof(data.amount));
-
-            if(data.quantity && data.rate) {
-                data.amount = data.quantity * data.rate;
-                this.form.sum += data.amount
-            }
-
-            if(!data.quantity && !data.rate){
-                this.form.sum += Number(data.amount)
+            if(row.rate && row.quantity) {
+                row.amount = row.rate * row.quantity;
+            
+                this.checkTotal();
             }
         },
 
-        checkOthers(index){
-            let other = this.form.others
-            let total = this.form.sum
+        checkTotal() {
+            let sum = 0;
 
-            console.log(typeof(other))
-            console.log(this.form.sum = total + Number(other))
+            Object.values(this.form.cost_details).forEach((cost) => {
+                sum += parseInt(cost.amount) || 0;
+            })
+
+            sum += parseInt(this.form.others) || 0;
+
+            this.form.sum = sum;
         },
 
         test() {

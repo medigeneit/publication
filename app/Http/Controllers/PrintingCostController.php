@@ -80,7 +80,7 @@ class PrintingCostController extends Controller
 
     public function store(Request $request)
     {
-
+ 
         // if ($request->key) {
         //     $keyId = PrintingDetailsCategoryValue::create([
         //         'name' => $request->key
@@ -221,7 +221,8 @@ class PrintingCostController extends Controller
 
     public function update(Request $request, Printing $printingCost)
     {
-        // return $request;
+        return $request;
+        
         $printingCost->version_cost()->delete();
         $printingCost->print_details()->delete();
         $printingCost->printing_contributors()->delete();
