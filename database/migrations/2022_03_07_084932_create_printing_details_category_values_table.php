@@ -16,7 +16,7 @@ class CreatePrintingDetailsCategoryValuesTable extends Migration
         Schema::create('printing_details_category_values', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->smallInteger('printing_details_category_key_id');
+            $table->smallInteger('printing_details_category_key_id')->nullable();
             $table->boolean('active')->default(1);
             $table->softDeletes();
 
