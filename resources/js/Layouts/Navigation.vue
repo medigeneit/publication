@@ -18,7 +18,7 @@
     <nav-link-wrapper
         title="Production Management"
         :active="route().current(
-            '(publishers|productions|versions|moderator-types|contributors|moderators|categories|price-categories|products|packages).*'
+            '(publishers|productions|versions|moderator-types|contributors|moderators|categories|price-categories|products|packages|presses|version-variables).*'
             )"
     >
         <nav-link-wrapper
