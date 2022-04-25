@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\StorageResource;
 use App\Models\Outlet;
+use App\Models\Press;
 use App\Models\PriceCategory;
 use App\Models\Product;
 use App\Models\Storage;
@@ -41,11 +42,12 @@ class StorageController extends Controller
             ->search(request()->search)
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
-            // return $storages ->get();
+        // return $storages ->get();
 
         return Inertia::render('Storage/Index', [
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'outlets' => Outlet::pluck('name', 'id'),
+            'presses' => Press::pluck('name', 'id'),
             'filters' => $this->getFilterProperty(),
         ]);
     }
@@ -73,14 +75,16 @@ class StorageController extends Controller
 
     public function store(Request $request)
     {
-        $data =$this->validateData($request);
-        $storage = Storage::updateOrCreate( [
-            'user_id' => Auth::id(),
-            'product_id' => $data['product_id'],
-        ],
-        [
-            'product_id' => $data['product_id'],
-        ]);
+        $data = $this->validateData($request);
+        $storage = Storage::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'product_id' => $data['product_id'],
+            ],
+            [
+                'product_id' => $data['product_id'],
+            ]
+        );
 
         return redirect()
             ->route('storages.show', $storage->id)
@@ -173,7 +177,4 @@ class StorageController extends Controller
     {
         return $request;
     }
-
-
-
 }

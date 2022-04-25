@@ -28,9 +28,9 @@
                     </div>
                     <div class="fixed inset-0 hidden z-50" id="circulationWrapper">
                         <div class="relative w-full h-full flex justify-center items-center">
-                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                            <div class="relative p-2 w-full max-w-xs bg-white rounded border shadow z-50">
                                 <div class="text-lg font-bold text-center">Circulation</div>
-                                <div class="flex justify-center">
+                                <div class="flex justify-center items-center gap-2 p-2">
                                     <div>
                                         <label for=""> In </label>
                                         <input type="radio" name="inOut" id="" class="mr-2" value="1" @change="changeValue($event, storage.outletId, storage.productId)"  required>
@@ -41,23 +41,44 @@
                                     </div>
                                 </div>
                                 <hr class="my-1">
+
+                                <div class="flex justify-center items-center gap-2 p-2" v-if="outStroage">
+                                    <div>
+                                        <label for=""> Press </label>
+                                        <input type="radio" name="fromstorage" id="" class="mr-2" value="1" @change="changePress($event, presses.pressId)"  required>
+                                    </div>
+                                    <div>
+                                        <label for=""> Outlet </label>
+                                        <input type="radio" name="fromstorage" id="" value="2" @change="changePress($event,storage.outletId)" required>
+                                    </div>
+                                </div>
                                 <div class="p-3">
                                     <div class="text-green-600">{{ message }}</div>
                                     <form @submit.prevent="submit" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
-                                        <div class="mb-4">
+                                        <div class="mb-2 text-left" v-if="!pressDisabled">
+                                            <Label value="From" />
                                             <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" :disabled="fromDisabled" required >
-                                                <option value="">-- Select From--</option>
-                                                <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
+                                                    <option value="">-- Select From--</option>
+                                                    <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
-                                        <div class="mb-4">
+                                        
+                                        <div class="mb-2 text-left" v-if="pressDisabled">
+                                            <Label value="From"/>
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" :disabled="fromDisabled" required >
+                                                <option value="">-- Select From--</option>
+                                                <option :value="pressesId" v-for="(pressesName, pressesId) in presses" :key="pressesId">{{ pressesName }}</option>
+                                            </Select>
+                                        </div>
+                                        <div class="mb-2 text-left">
+                                            <Label value="To" />
                                             <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" :disabled="toDisabled" required>
                                                 <option value="">-- Select To --</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
-
+                                        
                                         <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
 
                                         <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
@@ -85,6 +106,7 @@ import DataTable from "@/Components/DataTable.vue";
 import ActionButtonShow from "@/Components/ActionButtonShow.vue";
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import AddNewButton from '@/Components/AddNewButton.vue';
+import Label from '@/Components/Label.vue';
 import Input from '@/Components/Input.vue';
 import Button from '@/Components/Button.vue';
 import Select from '@/Components/Select.vue';
@@ -101,10 +123,12 @@ export default {
         ActionButtonEdit,
         AddNewButton,
         Select,
+        Label
     },
     props: {
         storages: { type: Object, default: {} },
         outlets: { type: Object, default: {} },
+        presses: { type: Object, default: {} },
         filters: { type: Object, default: {} },
     },
     data() {
@@ -127,6 +151,8 @@ export default {
             }),
             fromDisabled: false,
             toDisabled: false,
+            pressDisabled: false,
+            outStroage:false,
             modalEvent: '',
             message : ''
         }
@@ -145,6 +171,7 @@ export default {
                 this.form.to = id;
                 this.toDisabled = true
                 this.fromDisabled = false
+                this.outStroage = true
             }
             else {
                 this.form.to = '';
@@ -152,6 +179,25 @@ export default {
                 this.form.from = id;
                 this.fromDisabled = true
                 this.toDisabled = false
+                this.outStroage = false
+                this.pressDisabled = false
+
+            }
+        },
+
+        changePress(event, id) {
+            let value = event.target.value;
+            console.log(value);
+            this.form.type = value;
+            console.log(this.form.type = value)
+            if (value == 1) {
+                this.form.from = '';
+                this.fromDisabled = false
+                this.pressDisabled = true
+            }else{
+                this.form.from = '';
+                this.pressDisabled = false
+                this.fromDisabled = false
 
             }
         },
@@ -183,6 +229,8 @@ export default {
             this.form.product_id= ''
             this.fromDisabled = false;
             this.toDisabled = false;
+            this.pressDisabled = false;
+            this.ouletDisabled = false;
         }
     }
 };

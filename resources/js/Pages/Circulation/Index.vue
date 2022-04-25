@@ -108,6 +108,7 @@ export default {
         modalHandler(event, id) {
             this.modalEvent = event
             event.target.nextElementSibling .classList.toggle('hidden');
+            console.log(event.target.nextElementSibling .classList.toggle('hidden'))
         },
 
         closeModal(event) {
