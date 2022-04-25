@@ -26,7 +26,6 @@ class CreatePrintingTable extends Migration
             $table->smallInteger('plate_stored_at')->nullable();
             $table->smallInteger('binding_type_id')->nullable();
             $table->dateTime('order_date')->nullable();
-            $table->boolean('order_cancel')->default(0);
             $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
@@ -40,6 +39,6 @@ class CreatePrintingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('printing');
+        Schema::dropIfExists('printings');
     }
 }
