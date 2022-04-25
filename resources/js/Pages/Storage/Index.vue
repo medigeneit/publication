@@ -26,7 +26,7 @@
                     <div class="flex justify-center items-center text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" @click="modalHandler">
                         Circulation
                     </div>
-                    <div class="fixed inset-0 hidden z-50" id="circulationWrapper">
+                    <div class="fixed inset-0 hidden z-50 circulationWrapper">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full max-w-xs bg-white rounded border shadow z-50">
                                 <div class="text-lg font-bold text-center">Circulation</div>
@@ -213,11 +213,13 @@ export default {
         },
         submit() {
             this.message = "Your circulation is complete"
-            this.form.post(this.route('circulations.store'));
             // bangla code 
+            this.form.post(this.route('circulations.store'));
             setTimeout(()=> {
-                document.getElementById('circulationWrapper').classList.add('hidden');
-            }, 2000)
+                document.querySelectorAll('.circulationWrapper').forEach(element => {
+                    element.classList.add('hidden');
+                });
+            },2000)
         },
 
         emptyValue() {

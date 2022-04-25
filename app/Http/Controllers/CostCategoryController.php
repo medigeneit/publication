@@ -37,6 +37,7 @@ class CostCategoryController extends Controller
 
     public function edit(CostCategory $costCategory)
     {
+        // return 123;
         return Inertia::render('VersionVariable/CostCategoryEdit', [
             'costCategory' => $costCategory,
         ]);
