@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCirculationsTable extends Migration
+class CreateRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateCirculationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('circulations', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('storage_id');
-            $table->morphs('destinationable');
-            $table->integer('quantity')->comment('[positive => in-stock,negetive => out-stock]');
-            $table->morphs('requestable');
+            $table->integer('quantity');
+            $table->integer('outlet_id');
+            $table->date('expected_date');
+            $table->date('user_id');
             $table->unsignedBigInteger('user_id');
-            $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
@@ -33,6 +31,6 @@ class CreateCirculationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('circulations');
+        Schema::dropIfExists('requests');
     }
 }
