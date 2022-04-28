@@ -62,8 +62,11 @@ class PrintingCostController extends Controller
                 'page_amount' => $request->page_amount,
                 'order_date' => $request->order_date,
                 'plate_stored_at' => $request->plate_stored_at,
-                'alert_quantity'    => $request->alert_quantity,
+
             ]);
+            if ($printing && $request->alert_quantity){
+                Version::where('id', $request->version_id)->update(['alert_quantity'    => $request->alert_quantity,]);
+            }
 
 
             $category_value_ids = collect($request->printing_details)->pluck('category_value_id');
@@ -119,7 +122,7 @@ class PrintingCostController extends Controller
 
     public function show($id)
     {
-        // return 
+        // return
         $printing_cost = Printing::with([
             'stored_at:id,name',
             'press:id,name',
@@ -196,6 +199,9 @@ class PrintingCostController extends Controller
                 'binding_type_id'   => $request->binding_type_id,
                 'alert_quantity'    => $request->alert_quantity,
             ]);
+            if ($printingCost && $request->alert_quantity){
+                Version::where('id',$printingCost->version_id)->update(['alert_quantity'    => $request->alert_quantity,]);
+            }
         }
 
         // return  collect($request->printing_details)->pluck('category_value_id');

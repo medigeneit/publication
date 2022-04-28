@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CirculationResource;
 use App\Models\Circulation;
 use App\Models\Outlet;
+use App\Models\Press;
 use App\Models\Storage;
 use App\Models\Version;
 use App\Models\Volume;
@@ -34,7 +35,7 @@ class CirculationController extends Controller
             }])
             ->filter()
             ->dateFilter()
-            ->when(request()->search, function($query) {
+            ->when(request()->search, function ($query) {
                 $query->search(request()->search);
             })
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
@@ -58,6 +59,7 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
+        return $request;
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {
             $redirect_location = 'products.index';
@@ -101,14 +103,21 @@ class CirculationController extends Controller
             $updated = $storage->save();
 
             if ($updated) {
-                $outlet = Outlet::findOrFail($destination);
-
                 $data = [
                     'storage_id' => $storage->id,
                     'quantity' => $quantity,
                 ];
+                if (Circulation::STORAGE_TYPE[$request->type] == 'Press'){
+                    $press = Press::findOrFail($destination);
+                    $press->circulations()->create($data);
+                    
+                }
+                elseif (Circulation::STORAGE_TYPE[$request->type] == 'Outlet'){
+                    $outlet = Outlet::findOrFail($destination);
+                    $outlet->circulations()->create($data);
+                }
 
-                $outlet->circulations()->create($data);
+
             }
         } else {
             $data = [

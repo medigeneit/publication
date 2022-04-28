@@ -132,7 +132,7 @@ class VersionVariableControllor extends Controller
                 'required',
                 'string'
             ],
-            'printing_details_category_key_id' => ['Nu'],
+            'printing_details_category_key_id' => [],
             'action' => []
         ]);
     }
