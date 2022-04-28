@@ -30,10 +30,10 @@ class StorageController extends Controller
             ->with(['product.productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Volume::class => function ($query) {
-                        $query->with('version.production');
+                        $query->with('version.production','version.printings','version.products.storages.circulations');
                     },
                     Version::class => function ($query) {
-                        $query->with('volumes', 'production');
+                        $query->with('volumes', 'production','printings','products.storages.circulations');
                     },
                 ]);
             }, 'outlet', 'user'])
@@ -43,6 +43,7 @@ class StorageController extends Controller
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         // return $storages ->get();
+        // return StorageResource::collection($storages ->get());
 
         return Inertia::render('Storage/Index', [
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -78,11 +79,12 @@ class StorageController extends Controller
         $data = $this->validateData($request);
         $storage = Storage::updateOrCreate(
             [
-                'user_id' => Auth::id(),
                 'product_id' => $data['product_id'],
+                'outlet_id' => $data['outlet_id'],
             ],
             [
-                'product_id' => $data['product_id'],
+                'user_id' => Auth::id(),
+                'alert_quantity' => $data['alert_quantity'],
             ]
         );
 

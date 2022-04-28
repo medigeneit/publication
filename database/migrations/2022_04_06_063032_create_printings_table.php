@@ -19,7 +19,6 @@ class CreatePrintingTable extends Migration
             $table->smallInteger('press_id');
             $table->integer('copy_quantity');
             $table->integer('received_quantity')->default(0);
-            $table->integer('alert_quantity')->default(0);
             $table->smallInteger('page_amount');
             $table->double('others_cost')->default(0);
             $table->double('cost_per_unit')->nullable();

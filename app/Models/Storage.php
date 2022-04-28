@@ -111,4 +111,10 @@ class Storage extends Model
         });
     }
 
+    public function circulations()
+    {
+        return $this->hasMany(Circulation::class);
+    }
+
+
 }

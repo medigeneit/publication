@@ -13,4 +13,9 @@ class Press extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+
+    public function circulations()
+    {
+        return $this->morphMany(Circulation::class, 'destinationable');
+    }
 }

@@ -19,6 +19,10 @@ class Circulation extends Model
         1   => "In",
         2   => "Out"
     ];
+    const STORAGE_TYPE = [
+        1   => "Press",
+        2   => "Outlet"
+    ];
 
     public function scopeFilter($query)
     {
