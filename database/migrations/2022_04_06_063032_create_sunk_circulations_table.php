@@ -18,6 +18,7 @@ class CreateSunkCirculationsTable extends Migration
             $table->integer('quantity');
             $table->string('details')->nullable();
             $table->bigInteger('cotculation_id');
+            $table->unsignedBigInteger('user_id');
             $table->softDeletes();
         });
     }
