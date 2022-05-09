@@ -34,7 +34,7 @@ class PackageController extends Controller
             'filters' => $this->getFilterProperty(),
         ]);
     }
-
+ 
     public function create()
     {
         return Inertia::render('Package/Create', [
