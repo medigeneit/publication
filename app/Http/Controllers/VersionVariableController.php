@@ -18,7 +18,7 @@ use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class VersionVariableControllor extends Controller
+class VersionVariableController extends Controller
 {
     use DateFilter;
 
