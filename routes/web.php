@@ -20,7 +20,7 @@ use App\Http\Controllers\PressController;
 use App\Http\Controllers\PriceCategoryController;
 use App\Http\Controllers\PrintingCostController;
 use App\Http\Controllers\PrintingDetailsCategoryValueController;
-use App\Http\Controllers\PrintingDetaislController;
+use App\Http\Controllers\PrintingDetailsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\PublisherController;
@@ -28,7 +28,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VersionController;
-use App\Http\Controllers\VersionVariableControllor;
+use App\Http\Controllers\VersionVariableController;
 use App\Models\BindingType;
 use App\Models\PrintingDetailsCategoryValue;
 use Illuminate\Foundation\Application;
@@ -73,7 +73,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'publishers'                => PublisherController::class,
         'productions'               => ProductionController::class,
         'presses'                   => PressController::class,
-        'version-variables'         => VersionVariableControllor::class,
+        'version-variables'         => VersionVariableController::class,
         'printing-detail-categories' => PrintingDetailsCategoryValueController::class,
         'cost-categories'           => CostCategoryController::class,
         'binding-types'             => BindingTypeController::class,
