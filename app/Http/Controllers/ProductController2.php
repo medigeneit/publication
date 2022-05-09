@@ -25,11 +25,13 @@ class ProductController extends Controller
     {
 
         $products = Product::query()
-            ->with('categories', 'publisher', 'prices', 'price_categories')
+            ->with('categories', 'publisher', 'prices', 'price_categories', 'storages')
             ->filter()
             ->dateFilter()
             ->search(['id', 'name'], ['publisher:name'])
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
+
+        return $products;
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -97,7 +99,7 @@ class ProductController extends Controller
             "data" => [
                 'product'                   => $product,
                 'productable'               => $product->productable,
-                'volume'                    => Volume::find($product->productable->id)->with('version','version.production')->first(),
+                'volume'                    => Volume::find($product->productable->id)->with('version', 'version.production')->first(),
                 'productCategories'         => $product->categories,
                 'publisherList'             => Publisher::active()->pluck('name', 'id'),
                 'productList'               => Product::where('id', '!=', $product->id)->pluck('productable_type', 'id'),
@@ -114,9 +116,9 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $product->update($this->validateData($request, $product->id));
-        
+
         if (is_array($request->amounts)) {
-            
+
             foreach ($request->amounts as $index => $amount) {
                 // return $index;
                 if ($amount == '') {

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRequestsTable extends Migration
+class CreateProductRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('product_requests', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
-            $table->integer('outlet_id');
+            $table->unsignedBigInteger('outlet_id')->nullable();
             $table->date('expected_date');
-            $table->date('user_id');
-            $table->unsignedBigInteger('user_id');
+            $table->integer('user_id')->nullable();
             $table->softDeletes();
         });
     }
@@ -31,6 +30,6 @@ class CreateRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('requests');
+        Schema::dropIfExists('product_requests');
     }
 }

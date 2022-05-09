@@ -120,9 +120,9 @@
                                 <div class="text-lg font-bold text-center">Storage</div>
                                 <hr class="my-1">
                                 <div class="p-3">
-                                    <div class="py-1.5 flex gap-2" v-for="(storage, index) in product.storages" :key="index">
+                                    <div class="py-1.5 flex gap-4" v-for="(storage, index) in product.storages" :key="index">
                                         <!-- {{ moderator.moderators_type.name }} :   {{ moderator.author.name }} -->
-                                        {{ storage.outlet.name }} : {{ storage.quantity || 0 }}
+                                        {{ storage.outlet.name }} : {{ storage.quantity || 0 }} pc
                                     </div>
                                 </div>
                                 <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
@@ -144,39 +144,34 @@
                                 <div class="flex justify-center">
                                     <div>
                                         <label for=""> In </label>
-                                        <input type="radio" name="inOut" class="mr-2 checkBox" @click="form.type = 1;changeValue(product.id, product.storage_outlets);" value="1" required>
+                                        <input type="radio" name="inOut" class="mr-2 checkBox" @click="form.type = 1; changeValue(product.id, product.storage_outlets);" value="1" required>
                                     </div>
                                     <div>
                                         <label for=""> Out </label>
-                                        <input type="radio" name="inOut" class="checkBox" value="2"  @click="form.type = 2;changeValue(product.id, product.storage_outlets, product.storages);" required>
+                                        <input type="radio" name="inOut" class="checkBox" value="2"  @click="form.type = 2; changeValue(product.id, product.storage_outlets, product.storages);" required>
                                     </div>
                                 </div>
                                 <hr class="my-1">
                                 <div class="p-3">
-                                    <div class="text-green-800 text-sm font-bold">{{ `Total Quantity : ${product.total_storage}` }}</div>
-                                    <form @submit.prevent="submit" class="">
-                                        <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" @change="showMessage(product.storages)" required>
-                                                <option value="">--From where--</option>
-                                                <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId" :class="{'hidden' : !(product.storage_outlets.includes(parseInt(outletsId)))}">
-                                                    {{ outletsName }}
-                                                </option>
+                                    <div class="text-green-600">{{ message }}</div>
+                                    <form @submit.prevent="submit('Circulation')" class="">
+                                        <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
+                                        <div class="mb-2 text-left">
+                                            <Label value="From" />
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" :disabled="fromDisabled" required >
+                                                    <option value="">-- Select From--</option>
+                                                    <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
-                                            <div class="text-green-700">{{ message }}</div>
                                         </div>
-                                        <div class="mb-4">
-                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" required @change="changeValue(product.id, product.storage_outlets)">
-                                                <option value="">{{ formToLabel }}</option>
+                                        <div class="mb-2 text-left">
+                                            <Label value="To" />
+                                            <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" :disabled="toDisabled" required>
+                                                <option value="">-- Select To --</option>
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
-
-                                        <div class="mb-4">
-                                            <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
-                                        </div>
-                                        <div class="mb-4">
-                                            <Input id="type" type="number" class="mt-1 block w-full" placeholder="Alert Quantity" v-model="form.alert_quantity" v-if="alertQuantity"/>
-                                        </div>
+                                        
+                                        <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
 
                                         <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
                                             Submit
@@ -191,6 +186,80 @@
                         </div>
                     </div>
                 </td>
+
+                <td class="text-center">
+                    <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" v-if="product.storages.length" @click="modalHandler">
+                        Request Product
+                    </div>
+                    <div class="fixed inset-0 z-50" id="circulationWrapper" :class="{hidden : modalShow}">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-lg bg-white rounded border shadow z-50">
+                                <div class="p-3">
+                                    <div v-for="(storage, index) in product.storages" :key="index" class="text-lg">
+                                        <div v-for="productRequest in storage.product_requests" :key="productRequest.id" class="flex justify-around items-center">
+                                            <div class="flex flex-col bg-gray-200 p-4 text-left rounded mt-2">
+                                                <span>Requeste Quantity : {{ productRequest.request_quantity}} </span>
+                                                <span>Expected Date : {{ productRequest.expected_date}} </span>
+                                                <span>Requeste By : {{ productRequest.storage_id}} </span>
+                                                <div class="mx-auto mt-2">
+                                                    <div class="flex items-center rounded mt-2" >
+                                                        <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" v-if="product.storages.length" @click="modalHandler">
+                                                            SEND    
+                                                        </div>
+                                                        <div class="fixed inset-0 z-50" id="circulationWrapper" :class="{hidden : modalShow}">
+                                                            <div class="relative w-full h-full flex justify-center items-center">
+                                                                <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                                                    <div class="p-3 text-center">
+                                                                        <div class="text-green-600">{{ message }}</div>
+                                                                        <form @submit.prevent="submit('Circulation')" class="">
+                                                                            <div class="mb-2 text-left">
+                                                                                <Label value="From" />
+                                                                                <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" :disabled="fromDisabled" required >
+                                                                                        <option value="">-- Select From--</option>
+                                                                                        <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
+                                                                                </Select>
+                                                                            </div>
+                                                                            <div class="mb-2 text-left">
+                                                                                <Label value="To" />
+                                                                                <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" :disabled="toDisabled" required>
+                                                                                    <option value="">-- Select To --</option>
+                                                                                    <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
+                                                                                </Select>
+                                                                            </div>
+                                                                            
+                                                                            <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
+
+                                                                            <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
+                                                                                Submit
+                                                                            </Button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                                                                </div>
+                                                                <div class="absolute inset-0 bg-gray-500 bg-opacity-30 z-40">
+                                                                    <div class="w-full h-full" @click="closeModal"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                 <action-button-show :href="route('product-requests.show', productRequest.id)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="absolute right-2 top-0 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-30 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+
                 <td class="py-3 px-2 text-center">
                     <div v-if="product.packageProductCount" @click="modalHandler" class="text-center border bg-yellow-600 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ product.packageProductCount }} products
@@ -214,8 +283,8 @@
                         </div>
                     </div>
                 </td>
-                <td class="py-3 px-2 text-left">{{ product.publisherName ?? '' }}</td>
-                <td class="py-3 px-2 text-right">{{ product.productionCost }}</td>
+                <!-- <td class="py-3 px-2 text-left">{{ product.publisherName ?? '' }}</td>
+                <td class="py-3 px-2 text-right">{{ product.productionCost }}</td> -->
                 <td class="py-3 px-2 text-right">
                         {{ product.alertQuantity }}
                 </td>
@@ -230,6 +299,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import DataTable from "@/Components/DataTable.vue";
 import ActionButtonShow from "@/Components/ActionButtonShow.vue";
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
+import NavLink from "@/Components/NavLink.vue";
 import AddNewButton from '@/Components/AddNewButton.vue';
 import Input from '@/Components/Input.vue';
 import Button from '@/Components/Button.vue';
@@ -248,7 +318,8 @@ export default {
         Input,
         Button,
         Select,
-        Label
+        Label,
+        NavLink
     },
     props: {
         products: { type: Object, default: {} },
@@ -270,8 +341,9 @@ export default {
                     {title: 'Moderators', align: 'right', sortable: 'moderator_type'},
                     {title: 'Storages', align: 'right'},
                     {title: 'Circulation', align: 'right'},
-                    {title: 'Package', align: 'center'},
-                    {title: 'Publisher Name', align: 'left', sortable:'publisher.name'},
+                    {title: 'Requested Product', align: 'right'},
+                    // {title: 'Package', align: 'center'},
+                    // {title: 'Publisher Name', align: 'left', sortable:'publisher.name'},
                     {title: 'Production Cost', align: 'right', sortable:'production_cost'},
                     {title: 'Alert', align: 'right', sortable: 'alert_quantity'},
                 ],
@@ -284,6 +356,7 @@ export default {
                 product_id: '',
                 alert_quantity: ''
             }),
+            status: '',
             modalShow: true,
             alertQuantity : false,
             message : '',
@@ -358,7 +431,7 @@ export default {
             this.fromDisabled = false;
             this.toDisabled = false;
             // console.log(this.form);
-        }
+        },
     }
 };
 </script>

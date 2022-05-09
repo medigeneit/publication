@@ -15,6 +15,41 @@
                 <td class="py-3 px-2 text-left">{{ storage.productName }}</td>
                 <td class="py-3 px-2 text-left">{{ storage.quantity }}</td>
                 <td class="py-3 px-2 text-left">{{ storage.alert_quantity }}</td>
+                <!-- {{ storage.id }} -->
+                <td class="py-3 px-2 text-left">
+                    <div class="flex justify-center items-center text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" @click="modalHandler($event); form.storage_id = storage.id">
+                        Request
+                    </div>
+                    <div class="fixed inset-0 hidden z-50 circulationWrapper">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Product Request</div>
+                                <div class="p-3">
+                                    <div class="text-green-600">{{ message }}</div>
+                                    <form @submit.prevent="submit('Request')" class="">
+                                        <div class="mb-2 text-left">
+                                            <Label value="Quantity" />
+                                           <Input type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.request_quantity" required/>
+                                        </div>
+
+                                        <div class="mb-2 text-left">
+                                            <Label value="Expected Date" />
+                                           <Input type="date" class="mt-1 block w-full" placeholder="Quantity" v-model="form.expected_date" required/>
+                                        </div>
+                                        
+                                        <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
+                                            Submit
+                                        </Button>
+                                    </form>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('storages.show', storage.id)" />
@@ -54,7 +89,7 @@
                                 </div>
                                 <div class="p-3">
                                     <div class="text-green-600">{{ message }}</div>
-                                    <form @submit.prevent="submit" class="">
+                                    <form @submit.prevent="submit('Circulation')" class="">
                                         <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-2 text-left" v-if="!pressDisabled">
                                             <Label value="From" />
@@ -139,6 +174,7 @@ export default {
                 {title: 'Product Name', align : 'left', sortable : 'product.name'},
                 {title: 'Quantity', align : 'left', sortable : 'quantity'},
                 {title: 'Alert Quantity', align : 'left', sortable : 'alert_quantity'},
+                {title: 'Product Request', align : 'left'},
                 {title: 'Action', align : 'center'},
                 {title: 'Cerculation', align : 'center'},
             ],
@@ -147,8 +183,15 @@ export default {
                 to: '',
                 quantity: '',
                 type: '',
-                product_id: ''
+                product_id: '',
+                storage_id: '',
+                request_quantity: '',
+                expected_date:'',
             }),
+
+            // outlet_id: this.storages.data[0].outletId,
+    
+
             fromDisabled: false,
             toDisabled: false,
             pressDisabled: false,
@@ -157,6 +200,13 @@ export default {
             message : ''
         }
     },
+
+    // created(){
+    //     Object.entries(this.storages.data).filter((outletId) => {
+    //         console.log( this.outlet_id = outletId[1].outletName)
+    //     })
+    // },
+
     methods : {
         changeValue(event, id, productId) {
             console.log(productId);
@@ -211,15 +261,32 @@ export default {
             this.emptyValue();
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
-        submit() {
-            this.message = "Your circulation is complete"
+        submit(type) {
+            console.log(type);
+            if(type === 'Circulation')
+            {
+                this.message = "Your circulation is complete"
             // bangla code 
-            this.form.post(this.route('circulations.store'));
-            setTimeout(()=> {
+                this.form.post(this.route('circulations.store'));
+                setTimeout(()=> {
+                    document.querySelectorAll('.circulationWrapper').forEach(element => {
+                        element.classList.add('hidden');
+                    });
+                },2000)
+                
+            }
+
+            if(type === 'Request')
+            {
+                this.form.post(this.route('product-requests.store'));
+                setTimeout(()=> {
                 document.querySelectorAll('.circulationWrapper').forEach(element => {
-                    element.classList.add('hidden');
-                });
-            },2000)
+                        element.classList.add('hidden');
+                    });
+                },2000)
+            }
+
+        
         },
 
         emptyValue() {

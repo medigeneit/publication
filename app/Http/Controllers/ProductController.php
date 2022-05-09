@@ -47,9 +47,10 @@ class ProductController extends Controller
 
         $price_categories = PriceCategory::pluck('name', 'id');
         ProductResource::$price_categories = $price_categories;
+
         $products = Product::query()
             // ->with('categories', 'publisher', 'prices', 'price_categories')
-            ->with(['categories',  'prices', 'storages.outlet', 'productable' => function (MorphTo $morphTo) {
+            ->with(['categories',  'prices', 'storages.outlet', 'storages.productRequests', 'productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Volume::class => function ($query) {
                         $query->with([
@@ -84,7 +85,7 @@ class ProductController extends Controller
         // $products =  $products->where('id',10)->first()->storages->pluck('quantity')->sum();
         // $instance =  $products[10];
         // $moderators = $instance->productable_type == Volume::class ? ($instance->productable->version->moderators) :  ($instance->productable_type == Version::class ? $instance->productable->moderators : []);
-        // return $products;
+        // return $products->get();
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -259,12 +260,12 @@ class ProductController extends Controller
         return [
             'type' => Product::getTypes(),
             'active' => Product::getActiveProperties(),
-            'moderator_type' => ModeratorType::pluck('name','id'),
+            'moderator_type' => ModeratorType::pluck('name', 'id'),
             'author' => Author::query()
                 // ->when(request()->moderator_type,function($query){
                 //     $query->where('moderator_type',request()->moderator_type);
                 // })
-                ->pluck('name','id'),
+                ->pluck('name', 'id'),
             'category' => Category::pluck('name', 'id'),
         ];
     }
