@@ -95,7 +95,6 @@ class CirculationController extends Controller
         } else {
             $updated_quantity = $storage->quantity + $quantity;
         }
-        // return [$storage, $updated_quantity];
 
         if ($updated_quantity >= 0) {
             $storage->quantity = $updated_quantity;
