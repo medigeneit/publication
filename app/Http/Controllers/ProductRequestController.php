@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductRequestResource;
+use App\Models\Circulation;
 use App\Models\ProductRequest;
 use App\Traits\DateFilter;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -55,9 +56,9 @@ class ProductRequestController extends Controller
 
     public function show(ProductRequest $productRequest)
     {
-        // return $productRequest;
+        // return 
         $productRequestShow = ProductRequest::query()
-            ->with(['storage.outlet', 'circulations.storage.outlet', 'circulations.destinationable', 'circulations.storage.product.productable' => function (MorphTo $morphTo) {
+            ->with(['storage.outlet', 'storage.user:id,name', 'circulations.storage.outlet', 'circulations.destinationable', 'circulations.storage.product.productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Volume::class => function ($query) {
                         $query->with('version.production');
@@ -65,9 +66,14 @@ class ProductRequestController extends Controller
                     Version::class => function ($query) {
                         $query->with('volumes', 'production');
                     },
+                    Circulation::class => function ($query, $productRequest) {
+                        $query->where('requestable_id', $productRequest->id);
+                    }
                 ]);
             }])
             ->find($productRequest->id);
+
+        // return  $productRequestShow->;
 
         ProductRequestResource::withoutWrapping();
 

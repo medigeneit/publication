@@ -196,14 +196,15 @@
                             <div class="relative p-2 w-full mx-auto max-w-lg bg-white rounded border shadow z-50">
                                 <div class="p-3">
                                     <div v-for="(storage, index) in product.storages" :key="index" class="text-lg">
-                                        <div v-for="productRequest in storage.product_requests" :key="productRequest.id" class="flex justify-around items-center">
-                                            <div class="flex flex-col bg-gray-200 p-4 text-left rounded mt-2">
+                                        <div v-for="productRequest in storage.product_requests" :key="productRequest.id" class="grid grid-cols-4 items-center justify-center">
+                                            <div class="col-span-3 flex flex-col bg-gray-200 p-2 text-left rounded mt-2">
                                                 <span>Requeste Quantity : {{ productRequest.request_quantity}} </span>
                                                 <span>Expected Date : {{ productRequest.expected_date}} </span>
-                                                <span>Requeste By : {{ productRequest.storage_id}} </span>
+                                                <span>Requeste By : {{ productRequest.storage.outlet.name }} </span>
                                                 <div class="mx-auto mt-2">
                                                     <div class="flex items-center rounded mt-2" >
-                                                        <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" v-if="product.storages.length" @click="modalHandler">
+                                                        <div class="text-center text-sm border bg-green-500 text-white px-2 py-1 rounded cursor-pointer"
+                                                        @click="modalHandler($event, productRequest.storage.outlet.id) ">
                                                             SEND    
                                                         </div>
                                                         <div class="fixed inset-0 z-50" id="circulationWrapper" :class="{hidden : modalShow}">
@@ -214,14 +215,14 @@
                                                                         <form @submit.prevent="submit('Circulation')" class="">
                                                                             <div class="mb-2 text-left">
                                                                                 <Label value="From" />
-                                                                                <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" :disabled="fromDisabled" required >
+                                                                                <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from" required >
                                                                                         <option value="">-- Select From--</option>
                                                                                         <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                                                                 </Select>
                                                                             </div>
-                                                                            <div class="mb-2 text-left">
+                                                                            <div class="mb-2 text-left" >
                                                                                 <Label value="To" />
-                                                                                <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" :disabled="toDisabled" required>
+                                                                                <Select id="outlet_id" class="mt-1 block w-full" v-model="form.to" :disabled="true"  required>
                                                                                     <option value="">-- Select To --</option>
                                                                                     <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                                                                 </Select>
@@ -244,8 +245,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                 <action-button-show :href="route('product-requests.show', productRequest.id)" />
+                                            <div class="text-left">
+                                                 <a class="bg-green-500 p-2 text-white rounded-r-lg" :href="route('product-requests.show', productRequest.id)">Details</a>
                                             </div>
                                         </div>
                                     </div>
@@ -364,24 +365,25 @@ export default {
         }
     },
 
-    methods : {
-        changeValue(productId, storageOutlets, storages) {
-            console.log(storages);
-            let value = this.form.type;
-            this.form.product_id = productId;
-            this.formToLabel = value == 1 ? "--Storing In--" : "--Sending to--"
-            let alertQuantity = this.form.to ? storageOutlets.includes(parseInt(this.form.to)) : false;
 
-            if (value == 1 && !alertQuantity && this.form.to) {
-                this.alertQuantity = true
-                this.message ='';
-            } else {
-                this.alertQuantity = false
-            }
-            if(storages) {
-                this.showMessage(storages);
-            }
-        },
+    methods: {
+        // changeValue(productId, storageOutlets, storages) {
+        //     console.log(storages);
+        //     let value = this.form.type;
+        //     this.form.product_id = productId;
+        //     this.formToLabel = value == 1 ? "--Storing In--" : "--Sending to--"
+        //     let alertQuantity = this.form.to ? storageOutlets.includes(parseInt(this.form.to)) : false;
+
+        //     if (value == 1 && !alertQuantity && this.form.to) {
+        //         this.alertQuantity = true
+        //         this.message ='';
+        //     } else {
+        //         this.alertQuantity = false
+        //     }
+        //     if(storages) {
+        //         this.showMessage(storages);
+        //     }
+        // },
         showMessage(storages) {
             if(this.form.type == 2 && this.form.from) {
                 storages.forEach((storage) => {
@@ -389,12 +391,16 @@ export default {
                 })
             }
         },
-        modalHandler(event) {
+        modalHandler(event, outlet_id = null) {
             document.querySelectorAll('.checkBox').forEach((element)=>{
                 element.checked = false;
             });
 
             this.emptyValue();
+
+            if(outlet_id) {
+                this.form.to = outlet_id;
+            }
 
             if(!event){
                 this.modalShow = false;
@@ -430,7 +436,6 @@ export default {
             this.form.product_id= ''
             this.fromDisabled = false;
             this.toDisabled = false;
-            // console.log(this.form);
         },
     }
 };
