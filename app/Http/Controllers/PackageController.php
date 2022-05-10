@@ -19,22 +19,32 @@ class PackageController extends Controller
         DB::enableQueryLog();
 
         $packages = Package::query()
-            ->with('package_products.product')
+            ->withMorphTo('package_products.product.productable', [
+                Volume::class => [
+                    'version.production',
+                ],
+                Version::class => [
+                    'volumes',
+                    'production'
+                ]
+            ])
             // ->whereHas('package_products.product',function($query){
             //     $query->nameRelations();
             // })
-            
+
             // ->filter()
             ->dateFilter();
-            return [$packages->get(),
-            DB::getQueryLog()];
+        return [
+            $packages->get(),
+            DB::getQueryLog()
+        ];
 
         return Inertia::render('Package/Index', [
             'packages' => PackageResource::collection($packages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
- 
+
     public function create()
     {
         return Inertia::render('Package/Create', [
@@ -117,5 +127,4 @@ class PackageController extends Controller
             //
         ]);
     }
-
 }

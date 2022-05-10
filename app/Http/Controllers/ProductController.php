@@ -49,7 +49,26 @@ class ProductController extends Controller
         ProductResource::$price_categories = $price_categories;
 
         $products = Product::query()
+            ->with(['categories',  'prices', 'storages.outlet', 'storages.productRequests'])
+            ->withMorphTo('productable', [
+                Volume::class => [
+                    'version.production.publisher:id,name',
+                    'version.volumes:id,version_id',
+                    'version.moderators:id,author_id,moderator_type,version_id',
+                    'version.moderators.moderators_type:id,name',
+                    'version.moderators.author:id,name'
+                ],
+                Version::class => [
+                    'moderators:id,author_id,moderator_type,version_id',
+                    'moderators.moderators_type:id,name',
+                    'moderators.author:id,name',
+                    'volumes',
+                    'production.publisher:id,name'
+                ]
+            ])
+
             // ->with('categories', 'publisher', 'prices', 'price_categories')
+            /*
             ->with(['categories',  'prices', 'storages.outlet', 'storages.productRequests', 'productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Volume::class => function ($query) {
@@ -72,6 +91,7 @@ class ProductController extends Controller
                     },
                 ]);
             }])
+            */
 
             ->filter()
             ->dateFilter()
