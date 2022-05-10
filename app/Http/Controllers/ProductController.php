@@ -50,7 +50,7 @@ class ProductController extends Controller
 
         $products = Product::query()
             // ->with('categories', 'publisher', 'prices', 'price_categories')
-            ->with(['categories',  'prices', 'storages.outlet', 'storages.productRequests', 'productable' => function (MorphTo $morphTo) {
+            ->with(['categories',  'prices', 'storages.outlet', 'storages.productRequests', 'storages.productRequests.storage.outlet', 'productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Volume::class => function ($query) {
                         $query->with([

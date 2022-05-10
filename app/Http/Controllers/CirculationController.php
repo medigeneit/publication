@@ -59,7 +59,6 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {
             $redirect_location = 'products.index';
@@ -107,17 +106,13 @@ class CirculationController extends Controller
                     'storage_id' => $storage->id,
                     'quantity' => $quantity,
                 ];
-                if (Circulation::STORAGE_TYPE[$request->type] == 'Press'){
+                if (Circulation::STORAGE_TYPE[$request->type] == 'Press') {
                     $press = Press::findOrFail($destination);
                     $press->circulations()->create($data);
-                    
-                }
-                elseif (Circulation::STORAGE_TYPE[$request->type] == 'Outlet'){
+                } elseif (Circulation::STORAGE_TYPE[$request->type] == 'Outlet') {
                     $outlet = Outlet::findOrFail($destination);
                     $outlet->circulations()->create($data);
                 }
-
-
             }
         } else {
             $data = [

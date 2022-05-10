@@ -20,6 +20,7 @@ class ProductRequestResource extends JsonResource
             'expectedDate'     => (string) ($this->expected_date ?? 0),
             'pending'          => (int) ($this->pending ?? 0),
             'storage'          => (object) ($this->storage ?? ''),
+            'user'             => (object) ($this->storage->user ?? ''),
             'circulations'     => (object) ($this->circulations ?? ''),
         ];
     }

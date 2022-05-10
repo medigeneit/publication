@@ -32,21 +32,20 @@
             </table>
         </div>
 
-        <div v-for="circulation in productRequest.circulations" :key="circulation.id">
-            <span></span>
-            {{ circulation.quantity }}
+        <div v-for="circulation in productRequest.circulations" :key="circulation.id" class="max-w-4xl p-5">
+                <show-table-row heading="Circulation">{{ circulation.id  }}</show-table-row>
+                <show-table-row heading="OUTLET NAME	">{{ circulation.storage.outlet.name  }}</show-table-row>
+                <show-table-row heading="PRODUCT NAME">{{ circulation.storage.product.product_name  }}</show-table-row>
+                <show-table-row heading="QUANTITY" :class="{'text-red-500': circulation.quantity < 0, 'text-green-500': circulation.quantity > 0 }">{{ circulation.quantity  }}</show-table-row>
+                <show-table-row heading="ALERT QUANTITY">{{ circulation.storage.alert_quantity  }}</show-table-row>
+                <show-table-row heading="CREATED BY">{{ productRequest.storage.user.name }}</show-table-row>
+                <show-table-row heading="Action">
+                    <div class="flex justify-start items-center gap-1 md:gap-2">
+                        <action-button-edit :href="route('product-requests.edit', productRequest.id)" />
+                    </div>
+                </show-table-row>
         </div>
-        <!-- <data-table :collections="productRequest.circulations" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
-            <template #default="{ item: circulation }">
-                <td class="py-3 px-2 text-left">{{ circulation.id }}</td>
-                <td class="py-3 px-2 text-left">{{ circulation.circulation_of }}</td>
-                <td class="py-3 px-2 text-left">{{ circulation.productName }}</td>
-                <td class="py-3 px-2 text-left font-bold" :class="{'text-red-500': circulation.quantity < 0, 'text-green-500': circulation.quantity > 0 }"> {{ circulation.quantity }}</td>
-                <td class="py-3 px-2 text-left">{{ circulation.destination }}</td>
-                <td class="py-3 px-2 text-left"> {{ circulation.circulationDate }}</td>
-            </template>
-        </data-table> -->
-
+       
         <div class="w-full mt-4 flex">
             <go-to-list :href="route('product-requests.index')"/>
         </div>
