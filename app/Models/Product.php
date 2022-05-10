@@ -9,6 +9,7 @@ use App\Traits\ScopeSort;
 use App\Traits\TypeProperty;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -17,7 +18,7 @@ class Product extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['product_name'];
+    // protected $appends = ['product_name'];
 
     const types = [
         1 => 'Package',
@@ -29,6 +30,28 @@ class Product extends Model
     protected static function getTypes()
     {
         return self::types;
+    }
+
+    public function scopeNameRelations($query)
+    {
+        return $query
+        ->with(['productable' => function (MorphTo $morphTo) {
+            $morphTo->constrain([
+                Volume::class => function ($query) {
+                    $query->with([
+                        'version.production',
+                        // 'version.volumes:id,version_id',
+                    ]);
+                },
+                Version::class => function ($query) {
+                    $query->with([
+                        'volumes',
+                        'production'
+                    ]);
+                },
+            ]);
+        }]);
+
     }
 
     public function getProductNameAttribute()
