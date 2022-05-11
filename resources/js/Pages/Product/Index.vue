@@ -204,7 +204,7 @@
                                                 <div class="mx-auto mt-2">
                                                     <div class="flex items-center rounded mt-2" >
                                                         <div class="text-center text-sm border bg-green-500 text-white px-2 py-1 rounded cursor-pointer"
-                                                        @click="modalHandler($event, productRequest.storage.outlet.id) ">
+                                                        @click="modalHandler($event, productRequest.storage.outlet.id, productRequest.id) ">
                                                             SEND    
                                                         </div>
                                                         <div class="fixed inset-0 z-50" id="circulationWrapper" :class="{hidden : modalShow}">
@@ -355,13 +355,14 @@ export default {
                 quantity: '',
                 type: '',
                 product_id: '',
+                request_id: '',
                 alert_quantity: ''
             }),
             status: '',
             modalShow: true,
             alertQuantity : false,
             message : '',
-            formToLabel : '-- Select To --'
+            formToLabel : '-- Select To --',
         }
     },
 
@@ -391,15 +392,18 @@ export default {
                 })
             }
         },
-        modalHandler(event, outlet_id = null) {
+        modalHandler(event, outlet_id = null, request_id = null) {
             document.querySelectorAll('.checkBox').forEach((element)=>{
                 element.checked = false;
             });
+            console.log(request_id)
 
             this.emptyValue();
 
             if(outlet_id) {
                 this.form.to = outlet_id;
+                this.form.type = 'Out',
+                this.form.request_id = request_id
             }
 
             if(!event){
