@@ -15,8 +15,8 @@ class CreateProductRequestsTable extends Migration
     {
         Schema::create('product_requests', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('storage_id')->nullable();
             $table->integer('request_quantity');
-            $table->unsignedBigInteger('outlet_id')->nullable();
             $table->date('expected_date');
             $table->integer('user_id')->nullable();
 
