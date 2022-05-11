@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PackageResource;
 use App\Models\Package;
+use App\Models\Version;
+use App\Models\Volume;
 use App\Traits\DateFilter;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -16,28 +19,24 @@ class PackageController extends Controller
 
     public function index()
     {
-        DB::enableQueryLog();
+        // DB::enableQueryLog();
 
         $packages = Package::query()
-            ->withMorphTo('package_products.product.productable', [
+        ->withMorphTo('package_products.product.productable', [
                 Volume::class => [
-                    'version.production',
+                    'version.production'
                 ],
                 Version::class => [
-                    'volumes',
-                    'production'
+                    'volumes', 'production'
                 ]
             ])
-            // ->whereHas('package_products.product',function($query){
-            //     $query->nameRelations();
-            // })
-
-            // ->filter()
             ->dateFilter();
-        return [
-            $packages->get(),
-            DB::getQueryLog()
-        ];
+
+        // dd($packages->get());
+        // return [
+        //     $packages->get(),
+        //     DB::getQueryLog()
+        // ];
 
         return Inertia::render('Package/Index', [
             'packages' => PackageResource::collection($packages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
