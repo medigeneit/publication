@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PackageProductListResource;
 use App\Http\Resources\PackageResource;
 use App\Models\Package;
+use App\Models\PriceCategory;
 use App\Models\Product;
 use App\Models\Version;
 use App\Models\Volume;
@@ -23,7 +25,7 @@ class PackageController extends Controller
         // DB::enableQueryLog();
 
         $packages = Package::query()
-        ->withMorphTo('package_products.product.productable', [
+            ->withMorphTo('package_products.product.productable', [
                 Volume::class => [
                     'version.production'
                 ],
@@ -43,28 +45,36 @@ class PackageController extends Controller
 
     public function create()
     {
-        return Inertia::render('Package/Create', [
-                'package' => new Package(),
-                'productList' => Product::with(['productable' => function (MorphTo $morphTo) {
+        $price_categories = PriceCategory::pluck('name', 'id');
+        PackageProductListResource::$price_categories = $price_categories;
+        $product_list =Product::with([
+            'prices',
+            'productable' => function (MorphTo $morphTo) {
 
-                    $morphTo->constrain([
-                        Volume::class => function ($query) {
-                            $query->with([
-                                'version.production',
-                                'version.volumes:id,version_id',
-                                'version.moderators:id,author_id,moderator_type,version_id',
-                                'version.moderators.moderators_type:id,name',
-                                'version.moderators.author:id,name'
-                            ]);
-                        },
-                        Version::class => function ($query) {
-                            $query->with([
-                                'production.publisher:id,name'
-                            ]);
-                        },
-                    ]);
-                }])->get(),
-        ]);
+                $morphTo->constrain([
+                    Volume::class => function ($query) {
+                        $query->with([
+                            'version.production',
+                            'version.last_printing'
+
+                        ]);
+                    },
+                    Version::class => function ($query) {
+                        $query->with([
+                            'production.publisher:id,name',
+                            'last_printing'
+                        ]);
+                    },
+                ]);
+            }
+        ])->get();
+
+        return  [
+        // return Inertia::render('Package/Create', [
+            'package' => new Package(),
+            'productList' => PackageProductListResource::collection( $product_list)
+        // ]);
+        ];
     }
 
     public function store(Request $request)
