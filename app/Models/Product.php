@@ -19,7 +19,7 @@ class Product extends Model
 
     protected $guarded = [];
 
-    // protected $appends = ['product_name'];
+    protected $appends = ['product_name'];
 
     const types = [
         1 => 'Package',

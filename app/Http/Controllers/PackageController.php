@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PackageResource;
 use App\Models\Package;
+use App\Models\Product;
 use App\Models\Version;
 use App\Models\Volume;
 use App\Traits\DateFilter;
@@ -32,14 +33,10 @@ class PackageController extends Controller
             ])
             ->dateFilter();
 
-        // dd($packages->get());
-        // return [
-        //     $packages->get(),
-        //     DB::getQueryLog()
-        // ];
-
+        // return PackageResource::collection($packages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
         return Inertia::render('Package/Index', [
             'packages' => PackageResource::collection($packages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            // 'packages' => $packages,
             'filters' => $this->getFilterProperty(),
         ]);
     }
@@ -47,7 +44,26 @@ class PackageController extends Controller
     public function create()
     {
         return Inertia::render('Package/Create', [
-            'package' => new Package(),
+                'package' => new Package(),
+                'productList' => Product::with(['productable' => function (MorphTo $morphTo) {
+
+                    $morphTo->constrain([
+                        Volume::class => function ($query) {
+                            $query->with([
+                                'version.production',
+                                'version.volumes:id,version_id',
+                                'version.moderators:id,author_id,moderator_type,version_id',
+                                'version.moderators.moderators_type:id,name',
+                                'version.moderators.author:id,name'
+                            ]);
+                        },
+                        Version::class => function ($query) {
+                            $query->with([
+                                'production.publisher:id,name'
+                            ]);
+                        },
+                    ]);
+                }])->get(),
         ]);
     }
 

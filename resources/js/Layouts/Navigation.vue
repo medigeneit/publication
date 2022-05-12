@@ -60,12 +60,12 @@
             >
                 Moderator Types
             </nav-link>
-            <!-- <nav-link
+            <nav-link
                 :href="route('packages.index')"
                 :active="route().current('packages.*')"
             >
                 Packages
-            </nav-link> -->
+            </nav-link>
             <nav-link
                 :href="route('version-variables.index')"
                 :active="route().current('version-variables.*')"
