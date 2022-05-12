@@ -7,6 +7,8 @@ use App\Http\Resources\CirculationResource;
 use App\Models\Circulation;
 use App\Models\Outlet;
 use App\Models\Press;
+use App\Models\Printing;
+use App\Models\ProductRequest;
 use App\Models\Storage;
 use App\Models\Version;
 use App\Models\Volume;
@@ -59,31 +61,46 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+        // return $request;
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {
             $redirect_location = 'products.index';
         }
+        $product_id = 0;
+        if ($request->has('request_id')) {
+            // return
+            $product_id = ProductRequest::find($request->request_id)->storage->product_id;
+        }
 
-        if (!in_array($request->type, array_keys(Circulation::TYPE))) {
+        if (!in_array($request->type, array_keys(Circulation::TYPE)) && !in_array($request->type, array_values(Circulation::TYPE))) {
             return redirect()
                 ->route($redirect_location)
                 ->with('status', 'Unsuccessfull attempt, because of wrong type.');
         }
+        // return array_values(Circulation::TYPE);
 
         if (Circulation::TYPE[$request->type] == 'In') {
+            // return 'in';
             $quantity = $request->quantity;
             $storage_outlet_id = $request->to;
             $destination = $request->from;
+            if (Circulation::STORAGE_TYPE[$request->type] == 'Press')
+                $requestable_type = Printing::class ?? null;
+            if (Circulation::STORAGE_TYPE[$request->type] == 'Outlet')
+                $requestable_type = ProductRequest::class ?? null;
+            $requestable_id =  $request->request_id ?? null;
         } elseif (Circulation::TYPE[$request->type] == 'Out') {
             $quantity = $request->quantity * -1;
             $storage_outlet_id = $request->from;
             $destination = $request->to;
+            $requestable_type = ProductRequest::class ?? null;
+            $requestable_id =  $request->request_id ?? null;
         }
+        // return
         $storage = Storage::query()
             ->where([
                 'outlet_id' => $storage_outlet_id,
-                'product_id' => $request->product_id,
+                'product_id' => $request->product_id ?? $product_id,
             ])->first();
 
         if (Circulation::TYPE[$request->type] == 'In' &&  !$storage) {
@@ -106,6 +123,8 @@ class CirculationController extends Controller
                 $data = [
                     'storage_id' => $storage->id,
                     'quantity' => $quantity,
+                    'requestable_type' => $requestable_type,
+                    'requestable_id' => $requestable_id,
                 ];
                 if (Circulation::STORAGE_TYPE[$request->type] == 'Press') {
                     $press = Press::findOrFail($destination);

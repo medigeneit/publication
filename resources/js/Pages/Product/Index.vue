@@ -170,7 +170,7 @@
                                                 <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                             </Select>
                                         </div>
-                                        
+
                                         <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
 
                                         <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
@@ -205,7 +205,7 @@
                                                     <div class="flex items-center rounded mt-2" >
                                                         <div class="text-center text-sm border bg-green-500 text-white px-2 py-1 rounded cursor-pointer"
                                                         @click="modalHandler($event, productRequest.storage.outlet.id, productRequest.id) ">
-                                                            SEND    
+                                                            SEND
                                                         </div>
                                                         <div class="fixed inset-0 z-50" id="circulationWrapper" :class="{hidden : modalShow}">
                                                             <div class="relative w-full h-full flex justify-center items-center">
@@ -227,7 +227,7 @@
                                                                                     <option :value="outletsId" v-for="(outletsName, outletsId) in outlets" :key="outletsId">{{ outletsName }}</option>
                                                                                 </Select>
                                                                             </div>
-                                                                            
+
                                                                             <Input id="type" type="number" class="mt-1 block w-full" placeholder="Quantity" v-model="form.quantity" required/>
 
                                                                             <Button type="submit" class="bg-gray-600 text-white px-2 py-1 rounded mt-2">
@@ -402,7 +402,7 @@ export default {
 
             if(outlet_id) {
                 this.form.to = outlet_id;
-                this.form.type = 'Out',
+                this.form.type = 2,
                 this.form.request_id = request_id
             }
 
@@ -423,12 +423,12 @@ export default {
         submit() {
             this.message = "Your circulation is complete";
             this.form.post(this.route('circulations.store'));
-            
+
             // setInterval(()=> {
             //     this.modalShow = true;
             // }, 1000)
             this.modalShow = true;
-            
+
             this.emptyValue();
         },
         emptyValue() {
