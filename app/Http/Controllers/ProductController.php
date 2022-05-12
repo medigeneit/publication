@@ -78,7 +78,8 @@ class ProductController extends Controller
                             'version.volumes:id,version_id',
                             'version.moderators:id,author_id,moderator_type,version_id',
                             'version.moderators.moderators_type:id,name',
-                            'version.moderators.author:id,name'
+                            'version.moderators.author:id,name',
+                            'version.last_printing'
                         ]);
                     },
                     Version::class => function ($query) {
@@ -87,7 +88,9 @@ class ProductController extends Controller
                             'moderators.moderators_type:id,name',
                             'moderators.author:id,name',
                             'volumes',
-                            'production.publisher:id,name'
+                            'production.publisher:id,name',
+                            'last_printing'
+
                         ]);
                     },
                 ]);
@@ -100,13 +103,13 @@ class ProductController extends Controller
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
 
-
-        // $products =  ProductResource::collection($products->get());
+return
+        $products =  ProductResource::collection($products->get());
         // $products =  $products->get();
         // $products =  $products->where('id',10)->first()->storages->pluck('quantity')->sum();
         // $instance =  $products[10];
         // $moderators = $instance->productable_type == Volume::class ? ($instance->productable->version->moderators) :  ($instance->productable_type == Version::class ? $instance->productable->moderators : []);
-        // return $products->get();
+        return $products->get();
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
