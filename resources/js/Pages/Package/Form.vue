@@ -26,8 +26,9 @@
                         <table class="min-w-max w-full table-auto">
                             <thead>
                                 <tr class="text-gray-600 text-sm font-light bg-white">
-                                    <th class="text-left w-full">Name</th>
-                                    <th class="text-left w-full">Cost</th>
+                                    <th class="text-left">Name</th>
+                                    <th class="text-left">Cost</th>
+                                    <th class="text-left">prices</th>
                                     <!-- <th>Estimation</th> -->
                                 </tr>
                             </thead>
@@ -35,6 +36,13 @@
                                 <tr class="border bg-green-200 border-white" v-for="(product, productId) in selectedProducts" :key="productId" >
                                     <td>{{ product.name }}</td>
                                     <td>{{ product.cost }}</td>
+                                    <td>
+                                      <div class="py-1.5 flex gap-2 mr-10" v-for="(priceCategory, index) in product.priceCategories" :key="priceCategory">
+                                        <div v-if="product.prices[index]">
+                                            {{ priceCategory }} : {{ product.prices[index] }}
+                                        </div>
+                                    </div>
+                                    </td>
                                     <td>
                                             <button
                                                 class="text-red-500 text-2xl"
@@ -77,7 +85,7 @@
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light bg-white">
                             <tr class="border" v-for="(product, productId) in data.productList" :key="productId" :class="{'hidden' : form.product_ids.includes(parseInt(productId))}">
-                                <td class="w-40">{{ product.product_name }}</td>
+                                <td class="w-40">{{ product.name }}</td>
                                 <td><Input type="checkbox" class="cursor-pointer checkbox" @change="productSelectHandler(productId)" :checked="product.checked" /></td>
                             </tr>
                         </tbody>
@@ -207,17 +215,28 @@ export default {
                 this.form.product_ids.push(productId);
             }
             let product = this.data.productList[productId];
-            console.log(product.product);
+
             
             if (!product.selected) {
                 this.selectedProducts.push({
                     productId: productId,
-                    name: product.product_name,
-                    cost: product.production_cost,
-                    mrp: product.mrp
+                    name: product.name,
+                    cost: product.productionCost,
+                    prices: product.prices,
+                    priceCategories: product.priceCategories
                 });
             }
+
+            this.totalCalculate(product);
+            
             this.selectedProductHandler();
+        },
+        totalCalculate(product) {
+            let price = {};
+           for(let priceCategoryId in product.priceCategories) {
+               price[product.priceCategories[priceCategoryId]] = product.prices[priceCategoryId];
+           };
+            console.log(price);
         },
         removeProduct(numberOfIndex, className) {
             document.querySelectorAll(`.${className}`).forEach((checkBox) => {
