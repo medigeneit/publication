@@ -103,13 +103,13 @@ class ProductController extends Controller
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
 
-return
-        $products =  ProductResource::collection($products->get());
+// return
+        // $products =  ProductResource::collection($products->get());
         // $products =  $products->get();
         // $products =  $products->where('id',10)->first()->storages->pluck('quantity')->sum();
         // $instance =  $products[10];
         // $moderators = $instance->productable_type == Volume::class ? ($instance->productable->version->moderators) :  ($instance->productable_type == Version::class ? $instance->productable->moderators : []);
-        return $products->get();
+        // return $products->get();
 
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
