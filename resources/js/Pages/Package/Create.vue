@@ -5,8 +5,8 @@
         <template #header>
             Create Product
         </template>
-        
-        <form-component :data="{productList}" module-action="store" />
+
+        <form-component :data="{productList, priceCategories}" module-action="store" />
     </app-layout>
 </template>
 
@@ -25,6 +25,10 @@ export default {
 
     props: {
         productList: {
+            type: Object,
+            default: {}
+        },
+        priceCategories: {
             type: Object,
             default: {}
         },

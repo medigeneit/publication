@@ -70,10 +70,11 @@ class PackageController extends Controller
         ])->get();
 
         PackageResource::withoutWrapping();
-        
+
         // return  [
         return Inertia::render('Package/Create', [
             'package' => new Package(),
+            'priceCategories' => $price_categories,
 
             'productList' => PackageProductListResource::collection($product_list),
             // 'productList' => $product_list,

@@ -18,7 +18,7 @@
                         <Input id="production_cost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.production_cost" required />
                     </div>
                 </div>
-                
+
                 <div v-if="selectedProducts.length > 0">
                     <div class="px-4 py-3 text-lg font-bold ">Selected Products ( {{ form.product_ids.length }} )</div>
                     <hr>
@@ -55,11 +55,11 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>   
+                    </div>
                 </div>
 
                 <hr class="w-full my-4">
-                
+
                 <div class="flex items-center justify-between">
                     <div class="">
                         <go-to-list :href="route('products.index')"/>
@@ -89,7 +89,7 @@
                                 <td><Input type="checkbox" class="cursor-pointer checkbox" @change="productSelectHandler(productId)" :checked="product.checked" /></td>
                             </tr>
                         </tbody>
-                    </table> 
+                    </table>
                 </div>
 
             </div>
@@ -116,7 +116,7 @@ export default {
     },
     props: {
         moduleAction: String,
-        buttonValue: { 
+        buttonValue: {
             type: String,
             default: 'Submit'
         },
@@ -131,6 +131,10 @@ export default {
             products.push(this.data.productList[product]);
         }
         this.selectedProducts= products || []
+        for(const priceCategoryId in this.data.priceCategories) {
+            window[this.data.priceCategories[priceCategoryId]] = [];
+            // console.log(this.data.priceCategories );
+        };
     },
     data() {
         return {
@@ -205,7 +209,7 @@ export default {
                 this.form.category_ids.push(categoryId);
             }
         },
-        
+
         productSelectHandler(productId) {
             productId = parseInt(productId);
 
@@ -216,7 +220,7 @@ export default {
             }
             let product = this.data.productList[productId];
 
-            
+
             if (!product.selected) {
                 this.selectedProducts.push({
                     productId: productId,
@@ -228,15 +232,17 @@ export default {
             }
 
             this.totalCalculate(product);
-            
+
             this.selectedProductHandler();
         },
         totalCalculate(product) {
-            let price = {};
+
            for(let priceCategoryId in product.priceCategories) {
-               price[product.priceCategories[priceCategoryId]] = product.prices[priceCategoryId];
+               if(product.prices[priceCategoryId] !== undefined)
+               window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId])
            };
-            console.log(price);
+               console.log(window);
+        //    console.log(product.prices);
         },
         removeProduct(numberOfIndex, className) {
             document.querySelectorAll(`.${className}`).forEach((checkBox) => {
@@ -258,7 +264,7 @@ export default {
             });
         },
         searchProduct(event) {
-            
+
             let url = this.route(this.routeName || this.route().current(), {
                 selected: this.selected.toString(),
                 search: !event.target.value.includes('\\') ? event.target.value : '',
