@@ -72,6 +72,7 @@ class PackageController extends Controller
         return  [
         // return Inertia::render('Package/Create', [
             'package' => new Package(),
+            // 'productList' => $product_list
             'productList' => PackageProductListResource::collection( $product_list)
         // ]);
         ];

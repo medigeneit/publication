@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Models\Product;
+use App\Models\Version;
+use App\Models\Volume;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PackageProductListResource extends JsonResource
