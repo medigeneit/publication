@@ -46,7 +46,7 @@
                                     <td>
                                             <button
                                                 class="text-red-500 text-2xl"
-                                                @click="removeProduct(productId, 'checkbox')"
+                                                @click="removeProduct(productId, 'checkbox', product)"
                                                 type="button"
                                             >
                                                 &times;
@@ -159,6 +159,7 @@ export default {
             categoryShow: false,
             selected: [],
             selectedProducts: [],
+            totalObj: {}
         }
     },
 
@@ -236,20 +237,39 @@ export default {
             this.selectedProductHandler();
         },
         totalCalculate(product) {
+            let total = 0;
+            
+            for(let priceCategoryId in product.prices) {
+                if(product.prices[priceCategoryId] !== undefined)
+                    window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId] ? product.prices[priceCategoryId] : 0)
 
-           for(let priceCategoryId in product.priceCategories) {
-               if(product.prices[priceCategoryId] !== undefined)
-               window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId])
-           };
-               console.log(window);
-        //    console.log(product.prices);
+                total =  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseInt(a) + parseInt(b));
+
+                this.totalObj[this.data.priceCategories[priceCategoryId]] = total
+                // console.log(this.totalObj[product.priceCategories[priceCategoryId]]);
+            };
+            console.log(this.totalObj);
+            console.log('add');
         },
-        removeProduct(numberOfIndex, className) {
+        removeProduct(numberOfIndex, className, product = null) {
             document.querySelectorAll(`.${className}`).forEach((checkBox) => {
                 if(checkBox.checked) {
                     checkBox.checked = false;
                 }
             });
+
+            for (const priceCategoryId in product.prices) {
+                const index = window[this.data.priceCategories[priceCategoryId]].indexOf(product.prices[priceCategoryId]);
+                //Only splice if the index exists
+                if (index > -1) {
+                //Splice the array
+                    window[this.data.priceCategories[priceCategoryId]].splice(index, 1);
+                }
+                console.log(window[this.data.priceCategories[priceCategoryId]])
+                this.totalObj[this.data.priceCategories[priceCategoryId]]=  parseInt(this.totalObj[this.data.priceCategories[priceCategoryId]]) - parseInt(product.prices[priceCategoryId]);
+            }
+            console.log(this.totalObj);
+            console.log('remove');
 
             this.selectedProducts.splice(numberOfIndex, 1);
             this.form.product_ids.splice(numberOfIndex, 1);
