@@ -81,6 +81,8 @@ class Product extends Model
             return  $this->productable->production->name . ', ' . $this->productable->edition . ' edition' . ($vol_name != '()' ? ', Vol' . $vol_name : '') ?? 'Version';
         } elseif ($this->productable_type == Volume::class) {
             return $this->productable->version->production->name . ', ' .  $this->productable->version->edition . ' edition, Vol (' .  $this->productable->name . ')' ?? 'Volume';
+        } elseif ($this->productable_type == Package::class) {
+            return  $this->productable->name ?? 'Package';
         }
     }
 

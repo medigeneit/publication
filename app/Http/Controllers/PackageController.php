@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PackageProductListResource;
 use App\Http\Resources\PackageResource;
 use App\Models\Package;
+use App\Models\PackageProduct;
 use App\Models\PriceCategory;
 use App\Models\Product;
 use App\Models\Version;
@@ -13,6 +14,7 @@ use App\Models\Volume;
 use App\Traits\DateFilter;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -47,7 +49,7 @@ class PackageController extends Controller
     {
         $price_categories = PriceCategory::pluck('name', 'id');
         PackageProductListResource::$price_categories = $price_categories;
-        $product_list =Product::with([
+        $product_list = Product::with([
             'prices',
             'productable' => function (MorphTo $morphTo) {
 
@@ -86,7 +88,36 @@ class PackageController extends Controller
     public function store(Request $request)
     {
         return $request;
-        $package = Package::create($this->validateData($request));
+        $package = Package::create([
+            'name' => $request->name,
+            'total_cost' => $request->total_cost,
+            'user_id' => Auth::id(),
+        ]);
+        // return  $package->id;
+
+        $products_list = [];
+        if ($package) {
+            foreach ($request->products as $product) {
+                $products_list[] = [
+                    'package_id' => $package->id,
+                    'product_id' => $product,
+                ];
+            }
+            $package_products = PackageProduct::insert($products_list);
+        }
+        if ($package_products) {
+            $package->products()->updateorCreate(
+                [
+                    'productable_type'  => Package::class,
+                    'productable_id'    => $package->id
+                ],
+                [
+                    'active' => 0
+                ]
+            );
+        }
+
+
 
         return redirect()
             ->route('packages.show', $package->id)
@@ -156,7 +187,11 @@ class PackageController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            //
+            'name' => [
+                'required',
+                'string'
+            ],
+
         ]);
     }
 }

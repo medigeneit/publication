@@ -16,8 +16,9 @@ class CreatePackagesTable extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->double('total_cost')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->tinyInteger('active');
+            $table->tinyInteger('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
