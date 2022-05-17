@@ -11,12 +11,6 @@
                         <Label for="name" value="Name" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                     </div>
-
-
-                    <div class="mb-4">
-                        <Label for="production_cost" value="Production Cost" />
-                        <Input id="production_cost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.production_cost" required />
-                    </div>
                 </div>
 
                 <div v-if="selectedProducts.length > 0">
@@ -34,9 +28,9 @@
                             </thead>
                             <tbody class="text-gray-600 text-sm font-light bg-white">
                                 <tr class="border bg-green-200 border-white" v-for="(product, productId) in selectedProducts" :key="productId" >
-                                    <td>{{ product.name }}</td>
-                                    <td>{{ product.cost }}</td>
-                                    <td>
+                                    <td class="text-left">{{ product.name }}</td>
+                                    <td class="text-left">{{ product.cost }}</td>
+                                    <td class="text-left">
                                       <div class="py-1.5 flex gap-2 mr-10" v-for="(priceCategory, index) in product.priceCategories" :key="priceCategory">
                                         <div v-if="product.prices[index]">
                                             {{ priceCategory }} : {{ product.prices[index] }}
@@ -52,6 +46,38 @@
                                                 &times;
                                             </button>
                                         </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div v-if="Object.keys(totalObj).length">
+                    <div class="px-4 py-3 text-lg font-bold ">Total</div>
+                    <hr>
+                    
+                    <div class="text-center text-lg"><b> Total Cost: {{ totalCost  }}</b></div>
+                    <div class="w-full flex justify-between items-center p-4" >
+                        <table class="min-w-max w-full table-auto">
+                            <thead>
+                                <tr class="text-gray-600 text-sm font-light bg-white">
+                                    <th class="text-left">Name</th>
+                                    <th class="text-left">Total</th>
+                                    <th class="text-center">Custom</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 text-sm font-light bg-white">
+                                <tr class="border border-white shadow-sm" v-for="(priceCategory, index) in data.priceCategories" :key="index">
+                                    <td class="py-3">
+                                        {{ priceCategory }}
+                                    </td>
+                                    <td class="py-3">
+                                        {{ totalObj[priceCategory] ? totalObj[priceCategory] : 0  }}
+                                    </td>
+                                    <td class="py-3 bg-white rounded">
+                                        <div class="text-center">
+                                            <Input label="Custom" step="0.01" type="number" v-model="form.prices[index]" class="mt-1" />
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -107,13 +133,13 @@ import Select from '@/Components/Select.vue';
 
 export default {
     components: {
-        Button,
-        Input,
-        Label,
-        ValidationErrors,
-        GoToList,
-        Select,
-    },
+    Button,
+    Input,
+    Label,
+    ValidationErrors,
+    GoToList,
+    Select,
+},
     props: {
         moduleAction: String,
         buttonValue: {
@@ -141,25 +167,21 @@ export default {
             form: this.$inertia.form({
                 name: '',
                 type: 1,
-                product_id: '',
-                production_cost: '',
-                mrp: '',
-                wholesale_price: '',
-                retail_price: '',
-                distribute_price:'',
-                special_price: '',
-                outside_dhaka_price: '',
-                ecom_distribute_price: '',
-                ecom_wholesale_price: '',
+                products: [],
+                total_cost:'',
+                total_price:'',
+                prices: [],
                 active: '',
-                category_ids: this.data.category_ids || [],
+                // category_ids: this.data.category_ids || [],
                 product_ids: this.data.product_ids || [],
-                packageProductPrice: this.data.product_prices || {},
+                // packageProductPrice: this.data.product_prices || {},
             }),
             categoryShow: false,
             selected: [],
             selectedProducts: [],
-            totalObj: {}
+            totalObj: {},
+            costs: [],
+            totalCost: ''
         }
     },
 
@@ -180,6 +202,8 @@ export default {
         },
 
         submit() {
+            this.form.total_cost = this.totalCost
+            this.form.total_price = this.totalObj
             if(this.moduleAction == 'store') {
                 return this.form.post(this.route('packages.store'));
             }
@@ -220,7 +244,8 @@ export default {
                 this.form.product_ids.push(productId);
             }
             let product = this.data.productList[productId];
-
+            this.form.products.push(product.id)
+            console.log("product_idds",this.form.products  );
 
             if (!product.selected) {
                 this.selectedProducts.push({
@@ -243,11 +268,15 @@ export default {
                 if(product.prices[priceCategoryId] !== undefined)
                     window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId] ? product.prices[priceCategoryId] : 0)
 
-                total =  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseInt(a) + parseInt(b));
+                total =  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseFloat(a) + parseFloat(b));
 
                 this.totalObj[this.data.priceCategories[priceCategoryId]] = total
-                // console.log(this.totalObj[product.priceCategories[priceCategoryId]]);
+                this.form.prices[priceCategoryId] = total;
             };
+
+            let cost = product.productionCost ? product.productionCost : 0;
+            this.costs.push(cost);
+            this.totalCost = this.costs.reduce((a,b) => parseFloat(a) + parseFloat(b));
             console.log(this.totalObj);
             console.log('add');
         },
@@ -267,9 +296,13 @@ export default {
                 }
                 console.log(window[this.data.priceCategories[priceCategoryId]])
                 this.totalObj[this.data.priceCategories[priceCategoryId]]=  parseInt(this.totalObj[this.data.priceCategories[priceCategoryId]]) - parseInt(product.prices[priceCategoryId]);
+                this.form.prices[priceCategoryId] = 0;
             }
-            console.log(this.totalObj);
-            console.log('remove');
+            
+            const index = this.costs.indexOf(product.cost);
+            this.costs.splice(index, 1);
+            this.totalCost = this.costs.reduce((a,b) => parseFloat(a) + parseFloat(b));
+            
 
             this.selectedProducts.splice(numberOfIndex, 1);
             this.form.product_ids.splice(numberOfIndex, 1);

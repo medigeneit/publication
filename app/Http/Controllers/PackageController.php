@@ -85,6 +85,7 @@ class PackageController extends Controller
 
     public function store(Request $request)
     {
+        return $request;
         $package = Package::create($this->validateData($request));
 
         return redirect()

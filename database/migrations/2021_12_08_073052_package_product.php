@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PackageProduct extends Migration
+class PackageProducts extends Migration
 {
     /**
      * Run the migrations.
