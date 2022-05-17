@@ -295,14 +295,17 @@ export default {
                     window[this.data.priceCategories[priceCategoryId]].splice(index, 1);
                 }
                 console.log(window[this.data.priceCategories[priceCategoryId]])
-                this.totalObj[this.data.priceCategories[priceCategoryId]]=  parseInt(this.totalObj[this.data.priceCategories[priceCategoryId]]) - parseInt(product.prices[priceCategoryId]);
-                this.form.prices[priceCategoryId] = 0;
+                // this.totalObj[this.data.priceCategories[priceCategoryId]]=  parseInt(this.totalObj[this.data.priceCategories[priceCategoryId]]) - parseInt(product.prices[priceCategoryId]);
+                this.totalObj[this.data.priceCategories[priceCategoryId]]=  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseFloat(a) + parseFloat(b));
+                this.form.prices[priceCategoryId] = this.totalObj[this.data.priceCategories[priceCategoryId]];
             }
             
-            const index = this.costs.indexOf(product.cost);
-            this.costs.splice(index, 1);
+            const indexCost = this.costs.indexOf(product.cost);
+            this.costs.splice(indexCost, 1);
             this.totalCost = this.costs.reduce((a,b) => parseFloat(a) + parseFloat(b));
             
+            const indexProduct =  this.form.products.indexOf(product.id);
+            this.form.products.splice(indexProduct,1);
 
             this.selectedProducts.splice(numberOfIndex, 1);
             this.form.product_ids.splice(numberOfIndex, 1);
