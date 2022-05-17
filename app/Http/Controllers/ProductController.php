@@ -173,21 +173,15 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        $product->load('prices','categories');
         // return $product->prices()->pluck('amount', 'id');
         return Inertia::render('Product/Edit', [
             "data" => [
                 'product'                   => $product,
-                'productable'               => $product->productable,
-                'volume'                    => Volume::find($product->productable->id)->with('version', 'version.production')->first(),
-                'productCategories'         => $product->categories,
-                'publisherList'             => Publisher::active()->pluck('name', 'id'),
-                'productList'               => Product::where('id', '!=', $product->id)->pluck('productable_type', 'id'),
-                'product_ids'               => $product->package_products()->get()->pluck('id')->toArray(),
-                'category_ids'              => $product->categories()->get()->pluck('id')->toArray(),
+                'category_ids'              => $product->categories->pluck('id')->toArray(),
                 'categories'                => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
-                'productType'               => Product::getTypes(),
                 'priceCategories'           => PriceCategory::get(),
-                'selectedPriceCategories'   => $product->prices()->pluck('amount', 'price_category_id'),
+                'selectedPriceCategories'   => $product->prices->pluck('amount', 'price_category_id'),
             ]
         ]);
     }
