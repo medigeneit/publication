@@ -168,9 +168,9 @@ export default {
                 name: '',
                 type: 1,
                 products: [],
-                total_cost:'',
+                total_cost: 0,
                 total_price:'',
-                prices: [],
+                prices: {},
                 active: '',
                 // category_ids: this.data.category_ids || [],
                 product_ids: this.data.product_ids || [],
@@ -187,23 +187,10 @@ export default {
 
     methods: {
 
-        typeChange(type) {
-            console.log(this.data.product.type === 1)
-            let publisherWrapper = document.getElementById('publisherWrapper');
-            let productWrapper = document.getElementById('productWrapper');
-
-            if(type === 1) {
-                publisherWrapper.classList.add('hidden');
-                productWrapper.classList.remove('hidden');
-            } else {
-                publisherWrapper.classList.remove('hidden');
-                productWrapper.classList.add('hidden');
-            }
-        },
-
         submit() {
             this.form.total_cost = this.totalCost
             this.form.total_price = this.totalObj
+            // console.log(this.form.prices);
             if(this.moduleAction == 'store') {
                 return this.form.post(this.route('packages.store'));
             }
