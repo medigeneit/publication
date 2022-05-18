@@ -189,8 +189,14 @@ export default {
 
         submit() {
             this.form.total_cost = this.totalCost
-            // this.form.total_price = this.totalObj
-            // console.log(this.form.prices);
+            
+            Object.keys(this.form.prices).forEach((key) => {
+                if(!this.form.prices[key])
+                    delete this.form.prices[key]
+            })
+            
+
+
             if(this.moduleAction == 'store') {
                 return this.form.post(this.route('packages.store'));
             }
@@ -264,8 +270,7 @@ export default {
             let cost = product.productionCost ? product.productionCost : 0;
             this.costs.push(cost);
             this.totalCost = this.costs.reduce((a,b) => parseFloat(a) + parseFloat(b));
-            console.log(this.totalObj);
-            console.log('add');
+
         },
         removeProduct(numberOfIndex, className, product = null) {
             document.querySelectorAll(`.${className}`).forEach((checkBox) => {
