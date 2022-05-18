@@ -19,4 +19,9 @@ class Package extends Model
        return $this->hasMany(PackageProduct::class);
     }
 
+    public function products()
+    {
+        return $this->morphMany(Product::class, 'productable');
+    }
+
 }
