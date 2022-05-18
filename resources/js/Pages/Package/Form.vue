@@ -169,7 +169,7 @@ export default {
                 type: 1,
                 products: [],
                 total_cost: 0,
-                total_price:'',
+                // total_price:'',
                 prices: {},
                 active: '',
                 // category_ids: this.data.category_ids || [],
@@ -189,7 +189,7 @@ export default {
 
         submit() {
             this.form.total_cost = this.totalCost
-            this.form.total_price = this.totalObj
+            // this.form.total_price = this.totalObj
             // console.log(this.form.prices);
             if(this.moduleAction == 'store') {
                 return this.form.post(this.route('packages.store'));
@@ -276,20 +276,26 @@ export default {
 
             for (const priceCategoryId in product.prices) {
                 const index = window[this.data.priceCategories[priceCategoryId]].indexOf(product.prices[priceCategoryId]);
-                //Only splice if the index exists
+                
                 if (index > -1) {
-                //Splice the array
+                    
                     window[this.data.priceCategories[priceCategoryId]].splice(index, 1);
                 }
-                console.log(window[this.data.priceCategories[priceCategoryId]])
-                // this.totalObj[this.data.priceCategories[priceCategoryId]]=  parseInt(this.totalObj[this.data.priceCategories[priceCategoryId]]) - parseInt(product.prices[priceCategoryId]);
-                this.totalObj[this.data.priceCategories[priceCategoryId]]=  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseFloat(a) + parseFloat(b));
+                console.log(window[this.data.priceCategories[priceCategoryId]].length)
+                this.totalObj[this.data.priceCategories[priceCategoryId]]=  parseInt(this.totalObj[this.data.priceCategories[priceCategoryId]]) - parseInt(product.prices[priceCategoryId]);
+                // this.totalObj[this.data.priceCategories[priceCategoryId]]=  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseFloat(a) + parseFloat(b));
                 this.form.prices[priceCategoryId] = this.totalObj[this.data.priceCategories[priceCategoryId]];
             }
             
             const indexCost = this.costs.indexOf(product.cost);
             this.costs.splice(indexCost, 1);
-            this.totalCost = this.costs.reduce((a,b) => parseFloat(a) + parseFloat(b));
+            
+            let sum = 0;
+            this.costs.forEach((a)=> {
+                sum += parseFloat(a);
+            })
+            this.totalCost = sum;
+            // this.totalCost = this.costs.reduce((a,b) => parseFloat(a) + parseFloat(b));
             
             const indexProduct =  this.form.products.indexOf(product.id);
             this.form.products.splice(indexProduct,1);
