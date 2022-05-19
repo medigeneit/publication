@@ -179,7 +179,7 @@ class PackageController extends Controller
         ])->get();
 
         PackageResource::withoutWrapping();
-
+        // return PackageProductListResource::collection($product_list);
         return Inertia::render('Package/Edit', [
             'proPackage' => $package,
             'priceCategories' => $price_categories,

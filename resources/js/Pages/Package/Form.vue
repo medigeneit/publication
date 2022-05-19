@@ -163,16 +163,17 @@ export default {
             window[this.data.priceCategories[priceCategoryId]] = [];
         };
 
-            let arr = [];
-            for (const iterator of this.data.productList) {
-                arr.push(iterator.id)
-            }
-            for (const key of this.data.proPackage.package_products) {
-                console.log(key.product_id);
-               let index = arr.indexOf(key.product_id);
+        let arr = [];
+        for (const iterator of this.data.productList) {
+            arr.push(iterator.id)
+        }
+        for (const key of this.data.proPackage.package_products) {
+            
+            let index = arr.indexOf(key.product_id);
 
-                this.productSelectHandler(index)
-            }
+            this.productSelectHandler(index)
+        }
+        
     },
     data() {
         return {
@@ -248,7 +249,6 @@ export default {
             }
             let product = this.data.productList[productId];
             this.form.products.push(product.id)
-            console.log("product_idds",this.form.products  );
 
             if (!product.selected) {
                 this.selectedProducts.push({
@@ -266,7 +266,7 @@ export default {
         },
         totalCalculate(product) {
             let total = 0;
-            
+            console.log(product.prices);
             for(let priceCategoryId in product.prices) {
                 if(product.prices[priceCategoryId] !== undefined)
                     window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId] ? product.prices[priceCategoryId] : 0)
