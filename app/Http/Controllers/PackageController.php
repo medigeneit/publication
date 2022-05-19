@@ -75,7 +75,7 @@ class PackageController extends Controller
 
         // return  [
         return Inertia::render('Package/Create', [
-            'package' => new Package(),
+            'proPackage' => new Package(),
             'priceCategories' => $price_categories,
 
             'productList' => PackageProductListResource::collection($product_list),
@@ -87,7 +87,7 @@ class PackageController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+        // return $request;
         $package = Package::create([
             'name' => $request->name,
             'total_cost' => $request->total_cost,
@@ -135,13 +135,45 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
+        $package = Package::with('package_products')->where('id', $package->id)->first();
+        
+        $price_categories = PriceCategory::pluck('name', 'id');
+        PackageProductListResource::$price_categories = $price_categories;
+        $product_list = Product::with([
+            'prices',
+            'productable' => function (MorphTo $morphTo) {
+
+                $morphTo->constrain([
+                    Volume::class => function ($query) {
+                        $query->with([
+                            'version.production',
+                            'version.last_printing'
+
+                        ]);
+                    },
+                    Version::class => function ($query) {
+                        $query->with([
+                            'production.publisher:id,name',
+                            'last_printing'
+                        ]);
+                    },
+                ]);
+            }
+        ])->get();
+
+        PackageResource::withoutWrapping();
+
         return Inertia::render('Package/Edit', [
-            'package' => $package,
+            'proPackage' => $package,
+            'priceCategories' => $price_categories,
+
+            'productList' => PackageProductListResource::collection($product_list),
         ]);
     }
 
     public function update(Request $request, Package $package)
     {
+        return $request;
         $package->update($this->validateData($request, $package->id));
 
         return redirect()

@@ -156,25 +156,27 @@ export default {
         for (let product of this.form.product_ids) {
             products.push(this.data.productList[product]);
         }
-        this.selectedProducts= products || []
+
+        this.selectedProducts= products || [];
+
         for(const priceCategoryId in this.data.priceCategories) {
             window[this.data.priceCategories[priceCategoryId]] = [];
-            // console.log(this.data.priceCategories );
+        };
+
+        for(const key of this.data.proPackage.package_products) {
+            this.productSelectHandler(key.product_id);
         };
     },
     data() {
         return {
             form: this.$inertia.form({
-                name: '',
+                name:  this.data.proPackage.name || '',
                 type: 1,
                 products: [],
                 total_cost: 0,
-                // total_price:'',
                 prices: {},
                 active: '',
-                // category_ids: this.data.category_ids || [],
                 product_ids: this.data.product_ids || [],
-                // packageProductPrice: this.data.product_prices || {},
             }),
             categoryShow: false,
             selected: [],
@@ -202,7 +204,7 @@ export default {
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('packages.update', this.data.product.id));
+                return this.form.put(this.route('packages.update', this.data.proPackage.id));
             }
         },
 
