@@ -8,6 +8,7 @@ use App\Http\Resources\PackageResource;
 use App\Models\Package;
 use App\Models\PackageProduct;
 use App\Models\PriceCategory;
+use App\Models\Pricing;
 use App\Models\Product;
 use App\Models\Version;
 use App\Models\Volume;
@@ -95,8 +96,8 @@ class PackageController extends Controller
         ]);
         // return  $package->id;
 
-        $products_list = [];
         if ($package) {
+            $products_list = [];
             foreach ($request->products as $product) {
                 $products_list[] = [
                     'package_id' => $package->id,
@@ -106,7 +107,7 @@ class PackageController extends Controller
             $package_products = PackageProduct::insert($products_list);
         }
         if ($package_products) {
-            $package->products()->updateorCreate(
+            $product = $package->products()->updateorCreate(
                 [
                     'productable_type'  => Package::class,
                     'productable_id'    => $package->id
@@ -115,6 +116,18 @@ class PackageController extends Controller
                     'active' => 0
                 ]
             );
+        }
+        if ($product && !empty($request->prices)) {
+            $price_list = [];
+            foreach ($request->prices as $key => $price) {
+                $price_list[] = [
+                    'product_id' => $product->id,
+                    'price_category_id' => $key,
+                    'amount' => $price,
+                    'deleted_at' => NULL
+                ];
+            }
+            $package_products = Pricing::insert($price_list);
         }
 
 
