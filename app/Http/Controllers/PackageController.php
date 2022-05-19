@@ -50,6 +50,7 @@ class PackageController extends Controller
     {
         $price_categories = PriceCategory::pluck('name', 'id');
         PackageProductListResource::$price_categories = $price_categories;
+        // return
         $product_list = Product::with([
             'prices',
             'productable' => function (MorphTo $morphTo) {
@@ -148,10 +149,13 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
-        $package = Package::with('package_products')->where('id', $package->id)->first();
+        // $package = Package::with('package_products')->where('id', $package->id)->first();
+        // return
+        $package->load('package_products','products.prices.price_categroy');
         
         $price_categories = PriceCategory::pluck('name', 'id');
         PackageProductListResource::$price_categories = $price_categories;
+        // return
         $product_list = Product::with([
             'prices',
             'productable' => function (MorphTo $morphTo) {
@@ -186,9 +190,63 @@ class PackageController extends Controller
 
     public function update(Request $request, Package $package)
     {
-        return $request;
-        $package->update($this->validateData($request, $package->id));
-
+        // return $request;
+       // return $request;
+       $packageUpdate = Package::where('id', $package->id)
+       ->update([
+        'name' => $request->name,
+        'total_cost' => $request->total_cost,
+        'user_id' => Auth::id(),
+    ]);
+    // return
+    // Package::where('id', $package->id)->first()->package_products()->delete();
+    // return  $package->id;
+    
+    $package->package_products()->delete();
+    if ($packageUpdate) {
+        $products_list = [];
+        foreach ($request->products as $product) {
+            $package_products =  PackageProduct::withTrashed()->updateOrCreate(
+             [
+                'package_id' => $package->id,
+                'product_id' => $product,
+             ],[
+                'deleted_at' => NULL
+            ]);
+        }
+        // $package_products = PackageProduct::insert($products_list);
+    }
+    if ($package_products) {
+        $product = $package->products()->updateorCreate(
+            [
+                'productable_type'  => Package::class,
+                'productable_id'    => $package->id
+            ],
+            [
+                'active' => 0
+            ]
+        );
+    }
+    $product->prices()->delete();
+    if ($product && !empty($request->prices)) {
+        foreach ($request->prices as $key => $price) {
+            $pricing =  Pricing::withTrashed()->updateOrCreate(
+                [
+                    'product_id' => $product->id,
+                    'price_category_id' => $key,
+                ],[
+                    'amount' => $price,
+                    'deleted_at' => NULL
+               ]);
+            // $price_list[] = [
+            //     'product_id' => $product->id,
+            //     'price_category_id' => $key,
+            //     'amount' => $price,
+            //     'deleted_at' => NULL
+            // ];
+        }
+        // $package_products = Pricing::insert($price_list);
+    }
         return redirect()
             ->route('packages.show', $package->id)
             ->with('status', 'The record has been update successfully.');

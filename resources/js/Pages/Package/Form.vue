@@ -28,7 +28,7 @@
                             </thead>
                             <tbody class="text-gray-600 text-sm font-light bg-white">
                                 <tr class="border bg-green-200 border-white" v-for="(product, productId) in selectedProducts" :key="productId" >
-                                    <td class="text-left">{{ product.name }}</td>
+                                    <td class="text-left">{{ product.productId + product.name }}</td>
                                     <td class="text-left">{{ product.cost }}</td>
                                     <td class="text-left">
                                       <div class="py-1.5 flex gap-2 mr-10" v-for="(priceCategory, index) in product.priceCategories" :key="priceCategory">
@@ -111,7 +111,7 @@
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light bg-white">
                             <tr class="border" v-for="(product, productId) in data.productList" :key="productId" :class="{'hidden' : form.product_ids.includes(parseInt(productId))}">
-                                <td class="w-40">{{ product.name }}</td>
+                                <td class="w-40">{{ product.id + product.name }}</td>
                                 <td><Input type="checkbox" class="cursor-pointer checkbox" @change="productSelectHandler(productId)" :checked="product.checked" /></td>
                             </tr>
                         </tbody>
@@ -163,9 +163,16 @@ export default {
             window[this.data.priceCategories[priceCategoryId]] = [];
         };
 
-        for(const key of this.data.proPackage.package_products) {
-            this.productSelectHandler(key.product_id);
-        };
+            let arr = [];
+            for (const iterator of this.data.productList) {
+                arr.push(iterator.id)
+            }
+            for (const key of this.data.proPackage.package_products) {
+                console.log(key.product_id);
+               let index = arr.indexOf(key.product_id);
+
+                this.productSelectHandler(index)
+            }
     },
     data() {
         return {
@@ -231,6 +238,7 @@ export default {
         },
 
         productSelectHandler(productId) {
+            
             productId = parseInt(productId);
 
             if (this.form.product_ids.includes(productId)) {
@@ -244,7 +252,7 @@ export default {
 
             if (!product.selected) {
                 this.selectedProducts.push({
-                    productId: productId,
+                    productId: product.id,
                     name: product.name,
                     cost: product.productionCost,
                     prices: product.prices,

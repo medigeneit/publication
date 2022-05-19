@@ -23,5 +23,9 @@ class Package extends Model
     {
         return $this->morphMany(Product::class, 'productable');
     }
+    // public function package_products_with_pivot()
+    // {
+    //     return $this->belongsToMany(Product::class,'package_products');
+    // }
 
 }
