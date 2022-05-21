@@ -171,9 +171,14 @@ export default {
             
             let index = arr.indexOf(key.product_id);
 
-            this.productSelectHandler(index)
+            this.productSelectHandler(index, 'created')
         }
-        
+        for (const priceCategoryId in this.data.total_costs) {
+            if (Object.hasOwnProperty.call(this.data.total_costs, priceCategoryId)) {
+               this.form.prices[priceCategoryId] = this.data.total_costs[priceCategoryId] ;
+                
+            }
+        }
     },
     data() {
         return {
@@ -238,7 +243,7 @@ export default {
             }
         },
 
-        productSelectHandler(productId) {
+        productSelectHandler(productId, from = null) {
             
             productId = parseInt(productId);
 
@@ -260,22 +265,33 @@ export default {
                 });
             }
 
-            this.totalCalculate(product);
+            this.totalCalculate(product, from);
 
             this.selectedProductHandler();
         },
-        totalCalculate(product) {
+        totalCalculate(product, from) {
             let total = 0;
-            console.log(product.prices);
-            for(let priceCategoryId in product.prices) {
-                if(product.prices[priceCategoryId] !== undefined)
-                    window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId] ? product.prices[priceCategoryId] : 0)
 
-                total =  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseFloat(a) + parseFloat(b));
-
-                this.totalObj[this.data.priceCategories[priceCategoryId]] = total
-                this.form.prices[priceCategoryId] = total;
-            };
+            if (from != 'created') {
+                
+                for(let priceCategoryId in product.prices) {
+                    if(product.prices[priceCategoryId] !== undefined)
+                        window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId] ? product.prices[priceCategoryId] : 0)
+    
+                    total =  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseFloat(a) + parseFloat(b));
+    
+                    this.totalObj[this.data.priceCategories[priceCategoryId]] = total
+                    this.form.prices[priceCategoryId] = total;
+                };
+            } else {
+                for (const priceCategoryId in this.data.total_costs) {
+                    if (Object.hasOwnProperty.call(this.data.total_costs, priceCategoryId)) {
+                    this.totalObj[this.data.priceCategories[priceCategoryId]] = this.data.total_costs[priceCategoryId] ;
+                    this.form.prices[priceCategoryId] = this.data.total_costs[priceCategoryId] ;
+                        
+                    }
+                }
+            }
 
             let cost = product.productionCost ? product.productionCost : 0;
             this.costs.push(cost);
@@ -289,6 +305,7 @@ export default {
                 }
             });
 
+            
             for (const priceCategoryId in product.prices) {
                 const index = window[this.data.priceCategories[priceCategoryId]].indexOf(product.prices[priceCategoryId]);
                 

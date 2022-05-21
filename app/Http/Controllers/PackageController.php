@@ -181,10 +181,10 @@ class PackageController extends Controller
         PackageResource::withoutWrapping();
         // return PackageProductListResource::collection($product_list);
         return Inertia::render('Package/Edit', [
-            'proPackage' => $package,
-            'priceCategories' => $price_categories,
-
-            'productList' => PackageProductListResource::collection($product_list),
+            'proPackage'        => $package,
+            'priceCategories'   => $price_categories,
+            'total_costs'       => $package->products[0]->prices->pluck('amount', 'price_category_id') ?? [],
+            'productList'       => PackageProductListResource::collection($product_list),
         ]);
     }
 
