@@ -278,7 +278,7 @@ export default {
                     if(product.prices[priceCategoryId] !== undefined)
                         window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId] ? product.prices[priceCategoryId] : 0)
     
-                    total =  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseFloat(a) + parseFloat(b));
+                    teotal =  window[this.data.priceCategories[priceCategoryId]].reduce((a,b) => parseFloat(a) + parseFloat(b));
     
                     this.totalObj[this.data.priceCategories[priceCategoryId]] = total
                     this.form.prices[priceCategoryId] = total;
