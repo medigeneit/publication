@@ -32,6 +32,7 @@ class ProductResource extends JsonResource
         $publisher_name = $this->productable_type == Volume::class ? ($this->productable->version->production->publisher->name) : ($this->productable_type == Version::class ? $this->productable->production->publisher->name : '');
 
         $moderators = $this->productable_type == Volume::class ? ($this->productable->version->moderators) : ($this->productable_type == Version::class ? $this->productable->moderators : []);
+        $alert_quantity = $this->productable_type == Volume::class ? ($this->productable->version->alert_quantity) : ($this->productable_type == Version::class ? $this->productable->alert_quantity : 0);
 
         return [
             'id'                    => (int) $this->id,
@@ -56,6 +57,7 @@ class ProductResource extends JsonResource
             'total_storage'         => (int) ($this->storages->pluck('quantity')->sum() ?? 0),
             'storage_outlets'       => (array) ($this->storages->pluck('outlet_id')->toArray() ?? []),
             'storages'              => (object) ($this->storages ?? []),
+            'alert_quantity'         => (int) ($alert_quantity ?? 0),
             // 'wholesalePrice'        => (float) ($this->prices->amount ?? 0),
             // 'retailPrice'           => (float) ($this->retail_price ?? 0),
             // 'distributePrice'       => (float) ($this->distribute_price ?? 0),
@@ -67,7 +69,6 @@ class ProductResource extends JsonResource
             // 'edition'               => (string) ($this->edition ?? ''),
             // 'isbn'                  => (string) ($this->isbn ?? ''),
             // 'crl'                   => (string) ($this->crl ?? ''),
-            // 'alertQuantity'         => (int) ($this->alert_quantity ?? 0),
             // 'storages'              => (int) ($this->storages->count() ?? ''),
             // 'packageProducts'       => (object) ($this->package_products),
             // 'packageProductCount'   => (int) ($this->package_products->count()),
