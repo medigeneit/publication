@@ -19,7 +19,6 @@ class CreatePressesTable extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('address')->nullable();
-            $table->tinyInteger('active');
             $table->bigInteger('user_id');
             $table->boolean('active')->default(1);
             $table->softDeletes();
