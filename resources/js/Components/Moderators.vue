@@ -68,10 +68,11 @@
         </div>
 
         <div class="mb-4">
-            <Label for="active" value="Honorarium" />
+            <Label for="active" :value=" form.moderators[index].honorarium_type == 2 ? 'Honorarium(%)' : 'Honorarium(Tk)'" />
             <Input
                 type="number"
                 class="mt-1 block w-full"
+                :placeholder="form.moderators[index].honorarium_type == 2 ? 'e.g: 2%' : 'e.g: 1000**/-'"
                 v-model="form.moderators[index].honorarium"
                 
             />

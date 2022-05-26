@@ -247,7 +247,7 @@ export default {
                 soft: this.data.product.soft || 0,
                 priceCategory: this.data.product.priceCategory,
                 amounts: {},
-                active: this.moduleAction == 'store' ? 1 : this.data.product.active,
+                active: this.moduleAction == 'store' ? 0 : this.data.product.active,
                 category_ids: this.data.category_ids || [],
                 // image : this.data.product.image || null,
                 // name: this.data.product.name,

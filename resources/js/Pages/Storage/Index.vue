@@ -10,13 +10,13 @@
 
         <data-table :collections="storages" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: storage }">
-                <td class="py-3 px-2 text-left">{{ storage.id }}</td>
-                <td class="py-3 px-2 text-left">{{ storage.outletName }}</td>
-                <td class="py-3 px-2 text-left">{{ storage.productName }}</td>
-                <td class="py-3 px-2 text-left">{{ storage.quantity }}</td>
-                <td class="py-3 px-2 text-left">{{ storage.alert_quantity }}</td>
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">{{ storage.id }}</td>
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">{{ storage.outletName }}</td>
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">{{ storage.productName }}</td>
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">{{ storage.quantity }}</td>
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">{{ storage.alert_quantity }}</td>
                 <!-- {{ storage.id }} -->
-                <td class="py-3 px-2 text-left">
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">
                     <div class="flex justify-center items-center text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" @click="modalHandler($event); form.storage_id = storage.id">
                         Request
                     </div>
@@ -50,14 +50,14 @@
                         </div>
                     </div>
                 </td>
-                <td class="py-2.5 px-2">
+                <td class="py-2.5 px-2" :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('storages.show', storage.id)" />
                         <action-button-edit :href="route('storages.edit', storage.id)" />
                         <!-- <action-button-cerculation @click="modalHandler" /> -->
                     </div>
                 </td>
-                <td class="py-3 px-2 text-center">
+                <td class="py-3 px-2 text-center" :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">
                     <div class="flex justify-center items-center text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" @click="modalHandler">
                         Circulation
                     </div>

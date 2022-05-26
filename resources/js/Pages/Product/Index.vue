@@ -8,34 +8,34 @@
 
         <!-- <add-new-button :href="route('products.create')" /> -->
 
-        <data-table :collections="products" :filters="filters" :top-links="true" :columns="columns" :latest="true">
+        <data-table :collections="products" :filters="filters" :top-links="true" :columns="columns"  :latest="true">
             <template #default="{ item: product }">
-                <td class="py-2.5 px-2">
+                <td class="py-2.5 px-2" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
                         <action-button-show :href="route('products.show', product.id)" />
                         <action-button-edit :href="route('products.edit', product.id)" />
                     </div>
                 </td>
-                <td class="py-3 px-2 text-left">{{ product.id }}</td>
-                <td class="py-3 px-2 text-left">
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">{{ product.id }}</td>
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <b>
                         {{ product.name }}
                     </b>
                 </td>
-                <td class="py-3 px-2 text-left">
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     {{ product.typeName }}
                 </td>
-                <td class="py-3 px-2 text-left">
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
                         {{ product.activeValue }}
                     </span>
                 </td>
-                <td class="py-3 px-2 text-left">
+                <td class="py-3 px-2 text-left" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-yellow-500': product.soft, 'bg-gray-500': !product.soft }">
                         {{ product.soft ? 'Yes' : 'No' }}
                     </span>
                 </td>
-                <td class="py-3 px-2 text-center">
+                <td class="py-3 px-2 text-center" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div v-if="product.categoryCount" @click="modalHandler" class="text-center border bg-indigo-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ product.categoryCount }} categories
                     </div>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </td>
-                <td class="py-3 px-2 text-right">
+                <td class="py-3 px-2 text-right" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div v-if="Object.keys(product.prices).length" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ Object.keys(product.prices).length }} Prices
                     </div>
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </td>
-                <td class="py-3 px-2 text-right">
+                <td class="py-3 px-2 text-right" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div v-if="product.moderators.length" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ product.moderators.length }} Moderators
                     </div>
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                 </td>
-                <td class="py-3 px-2 text-right">
+                <td class="py-3 px-2 text-right" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div v-if="product.storages.length" @click="modalHandler" class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         Total Quantity :  {{ product.total_storage }}
                         <br>
@@ -122,7 +122,9 @@
                                 <div class="p-3">
                                     <div class="py-1.5 flex gap-4" v-for="(storage, index) in product.storages" :key="index">
                                         <!-- {{ moderator.moderators_type.name }} :   {{ moderator.author.name }} -->
-                                        {{ storage.outlet.name }} : {{ storage.quantity || 0 }} pc
+                                        <div :class="{'bg-red-200' : storage.quantity <= storage.alert_quantity}">
+                                            {{ storage.outlet.name }} : {{ storage.quantity || 0 }} pc
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
@@ -133,7 +135,7 @@
                         </div>
                     </div>
                 </td>
-                <td class="py-3 px-2 text-center">
+                <td class="py-3 px-2 text-center" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" v-if="product.storages.length" @click="modalHandler">
                         Circulation
                     </div>
@@ -187,7 +189,7 @@
                     </div>
                 </td>
 
-                <td class="text-center">
+                <td class="text-center" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer" v-if="product.storages.length" @click="modalHandler">
                         Request Product
                     </div>
@@ -261,7 +263,7 @@
                 </td>
 
 
-                <td class="py-3 px-2 text-center">
+                <td class="py-3 px-2 text-center" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div v-if="product.packageProductCount" @click="modalHandler" class="text-center border bg-yellow-600 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ product.packageProductCount }} products
                     </div>
@@ -286,7 +288,7 @@
                 </td>
                 <!-- <td class="py-3 px-2 text-left">{{ product.publisherName ?? '' }}</td>
                 <td class="py-3 px-2 text-right">{{ product.productionCost }}</td> -->
-                <td class="py-3 px-2 text-right">
+                <td class="py-3 px-2 text-right" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                         {{ product.alertQuantity }}
                 </td>
             </template>
