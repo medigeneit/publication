@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PackageProductListResource;
 use App\Http\Resources\PackageResource;
+use App\Models\Category;
 use App\Models\Package;
 use App\Models\PackageProduct;
 use App\Models\PriceCategory;
@@ -74,13 +75,14 @@ class PackageController extends Controller
         ])->get();
 
         PackageResource::withoutWrapping();
-
+        $proPackage = new Package();
+        $proPackage->package_products = [];
         // return  [
         return Inertia::render('Package/Create', [
-            'proPackage' => new Package(),
-            'priceCategories' => $price_categories,
-
-            'productList' => PackageProductListResource::collection($product_list),
+            'proPackage'        => $proPackage,
+            'priceCategories'   => $price_categories,
+            'total_costs'       => [],
+            'productList'       => PackageProductListResource::collection($product_list),
             // 'productList' => $product_list,
         ]);
         // ];
@@ -94,6 +96,7 @@ class PackageController extends Controller
             'name' => $request->name,
             'total_cost' => $request->total_cost,
             'user_id' => Auth::id(),
+            'active' => $request->active,
         ]);
         // return  $package->id;
 
@@ -149,9 +152,7 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
-        // $package = Package::with('package_products')->where('id', $package->id)->first();
-        // return
-        $package->load('package_products','products.prices.price_categroy');
+        $package->load('package_products','product.prices.price_categroy');
         
         $price_categories = PriceCategory::pluck('name', 'id');
         PackageProductListResource::$price_categories = $price_categories;
@@ -183,8 +184,10 @@ class PackageController extends Controller
         return Inertia::render('Package/Edit', [
             'proPackage'        => $package,
             'priceCategories'   => $price_categories,
-            'total_costs'       => $package->products[0]->prices->pluck('amount', 'price_category_id') ?? [],
+            'total_costs'       => $package->product->prices->pluck('amount', 'price_category_id') ?? [],
             'productList'       => PackageProductListResource::collection($product_list),
+            'category_ids'      => $package->product->categories->pluck('id')->toArray(),
+            'categories'        => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
         ]);
     }
 
@@ -197,6 +200,7 @@ class PackageController extends Controller
         'name' => $request->name,
         'total_cost' => $request->total_cost,
         'user_id' => Auth::id(),
+        'active' => $request->active
     ]);
     // return
     // Package::where('id', $package->id)->first()->package_products()->delete();

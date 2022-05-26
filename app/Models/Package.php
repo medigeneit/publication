@@ -19,10 +19,11 @@ class Package extends Model
        return $this->hasMany(PackageProduct::class);
     }
 
-    public function products()
+    public function product()
     {
-        return $this->morphMany(Product::class, 'productable');
+        return $this->morphOne(Product::class, 'productable');
     }
+
     // public function package_products_with_pivot()
     // {
     //     return $this->belongsToMany(Product::class,'package_products');

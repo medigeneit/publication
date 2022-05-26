@@ -11,6 +11,14 @@
                         <Label for="name" value="Name" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                     </div>
+                    
+                    <div class="mb-4">
+                        <Label for="active" value="Active" />
+                        <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </Select>
+                    </div>
                 </div>
 
                 <div v-if="selectedProducts.length > 0">
@@ -51,7 +59,7 @@
                         </table>
                     </div>
                 </div>
-                <div v-if="Object.keys(totalObj).length">
+                <div>
                     <div class="px-4 py-3 text-lg font-bold ">Total</div>
                     <hr>
                     
@@ -85,6 +93,69 @@
                 </div>
 
                 <hr class="w-full my-4">
+
+                        <div class="w-full max-w-md" v-if="categoryShow">
+            <div class="mb-4 w-full bg-white border shadow rounded">
+                <div class="px-4 py-3 text-lg font-bold">Category &amp; Subcategory</div>
+                <hr>
+                <div class="p-4">
+                    <ul class="">
+                        <li v-for="(category, index) in data.categories" :key="index" class="my-1 relative">
+                            <div class="parent flex items-center gap-1 shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(category.id), 'bg-white' : form.category_ids.includes(category.id) }" draggable="true" >
+                                <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer transform" :class="{'text-blue-700' : category.subcategories.length, 'text-gray-300' : !(category.subcategories.length)}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                                </svg>
+
+                                <div class="w-full flex justify-between items-center">
+                                    <div class="">{{ category.name }}</div>
+                                    <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(category.id)" :checked="form.category_ids.includes(category.id)" />
+                                </div>
+                            </div>
+                            <ul class="ml-4 md:ml-8 relative">
+                                <li v-for="(subcategory, index) in category.subcategories" :key="index" class="my-1 relative">
+                                    <div class="parent flex items-center gap-1 bg-white shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(subcategory.id), 'bg-white' : form.category_ids.includes(subcategory.id) }" draggable="true">
+                                        <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer transform" :class="{'text-blue-700' : subcategory.subcategories.length, 'text-gray-300' : !(subcategory.subcategories.length)}"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                                        </svg>
+                                        <div class="w-full flex justify-between items-center">
+                                            <div class="">{{ subcategory.name }}</div>
+                                            <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(subcategory.id)" :checked="form.category_ids.includes(subcategory.id)" />
+                                        </div>
+                                    </div>
+                                    <ul class="ml-4 md:ml-8 relative">
+                                        <li v-for="(subcategory, index) in subcategory.subcategories" :key="index" class="my-1 relative">
+                                            <div class="parent flex items-center gap-1 bg-white shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(subcategory.id), 'bg-white' : form.category_ids.includes(subcategory.id) }" draggable="true">
+                                                <svg @click="itemClickHandler" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer transform" :class="{'text-blue-700' : subcategory.subcategories.length, 'text-gray-300' : !(subcategory.subcategories.length)}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+                                                </svg>
+                                                <div class="w-full flex justify-between items-center">
+                                                    <div class="">{{ subcategory.name }}</div>
+                                                    <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(subcategory.id)" :checked="form.category_ids.includes(subcategory.id)" />
+                                                </div>
+                                            </div>
+                                            <ul class="ml-4 md:ml-8 relative">
+                                                <li v-for="(subcategory, index) in subcategory.subcategories" :key="index" class="my-1 relative">
+                                                    <div class="w-full flex justify-between items-center gap-1 bg-white shadow rounded border p-2" :class="{ 'bg-green-200' : form.category_ids.includes(subcategory.id), 'bg-white' : form.category_ids.includes(subcategory.id) }" draggable="true">
+                                                        <div>{{ subcategory.name }}</div>
+                                                        <Input type="checkbox" class="cursor-pointer" @change="categorySelectHandler(subcategory.id)" :checked="form.category_ids.includes(subcategory.id)" />
+                                                    </div>
+                                                    <div class="absolute -left-2 md:-left-4 w-2 md:w-4 h-7 -top-1 border-l-2 border-b-2 rounded-bl-3xl"></div>
+                                                </li>
+                                                <div class="absolute -left-2 md:-left-4 -top-1 bottom-11 border-l-2"></div>
+                                            </ul>
+                                            <div class="absolute -left-2 md:-left-4 w-2 md:w-4 h-7 -top-1 border-l-2 border-b-2 rounded-bl-3xl"></div>
+                                        </li>
+                                        <div class="absolute -left-2 md:-left-4 -top-1 bottom-11 border-l-2"></div>
+                                    </ul>
+                                    <div class="absolute -left-2 md:-left-4 w-2 md:w-4 h-7 -top-1 border-l-2 border-b-2 rounded-bl-3xl"></div>
+                                </li>
+                                <div class="absolute -left-2 md:-left-4 -top-1 bottom-11 border-l-2"></div>
+                            </ul>
+                        </li>
+                    </ul>    
+                </div>    
+            </div>
+        </div>
 
                 <div class="flex items-center justify-between">
                     <div class="">
@@ -167,6 +238,7 @@ export default {
         for (const iterator of this.data.productList) {
             arr.push(iterator.id)
         }
+
         for (const key of this.data.proPackage.package_products) {
             
             let index = arr.indexOf(key.product_id);
@@ -190,13 +262,15 @@ export default {
                 prices: {},
                 active: '',
                 product_ids: this.data.product_ids || [],
+                active: this.moduleAction == "store" ? 1 : this.data.proPackage.active,
             }),
             categoryShow: false,
             selected: [],
             selectedProducts: [],
             totalObj: {},
             costs: [],
-            totalCost: ''
+            totalCost: '',
+            categoryShow: true
         }
     },
 
