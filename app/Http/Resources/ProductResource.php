@@ -23,15 +23,33 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
 
-        $product_type = $this->productable_type == Volume::class ? $this->productable->version->type : ($this->productable_type == Version::class ? $this->productable->type : ($this->productable_type == Package::class ? 4: 1));
-        $type = ($product_type == 1 || $product_type == 3) ? 2 : ($product_type == 2 ? 3 : ($product_type == 4 ? 1: 2));;
+        $product_type = $this->productable_type == Volume::class ? $this->productable->version->type : ($this->productable_type == Version::class ? $this->productable->type : ($this->productable_type == Package::class ? 4 : 1));
+        $type = ($product_type == 1 || $product_type == 3) ? 2 : ($product_type == 2 ? 3 : ($product_type == 4 ? 1 : 2));;
         // $type = $product_type == 3 ? 2 : ($product_type == 2 ? 3 : ($product_type == 1 ? 1: 2));
 
-        $cost = $this->productable_type == Volume::class ? (string)($this->productable->version->last_printing->cost_per_unit??0 . '/' . $this->productable->version->volumes->count()) : ($this->productable_type == Version::class ? $this->productable->last_printing->cost_per_unit??0 : ($this->productable_type == Package::class ? $this->productable->total_cost :0));
+        $cost = $this->productable_type == Volume::class ? (string)($this->productable->version->last_printing->cost_per_unit ?? 0 . '/' . $this->productable->version->volumes->count()) : ($this->productable_type == Version::class ? $this->productable->last_printing->cost_per_unit ?? 0 : ($this->productable_type == Package::class ? $this->productable->total_cost : 0));
         // $cost = $this->productable_type == Volume::class ? (string)($this->productable->version->production_cost . '/' . $this->productable->version->volumes->count()) : ($this->productable_type == Version::class ? $this->productable->production_cost : 0);
         $publisher_name = $this->productable_type == Volume::class ? ($this->productable->version->production->publisher->name) : ($this->productable_type == Version::class ? $this->productable->production->publisher->name : '');
 
         $moderators = $this->productable_type == Volume::class ? ($this->productable->version->moderators) : ($this->productable_type == Version::class ? $this->productable->moderators : []);
+
+        $storage_pack = NULL;
+        $package_products = $this->productable->package_products;
+
+        if ($this->productable_type == Package::class) {
+            $storage_pack = $this->storages->map(function ($storage) use($package_products) {
+                // $storage_pack_storage = $package_products;
+                $package_product_quantity = $package_products->map(function ($package_product) use($storage) {
+                    return $package_product->product->storages->where('outlet_id', $storage->outlet_id )->first();
+                });
+                // $storage_pack_storage->quantity = 987654321;
+                // return $storage_pack_storage;
+                 $storage->quantity =  $package_product_quantity->min('quantity');
+                //  $storage->asfafasfasfasf =  $package_product_quantity;
+                return $storage;
+            });
+        }
+
 
         return [
             'id'                    => (int) $this->id,
@@ -45,7 +63,7 @@ class ProductResource extends JsonResource
             'mrp'                   => (float) ($this->mrp ?? ''),
             'prices'                => (object) ($this->prices->pluck('amount', 'price_category_id') ?? []),
             'priceCategories'       => (object) (self::$price_categories ?? []),
-            'volume'                => (object) ($this->productable_type == Version::class ? $this->productable->volumes : $this->productable),
+            'volume'                => (object) ($this->productable_type == Version::class ? $this->productable->volumes : ($this->productable_type == Version::class ? $this->productable:[])),
             'productable'           => (object) ($this->productable ?? ''),
             'active'                => (int) ($this->active),
             'activeValue'           => (string) ($this->value_of_active),
@@ -55,7 +73,8 @@ class ProductResource extends JsonResource
             'moderators'            => (object) ($moderators ?? []),
             'total_storage'         => (int) ($this->storages->pluck('quantity')->sum() ?? 0),
             'storage_outlets'       => (array) ($this->storages->pluck('outlet_id')->toArray() ?? []),
-            'storages'              => (object) ($this->storages ?? []),
+            'storages'              => (object) ($storage_pack ?? ($this->storages ?? [])),
+            // '$storage_pack'              => $storage_pack??[],
             // 'wholesalePrice'        => (float) ($this->prices->amount ?? 0),
             // 'retailPrice'           => (float) ($this->retail_price ?? 0),
             // 'distributePrice'       => (float) ($this->distribute_price ?? 0),

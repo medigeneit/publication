@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\ModeratorType;
 use App\Models\Outlet;
+use App\Models\Package;
 use App\Models\Product;
 use App\Models\Publisher;
 use App\Models\PackageProduct;
@@ -93,6 +94,18 @@ class ProductController extends Controller
 
                         ]);
                     },
+                    Package::class => function ($query) {
+                        $query->with('package_products.product.storages')
+                        ->withMorphTo('package_products.product.productable', [
+                            Volume::class => [
+                                'version.production'
+                            ],
+                            Version::class => [
+                                'volumes', 'production'
+                            ]
+                        ]);
+                    },
+
                 ]);
             }])
             // */
@@ -103,7 +116,7 @@ class ProductController extends Controller
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
 
-// return
+        // return
         // $products =  ProductResource::collection($products->get());
         // $products =  $products->get();
         // $products =  $products->where('id',10)->first()->storages->pluck('quantity')->sum();
@@ -173,7 +186,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $product->load('prices','categories');
+        $product->load('prices', 'categories');
         // return $product->prices()->pluck('amount', 'id');
         return Inertia::render('Product/Edit', [
             "data" => [
