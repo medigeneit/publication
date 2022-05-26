@@ -29,6 +29,7 @@ class PackageController extends Controller
         // DB::enableQueryLog();
 
         $packages = Package::query()
+            // ->with('package_products.product.storages','products')
             ->withMorphTo('package_products.product.productable', [
                 Volume::class => [
                     'version.production'
@@ -38,6 +39,11 @@ class PackageController extends Controller
                 ]
             ])
             ->dateFilter();
+            // foreach( $packages->get()[0]->package_products as $pack_product )
+            // return $pack_product;
+
+            // return
+            // $storages = $packages->get()[0];
 
         // return PackageResource::collection($packages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
         return Inertia::render('Package/Index', [
@@ -152,6 +158,7 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
+
         $package->load('package_products','product.prices.price_categroy');
         
         $price_categories = PriceCategory::pluck('name', 'id');
@@ -180,7 +187,7 @@ class PackageController extends Controller
         ])->get();
 
         PackageResource::withoutWrapping();
-        // return PackageProductListResource::collection($product_list);
+
         return Inertia::render('Package/Edit', [
             'proPackage'        => $package,
             'priceCategories'   => $price_categories,

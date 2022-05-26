@@ -10,6 +10,8 @@ class CategoryProduct extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $timestamp = false;
+
     protected $guarded = [];
 
     public function category() {

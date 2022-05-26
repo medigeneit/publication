@@ -12,21 +12,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Package extends Model
 {
-    use HasFactory, ScopeSort, ScopeSearch, ScopeDateFilter,SoftDeletes, WithProductRelations;
+    use HasFactory, ScopeSort, ScopeSearch, ScopeDateFilter, SoftDeletes, WithProductRelations;
     protected $guarded = [];
 
-    public function package_products() {
-       return $this->hasMany(PackageProduct::class);
+    public function package_products()
+    {
+        return $this->hasMany(PackageProduct::class);
     }
+
 
     public function product()
     {
         return $this->morphOne(Product::class, 'productable');
     }
-
-    // public function package_products_with_pivot()
-    // {
-    //     return $this->belongsToMany(Product::class,'package_products');
-    // }
 
 }

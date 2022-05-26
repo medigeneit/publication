@@ -79,7 +79,7 @@ class SaleController extends Controller
                     },
                 ]);
             }])
-            ->where('active', 1)
+            // ->where('active', 1)
             // ->when(isset(request()->search), function ($query) {
             //     $query->where('name', 'regexp', str_replace(" ", "|", request()->search))
             //         ->orWhere('id', request()->search)

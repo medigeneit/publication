@@ -23,7 +23,14 @@ class PackageResource extends JsonResource
                 $product_ids[] = [$product->product_id];
             }
         }
-        
+        // $storage[] = [
+        //     'id'
+        //     'outlet_id'
+        //     'product_id'
+        //     'quantity'
+        //     'alert_quantity'
+        //     ]
+
         return [
             'id'            => (int) $this->id,
             'name'          => (string) ($this->name ?? ''),

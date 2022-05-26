@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\StorageResource;
 use App\Models\Outlet;
+use App\Models\Package;
 use App\Models\Press;
 use App\Models\PriceCategory;
 use App\Models\Product;
@@ -27,13 +28,25 @@ class StorageController extends Controller
     public function index()
     {
         $storages = Storage::query()
+            // ->with('package_products.product.storages')
             ->with(['product.productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([
                     Volume::class => function ($query) {
-                        $query->with('version.production','version.printings','version.products.storages.circulations');
+                        $query->with('version.production', 'version.printings', 'version.products.storages.circulations');
                     },
                     Version::class => function ($query) {
-                        $query->with('volumes', 'production','printings','products.storages.circulations');
+                        $query->with('volumes', 'production', 'printings', 'products.storages.circulations');
+                    },
+                    Package::class => function ($query) {
+                        $query->with(['package_products.product.storages' ])
+                        ->withMorphTo('package_products.product.productable', [
+                            Volume::class => [
+                                'version.production'
+                            ],
+                            Version::class => [
+                                'volumes', 'production'
+                            ]
+                        ]);
                     },
                 ]);
             }, 'outlet', 'user'])
@@ -42,8 +55,10 @@ class StorageController extends Controller
             ->search(request()->search)
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
-        // return $storages ->get();
-        // return StorageResource::collection($storages ->get());
+        // return $storages->get();
+        // return $this->product->productable->package_products->pluck('product_id');
+        // return StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
+            // return StorageResource::collection($storages ->get());
 
         return Inertia::render('Storage/Index', [
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
