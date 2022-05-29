@@ -89,6 +89,7 @@ class PackageController extends Controller
             'priceCategories'   => $price_categories,
             'total_costs'       => [],
             'productList'       => PackageProductListResource::collection($product_list),
+            'categories'  => Category::mainCategory()->with('subcategories.subcategories.subcategories.subcategories')->active()->get(),
             // 'productList' => $product_list,
         ]);
         // ];

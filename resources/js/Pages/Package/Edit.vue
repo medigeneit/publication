@@ -6,7 +6,7 @@
             Edit Product
         </template>
         
-        <form-component :data="{proPackage,productList, priceCategories, total_costs}" module-action="update" />
+        <form-component :data="{proPackage,productList, priceCategories, total_costs, category_ids, categories}" module-action="update" />
     </app-layout>
 </template>
 
@@ -39,6 +39,14 @@ export default {
         total_costs: { 
             type: Object, 
             default: {} 
+        },
+        category_ids: {
+            type: Array,
+            default: []
+        },
+        categories: {
+            type: Object,
+            default: {}
         },
     }, 
 };
