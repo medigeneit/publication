@@ -22,7 +22,7 @@
             )"
     >
         <nav-link-wrapper
-            title="Publication"
+            title="Publication Prerequisite"
             :active="
                 route().current(
                     '(categories|price-categories|packages|authors|publishers|moderator-types|presses|version-variables).*'
@@ -58,7 +58,7 @@
                 :href="route('moderator-types.index')"
                 :active="route().current('moderator-types.*')"
             >
-                Moderator Types
+               Contributor Types
             </nav-link>
             <nav-link
                 :href="route('packages.index')"
@@ -70,7 +70,7 @@
                 :href="route('version-variables.index')"
                 :active="route().current('version-variables.*')"
             >
-                Version Variables
+                Cost Variables
             </nav-link>
 
               <nav-link
