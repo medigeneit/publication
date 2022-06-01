@@ -17,7 +17,6 @@
     <!-- Scripts -->
     @routes
     <script src="{{ mix('js/app.js') }}" defer></script>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
 </head>
 
 <body class="font-sans antialiased">
