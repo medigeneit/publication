@@ -17,7 +17,8 @@
             </div>
             <div class="flex justify-between">
                 <slot name="footer">
-                    <Link :href="route('categories.index')" class="px-2 py-0.5 border rounded bg-red-600 text-white">Cancel</Link>
+                    <Link :href="route('categories.index')" class="px-2 py-0.5 border rounded bg-red-600 text-white">
+                    Cancel</Link>
                 </slot>
                 <button class="px-2 py-0.5 border rounded bg-blue-600 text-white" type="submit">Submit</button>
             </div>

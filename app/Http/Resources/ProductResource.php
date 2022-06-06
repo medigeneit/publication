@@ -35,7 +35,19 @@ class ProductResource extends JsonResource
         $alert_quantity = $this->productable_type == Volume::class ? ($this->productable->version->alert_quantity) : ($this->productable_type == Version::class ? $this->productable->alert_quantity : 0);
 
         $storage_pack = NULL;
+
         $package_products = $this->productable->package_products;
+        $product_names = [];
+        $product_ids = [];
+        $pacakge_id= '';
+
+        if ($package_products) {
+            foreach ($package_products as $product) {
+                $product_names[$product->product_id] = [$product->product->product_name];
+                $product_ids[] = [$product->product_id];
+                $pacakge_id = $product->package_id;
+            }
+        }
 
         if ($this->productable_type == Package::class) {
             $storage_pack = $this->storages->map(function ($storage) use($package_products) {
@@ -75,8 +87,10 @@ class ProductResource extends JsonResource
             'total_storage'         => (int) ($this->storages->pluck('quantity')->sum() ?? 0),
             'storage_outlets'       => (array) ($this->storages->pluck('outlet_id')->toArray() ?? []),
             'storages'              => (object) ($storage_pack ?? ($this->storages ?? [])),
-            'alert_quantity'         => (int) ($alert_quantity ?? 0),
-
+            'alert_quantity'        => (int) ($alert_quantity ?? 0),
+            'package_product_ids'   => (array) ($product_ids ?? []),
+            'package_product_names' => (array) ($product_names ?? []),
+            'pacakge_id'            => (int) ($pacakge_id ?? 0),
             // 'wholesalePrice'        => (float) ($this->prices->amount ?? 0),
             // 'retailPrice'           => (float) ($this->retail_price ?? 0),
             // 'distributePrice'       => (float) ($this->distribute_price ?? 0),

@@ -150,10 +150,11 @@ class PackageController extends Controller
 
     public function show(Package $package)
     {
+        $package->load('package_products','product.prices.price_categroy');
         PackageResource::withoutWrapping();
-
+        // return new PackageResource($package);
         return Inertia::render('Package/Show', [
-            'package' => new PackageResource($package),
+            'packagePro' => new PackageResource($package),
         ]);
     }
 

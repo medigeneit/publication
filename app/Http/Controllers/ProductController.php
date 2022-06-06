@@ -123,7 +123,7 @@ class ProductController extends Controller
         // $instance =  $products[10];
         // $moderators = $instance->productable_type == Volume::class ? ($instance->productable->version->moderators) :  ($instance->productable_type == Version::class ? $instance->productable->moderators : []);
         // return $products->get();
-
+        
         return Inertia::render('Product/Index', [
             'products' => ProductResource::collection($products->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'outlets' => Outlet::pluck('name', 'id'),

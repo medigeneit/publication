@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             'email'         => (string) ($this->email ?? ''),
             'phone'         => (string) ($this->phone ?? ''),
             'type'          => (int) ($this->type ?? 0),
+            'password'      => (string) ($this->password ?? ''),
             'typeName'      => (string) ($this->value_of_type ?? ''),
             'active'        => (int) ($this->active ?? 0),
             'activeValue'   => (string) ($this->value_of_active ?? 0),

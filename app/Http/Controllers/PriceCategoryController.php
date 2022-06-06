@@ -16,9 +16,10 @@ class PriceCategoryController extends Controller
 
     public function index()
     {
-        $priceCategory = $this->setQuery(PriceCategory::query())
-            ->search()->filter()
-            ->getQuery();
+        $priceCategory = PriceCategory::query()
+            ->search(['id', 'name',])
+            ->filter()
+            ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         return Inertia::render('PriceCategory/Index', [
             'priceCategories' => PriceCategoryResource::collection($priceCategory->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),

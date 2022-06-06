@@ -1,48 +1,104 @@
 <template>
+
     <Head title="Product" />
 
     <app-layout>
         <template #header>
-            {{ product.name }}
+            {{ packagePro.name }}
         </template>
 
         <add-new-button :href="route('packages.create')" class="mb-4" />
-        
-        <div class="overflow-auto bg-white border">
-            <table class="table-auto">
-                <show-table-row heading="ID">{{ product.id }}</show-table-row>
-                <show-table-row heading="Name">{{ product.name }}</show-table-row>
-                <show-table-row heading="Type">{{ product.typeName }}</show-table-row>
-                <show-table-row v-if="product.categoryCount" heading="Category">
-                    <div v-for="(categoryName, index) of categories" :key="index">
-                        {{ categoryName }}
+
+        <div class="overflow-auto bg-white border p-5">
+
+            <!-- <h1 class="font-extrabold text-center">{{ packagePro.name }}</h1>
+            <div class="text-center" v-if="packagePro.package_products.length">
+                <div>
+                    Products : {{ packagePro.package_products.length }}
+                </div>
+                <div>
+                    Total Cost : {{ packagePro.total_cost }}
+                </div>
+            </div>
+            <div class="text-center">
+                Active :
+                <span class="py-1 px-3 rounded-full text-white font-bold"
+                    :class="{ 'bg-green-500': packagePro.active, 'bg-red-500': !packagePro.active }">
+                    {{ packagePro.activeValue }}
+                </span>
+            </div>
+
+            <div class="mt-2 text-center">
+                <h1 class="underline font-extrabold">Prices</h1>
+                
+                <div v-for="(price, priceCategory) in packagePro.package_prices" :key="priceCategory">
+                    <span>{{ `${priceCategory} : ${price} tk` }}</span>
+                </div>
+            </div> -->
+
+            <div class="text-center">
+                Active :
+                <span class="py-1 px-3 rounded-full text-white font-bold"
+                    :class="{ 'bg-green-500': packagePro.active, 'bg-red-500': !packagePro.active }">
+                    {{ packagePro.activeValue }}
+                </span>
+            </div>
+            <div class="mt-2 w-72 p-5">
+                <h1 class="underline font-extrabold mb-5">Package Details:</h1>
+                <div class="min-w-max">
+                    <div class="text-center mt-3">
+                        <div class="font-extrabold">
+                            {{ packagePro.name }}
+                        </div>
+                        <div v-if="packagePro.package_products.length">
+                            Products :
+                            <span class="font-extrabold">
+                                {{ packagePro.package_products.length }}
+                            </span>
+                        </div>
+                        <div v-if="packagePro.total_cost">
+                            Total cost :
+                            <span class="font-extrabold">
+                                {{ packagePro.total_cost }}
+                            </span>
+                        </div>
                     </div>
-                </show-table-row>
-                <show-table-row heading="Product Cost">{{ product.productionCost }}</show-table-row>
-                <show-table-row heading="MRP ">{{ product.mrp }}</show-table-row>
-                <show-table-row heading="Wholesale Price">{{ product.wholesalePrice }}</show-table-row>
-                <show-table-row heading="Retail Price">{{ product.retailPrice }}</show-table-row>
-                <show-table-row heading="Distribute Price">{{ product.distributePrice }}</show-table-row>
-                <show-table-row heading="Special Price">{{ product.specialPrice }}</show-table-row>
-                <show-table-row heading="Outside Dhaka Price">{{ product.outsideDhakaPrice }}</show-table-row>
-                <show-table-row heading="Ecom. Distribute Price">{{ product.ecomDistributePrice }}</show-table-row>
-                <show-table-row heading="Ecom. Wholesale Price">{{ product.ecomWholesalePrice }}</show-table-row>
-                <show-table-row heading="Active">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': product.active, 'bg-red-500': !product.active }">
-                        {{ product.activeValue }}
-                    </span>
-                </show-table-row>
-                <show-table-row heading="Created By">{{ product.createdBy }}</show-table-row>
-                <show-table-row heading="Action">
-                    <div class="flex justify-start items-center gap-1 md:gap-2">
-                        <action-button-edit :href="route('packages.edit', product.id)" />
+                    <hr>
+                    <div class="w-full" v-for="(price, priceCategory) in packagePro.package_prices"
+                        :key="priceCategory">
+                        <div class="flex">
+                            <div class="w-full">
+                                {{ priceCategory }}
+                            </div>
+                            <div class="min-w-max">
+                                {{ `${price} tk` }}
+                            </div>
+                        </div>
                     </div>
-                </show-table-row>
-            </table>
+                </div>
+            </div>
+
+            <div class="mt-2 w-72 p-5">
+                <h1 class="underline font-extrabold mb-5">Product Details:</h1>
+                <div class="min-w-max" v-for="(prices, name) in packagePro.products" :key="name">
+                    <div class="text-center font-extrabold mt-3"> {{ name }} </div>
+                    <hr>
+                    <div class="w-full" v-for="(price, priceCategory) in prices" :key="price">
+                        <div class="flex">
+                            <div class="w-full">
+                                {{ priceCategory }}
+                            </div>
+                            <div class="min-w-max">
+                                {{ `${price} tk` }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="w-full mt-4 flex">
-            <go-to-list :href="route('packages.index')"/>
+            <go-to-list :href="route('packages.index')" />
         </div>
     </app-layout>
 </template>
@@ -66,7 +122,7 @@ export default {
         AddNewButton,
     },
     props: {
-        product: { type: Object, default: {} },
+        packagePro: { type: Object, default: {} },
         categories: { type: Object, default: {} },
     },
 };

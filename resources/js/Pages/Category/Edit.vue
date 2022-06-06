@@ -27,7 +27,8 @@ export default {
         return {
             data: {
                 category : this.category,
-                categoryList: this.categoryList
+                categoryList: this.categoryList,
+                parent: this.parent,
             }
         }
     },
@@ -38,6 +39,10 @@ export default {
             default: {} 
         },
         categoryList: {
+            type:Object,
+            default: {}
+        },
+        parent: {
             type:Object,
             default: {}
         }

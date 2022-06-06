@@ -1,5 +1,6 @@
 <template>
-    <Head title="Category Tree"/>
+
+    <Head title="Category Tree" />
     <app-layout>
         <template #header>
             Category Tree
@@ -7,22 +8,29 @@
         <div class="w-auto mx-auto max-w-3xl bg-white p-4 rounded-lg shadow border">
             <Form v-if="openForm" :data="data">
                 <template #footer>
-                    <button class="px-2 py-0.5 border rounded bg-red-600 text-white" type="button" @click="openForm = false">Cancel</button>
+                    <button class="px-2 py-0.5 border rounded bg-red-600 text-white" type="button"
+                        @click="openForm = false">Cancel</button>
                 </template>
             </Form>
 
-            <button v-show="!openForm" class="px-2 py-0.5 border rounded bg-gray-600 text-white mb-4" @click="addNewSubcategory(0)">
+            <button v-show="!openForm" class="px-2 py-0.5 border rounded bg-gray-600 text-white mb-4"
+                @click="addNewSubcategory(0)">
                 + Add New Category
             </button>
 
             <ul v-show="!openForm">
-                <category-tree :main-parent="true" :collection="categories.data" :add-new-subcategory="addNewSubcategory" >
+                <category-tree :main-parent="true" :collection="categories.data"
+                    :add-new-subcategory="addNewSubcategory" :actionButton="true">
                     <template #default="{ item: subcategory  }">
-                        <category-tree :collection="subcategory.subcategories" :add-new-subcategory="addNewSubcategory">
+                        <category-tree :collection="subcategory.subcategories" :add-new-subcategory="addNewSubcategory"
+                            :actionButton="true">
                             <template #default="{ item: subcategory  }">
-                                <category-tree :collection="subcategory.subcategories" :add-new-subcategory="addNewSubcategory">
+                                <category-tree :collection="subcategory.subcategories"
+                                    :add-new-subcategory="addNewSubcategory" :actionButton="true">
                                     <template #default="{ item: subcategory  }">
-                                        <category-tree :collection="subcategory.subcategories" :lastChild="true"></category-tree>
+                                        <category-tree :collection="subcategory.subcategories" :lastChild="true"
+                                            :actionButton="true">
+                                        </category-tree>
                                     </template>
                                 </category-tree>
                             </template>

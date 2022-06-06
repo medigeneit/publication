@@ -87,9 +87,11 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
+        // return Category::where('id', $category->parent_id)->first();
         return Inertia::render('Category/Edit', [
             'category' => $category,
             'categoryList' => Category::active()->pluck('name', 'id'),
+            'parent'    => Category::where('id', $category->parent_id)->first() ?? $category,
         ]);
     }
 
@@ -107,7 +109,7 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()
-            ->route('collections.index')
+            ->route('categories.index')
             ->with('status', 'The record has been delete successfully.');
     }
 

@@ -43,7 +43,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = User::create($this->validateData($request) + [
-            'password'  => Hash::make(123456),
+            'password'  => Hash::make($request->password),
         ]);
 
         return redirect()
@@ -70,7 +70,10 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $user->update($this->validateData($request, $user->id));
+        // return $request;
+        $user->update($this->validateData($request, $user->id) + [
+            'password'  => Hash::make($request->password),
+        ]);
 
         return redirect()
             ->route('users.show', $user->id)
@@ -123,6 +126,11 @@ class UserController extends Controller
                 'required',
                 'string',
                 Rule::unique(User::class, 'phone')->ignore($id),
+            ],
+            'password' => [
+                'required',
+                'string',
+                Rule::unique(User::class, 'password')->ignore($id),
             ],
             'type' => [
                 'required',
