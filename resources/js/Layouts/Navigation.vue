@@ -16,6 +16,18 @@
     </nav-link-wrapper>
 
     <nav-link-wrapper
+        title="Roles"
+        :active="route().current('(roles).*')"
+    >
+        <nav-link
+            :href="route('roles.index')"
+            :active="route().current('roles.*')"
+        >
+            Roles
+        </nav-link>
+    </nav-link-wrapper>
+
+    <nav-link-wrapper
         title="Production Management"
         :active="route().current(
             '(publishers|productions|versions|moderator-types|contributors|moderators|categories|price-categories|products|packages|authors|presses|version-variables).*'

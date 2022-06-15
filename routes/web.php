@@ -25,6 +25,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\ProductRequestController;
 use App\Http\Controllers\PublisherController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
@@ -71,6 +72,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/printing-cost-categories/{version}', [PrintingCostController::class, 'createWithVerion'])->name('printing-cost-categories');
     Route::resources([
         'users'                     => UserController::class,
+        'roles'                     => RoleController::class,
         'publishers'                => PublisherController::class,
         'productions'               => ProductionController::class,
         'presses'                   => PressController::class,
