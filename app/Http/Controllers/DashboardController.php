@@ -14,6 +14,8 @@ use App\Models\Sale;
 use App\Models\Storage;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
 use Inertia\Inertia;
 
 class DashboardController extends Controller

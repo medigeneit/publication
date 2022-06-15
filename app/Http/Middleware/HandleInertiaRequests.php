@@ -38,6 +38,9 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'request' => $request,
+            'permissions' => auth()->user()
+                ? json_encode($request->user()->allPermissions, true)
+                : [],
         ]);
     }
 }
