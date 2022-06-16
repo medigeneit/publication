@@ -8,7 +8,9 @@ use App\Traits\DateFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Inertia\Inertia;
+// use Spatie\Permission\Contracts\Permission;
 
 class RoleController extends Controller
 {
@@ -26,13 +28,15 @@ class RoleController extends Controller
     public function create()
     {
         return Inertia::render('Role/Create', [
-            'role' => new Role(),
+            'role' => new Role(),    
+            'permissions' => Permission::pluck('name', 'id')
         ]);
     }
 
     public function store(Request $request)
     {
         $role = Role::create($this->validateData($request));
+        $role->syncPermissions($request->permissions);;
 
         return redirect()
             ->route('roles.show', $role->id)
@@ -104,7 +108,7 @@ class RoleController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            //
+            'name' => 'required'
         ]);
     }
 

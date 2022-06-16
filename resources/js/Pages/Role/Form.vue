@@ -5,44 +5,33 @@
 
         <form @submit.prevent="submit" class="">
             <div class="mb-4">
-                <Label for="publisher" value="Publisher" />
-                <Select id="publisher" class="mt-1 block w-full" v-model="form.publisher_id">
-                    <option value="">--Select --</option>
-                    <option :value="publisherId" v-for="publisherName, publisherId in data.publishers" :key="publisherId">{{ publisherName }}</option>
-                </Select>
+                <Label for="name" value="Name" />
+                <Input name="name" type="text" class="mt-1 block w-full" v-model="form.name" />
             </div>
-
+            <!-- :class="{ hidden: selected.includes(permission.id) }" -->
             <div class="mb-4">
-                <Label for="type" value="Type" />
-                <Select name="type" class="mt-1 block w-full" v-model="form.type" required @change="accountCategoryHandler">
-                     <option value=""> -- Select Type -- </option>
-                    <option :value="type" v-for="(typeName, type) in data.accountType" :key="type">{{ typeName }}</option>
-                </Select>
-            </div>
-
-            <div class="mb-4">
-                <Label for="account_category" value="Category" />
-                <Select name="account_category" class="mt-1 block w-full" v-model="form.account_category_id" required>
-                    <option value=""> -- Select Category -- </option>
-                    <option :value="type" v-for="(typeName, type) in accountCategoryList" :key="type">{{ typeName }}</option>
-                </Select>
-            </div>
-
-            <div class="mb-4">
-                <Label for="purpose" value="Purpose"/>
-                <Textarea name="purpose" type="text" class="mt-1 block w-full" v-model="form.purpose" />
-            </div>
-
-            <div class="mb-4">
-                <Label for="amount" value="Amount" />
-                <Input name="amount" type="number" class="mt-1 block w-full" v-model="form.amount"/>
+                <Label for="type" value="Permission" />
+                <li class="
+                        w-full
+                        p-2
+                        border-b
+                        cursor-pointer
+                        flex
+                        justify-between
+                    " v-for="(permission, permissionId) in data.permissions" :key="permissionId"
+                    :class="{ 'bg-green-500': selected.includes(permissionId) }"
+                    @click="selectPermissionHandler(permissionId)">
+                    <div class="w-full">
+                        {{ permission }}
+                    </div>
+                </li>
             </div>
 
             <hr class="w-full my-4">
-            
+
             <div class="flex items-center justify-between">
                 <div class="">
-                    <go-to-list :href="route('products.index')"/>
+                    <go-to-list :href="route('roles.index')" />
                 </div>
                 <Button class="" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     {{ buttonValue }}
@@ -84,32 +73,24 @@ export default {
         },
     },
 
-    created() {
-        this.accountCategoryHandler();
-    },
-
     data() {
         return {
             form: this.$inertia.form({
-                publisher_id: this.moduleAction == 'store' ? '' : this.data.account.accountable_id,
-                purpose: this.data.account.purpose,
-                amount: this.data.account.amount,
-                type: this.data.account.type || '',
-                account_category_id: this.moduleAction == 'store' ? '' : this.data.account.account_category_id
+                name: this.data.name,
+                permissions: [],
             }),
-            // accountCategoryList: this.data.account.type == 1 ? this.data.incomeCategoryList : this.moduleAction == 'store' ? {}
-            accountCategoryList: {},
+            selected: [],
         }
     },
 
     methods: {
         submit() {
             if(this.moduleAction == 'store') {
-                return this.form.post(this.route('accounts.store'));
+                return this.form.post(this.route('roles.store'));
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('accounts.update', this.data.account.id));
+                return this.form.put(this.route('roles.update', this.data.account.id));
             }
         },
         accountCategoryHandler() {
@@ -124,7 +105,20 @@ export default {
             if(type === 2) {
                 this.accountCategoryList = this.data.expenseCategoryList;
             }
-        }
+        },
+        selectPermissionHandler(permissionId) {
+            let permission = this.data.permissions[permissionId];
+
+            if (!this.selected.includes(permissionId)) {
+                this.selected.push(permissionId)
+            }
+            else {
+                let index = this.selected.indexOf(permissionId)
+                this.selected.splice(index, 1);
+            }
+            this.form.permissions = this.selected;
+            
+        },
     }
 };
 </script>

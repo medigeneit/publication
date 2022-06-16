@@ -26,35 +26,20 @@ export default {
     data() {
         return {
             data: {
-                account: this.account,
-                publishers: this.publishers,
-                accountType: this.accountType,
-                incomeCategoryList: this.incomeCategoryList,
-                expenseCategoryList: this.expenseCategoryList,
+                role: this.role,
+                permissions: this.permissions,
             }
         }
     },
 
     props: {
-        account: { 
+        role: { 
             type: Object,
             default: {}
         },
-        publishers: { 
+        permissions: { 
             type: Object,
             default: {}
-        },
-        accountType: { 
-            type: Object, 
-            default: {} 
-        },
-        incomeCategoryList: { 
-            type: Object, 
-            default: {} 
-        },
-        expenseCategoryList: { 
-            type: Object, 
-            default: {} 
         },
     },
 };
