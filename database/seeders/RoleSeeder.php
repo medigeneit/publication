@@ -14,7 +14,7 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        if (!DB::table('roles')->where('name', 'Owner')->exists()) {
+        if (!DB::table('roles')->where('name', 'Super Admin')->exists()) {
             DB::table('roles')->insert([
                 [
                     'name'          => 'Super Admin',
