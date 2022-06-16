@@ -8,9 +8,11 @@ use App\Traits\ActiveFilter;
 use App\Traits\ActiveTrait;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -35,16 +37,26 @@ class UserController extends Controller
     public function create()
     {
         return Inertia::render('User/Create', [
-            'user'      => new User(),
-            'userType'  => User::getTypes(),
+            "data" => [
+                'user'      => new User(),
+                'userType'  => User::getTypes(),
+                'roles'     => Role::pluck('name', 'id'),
+            ]
         ]);
     }
 
     public function store(Request $request)
     {
+        return Hash::make($request->password);
         $user = User::create($this->validateData($request) + [
             'password'  => Hash::make($request->password),
         ]);
+
+        // $user->assignRole($user, $request->roles);
+        if (($request->roles == 1 && Auth::user()->hasRole('Super Admin')) || $request->roles != 1
+        ) {
+            $user->syncRoles($request->roles);
+        }
 
         return redirect()
             ->route('users.show', $user->id)
@@ -53,6 +65,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user->load('roles');
         UserResource::withoutWrapping();
 
         return Inertia::render('User/Show', [
@@ -63,17 +76,24 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return Inertia::render('User/Edit', [
-            'user'      => $user,
-            'userType'  => User::getTypes(),
+            "data" => [
+                'user'      => $user,
+                'userType'  => User::getTypes(),
+                'roles'     => Role::pluck('name', 'id'),
+            ]
         ]);
     }
 
     public function update(Request $request, User $user)
     {
-        // return $request;
         $user->update($this->validateData($request, $user->id) + [
             'password'  => Hash::make($request->password),
         ]);
+        // $user->assignRole($user,$request->roles);
+        if (($request->roles == 1 && Auth::user()->hasRole('Super Admin')) || $request->roles != 1
+        ) {
+            $user->syncRoles($request->roles);
+        }
 
         return redirect()
             ->route('users.show', $user->id)
@@ -138,5 +158,12 @@ class UserController extends Controller
             ],
             'active' => ['required'],
         ]);
+    }
+    private function assignRole($admin, $role)
+    {
+        return $admin;
+        if (($role == 1 && Auth::user()->hasRole('Super Admin')) || $role != 1) {
+            $admin->syncRoles($role);
+        }
     }
 }

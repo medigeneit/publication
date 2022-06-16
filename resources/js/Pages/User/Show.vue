@@ -18,6 +18,12 @@
 
                 <show-table-row heading="Phone">{{ user.phone }}</show-table-row>
 
+                <show-table-row heading="Role">
+                    <div v-for=" role in user.roles" :key="role">
+                        {{ role }}
+                    </div>
+                </show-table-row>
+
                 <show-table-row heading="Type">{{ user.typeName }}</show-table-row>
 
                 <show-table-row heading="Active">

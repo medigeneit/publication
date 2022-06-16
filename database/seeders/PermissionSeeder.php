@@ -17,12 +17,16 @@ class PermissionSeeder extends Seeder
         $data = [];
 
         $permissionPrefix = [
-            'User',
+            'Admin',
+            'Roles',
+            'Category',
+            'Price Category',
             'Author',
             'Publisher',
-            'Category',
-            'Product',
-            'Order',
+            'Contributor Type',
+            'Cost Variable',
+            'Press',
+            'Raw Product',
         ];
 
         $commonPart = [

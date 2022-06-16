@@ -23,39 +23,27 @@ export default {
         FormComponent,
     },
 
-    data() {
-        return {
-            data:{
-                account: this.account,
-                publishers: this.publishers,
-                accountType: this.accountType,
-                incomeCategoryList: this.incomeCategoryList,
-                expenseCategoryList: this.expenseCategoryList,
-            }
-        }
-    },
+    // data() {
+    //     return {
+    //         data:{
+    //             account: this.account,
+    //             publishers: this.publishers,
+    //             accountType: this.accountType,
+    //             incomeCategoryList: this.incomeCategoryList,
+    //             expenseCategoryList: this.expenseCategoryList,
+    //         }
+    //     }
+    // },
 
     props: {
-        account: { 
+        data: { 
             type: Object,
             default: {}
         },
-        publishers: { 
-            type: Object,
-            default: {}
-        },
-         accountType: { 
-            type: Object, 
-            default: {} 
-        },
-        incomeCategoryList: { 
-            type: Object, 
-            default: {} 
-        },
-        expenseCategoryList: { 
-            type: Object, 
-            default: {} 
-        },
+        // permissions: { 
+        //     type: Object,
+        //     default: {}
+        // },
     },
 };
 </script>

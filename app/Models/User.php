@@ -37,6 +37,14 @@ class User extends Authenticatable
 
         return $permissions;
     }
+    public function getAllRolesAttribute()
+    {
+        $roles = [];
+        foreach (Auth::user()->roles as $role) {
+            $roles[] = $role->id;
+        }
+        return $roles;
+    }
 
     protected static function getTypes(){
         return [

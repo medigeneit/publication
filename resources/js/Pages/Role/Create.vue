@@ -23,21 +23,8 @@ export default {
         FormComponent,
     },
 
-    data() {
-        return {
-            data: {
-                role: this.role,
-                permissions: this.permissions,
-            }
-        }
-    },
-
     props: {
-        role: { 
-            type: Object,
-            default: {}
-        },
-        permissions: { 
+        data: { 
             type: Object,
             default: {}
         },

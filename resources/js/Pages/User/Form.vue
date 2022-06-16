@@ -1,67 +1,78 @@
 <template>
-    <div class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded">
+    <div class="w-full flex gap-4">
+        <div class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded">
 
-        <ValidationErrors class="mb-4" />
+            <ValidationErrors class="mb-4" />
 
-        <form @submit.prevent="submit" class="">
-            <div class="mb-4">
-                <Label for="name" value="Name" />
-                <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
-            </div>
-
-            <div class="mb-4">
-                <Label for="email" value="Email" />
-                <Input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required />
-            </div>
-
-            <div class="mb-4">
-                <Label for="phone" value="Phone" />
-                <Input id="phone" type="number" class="mt-1 block w-full" v-model="form.phone" />
-            </div>
-
-            <div class="mb-4">
-                <Label for="type" value="Type" />
-                <Select name="type" class="mt-1 block w-full" v-model="form.type" required>
-                    <option value="0"> --Select Type-- </option>
-                    <option :value="type" v-for="(typeName, type) in userType" :key="type">{{ typeName }}</option>
-                </Select>
-            </div>
-
-            <div class="mb-4">
-                <Label for="password" value="Password" />
-                <Input id="password" type="password" class="mt-1 block w-full" v-model="form.password" />
-                <button type="button" class="px-5 border rounded-md mt-1 bg-green-600 text-white border-gray-500"
-                    @click="passwordGenerate">
-                    Generate
-                </button>
-                <span class="text-green-400" v-if="generatedPassword">
-                    Generated :
-                    <b>
-                        {{ generatedPassword }}
-                    </b>
-                </span>
-                <div class="text-red-500">Atleast 8 character</div>
-            </div>
-
-            <div class="mb-4">
-                <Label for="active" value="Active" />
-                <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                </Select>
-            </div>
-
-            <hr class="w-full my-4">
-
-            <div class="flex items-center justify-between">
-                <div class="">
-                    <go-to-list :href="route('users.index')" />
+            <form @submit.prevent="submit" class="">
+                <div class="mb-4">
+                    <Label for="name" value="Name" />
+                    <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                 </div>
-                <Button class="" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    {{ buttonValue }}
-                </Button>
+
+                <div class="mb-4">
+                    <Label for="email" value="Email" />
+                    <Input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required />
+                </div>
+
+                <div class="mb-4">
+                    <Label for="phone" value="Phone" />
+                    <Input id="phone" type="number" class="mt-1 block w-full" v-model="form.phone" />
+                </div>
+
+                <div class="mb-4">
+                    <Label for="type" value="Type" />
+                    <Select name="type" class="mt-1 block w-full" v-model="form.type" required>
+                        <option value="0"> --Select Type-- </option>
+                        <option :value="type" v-for="(typeName, type) in data.userType" :key="type">{{ typeName }}
+                        </option>
+                    </Select>
+                </div>
+
+                <div class="mb-4">
+                    <Label for="password" value="Password" />
+                    <Input id="password" type="password" class="mt-1 block w-full" v-model="form.password" />
+                    <button type="button" class="px-5 border rounded-md mt-1 bg-green-600 text-white border-gray-500"
+                        @click="passwordGenerate">
+                        Generate
+                    </button>
+                    <span class="text-green-400" v-if="generatedPassword">
+                        Generated :
+                        <b>
+                            {{ generatedPassword }}
+                        </b>
+                    </span>
+                    <div class="text-red-500">Atleast 8 character</div>
+                </div>
+
+                <div class="mb-4">
+                    <Label for="active" value="Active" />
+                    <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </Select>
+                </div>
+
+                <hr class="w-full my-4">
+
+                <div class="flex items-center justify-between">
+                    <div class="">
+                        <go-to-list :href="route('users.index')" />
+                    </div>
+                    <Button class="" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                        {{ buttonValue }}
+                    </Button>
+                </div>
+            </form>
+        </div>
+        <div class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded">
+            <Label for="roles" value="Roles" />
+            <div name="roles" class="mt-1 block w-full cursor-pointer border border-gray-200 p-3"
+                :class="{ 'bg-blue-500': form.roles.includes(id), 'text-white': form.roles.includes(id) }"
+                v-for="(role, id) in data.roles" @click="roleSelect(id)" :key="id">
+                {{ role }}
             </div>
-        </form>
+        </div>
     </div>
 </template>
 
@@ -84,8 +95,7 @@ export default {
     },
 
     props: {
-        user: { type: Object, default: {} },
-        userType: { type: Object, default: {} },
+        data: { type: Object, default: {} },
         moduleAction: String,
         buttonValue: { type: String, default: 'Submit' },
     },
@@ -93,12 +103,13 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                name: this.user.name,
-                email: this.user.email,
-                phone: this.user.phone,
-                type: this.user.type || 0,
-                password: this.user.password || '',
-                active: this.moduleAction == 'store' ? 1 : this.user.active,
+                name: this.data.user.name || '',
+                email: this.data.user.email || '',
+                phone: this.data.user.phone || '',
+                type: this.data.user.type || 0,
+                password: this.data.user.password || '',
+                roles: [],
+                active: this.moduleAction == 'store' ? 1 : this.data.user.active,
             }),
             generatedPassword: '',
         }
@@ -139,7 +150,16 @@ export default {
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('users.update', this.user.id));
+                return this.form.put(this.route('users.update', this.data.user.id));
+            }
+        },
+        roleSelect(id) {
+            if (!this.form.roles.includes(id)) {
+                this.form.roles.push(id)
+            }
+            else {
+                let index = this.form.roles.indexOf(id);
+                this.form.roles.splice(index, 1)
             }
         }
     }

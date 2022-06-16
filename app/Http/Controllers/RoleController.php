@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
 use App\Traits\DateFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -16,9 +17,17 @@ class RoleController extends Controller
 {
     use DateFilter;
 
+    // public function __construct()
+    // {
+    //     $this->middleware('role:Super Admin|Administrator');
+    // }
+
     public function index()
     {
-        $roles = Role::query();
+        // return json_encode(request()->user()->allRoles, true);
+        $roles = Role::query()
+            ->where('name', '!=', 'Super Admin')
+            ->where('name', '!=', 'Administrator');
         return Inertia::render('Role/Index', [
             'roles' => RoleResource::collection($roles->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
@@ -28,15 +37,17 @@ class RoleController extends Controller
     public function create()
     {
         return Inertia::render('Role/Create', [
-            'role' => new Role(),    
-            'permissions' => Permission::pluck('name', 'id')
+            "data" => [
+                'role' => new Role(),    
+                'permissions' => Permission::pluck('name', 'id')
+            ]
         ]);
     }
 
     public function store(Request $request)
     {
         $role = Role::create($this->validateData($request));
-        $role->syncPermissions($request->permissions);;
+        $role->syncPermissions($request->permissions);
 
         return redirect()
             ->route('roles.show', $role->id)
@@ -45,6 +56,9 @@ class RoleController extends Controller
 
     public function show(Role $role)
     {
+        if (in_array($role->name, ['Super Admin', 'Administrator'])) {
+            return abort(404);
+        }
         $role->load('permissions:name');
         
         RoleResource::withoutWrapping();
@@ -56,15 +70,25 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
+        if (in_array($role->name, ['Super Admin', 'Administrator'])) {
+            return abort(404);
+        }
         return Inertia::render('Role/Edit', [
-            'role' => $role,
+            "data" => [
+                'role' => $role->load('permissions'),
+                'permissions' => Permission::pluck('name', 'id')
+            ]
         ]);
     }
 
     public function update(Request $request, Role $role)
     {
+        if (in_array($role->name, ['Owner', 'Administrator'])) {
+            return abort(404);
+        }
+        return $request->permissions;
         $role->update($this->validateData($request, $role->id));
-
+        $role->syncPermissions($request->permissions);
         return redirect()
             ->route('roles.show', $role->id)
             ->with('status', 'The record has been update successfully.');
@@ -72,6 +96,9 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
+        if (in_array($role->name, ['Owner', 'Administrator'])) {
+            return abort(404);
+        }
         $role->delete();
 
         return redirect()

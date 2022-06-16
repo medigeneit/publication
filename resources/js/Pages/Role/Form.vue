@@ -10,6 +10,10 @@
             </div>
             <!-- :class="{ hidden: selected.includes(permission.id) }" -->
             <div class="mb-4">
+                <div class="text-right">
+                    <span class="mr-3">Select All</span>
+                    <input type="checkbox" @click="allPermissionSelect">
+                </div>
                 <Label for="type" value="Permission" />
                 <li class="
                         w-full
@@ -19,7 +23,7 @@
                         flex
                         justify-between
                     " v-for="(permission, permissionId) in data.permissions" :key="permissionId"
-                    :class="{ 'bg-green-500': selected.includes(permissionId) }"
+                    :class="{ 'bg-blue-500': selected.includes(permissionId), 'text-white': selected.includes(permissionId) }"
                     @click="selectPermissionHandler(permissionId)">
                     <div class="w-full">
                         {{ permission }}
@@ -72,11 +76,17 @@ export default {
             default: {}
         },
     },
-
+    created() {
+        if (this.data.role.permissions) {
+            for (let permission of this.data.role.permissions)
+                this.selected.push(`${permission.id}`);
+        }
+        // console.log(this.data.selected); 
+    },
     data() {
         return {
             form: this.$inertia.form({
-                name: this.data.name,
+                name: this.data.role.name || '',
                 permissions: [],
             }),
             selected: [],
@@ -90,7 +100,7 @@ export default {
             }
 
             if(this.moduleAction == 'update') {
-                return this.form.put(this.route('roles.update', this.data.account.id));
+                return this.form.put(this.route('roles.update', this.data.role.id));
             }
         },
         accountCategoryHandler() {
@@ -107,7 +117,6 @@ export default {
             }
         },
         selectPermissionHandler(permissionId) {
-            let permission = this.data.permissions[permissionId];
 
             if (!this.selected.includes(permissionId)) {
                 this.selected.push(permissionId)
@@ -116,9 +125,31 @@ export default {
                 let index = this.selected.indexOf(permissionId)
                 this.selected.splice(index, 1);
             }
+            console.log(this.selected);
             this.form.permissions = this.selected;
             
         },
+        allPermissionSelect(event) {
+            console.log(event.target.checked);
+            if (event.target.checked) {
+                this.selected.length = 0;
+                for (const id in this.data.permissions) {
+                    this.selected.push(id)
+                }
+            }
+            else {
+                if (this.data.role.permissions) {
+                    this.selected.length = 0;
+                    for (let permission of this.data.role.permissions)
+                        this.selected.push(`${permission.id}`);
+
+                    console.log(this.selected);
+                }
+                else {
+                    this.selected.length = 0;
+                }
+            }
+        }
     }
 };
 </script>

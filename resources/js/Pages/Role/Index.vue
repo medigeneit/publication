@@ -8,7 +8,7 @@
         </template>
 
         <add-new-button :href="route('roles.create')" />
-
+        <!-- {{ $page.props.auth.user.roles }} -->
         <data-table :collections="roles" :filters="filters" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: role }">
                 <td class="py-3 px-2 text-left">{{ role.id }}</td>
