@@ -17,6 +17,15 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     use DateFilter, ActiveFilter;
+
+    // public function __construct()
+    // {
+    //     $this->middleware('can:Admin List')->only('index', 'show');
+    //     $this->middleware('can:Admin Create')->only('create', 'store');
+    //     $this->middleware('can:Admin Edit')->only('edit', 'update');
+    //     $this->middleware('can:Admin Download')->only('exportExcel');
+    //     $this->middleware('can:Admin Delete')->only('destroy');
+    // }
     public function __construct()
     {
         $this->middleware('role:Super Admin|Administrator');
