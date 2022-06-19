@@ -9,26 +9,25 @@
                 <Input name="name" type="text" class="mt-1 block w-full" v-model="form.name" />
             </div>
             <!-- :class="{ hidden: selected.includes(permission.id) }" -->
-            <div class="mb-4">
+            <div class="mb-4 overflow-auto h-screen">
+                <input type="text" @input="searchPermission">
                 <div class="text-right">
                     <span class="mr-3">Select All</span>
                     <input type="checkbox" @click="allPermissionSelect">
                 </div>
                 <Label for="type" value="Permission" />
-                <li class="
+                <div class="
                         w-full
                         p-2
                         border-b
                         cursor-pointer
-                        flex
-                        justify-between
                     " v-for="(permission, permissionId) in data.permissions" :key="permissionId"
                     :class="{ 'bg-blue-500': selected.includes(permissionId), 'text-white': selected.includes(permissionId) }"
                     @click="selectPermissionHandler(permissionId)">
                     <div class="w-full">
                         {{ permission }}
                     </div>
-                </li>
+                </div>
             </div>
 
             <hr class="w-full my-4">
@@ -149,7 +148,19 @@ export default {
                     this.selected.length = 0;
                 }
             }
-        }
+        },
+        searchPermission(event) {
+            let url = this.route(this.routeName || this.route().current(), {
+                selected: this.selected.toString(),
+                search: !event.target.value.includes('\\') ? event.target.value : '',
+                id: this.data.role.id
+            });
+
+            this.$inertia.get(url, {}, {
+                preserveState: true
+            });
+        },
+
     }
 };
 </script>
