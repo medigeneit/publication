@@ -1,6 +1,6 @@
 <template>
-    <div class="w-full flex gap-4">
-        <div class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded">
+    <div class="w-full md:flex justify-center items-center gap-4">
+        <div class="w-full md:max-w-md p-4 bg-white border shadow rounded">
 
             <ValidationErrors class="mb-4" />
 
@@ -65,12 +65,16 @@
                 </div>
             </form>
         </div>
-        <div class="w-full max-w-md mx-auto p-4 bg-white border shadow rounded">
+        <div class="w-full md:max-w-md p-4 bg-white border shadow rounded md:-mt-96">
             <Label for="roles" value="Roles" />
-            <div name="roles" class="mt-1 block w-full cursor-pointer border border-gray-200 p-3"
+            <div name="roles" class="mt-1 block cursor-pointer border border-gray-200 p-3"
                 :class="{ 'bg-blue-500': form.roles.includes(id), 'text-white': form.roles.includes(id) }"
                 v-for="(role, id) in data.roles" @click="roleSelect(id)" :key="id">
                 {{ role }}
+            </div>
+            
+            <div>
+
             </div>
         </div>
     </div>
@@ -83,6 +87,7 @@ import Label from '@/Components/Label.vue';
 import ValidationErrors from '@/Components/ValidationErrors.vue';
 import GoToList from '@/Components/GoToList.vue';
 import Select from '@/Components/Select.vue';
+import Swal from 'sweetalert2';
 
 export default {
     components: {
@@ -156,11 +161,24 @@ export default {
         roleSelect(id) {
             if (!this.form.roles.includes(id)) {
                 this.form.roles.push(id)
+                this.swalTik();
             }
             else {
                 let index = this.form.roles.indexOf(id);
                 this.form.roles.splice(index, 1)
             }
+        },
+        swalTik() {
+            Swal.fire({
+                icon: 'success',
+                width: 150,
+                showConfirmButton: false,
+                timer: 1000
+            });
+            document.querySelector('.check-icon').style.display = 'none';
+            setTimeout(() => {
+                document.querySelector('.check-icon').style.display = ''
+            }, 1000);
         }
     }
 };

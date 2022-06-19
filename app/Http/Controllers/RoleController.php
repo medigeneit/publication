@@ -59,6 +59,7 @@ class RoleController extends Controller
         if (in_array($role->name, ['Super Admin', 'Administrator'])) {
             return abort(404);
         }
+
         $role->load('permissions:name');
 
         RoleResource::withoutWrapping();
@@ -73,6 +74,7 @@ class RoleController extends Controller
         if (in_array($role->name, ['Super Admin', 'Administrator'])) {
             return abort(404);
         }
+
         return Inertia::render('Role/Edit', [
             "data" => [
                 'role' => $role->load('permissions'),
@@ -83,7 +85,7 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        if (in_array($role->name, ['Owner', 'Administrator'])) {
+        if (in_array($role->name, ['Super Admin', 'Administrator'])) {
             return abort(404);
         }
 
@@ -96,9 +98,10 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
-        if (in_array($role->name, ['Owner', 'Administrator'])) {
+        if (in_array($role->name, ['Super Admin', 'Administrator'])) {
             return abort(404);
         }
+
         $role->delete();
 
         return redirect()

@@ -18,10 +18,10 @@ createInertiaApp({
                     $can(permissionName) {
                         let roles = [];
                         for (const role of this.$page.props.auth.user.roles) {
-                           roles.push(role.id)
+                           roles.push(role.name)
                         }
                         // console.log(roles.includes(1));
-                        if (!roles.includes(1))
+                        if (!roles.includes("Super Admin"))
                             return this.$page.props.permissions.indexOf(permissionName) !== -1;
                         else
                             return true;
