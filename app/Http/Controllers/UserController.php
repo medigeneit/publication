@@ -17,9 +17,14 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     use DateFilter, ActiveFilter;
+    public function __construct()
+    {
+        $this->middleware('role:Super Admin|Administrator');
+    }
 
     public function index()
     {
+        // return in_array('Super Admin' , Auth::user()->roles->pluck('name')->toArray());
         $users = User::query()
             ->filter()
             ->dateFilter()
@@ -47,7 +52,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        return Hash::make($request->password);
         $user = User::create($this->validateData($request) + [
             'password'  => Hash::make($request->password),
         ]);
@@ -75,11 +79,17 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $user->load('roles:id');
+        $assignedRoles = [];
+        foreach ($user->roles as $key => $value) {
+            $assignedRoles[] = (string) $value->id;
+        }
         return Inertia::render('User/Edit', [
             "data" => [
-                'user'      => $user,
-                'userType'  => User::getTypes(),
-                'roles'     => Role::pluck('name', 'id'),
+                'user'          => $user,
+                'userType'      => User::getTypes(),
+                'roles'         => Role::pluck('name', 'id'),
+                'assignedRoles' => $assignedRoles,
             ]
         ]);
     }
@@ -147,11 +157,11 @@ class UserController extends Controller
                 'string',
                 Rule::unique(User::class, 'phone')->ignore($id),
             ],
-            'password' => [
-                'required',
-                'string',
-                Rule::unique(User::class, 'password')->ignore($id),
-            ],
+            // 'password' => [
+            //     'required',
+            //     'string',
+            //     Rule::unique(User::class, 'password')->ignore($id),
+            // ],
             'type' => [
                 'required',
                 'numeric',

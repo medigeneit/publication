@@ -17,10 +17,10 @@ class RoleController extends Controller
 {
     use DateFilter;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('role:Super Admin|Administrator');
-    // }
+    public function __construct()
+    {
+        $this->middleware('role:Super Admin|Administrator');
+    }
 
     public function index()
     {
@@ -38,7 +38,7 @@ class RoleController extends Controller
     {
         return Inertia::render('Role/Create', [
             "data" => [
-                'role' => new Role(),    
+                'role' => new Role(),
                 'permissions' => Permission::pluck('name', 'id')
             ]
         ]);
@@ -60,7 +60,7 @@ class RoleController extends Controller
             return abort(404);
         }
         $role->load('permissions:name');
-        
+
         RoleResource::withoutWrapping();
 
         return Inertia::render('Role/Show', [
@@ -86,7 +86,7 @@ class RoleController extends Controller
         if (in_array($role->name, ['Owner', 'Administrator'])) {
             return abort(404);
         }
-        return $request->permissions;
+
         $role->update($this->validateData($request, $role->id));
         $role->syncPermissions($request->permissions);
         return redirect()
@@ -138,5 +138,4 @@ class RoleController extends Controller
             'name' => 'required'
         ]);
     }
-
 }

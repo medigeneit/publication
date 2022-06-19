@@ -1,4 +1,5 @@
 <template>
+
     <Head title="User" />
 
     <app-layout>
@@ -6,9 +7,10 @@
             User List
         </template>
 
-        <add-new-button :href="route('users.create')" />
+        <add-new-button :href="route('users.create')" v-if="$can('Admin Create')" />
 
-        <data-table :collections="users" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
+        <data-table :collections="users" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns"
+            :latest="true">
             <!-- <template #head>
                 <th class="py-3 px-2 text-left">ID</th>
                 <th class="py-3 px-2 text-left">Name</th>
@@ -25,14 +27,15 @@
                 <td class="py-3 px-2 text-left">{{ user.phone }}</td>
                 <td class="py-3 px-2 text-left">{{ user.typeName }}</td>
                 <td class="py-3 px-2 text-left">
-                     <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500' : user.active, 'bg-red-500' : !user.active }">
+                    <span class="py-1 px-3 rounded-full text-white font-bold"
+                        :class="{ 'bg-green-500' : user.active, 'bg-red-500' : !user.active }">
                         {{ user.activeValue }}
-                     </span>
+                    </span>
                 </td>
                 <td class="py-2.5 px-2">
                     <div class="flex justify-center items-center gap-1 md:gap-2">
-                        <action-button-show :href="route('users.show', user.id)" />
-                        <action-button-edit :href="route('users.edit', user.id)" />
+                        <action-button-show :href="route('users.show', user.id)" v-if="$can('Admin List')" />
+                        <action-button-edit :href="route('users.edit', user.id)" v-if="$can('Admin Edit')" />
                     </div>
                 </td>
             </template>

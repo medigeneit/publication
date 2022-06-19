@@ -108,7 +108,7 @@ export default {
                 phone: this.data.user.phone || '',
                 type: this.data.user.type || 0,
                 password: this.data.user.password || '',
-                roles: [],
+                roles: this.data.assignedRoles || [],
                 active: this.moduleAction == 'store' ? 1 : this.data.user.active,
             }),
             generatedPassword: '',
