@@ -15,6 +15,8 @@
         </nav-link>
     </nav-link-wrapper>
 
+    <!-- v-if="$can('Publisher List') || $can('Raw Product List') || $can('Version List') || $can('Contributor Type List') ||
+    $can('Author List') || $can('Category List') || $can('Price Category List') || $can('Presses List') " -->
     <nav-link-wrapper title="Production Management" :active="route().current(
     '(publishers|productions|versions|moderator-types|contributors|moderators|categories|price-categories|products|packages|authors|presses|version-variables).*'
     )">

@@ -10,7 +10,7 @@
             </div>
             <!-- :class="{ hidden: selected.includes(permission.id) }" -->
             <div class="mb-4 overflow-auto h-screen">
-                <input type="text" @input="searchPermission">
+                <!-- <input type="text" @input="searchPermission"> -->
                 <div class="text-right">
                     <span class="mr-3">Select All</span>
                     <input type="checkbox" @click="allPermissionSelect">
@@ -25,7 +25,7 @@
                     :class="{ 'bg-blue-500': selected.includes(permissionId), 'text-white': selected.includes(permissionId) }"
                     @click="selectPermissionHandler(permissionId)">
                     <div class="w-full">
-                        {{ permission.name }}
+                        {{ permission }}
                     </div>
                 </div>
             </div>

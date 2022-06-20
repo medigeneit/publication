@@ -36,15 +36,10 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::query()
-            ->when(request()->search, function($query) {
-                $query->where('name', 'regex',request()->search);
-            })
-            ->get();
         return Inertia::render('Role/Create', [
             "data" => [
                 'role' => new Role(),
-                'permissions' => $permissions
+                'permissions' => Permission::pluck('name', 'id')
             ]
         ]);
     }
@@ -79,14 +74,11 @@ class RoleController extends Controller
         if (in_array($role->name, ['Super Admin', 'Administrator'])) {
             return abort(404);
         }
-        // return request()->search;    
-        $permissions = Permission::query()
-                ->get();
 
         return Inertia::render('Role/Edit', [
             "data" => [
                 'role' => $role->load('permissions'),
-                'permissions' => $permissions
+                'permissions' => Permission::pluck('name', 'id')
             ]
         ]);
     }
