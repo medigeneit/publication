@@ -16,6 +16,10 @@ createInertiaApp({
                 methods: {
                     route,
                     $can(permissionName) {
+                        console.log(this.$page.props.permissions.includes("Roles List"));
+                        // console.log(this.$page.props.permissions.match(permissionName));
+                        // array.some(e =>console.log( myRegex.test(e)))
+                        
                         let roles = [];
                         for (const role of this.$page.props.auth.user.roles) {
                            roles.push(role.name)
