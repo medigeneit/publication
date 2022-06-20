@@ -25,7 +25,7 @@
                     :class="{ 'bg-blue-500': selected.includes(permissionId), 'text-white': selected.includes(permissionId) }"
                     @click="selectPermissionHandler(permissionId)">
                     <div class="w-full">
-                        {{ permission }}
+                        {{ permission.name }}
                     </div>
                 </div>
             </div>
@@ -150,12 +150,13 @@ export default {
             }
         },
         searchPermission(event) {
+            
             let url = this.route(this.routeName || this.route().current(), {
-                selected: this.selected.toString(),
+                // selected: this.selected.toString(),
                 search: !event.target.value.includes('\\') ? event.target.value : '',
                 id: this.data.role.id
             });
-
+            // console.log(url);
             this.$inertia.get(url, {}, {
                 preserveState: true
             });
