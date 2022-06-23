@@ -25,7 +25,7 @@ class CreateVersionsTable extends Migration
             $table->double('production_cost')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('active')->default(1);
-            $table->integer('alert_quantity')->default(0);
+            $table->integer('alert_quantity')->default(0)->unsigned();
             $table->timestamps();
             $table->softDeletes();
         });

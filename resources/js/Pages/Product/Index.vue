@@ -23,11 +23,17 @@
                     :class="{ 'bg-red-200': product.total_storage <= product.alert_quantity }">{{ product.id }}</td>
                 <td class="py-3 px-2 text-left"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
-                    <b v-if="product.type !== 1">
-                        {{ product.name }} {{ product.type === 1 }}
-                    </b>
-                    <div v-else class="text-center border bg-indigo-500 text-white px-2 py-0.5 rounded cursor-pointer"
-                        @click="modalHandler">
+                    <div class="font-extrabold" v-if="product.type !== 1">
+                        <p>
+
+                        {{ product.name }}
+                        </p>
+                    </div>
+                    <!-- onclick="this.nextElementSibling.classList.toggle('hidden')" -->
+                    
+                    <div v-else class="border px-2 bg-indigo-500 text-white py-0.5 rounded cursor-pointer font-extrabold"
+                    @click="modalHandler"
+                        >
                         {{ product.name }} ( {{ product.package_product_names.length }} )
                     </div>
 
@@ -54,10 +60,9 @@
                             </div>
                         </div>
                     </div>
-                </td>
-                <td class="py-3 px-2 text-left"
-                    :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
-                    {{ product.typeName }}
+                    <i class="font-bold">
+                        {{ product.typeName }}
+                    </i>
                 </td>
                 <td class="py-3 px-2 text-left"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
@@ -79,9 +84,6 @@
                         class="text-center border bg-indigo-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ product.categoryCount }} categories
                     </div>
-                    <!-- <div v-else class="text-center border bg-indigo-500 text-white px-2 py-0.5 rounded">
-                        {{ product.categoryCount }} categories
-                    </div> -->
                     <div v-if="product.categoryCount" class="fixed inset-0 hidden z-50">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
@@ -103,38 +105,6 @@
                             </div>
                         </div>
                     </div>
-                </td>
-                <td class="py-3 px-2 text-right"
-                    :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
-                    <div v-if="Object.keys(product.prices).length" @click="modalHandler"
-                        class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
-                        View {{ Object.keys(product.prices).length }} Prices
-                    </div>
-                    <div v-if="Object.keys(product.prices).length" class="fixed inset-0 hidden z-50">
-                        <div class="relative w-full h-full flex justify-center items-center">
-                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
-                                <div class="text-lg font-bold text-center">Prices</div>
-                                <hr class="my-1">
-                                <div class="p-3">
-                                    <div class="py-1.5 flex gap-2 mr-10"
-                                        v-for="(priceCategory, index) in product.priceCategories" :key="priceCategory">
-                                        <div v-if="product.prices[index]">
-                                            <span>{{ index + 1 }}.</span>
-                                            {{ priceCategory }} : {{ product.prices[index] }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40"
-                                    @click="closeModal">&times;</div>
-                            </div>
-                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
-                                <div class="w-full h-full" @click="closeModal"></div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td class="py-3 px-2 text-right"
-                    :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div v-if="product.moderators.length" @click="modalHandler"
                         class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         View {{ product.moderators.length }} Moderators
@@ -161,13 +131,48 @@
                 </td>
                 <td class="py-3 px-2 text-right"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
-                    <div v-if="product.storages.length" @click="modalHandler"
+                    
+                    <b class="italic font-bold">
+                       Cost/Unit : {{ product.productionCost }}
+                    </b>
+                    <div v-if="Object.keys(product.prices).length" @click="modalHandler"
+                        class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
+                        View {{ Object.keys(product.prices).length }} Prices
+                        
+                    </div>
+                    <div v-if="Object.keys(product.prices).length" class="fixed inset-0 hidden z-50">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Prices</div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                    <div class="py-1.5 flex gap-2 mr-10"
+                                        v-for="(priceCategory, index) in product.priceCategories" :key="priceCategory">
+                                        <div v-if="product.prices[index]">
+                                            <span>{{ index + 1 }}.</span>
+                                            {{ priceCategory }} : {{ product.prices[index] }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40"
+                                    @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                
+                <td class="py-3 px-2 text-right"
+                    :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
+                    <div  @click="modalHandler"
                         class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer">
                         Total Quantity : {{ product.total_storage }}
                         <br>
                         Stored in : {{ product.storages.length }} outlets
                     </div>
-                    <div v-if="product.storages.length" class="fixed inset-0 hidden z-50">
+                    <div  class="fixed inset-0 hidden z-50">
                         <div class="relative w-full h-full flex justify-center items-center">
                             <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
                                 <div class="text-lg font-bold text-center">Storage</div>
@@ -259,7 +264,7 @@
                 <td class="text-center" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer"
                         v-if="product.storages.length" @click="modalHandler">
-                        Request Product
+                        Pending Request
                     </div>
                     <div class="fixed inset-0 z-50" id="circulationWrapper" :class="{hidden : modalShow}">
                         <div class="relative w-full h-full flex justify-center items-center">
@@ -389,8 +394,6 @@
                         </div>
                     </div>
                 </td>
-                <!-- <td class="py-3 px-2 text-left">{{ product.publisherName ?? '' }}</td>
-                <td class="py-3 px-2 text-right">{{ product.productionCost }}</td> -->
                 <td class="py-3 px-2 text-right"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     {{ product.alertQuantity }}
@@ -401,17 +404,17 @@
 </template>
 
 <script>
+import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
+import ActionButtonShow from "@/Components/ActionButtonShow.vue";
+import AddNewButton from '@/Components/AddNewButton.vue';
+import Button from '@/Components/Button.vue';
+import DataTable from "@/Components/DataTable.vue";
+import Input from '@/Components/Input.vue';
+import Label from '@/Components/Label.vue';
+import NavLink from "@/Components/NavLink.vue";
+import Select from '@/Components/Select.vue';
 import AppLayout from "@/Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import DataTable from "@/Components/DataTable.vue";
-import ActionButtonShow from "@/Components/ActionButtonShow.vue";
-import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
-import NavLink from "@/Components/NavLink.vue";
-import AddNewButton from '@/Components/AddNewButton.vue';
-import Input from '@/Components/Input.vue';
-import Button from '@/Components/Button.vue';
-import Select from '@/Components/Select.vue';
-import Label from '@/Components/Label.vue';
 
 export default {
     components: {
@@ -440,18 +443,13 @@ export default {
                     {title: 'Action', align: 'center'},
                     {title: 'ID', align: 'left', sortable: 'id'},
                     {title: 'Name', align: 'left', sortable: 'name'},
-                    {title: 'Type', align: 'left', sortable: 'type'},
                     {title: 'Active', align: 'left', sortable: 'active'},
                     {title: 'Soft', align: 'left', sortable: 'soft'},
-                    {title: 'Categrories', align: 'center'},
-                    {title: 'Prices', align: 'right'},
-                    {title: 'Moderators', align: 'right', sortable: 'moderator_type'},
+                    {title: 'Categrories<br><hr>Moderators', align: 'center'},
+                    {title: 'Cost/Unit<br><hr>Prices', align: 'right'},
                     {title: 'Storages', align: 'right'},
                     {title: 'Circulation', align: 'right'},
                     {title: 'Requested Product', align: 'right'},
-                    // {title: 'Package', align: 'center'},
-                    // {title: 'Publisher Name', align: 'left', sortable:'publisher.name'},
-                    {title: 'Production Cost', align: 'right', sortable:'production_cost'},
                     {title: 'Alert', align: 'right', sortable: 'alert_quantity'},
                 ],
 
@@ -468,7 +466,9 @@ export default {
             modalShow: true,
             alertQuantity : false,
             message : '',
-            formToLabel : '-- Select To --',
+            formToLabel: '-- Select To --',
+            fromDisabled: false,
+            toDisabled: false,
         }
     },
 
@@ -515,7 +515,7 @@ export default {
             if(!event){
                 this.modalShow = false;
             }
-            // console.log(this.modalShow)
+            console.log(event.target.nextElementSibling)
             event.target.nextElementSibling.classList.toggle('hidden');
         },
 

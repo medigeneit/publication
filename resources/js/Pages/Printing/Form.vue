@@ -96,7 +96,7 @@
                                             v-for="(printingDetail, index) in form.printing_details"
                                             :key="printingDetail.id"
                                         >
-                                            <td class="text-right px-2 py-1 text-sm">   
+                                            <td class="text-right px-2 py-1 text-sm">
                                                 {{ printingDetail.printing_detail_name }}
                                             </td>
                                             <td class="text-left px-2 py-1" >
@@ -113,9 +113,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                
+
                             </div>
-                           
+
                         </div>
 
                     </div>
@@ -168,7 +168,7 @@
                                                         class="mt-1 py-1 block w-full"
                                                         :value="form.others"
                                                         v-model="form.others"
-                                                        @change="checkTotal"  
+                                                        @change="checkTotal"
                                                         />
                                                     </td>
                                                 </tr>
@@ -342,7 +342,7 @@ export default {
 
                 binding_type_id: this.data.printing.binding_type_id || '',
 
-                alert_quantity: this.data.printing.alert_quantity || '',
+                alert_quantity: this.data.printing.version.alert_quantity || '',
 
                 plate_stored_at: this.data.printing.plate_stored_at || '',
 
@@ -380,7 +380,7 @@ export default {
             if(this.data.printing.version_cost){
                 let versionCostData = Object.values(this.data.printing.version_cost.filter(item => {
                 return item.cost_category_id == cost_category[0];
-                }))[0]; 
+                }))[0];
 
                 this.form.cost_details.push({
                     cost_category_id: cost_category[0],
@@ -399,7 +399,7 @@ export default {
                             amount: '',
                         });
             }
-            
+
         });
 
         Object.values(this.data.printing_details_category_keys).forEach((printing_details) => {

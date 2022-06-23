@@ -62,6 +62,7 @@ class PrintingCostController extends Controller
                 'page_amount' => $request->page_amount,
                 'order_date' => $request->order_date,
                 'plate_stored_at' => $request->plate_stored_at,
+                'binding_type_id'   => $request->binding_type_id,
 
             ]);
             if ($printing && $request->alert_quantity){
@@ -97,7 +98,7 @@ class PrintingCostController extends Controller
             $total_cost += $request->others;
             $cost_per_unit = $total_cost / (($request->copy_quantity != 0 || $request->copy_quantity != NULL) ? $request->copy_quantity : 1);
             $printing->update([
-                'others_cost' => $request->others,
+                'others_cost' => $request->others ?? 0,
                 'cost_per_unit' => $cost_per_unit
             ]);
 
@@ -155,7 +156,8 @@ class PrintingCostController extends Controller
             'buinding_type',
             'version_cost',
             'printing_details:id,name,printing_details_category_key_id',
-            'printing_contributors'
+            'printing_contributors',
+            'version:id,alert_quantity'
         ])->find($id);
         // return $printing->printing_details->printing_details_category_key_id;
 
@@ -197,7 +199,7 @@ class PrintingCostController extends Controller
                 'order_date'        => $request->order_date,
                 'plate_stored_at'   => $request->plate_stored_at,
                 'binding_type_id'   => $request->binding_type_id,
-                'alert_quantity'    => $request->alert_quantity,
+                // 'alert_quantity'    => $request->alert_quantity,
             ]);
             if ($printingCost && $request->alert_quantity){
                 Version::where('id',$printingCost->version_id)->update(['alert_quantity'    => $request->alert_quantity,]);
@@ -243,7 +245,7 @@ class PrintingCostController extends Controller
         // return $total_cost;
         $cost_per_unit = $total_cost / (($request->copy_quantity != 0 || $request->copy_quantity != NULL) ? $request->copy_quantity : 1);
         $printingCost->update([
-            'others_cost' => $request->others,
+            'others_cost' => $request->others ?? 0,
             'cost_per_unit' => $cost_per_unit
         ]);
 
