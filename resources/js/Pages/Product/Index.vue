@@ -259,7 +259,7 @@
                 <td class="text-center" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer"
                         v-if="product.storages.length" @click="modalHandler">
-                        Request Product
+                        Pending Request
                     </div>
                     <div class="fixed inset-0 z-50" id="circulationWrapper" :class="{hidden : modalShow}">
                         <div class="relative w-full h-full flex justify-center items-center">
