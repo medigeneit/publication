@@ -2,19 +2,14 @@
     <div class="w-full flex gap-4">
         <form @submit.prevent="submit" class="w-full max-w-7xl space-y-4">
             <div class="w-full flex gap-6">
-                <div class="w-full max-w-3xl p-4 bg-white border shadow rounded">
-                    <h3 class="text-lg text-gray-600 font-bold">Version Information</h3>
+                <div
+                    class="w-full max-w-3xl p-4 bg-white border shadow rounded"
+                >
+                    <h3 class="text-lg text-gray-600 font-bold">
+                        Version Information
+                    </h3>
                     <div
-                        class="
-                            w-full
-                            grid grid-cols-2
-                            md:grid-cols-3
-                            bg-white
-                            border
-                            rounded
-                            gap-4
-                            p-4
-                        "
+                        class="w-full grid grid-cols-2 md:grid-cols-3 bg-white border rounded gap-4 p-4"
                     >
                         <div>
                             <Label value="Raw Product" />
@@ -23,10 +18,14 @@
                                 v-model="form.production_id"
                                 required
                             >
-                                <option value="">-- Select Production --</option>
+                                <option value="">
+                                    -- Select Production --
+                                </option>
                                 <option
                                     :value="productionId"
-                                    v-for="(productionName, productionId) in data.productionList"
+                                    v-for="(
+                                        productionName, productionId
+                                    ) in data.productionList"
                                     :key="productionId"
                                 >
                                     {{ productionName }}
@@ -48,18 +47,18 @@
                             <Input
                                 type="date"
                                 class="mt-1 block w-full"
-                                v-model="(form.release_date)"
+                                v-model="form.release_date"
                             />
                         </div>
 
-                        <div>
+                        <!-- <div>
                             <Label value="Cost per unit" />
                             <Input
                                 type="number"
                                 class="mt-1 block w-full"
                                 v-model="(form.production_cost)"
                             />
-                        </div>
+                        </div> -->
 
                         <div>
                             <Label value="Link" />
@@ -84,27 +83,21 @@
                                     :value="type"
                                     v-for="(typeName, type) in data.versionType"
                                     :key="type"
-                                    :disabled ="type == 3"
-                                    :hidden="(type == 3) && (this.data.version.type != 3) "
+                                    :disabled="type == 3"
+                                    :hidden="
+                                        type == 3 && this.data.version.type != 3
+                                    "
                                 >
-                                {{ typeName }}
+                                    {{ typeName }}
                                 </option>
                             </Select>
                         </div>
-
                     </div>
-                    <h3 class="text-lg text-gray-600 font-bold">Volume Information</h3>
+                    <h3 class="text-lg text-gray-600 font-bold">
+                        Volume Information
+                    </h3>
                     <div
-                        class="
-                            w-full
-                            grid grid-cols-2
-                            md:grid-cols-3
-                            bg-white
-                            border
-                            rounded
-                            gap-4
-                            p-4
-                        "
+                        class="w-full grid grid-cols-2 md:grid-cols-3 bg-white border rounded gap-4 p-4"
                         v-for="(volume, index) in form.volumes"
                         :key="index"
                     >
@@ -164,31 +157,96 @@
                         </Button>
                     </div>
 
-                    <div>
-                        <div v-for="(printingDetail, index) in data.printingDetails" :key="index" >
-                            <div class="flex justify-between border-2 rounded mt-4 p-4">
+                    <div class="mt-4" v-if="moduleAction == 'update'">
+                        <div class="flex">
+                            <h1 class="font-extrabold mr-1">Cost Summary</h1>
+                            <a
+                                class="rounded text-white"
+                                :href="
+                                    route(
+                                        'printing-cost-categories',
+                                        data.version.id
+                                    )
+                                "
+                                target="_blank"
+                            >
+                                <div class="cursor-pointer text-green-600">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        />
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+                        <div
+                            v-for="(
+                                printingDetail, index
+                            ) in data.printingDetails"
+                            :key="index"
+                        >
+                            <div
+                                class="flex justify-between border-2 rounded mt-4 p-4"
+                            >
                                 <div>
-                                    <span>Copy Quentity : {{ printingDetail.copy_quantity ?? 0}} pc</span><br>
-                                    <span>Page Amount : {{ printingDetail.page_amount ?? 0}} pages</span><br>
-                                    <span>Order Date : {{ this.formatDate(printingDetail.order_date ?? '') }}</span><br>
+                                    <span
+                                        >Copy Quentity :
+                                        {{ printingDetail.copy_quantity ?? 0 }}
+                                        pc</span
+                                    ><br />
+                                    <span
+                                        >Page Amount :
+                                        {{ printingDetail.page_amount ?? 0 }}
+                                        pages</span
+                                    ><br />
+                                    <span
+                                        >Order Date :
+                                        {{
+                                            this.formatDate(
+                                                printingDetail.order_date ?? ""
+                                            )
+                                        }}</span
+                                    ><br />
                                     <!-- <span>Store By : {{ printingDetail.store_by.name ?? '' }}</span> -->
                                 </div>
                                 <div>
-                                    <action-button-edit :href="route('printing-costs.edit', printingDetail.id)" />
+                                    <action-button-edit
+                                        :href="
+                                            route(
+                                                'printing-costs.edit',
+                                                printingDetail.id
+                                            )
+                                        "
+                                    />
 
-                                    <action-button-show :href="route('printing-costs.show', printingDetail.id)" />
+                                    <action-button-show
+                                        :href="
+                                            route(
+                                                'printing-costs.show',
+                                                printingDetail.id
+                                            )
+                                        "
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="w-full max-w-md">
-                   <Moderators :form ="form" :data="data"/>
+                    <Moderators :form="form" :data="data" />
                 </div>
             </div>
 
-             <!-- <div class="w-full max-w-md">
+            <!-- <div class="w-full max-w-md">
                   <nav-link class="" :href="route('printing-details.create',data.version.id)">
                         Cost Details
                  </nav-link>
@@ -215,18 +273,18 @@
 </template>
 
 <script>
+import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
+import ActionButtonShow from "@/Components/ActionButtonShow.vue";
+import ActiveInput from "@/Components/ActiveInput.vue";
 import Button from "@/Components/Button.vue";
+import DataTable from "@/Components/DataTable.vue";
+import GoToList from "@/Components/GoToList.vue";
 import Input from "@/Components/Input.vue";
 import Label from "@/Components/Label.vue";
-import ValidationErrors from "@/Components/ValidationErrors.vue";
-import ActionButtonShow from "@/Components/ActionButtonShow.vue";
-import GoToList from "@/Components/GoToList.vue";
-import Select from "@/Components/Select.vue";
-import ActiveInput from "@/Components/ActiveInput.vue";
-import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import Moderators from "@/Components/Moderators.vue";
 import NavLink from "@/Components/NavLink.vue";
-import DataTable from "@/Components/DataTable.vue";
+import Select from "@/Components/Select.vue";
+import ValidationErrors from "@/Components/ValidationErrors.vue";
 
 export default {
     components: {
@@ -241,7 +299,7 @@ export default {
         Moderators,
         NavLink,
         DataTable,
-        ActionButtonShow
+        ActionButtonShow,
     },
 
     props: {
@@ -263,17 +321,18 @@ export default {
                 production_id: this.data.version.production_id || "",
                 edition: this.data.version.edition || "",
                 release_date: this.data.version.release_date || "",
-                production_cost: this.data.version.production_cost || "",
+                // production_cost: this.data.version.production_cost || "",
                 link: this.data.version.link || "",
                 type: this.data.version.type || "",
-                page: '',
-                copy_quantity: '',
-                binding_type: '',
-                press: '',
-                storing_at: '',
-                is_place_storable: '',
-                price_details : [],
-                active: this.moduleAction == "store" ? 1 : this.data.version.active,
+                page: "",
+                copy_quantity: "",
+                binding_type: "",
+                press: "",
+                storing_at: "",
+                is_place_storable: "",
+                price_details: [],
+                active:
+                    this.moduleAction == "store" ? 1 : this.data.version.active,
                 volumes: [
                     {
                         name: "",
@@ -289,22 +348,25 @@ export default {
                         honorarium: "",
                     },
                 ],
-                moduleAction: this.moduleAction
+                moduleAction: this.moduleAction,
             }),
 
-            storigngAtVisibility : false,
-
+            storigngAtVisibility: false,
         };
     },
     created() {
-        for(let index in this.data.volumes) {
-            console.log('volumes', index);
-            this.form.volumes[index] = this.data.volumes[index] ? this.data.volumes[index] : '';
+        for (let index in this.data.volumes) {
+            console.log("volumes", index);
+            this.form.volumes[index] = this.data.volumes[index]
+                ? this.data.volumes[index]
+                : "";
         }
 
-        for(let index in this.data.selectedModerators) {
+        for (let index in this.data.selectedModerators) {
             console.log(this.data.selectedModerators[index]);
-            this.form.moderators[index] = this.data.selectedModerators[index] ? this.data.selectedModerators[index] : '';
+            this.form.moderators[index] = this.data.selectedModerators[index]
+                ? this.data.selectedModerators[index]
+                : "";
         }
     },
     methods: {
@@ -332,21 +394,20 @@ export default {
         },
 
         formatDate(input) {
-
             let date = new Date(input);
-            let month = '' + (date.getMonth() + 1);
-            let day = '' + date.getDate();
+            let month = "" + (date.getMonth() + 1);
+            let day = "" + date.getDate();
             let year = date.getFullYear();
 
             if (month.length < 2) {
-                month = '0' + month;
+                month = "0" + month;
             }
 
             if (day.length < 2) {
-                day = '0' + day;
+                day = "0" + day;
             }
 
-            return [year, month, day].join('-');
+            return [year, month, day].join("-");
         },
 
         submit() {
