@@ -281,7 +281,7 @@
                                                 <div class="mx-auto mt-2">
                                                     <div class="flex items-center rounded mt-2">
                                                         <div class="text-center text-sm border bg-green-500 text-white px-2 py-1 rounded cursor-pointer"
-                                                            @click="modalHandler($event, productRequest.storage.outlet.id, productRequest.id) ">
+                                                            @click="modalHandler($event, productRequest.storage.outlet.id, productRequest.id); ">
                                                             SEND
                                                         </div>
                                                         <div class="fixed inset-0 z-50" id="circulationWrapper"
@@ -292,7 +292,7 @@
                                                                     class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
                                                                     <div class="p-3 text-center">
                                                                         <div class="text-green-600">{{ message }}</div>
-                                                                        <form @submit.prevent="submit('Circulation')"
+                                                                        <form @submit.prevent="submit(product.id)"
                                                                             class="">
                                                                             <div class="mb-2 text-left">
                                                                                 <Label value="From" />
@@ -526,7 +526,10 @@ export default {
             }
             event.target.parentElement.parentElement.parentElement.classList.add('hidden');
         },
-        submit() {
+        submit(product_id = null) {
+            if (product_id)
+                this.form.product_id = product_id;
+            
             this.message = "Your circulation is complete";
             this.form.post(this.route('circulations.store'));
 
