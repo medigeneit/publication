@@ -515,7 +515,7 @@ export default {
             if(!event){
                 this.modalShow = false;
             }
-            console.log(event.target.nextElementSibling)
+            
             event.target.nextElementSibling.classList.toggle('hidden');
         },
 
