@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountCategoryController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BindingTypeController;
 use App\Http\Controllers\ModeratorTypeController;
@@ -48,14 +49,17 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+Route::get('/', [AuthenticatedSessionController::class, 'create'])
+                ->middleware('guest')
+                ->name('login');
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/customer-list', [CustomerController::class, 'customer_list'])->middleware(['auth', 'verified'])->name('customer-list');
