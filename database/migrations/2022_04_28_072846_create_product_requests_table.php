@@ -19,6 +19,7 @@ class CreateProductRequestsTable extends Migration
             $table->integer('request_quantity');
             $table->date('expected_date');
             $table->integer('user_id')->nullable();
+            $table->boolean('is_canceled')->default(0);
 
             $table->softDeletes();
         });

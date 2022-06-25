@@ -74,6 +74,7 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/printing-cost-categories/{version}', [PrintingCostController::class, 'createWithVerion'])->name('printing-cost-categories');
+    Route::get('/requestable', [CirculationController::class, 'requestable'])->name('requestable');
     Route::resources([
         'users'                     => UserController::class,
         'roles'                     => RoleController::class,

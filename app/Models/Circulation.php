@@ -60,4 +60,9 @@ class Circulation extends Model
                     ->Where('name', 'regexp',   $search_by_name);
             });
     }
+
+    public function requestable()
+    {
+        return $this->morphTo();
+    }
 }
