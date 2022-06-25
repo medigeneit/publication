@@ -53,19 +53,19 @@ class PriceCategoryController extends Controller
         ]);
     }
 
-    public function edit(PriceCategory $pricecategory)
+    public function edit(PriceCategory $priceCategory)
     {
         return Inertia::render('PriceCategory/Edit', [
-            'priceCategory' => $pricecategory,
+            'priceCategory' => $priceCategory,
         ]);
     }
 
-    public function update(Request $request, PriceCategory $pricecategory)
+    public function update(Request $request, PriceCategory $priceCategory)
     {
-        $pricecategory = PriceCategory::create($this->validateData($request, $pricecategory->id));
+        $priceCategory->update($this->validateData($request, $priceCategory->id));
 
         return redirect()
-            ->route('price-categories.show', $pricecategory->id)
+            ->route('price-categories.show', $priceCategory->id)
             ->with('status', 'The record has been update successfully.');
     }
 
@@ -108,6 +108,7 @@ class PriceCategoryController extends Controller
     {
         return $request->validate([
             'name'       => ['required'],
+            'is_special' => [],
         ]);
     }
 }

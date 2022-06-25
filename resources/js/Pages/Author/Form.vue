@@ -73,12 +73,12 @@
 
 <script>
 import Button from "@/Components/Button.vue";
+import GoToList from "@/Components/GoToList.vue";
 import Input from "@/Components/Input.vue";
 import Label from "@/Components/Label.vue";
-import ValidationErrors from "@/Components/ValidationErrors.vue";
-import GoToList from "@/Components/GoToList.vue";
 import Select from "@/Components/Select.vue";
 import Textarea from "@/Components/Textarea.vue";
+import ValidationErrors from "@/Components/ValidationErrors.vue";
 
 export default {
     components: {
@@ -101,6 +101,9 @@ export default {
         return {
             form: this.$inertia.form({
                 name: this.data.author.name,
+                phone: this.data.author.phone,
+                email: this.data.author.email,
+                address: this.data.author.address,
                 active:
                     this.moduleAction == "store" ? 1 : this.data.author.active,
             }),

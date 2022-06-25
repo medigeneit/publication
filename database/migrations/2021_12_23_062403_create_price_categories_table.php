@@ -16,6 +16,7 @@ class CreatePriceCategoriesTable extends Migration
         Schema::create('price_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->tinyInteger('is_special')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

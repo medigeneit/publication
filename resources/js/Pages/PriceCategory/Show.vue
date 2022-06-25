@@ -12,6 +12,7 @@
             <table class="table-auto">
                 <show-table-row heading="ID">{{ priceCategory.id }}</show-table-row>
                 <show-table-row heading="Name">{{ priceCategory.name }}</show-table-row>
+                <show-table-row heading="Special Price">{{ priceCategory.is_special ? 'Yes' : 'No' }}</show-table-row>
                 <show-table-row heading="Action">
                     <div class="flex justify-start items-center gap-1 md:gap-2">
                         <action-button-edit :href="route('price-categories.edit', priceCategory.id)" />

@@ -16,6 +16,7 @@ class CreateBindingTypesTable extends Migration
         Schema::create('binding_types', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
+            $table->boolean('active')->default(1);
         });
     }
 

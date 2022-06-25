@@ -149,7 +149,7 @@ class ProductController extends Controller
             'user_id' => Auth::id()
         ]);
         $this->categoryInsert($request, $product);
-        $this->packageInsert($request, $product);
+        // $this->packageInsert($request, $product);
 
         if (is_array($request->amounts)) {
 
@@ -225,7 +225,7 @@ class ProductController extends Controller
 
         $this->categoryInsert($request, $product);
 
-        $this->packageInsert($request, $product);
+        // $this->packageInsert($request, $product);
 
         return redirect()
             ->route('products.show', $product->id)

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCostCategoryTable extends Migration
+class CreateCostCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateCostCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('cost_category', function (Blueprint $table) {
+        Schema::create('cost_categories', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
             $table->boolean('active')->default(1);
             $table->softDeletes();
-
         });
     }
 
@@ -29,6 +28,6 @@ class CreateCostCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cost_category');
+        Schema::dropIfExists('cost_categories');
     }
 }

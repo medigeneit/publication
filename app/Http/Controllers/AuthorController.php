@@ -102,8 +102,11 @@ class AuthorController extends Controller
     private function validateData($request, $id = '')
     {
         return $request->validate([
-            'name' => ['required'],
-            'active' => ['required'],
+            'name'      => ['required'],
+            'phone'     => ['required'],
+            'email'     => [''],
+            'address'   => [''],
+            'active'    => ['required'],
         ]);
     }
 }

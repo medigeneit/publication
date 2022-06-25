@@ -45,7 +45,7 @@ class CostCategoryController extends Controller
 
     public function update(Request $request, CostCategory $costCategory)
     {
-        // return "update";
+        // return $request;
         $costCategory->update($this->validateData($request, $costCategory->id));
         return redirect()
             ->route('version-variables.index', $costCategory->id)
@@ -64,7 +64,7 @@ class CostCategoryController extends Controller
     {
         return $request->validate([
             'name' => ['required', 'string'],
-            'active' => []
+            'active' => ''
         ]);
     }
 }

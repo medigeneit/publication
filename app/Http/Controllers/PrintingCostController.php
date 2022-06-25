@@ -27,7 +27,7 @@ use PHPUnit\Util\Printer;
 class PrintingCostController extends Controller
 {
     use DateFilter;
-    public function createWithVerion($version)
+    public function createWithVerion(Version $version)
     {
         $cost_categories =  CostCategory::where('active', 1)->pluck('name', 'id');
         $printing_details_category_keys = PrintingDetailsCategoryValue::with([
@@ -39,9 +39,9 @@ class PrintingCostController extends Controller
             ->where('active', 1)
             ->get(['id', 'name']);
 
-
+        // return $version;
         return Inertia::render('Printing/Create', [
-            'printing'                         => new PrintingDetailsCategoryValue(),
+            // 'printing'                         => new Printing(),
             'printing_details_category_keys'   => $printing_details_category_keys,
             'costCategories'                   => $cost_categories,
             'presses'                          => Press::where('active', 1)->get(),
@@ -151,6 +151,7 @@ class PrintingCostController extends Controller
     {
         // return $printing_cost;
         // return
+
         $printing = Printing::with([
             'press:id,name',
             'buinding_type',
