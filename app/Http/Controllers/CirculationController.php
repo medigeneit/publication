@@ -8,6 +8,7 @@ use App\Models\Circulation;
 use App\Models\Outlet;
 use App\Models\Press;
 use App\Models\Printing;
+use App\Models\Product;
 use App\Models\ProductRequest;
 use App\Models\Storage;
 use App\Models\Version;
@@ -59,10 +60,60 @@ class CirculationController extends Controller
         ]);
     }
 
+    // public function requestable(Request $request)
+    // {
+    //     // $from = $request->from;
+    //     // $to = $request->to;
+    //     // $type = $request->from;
+    //     // $storage_type = $request->storage_type;
+    //     // $product_id = $request->product_id;
+    //     $product_id = 8;
+    //     $storage_outlet_id = 3;
+    //     return
+    //     Storage::where('product_id',$product_id)->where('outlet_id',$storage_outlet_id)->first()->productRequests->where('is_canceled',0)->load('circulations')->mapWithKeys(function($productRequest, $key){
+    //         $data = [];
+    //         $data['request_quantity'] = $productRequest->request_quantity;
+    //         $data['expected_date'] = $productRequest->expected_date;
+    //         $data['pending'] = $productRequest->request_quantity- $productRequest->circulations->sum('quantity');
+    //         return [$productRequest->id => $data] ;
+    //     });;
+
+
+    //     if (Circulation::TYPE[$request->type] == 'In') {
+    //         // return 'in';
+    //         // $quantity = $request->quantity;
+    //         $storage_outlet_id = $request->to;
+    //         $destination = $request->from;
+    //         $destination = $request->from;
+    //         if (Circulation::STORAGE_TYPE[$request->storage_type] == 'Press') {
+    //             // $requestable_type = Printing::class ?? null;
+
+    //             $printings = Product::find($product_id)->productable->printings->load('circulations')->mapWithKeys(function($printing, $key){
+    //                 $data = [];
+    //                 $data['order_quantity'] = $printing->copy_quantity;
+    //                 $data['order_date'] = $printing->order_date;
+    //                 $data['pending'] = $printing->copy_quantity- $printing->circulations->sum('quantity');
+    //                 return [$printing->id => $data] ;
+    //             });
+    //         }
+    //         if (Circulation::STORAGE_TYPE[$request->type] == 'Outlet') {
+
+    //             // $requestable_type = ProductRequest::class ?? null;
+    //         }
+    //         $requestable_id =  $request->request_id ?? null;
+    //     } elseif (Circulation::TYPE[$request->type] == 'Out') {
+    //         $quantity = $request->quantity * -1;
+    //         $storage_outlet_id = $request->from;
+    //         $destination = $request->to;
+    //         $requestable_type = ProductRequest::class ?? null;
+    //         $requestable_id =  $request->request_id ?? null;
+    //     }
+    // }
+
     public function store(Request $request)
     {
-        // return $request;
-        
+        return $request;
+
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {
             $redirect_location = 'products.index';

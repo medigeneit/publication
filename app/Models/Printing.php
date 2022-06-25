@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Printing extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     protected $guarded = [];
 
     public function plate_store()
@@ -49,5 +49,9 @@ class Printing extends Model
     public function version()
     {
         return $this->belongsTo(Version::class);
+    }
+    public function circulations()
+    {
+        return $this->morphMany(Circulation::class,'requestable');
     }
 }
