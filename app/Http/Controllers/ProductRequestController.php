@@ -37,6 +37,12 @@ class ProductRequestController extends Controller
             'productRequest' => new ProductRequest(),
         ]);
     }
+    public function request_page()
+    {
+        return Inertia::render('ProductRequest/Page', [
+            'productRequest' => new ProductRequest(),
+        ]);
+    }
 
     public function store(Request $request)
     {

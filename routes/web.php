@@ -63,6 +63,7 @@ Route::get('/', [AuthenticatedSessionController::class, 'create'])
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/customer-list', [CustomerController::class, 'customer_list'])->middleware(['auth', 'verified'])->name('customer-list');
+Route::get('/request-page', [ProductRequestController::class, 'request_page'])->middleware(['auth', 'verified'])->name('request-page');
 
 Route::get('/typing-test', function () {
     return Inertia::render('TypingTest');
