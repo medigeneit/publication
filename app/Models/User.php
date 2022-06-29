@@ -86,4 +86,9 @@ class User extends Authenticatable
             ? $this->email_verified_at->diffForHumans()
             : '';
     }
+
+    public function outlets()
+    {
+        return $this->hasManyThrough(Outlet::class,UserOutlet::class,'user_id','id','id','outlet_id');
+    }
 }

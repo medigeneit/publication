@@ -33,26 +33,27 @@ class Product extends Model
         return self::types;
     }
 
-    public function scopeNameRelations($query)
-    {
-        return $query
-            ->with(['productable' => function (MorphTo $morphTo) {
-                $morphTo->constrain([
-                    Volume::class => function ($query) {
-                        $query->with([
-                            'version.production',
-                            // 'version.volumes:id,version_id',
-                        ]);
-                    },
-                    Version::class => function ($query) {
-                        $query->with([
-                            'volumes',
-                            'production'
-                        ]);
-                    },
-                ]);
-            }]);
-    }
+    // public function scopeNameRelations($query)
+    // {
+    //     return $query
+    //         ->with(['productable' => function (MorphTo $morphTo) {
+    //             $morphTo->constrain([
+    //                 Volume::class => function ($query) {
+    //                     $query->with([
+    //                         'version.production',
+    //                         // 'version.volumes:id,version_id',
+    //                     ]);
+    //                 },
+    //                 Version::class => function ($query) {
+    //                     $query->with([
+    //                         'volumes',
+    //                         'production'
+    //                     ]);
+    //                 },
+    //             ]);
+    //         }]);
+    // }
+    
 
     // public function scopeWithMorphTo($query, $relation, array $constrains)
     // {
