@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductRequestResource;
 use App\Models\Circulation;
 use App\Models\ProductRequest;
+use App\Models\RequestResponse;
 use App\Traits\DateFilter;
+use App\Traits\WithProductRelations;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,15 +18,43 @@ class ProductRequestController extends Controller
 {
     use DateFilter;
 
-    public function index()
+    public function index(Request $request)
     {
 
-        $productRequests = $this->setQuery(ProductRequest::query()
-            ->with('storage.outlet'))
-            ->search()->filter()
-            ->getQuery();
+
+
+        // return
+        $productRequests = ProductRequest::query()
+            ->with([
+                'storage.outlet',
+                'storage.product.productable' => function (MorphTo $morphTo) {
+                    $morphTo->constrain([
+                        Volume::class => function ($query) {
+                            $query->with([
+                                'version.production',
+                                // 'version.volumes:id,version_id',
+                            ]);
+                        },
+                        Version::class => function ($query) {
+                            $query->with([
+                                'volumes',
+                                'production'
+                            ]);
+                        },
+                    ]);
+                },
+                'outlet',
+                'responses.user',
+                'responses.outlet',
+                'circulations' => function ($query) {
+                    $query->whereNull('circulation_id')->with('circulations');
+                }
+            ])
+            ->orderBy('expected_date', 'desc');
+        // ->search()->filter();
 
         // return $productRequests->get();
+        return  ProductRequestResource::collection($productRequests->get());
         return Inertia::render('ProductRequest/Index', [
             'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
@@ -40,12 +70,24 @@ class ProductRequestController extends Controller
 
     public function store(Request $request)
     {
-        $productRequest = ProductRequest::insert([
+        // return $request;
+        $productRequest = ProductRequest::create([
             'storage_id' => $request->storage_id,
             'request_quantity' => $request->request_quantity,
             'expected_date' => $request->expected_date,
-            'user_id'     => Auth::user()->id
+            'type' => $request->type ?? 1,
+            // 'user_id'     => Auth::user()->id
         ]);
+        // return $productRequest;
+
+        if ($productRequest) {
+            RequestResponse::create([
+                'product_request_id' => $productRequest->id,
+                'status' => 1,
+                'note' => $request->note ?? null,
+                'user_id' => Auth::user()->id,
+            ]);
+        }
 
         return back();
 
@@ -56,7 +98,7 @@ class ProductRequestController extends Controller
 
     public function show(ProductRequest $productRequest)
     {
-        // return 
+        // return
         $productRequestShow = ProductRequest::query()
             ->with(['storage.outlet', 'storage.user:id,name', 'circulations.storage.outlet', 'circulations.destinationable', 'circulations.storage.product.productable' => function (MorphTo $morphTo) {
                 $morphTo->constrain([

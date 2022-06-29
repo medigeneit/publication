@@ -36,6 +36,11 @@ class Circulation extends Model
     {
         return $this->belongsTo(Storage::class);
     }
+    public function circulations()
+    {
+        return $this->hasMany(Circulation::class);
+    }
+
 
 
 
