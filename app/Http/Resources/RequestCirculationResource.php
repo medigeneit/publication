@@ -17,6 +17,7 @@ class RequestCirculationResource extends JsonResource
 
     static $Requested_by = null;
     static $Request_type = null;
+    static $YourOutlet = null;
 
 
     public function toArray($request)
@@ -28,13 +29,21 @@ class RequestCirculationResource extends JsonResource
             'circulation_of' => (string)  ($this->storage->outlet->name  ?? ''),
             'destination_id' => (int) ($this->destinationable_id ?? 0),
             'destination' => (string) ($this->destinationable->name ?? ''),
-            'productId' => (int) ($this->storage->product->id ?? 0),
-            'productName' => (string) ($this->storage->product->product_name ?? ''),
+            // 'productId' => (int) ($this->storage->product->id ?? 0),
+            // 'productName' => (string) ($this->storage->product->product_name ?? ''),
             'quantity'  => (int) ($this->quantity ?? 0),
             'circulationDate'  => (string) ($this->created_at->format('d-M-Y') ?? 0),
             'circulations' => RequestCirculationResource::collection($this->whenLoaded('circulations')),
 
         ];
+
+        if (($data['circulation_of_id'] ?? 0) == self::$YourOutlet){
+            $data['circulation_of'] = 'Your Outlet';
+        }
+
+        if (($data['destination_id'] ?? 0) == self::$YourOutlet){
+            $data['destination'] = 'Your Outlet';
+        }
         return $data;
     }
 }

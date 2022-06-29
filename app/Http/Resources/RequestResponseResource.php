@@ -13,6 +13,9 @@ class RequestResponseResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
+
+    static $YourOutlet = null;
+
     public function toArray($request)
     {
         $data = [];
@@ -24,6 +27,11 @@ class RequestResponseResource extends JsonResource
         $data['user_name'] = (string) $this->user->name ?? 0;
         $data['outlet_id'] = (int) $this->outlet->id ?? 0;
         $data['outlet_name'] = (string) $this->outlet->name ?? 0;
+
+        if (($data['outlet_id'] ?? 0) == self::$YourOutlet){
+            $data['outlet_name'] = 'Your Outlet';
+        }
+
 
         return $data;
     }
