@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductRequestResource;
 use App\Models\Circulation;
+use App\Models\Outlet;
 use App\Models\ProductRequest;
 use App\Models\RequestResponse;
 use App\Models\Storage;
@@ -22,7 +23,17 @@ class ProductRequestController extends Controller
     public function index(Request $request)
     {
 
+        $roles =  Auth::user()->getRoleNames()->toArray();
 
+        $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name','id') :Auth::user()->outlets->pluck('name','id');
+        // return array_keys ($outlets->toArray());
+
+        if(!in_array($request->outlet_id, array_keys ($outlets->toArray()))){
+            return [
+                'message'=> 'You are not allowed',
+                'success'=> false,
+            ];
+        }
 
         // return
         $productRequests = ProductRequest::query()
@@ -54,11 +65,17 @@ class ProductRequestController extends Controller
             ->orderBy('expected_date', 'desc');
         // ->search()->filter();
 
-        // return Auth::user()->outlets->pluck('name','id');
+        // return $roles->toArray();
         // return $productRequests->get();
-        return  ProductRequestResource::collection($productRequests->get());
+        ProductRequestResource::$YourOutlet = $request->outlet_id;
+        return
+        [
+            'your_outlets' =>  $outlets,
+            'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'filters' => $this->getFilterProperty(),
+        ];
         return Inertia::render('ProductRequest/Index', [
-            'your_outlets' => Auth::user()->outlets->pluck('name','id'),
+            'your_outlets' =>  in_array("Super Admin", $roles) ? Outlet::pluck('name','id') :Auth::user()->outlets->pluck('name','id'),
             'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);

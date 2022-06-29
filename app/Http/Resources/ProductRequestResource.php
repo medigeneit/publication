@@ -16,12 +16,15 @@ class ProductRequestResource extends JsonResource
      */
 
 
+    static $YourOutlet = null;
 
     public function toArray($request)
     {
 
         RequestCirculationResource::$Requested_by = $this->storage->outlet->id;
         RequestCirculationResource::$Request_type = $this->type;
+        RequestCirculationResource::$YourOutlet = self::$YourOutlet;
+        RequestResponseResource::$YourOutlet = self::$YourOutlet;
 
 
 
@@ -39,11 +42,18 @@ class ProductRequestResource extends JsonResource
         $data['type_name']         = (string) ProductRequest::$Type[($this->type ?? 1)];
         $data['status']            = (int)  $status;
         $data['status_name']       = (string)  $status == 1 ? 'Closed' : 'Pending';
-        // $data['responses']       = (object) $this->responses ?? [];
+        // $data['responses2']       = (object) $this->responses ?? [];
         $data['responses']       = (object) RequestResponseResource::collection($this->responses) ?? [];
-        // 'storage'           => (object) ($this->storage ?? ''),
-        // 'user'              => (object) ($this->user ?? ''),
-        // 'created_by'        => (object) ($this->user->only(['id','name']) ?? NULl),
+
+        if (($data['requested_by']['id'] ?? 0) == self::$YourOutlet){
+            $data['requested_by']['name'] = 'Your Outlet';
+            $data['button_access'] = ['request_edit','request_close'];
+        }else{
+            $data['button_access'] = ['request_accept','request_denie'];
+        }
+        if (($data['requested_to']['id'] ?? 0) == self::$YourOutlet){
+            $data['requested_to']['name'] = 'Your Outlet';
+        }
 
         $data['circulations']      = (object) (RequestCirculationResource::collection($this->circulations) ?? []);
 
