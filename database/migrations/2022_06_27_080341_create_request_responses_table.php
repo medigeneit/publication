@@ -17,7 +17,7 @@ class CreateRequestResponsesTable extends Migration
             $table->id();
             $table->bigInteger('product_request_id');
             $table->smallInteger('status');
-            $table->int('quantity')->nullable();
+            $table->integer('quantity')->nullable();
             $table->text('note')->nullable();
             $table->bigInteger('user_id');
             $table->bigInteger('outlet_id')->nullable();

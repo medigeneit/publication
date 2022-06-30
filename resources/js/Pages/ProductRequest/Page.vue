@@ -18,21 +18,18 @@
                 </a>
                 <div class="mb-3 font-extrabold">
                     {{ item.product }}
-                    <!-- Amar Bangla Boi -->
-                    <!-- <hr class="border border-gray-300"> -->
                 </div>
                 <div class="mb-3 text-sm">
                     requested <span class="text-sm font-extrabold">10 pcs</span>
                 </div>
                 <div class="mb-3">
                     <p class="font-extrabold text-sm unde">Expected Date:</p>
-                    <!-- 10-06-2022 -->
                     {{ item.expectedDate }}
                 </div>
                 <div
                     href="#"
                     class="inline-flex ite-ms-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
-                    @click="modalShow(index)"
+                    @click="modalShow($event, index)"
                 >
                     See
                     <svg
@@ -48,6 +45,29 @@
                         ></path>
                     </svg>
                 </div>
+
+                <div class="fixed inset-0 hidden z-50">
+                        <div class="relative w-full h-full flex justify-center items-center">
+                            <div class="relative p-2 w-full mx-auto max-w-7xl bg-white rounded border shadow z-50">
+                                <div class="text-lg font-bold text-center">Circulations</div>
+                                <hr class="my-1">
+                                <div class="p-3">
+                                    <!-- <div class="py-1.5 flex gap-2" v-for="(category, index) in product.categories"
+                                        :key="index">
+                                        <span>{{ index + 1 }}.</span>
+                                        <Link class="underline hover:text-blue-500"
+                                            :href="route('categories.show', category.id)">{{ category.name }}</Link>
+                                    </div> -->
+                                    dfdfdfjkdhfjkdhf
+                                </div>
+                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40"
+                                    @click="closeModal">&times;</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                <div class="w-full h-full" @click="closeModal"></div>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
     </app-layout>
@@ -86,8 +106,14 @@ export default {
         };
     },
     methods: {
-        modalShow(index) {
+        modalShow(event, index) {
+            console.log(event.target.nextElementSibling);
+            event.target.nextElementSibling.classList.toggle('hidden');
             console.log(this.items[index]);
+        },
+        closeModal(event) {
+            event.target.parentElement.parentElement.parentElement.classList.add('hidden');
+
         },
     },
 };
