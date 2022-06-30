@@ -112,7 +112,7 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+        // return $request;
 
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {

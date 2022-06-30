@@ -57,7 +57,7 @@
 
                 <div
                     class="inline-flex ite-ms-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
-                    @click="circulaitonShow = !circulaitonShow"
+                    @click="circulaitonShow = !circulaitonShow; circulationData = item.circulations; resopnseData = item.responses"
                 >
                     See
                     <svg
@@ -74,9 +74,22 @@
                     </svg>
                 </div>
             </div>
-            <div class="col-span-12" v-if="circulaitonShow">
+            <!-- v-if="circulaitonShow" -->
+            <div class="col-span-12">
                 <div class="bg-white rounded border shadow z-50">
-                    <div class="p-3">dfdfdfjkdhfjkdhf</div>
+                    <div class="p-3 grid grid-cols-12 gap-2">
+                        <div class="col-span-6 border-r-2" >
+                            <h1 class="underline font-extrabold">On The Way</h1>
+                            <div v-for="item in circulationData" :key="item">
+                             <p class="font-extrabold text-sm unde">Expected Date:</p>
+                            {{ item.expected_date }}
+
+                            </div>
+                        </div>
+                        <div class="col-span-6">
+                            <h1 class="underline font-extrabold">Responses</h1>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,6 +128,8 @@ export default {
                 { title: "Status", align: "center" },
                 { title: "Action", align: "center" },
             ],
+            circulationData: '',
+            resopnseData: '',
             circulaitonShow: false,
         };
     },
