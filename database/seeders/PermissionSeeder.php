@@ -27,6 +27,8 @@ class PermissionSeeder extends Seeder
             'Cost Variable',
             'Press',
             'Raw Product',
+            'Request',
+            'Responce',
         ];
 
         $commonPart = [
@@ -50,6 +52,8 @@ class PermissionSeeder extends Seeder
                 }
             }
         }
+
+        
 
         DB::table('permissions')->insert($data);
     }
