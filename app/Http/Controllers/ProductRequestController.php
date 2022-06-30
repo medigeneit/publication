@@ -28,7 +28,12 @@ class ProductRequestController extends Controller
         $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name','id') :Auth::user()->outlets->pluck('name','id');
         // return array_keys ($outlets->toArray());
 
-        if(!in_array($request->outlet_id, array_keys ($outlets->toArray()))){
+        if(!$request->outlet_id){
+            // return 
+            $request->outlet_id = $outlets->keys()->first();
+        }
+
+        elseif(!in_array($request->outlet_id, array_keys ($outlets->toArray()))){
             return [
                 'message'=> 'You are not allowed',
                 'success'=> false,
