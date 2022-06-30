@@ -15,6 +15,7 @@ class CreateCirculationsTable extends Migration
     {
         Schema::create('circulations', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('circulation_id')->nullable();
             $table->bigInteger('storage_id');
             $table->morphs('destinationable');
             $table->integer('quantity')->comment('[positive => in-stock,negetive => out-stock]');

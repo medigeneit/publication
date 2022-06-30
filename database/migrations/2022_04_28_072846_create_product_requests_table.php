@@ -18,9 +18,9 @@ class CreateProductRequestsTable extends Migration
             $table->unsignedBigInteger('storage_id')->nullable();
             $table->integer('request_quantity');
             $table->date('expected_date');
-            $table->integer('user_id')->nulalble();
             $table->tinyInteger('type')->default(1);
-            $table->boolean('is_canceled')->default(0);
+            $table->boolean('is_closed')->default(0);
+            $table->unsignedBigInteger('outlet_id')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

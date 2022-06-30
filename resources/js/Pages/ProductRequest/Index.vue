@@ -18,9 +18,9 @@
                         })
                     "
                     aria-current="page"
-                    class="inline-block p-4 text-blue-600 bg-gray-300 rounded-t-lg active"
+                    class="inline-block p-2 text-gray-600 bg-gray-300 rounded-t-lg hover:bg-gray-500 hover:text-gray-200"
                     :class="{
-                        'font-extrabold bg-blue-300': $page.url.includes(
+                        'font-extrabold bg-gray-500 text-gray-200': $page.url.includes(
                             `outlet_id=${outlet_id}`
                         ),
                     }"
@@ -57,7 +57,10 @@
 
                 <div
                     class="inline-flex ite-ms-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
-                    @click="circulaitonShow = !circulaitonShow; circulationData = item.circulations; resopnseData = item.responses"
+                    @click="
+                        circulaitonShow = !circulaitonShow;
+                        productRequest = item;
+                    "
                 >
                     See
                     <svg
@@ -75,19 +78,143 @@
                 </div>
             </div>
             <!-- v-if="circulaitonShow" -->
-            <div class="col-span-12">
+            <div class="col-span-12" v-if="circulaitonShow">
                 <div class="bg-white rounded border shadow z-50">
                     <div class="p-3 grid grid-cols-12 gap-2">
-                        <div class="col-span-6 border-r-2" >
+                        <div class="col-span-6 border-r-2">
                             <h1 class="underline font-extrabold">On The Way</h1>
-                            <div v-for="item in circulationData" :key="item">
-                             <p class="font-extrabold text-sm unde">Expected Date:</p>
-                            {{ item.expected_date }}
-
+                            <div
+                                v-for="circulation in productRequest.circulations"
+                                :key="circulation"
+                            >
+                                <span class="text-sm">
+                                    {{ productRequest.expected_date }}
+                                </span>
+                                <div>
+                                    <!-- {{ circulation }} -->
+                                    <span class="font-extrabold">
+                                        {{ circulation.circulation_of }}
+                                    </span>
+                                    <span>
+                                        <!-- {{
+                                            $page.url.includes(
+                                                `outlet_id=${circulation.circulation_of_id}`
+                                            )
+                                                ? " sends "
+                                                : " recieved "
+                                        }} -->
+                                        {{
+                                            circulation.quantity < 0
+                                                ? " sends "
+                                                : " recieved "
+                                        }}
+                                    </span>
+                                    <span class="font-extrabold">
+                                        {{ Math.abs(circulation.quantity) }} pcs
+                                    </span>
+                                    <span>
+                                        <!-- {{
+                                            $page.url.includes(
+                                                `outlet_id=${circulation.circulation_of_id}`
+                                            )
+                                                ? " to "
+                                                : " from "
+                                        }} -->
+                                        {{
+                                            circulation.quantity < 0
+                                                ? " to "
+                                                : " from "
+                                        }}
+                                    </span>
+                                    <span class="font-extrabold">
+                                        {{ circulation.destination }}
+                                    </span>
+                                    <div
+                                        class="float-right"
+                                        v-for="button_access in productRequest.button_access"
+                                        :key="button_access"
+                                    >
+                                        <!-- {{ button_access }} -->
+                                        <div
+                                            class="px-2 mr-2 bg-gray-500 text-white rounded"
+                                        >
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access ==
+                                                    'request_accept'
+                                                "
+                                            >
+                                                Accept
+                                            </span>
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access ==
+                                                    'request_denie'
+                                                "
+                                            >
+                                                Deny
+                                            </span>
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access ==
+                                                    'request_close'
+                                                "
+                                            >
+                                                Close
+                                            </span>
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access == 'stock_out'
+                                                "
+                                            >
+                                                Stock Out
+                                            </span>
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access == 'stock_in'
+                                                "
+                                            >
+                                                Stock In
+                                            </span>
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access ==
+                                                    'request_edit'
+                                                "
+                                            >
+                                                Edit
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-span-6">
                             <h1 class="underline font-extrabold">Responses</h1>
+                            <div
+                                v-for="response in productRequest.responses"
+                                :key="response"
+                            >
+                                <div>
+                                    <!-- {{ response }} -->
+                                    <span class="font-extrabold">
+                                        {{ `${response.outlet_name} ` }}
+                                    </span>
+                                    <span>
+                                        {{ `${response.status_name} ` }}
+                                    </span>
+                                    <span class="font-extrabold">
+                                        {{ response.quantity }} pcs
+                                    </span>
+                                    reqeuest
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,6 +227,7 @@
 import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
 import ActionButtonShow from "@/Components/ActionButtonShow.vue";
 import AddNewButton from "@/Components/AddNewButton.vue";
+import Button from "@/Components/Button.vue";
 import DataTable from "@/Components/DataTable.vue";
 import AppLayout from "@/Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
@@ -113,6 +241,7 @@ export default {
         ActionButtonShow,
         ActionButtonEdit,
         AddNewButton,
+        Button,
     },
     props: {
         productRequests: { type: Object, default: {} },
@@ -128,8 +257,7 @@ export default {
                 { title: "Status", align: "center" },
                 { title: "Action", align: "center" },
             ],
-            circulationData: '',
-            resopnseData: '',
+            productRequest: "",
             circulaitonShow: false,
         };
     },

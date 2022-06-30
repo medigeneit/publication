@@ -177,6 +177,7 @@ class CirculationController extends Controller
                     'quantity' => $quantity,
                     'requestable_type' => $requestable_type,
                     'requestable_id' => $requestable_id,
+                    'user_id' => Auth::id(),
                 ];
                 if (Circulation::STORAGE_TYPE[$request->type] == 'Press') {
                     $press = Press::findOrFail($destination);

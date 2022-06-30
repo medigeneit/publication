@@ -123,7 +123,7 @@ class ProductRequestController extends Controller
                 'note' => $request->note ?? null,
                 'quantity' => $request->request_quantity ?? 0,
                 'user_id' => Auth::user()->id,
-                'outlet_id' =>  $outlet ,
+                'outlet_id' =>  $outlet->id ,
             ]);
         }
 
