@@ -101,6 +101,22 @@ class ProductRequestController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->storage_id) {
+
+            $storage = Storage::firstOrCreate(
+                [
+                    'product_id' => $request->product_id,
+                    'outlet_id' => $request->outlet_id,
+                ],
+                [
+                    'quantity' => 0,
+                    'alert_quantity' => 0,
+                    'user_id' => Auth::id()
+                ]
+            );
+            $request->storage_id = $storage->id;
+        }
+
         // return $request;
         $productRequest = ProductRequest::create([
             'storage_id' => $request->storage_id,

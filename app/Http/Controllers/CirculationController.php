@@ -136,9 +136,9 @@ class CirculationController extends Controller
             $quantity = $request->quantity;
             $storage_outlet_id = $request->to;
             $destination = $request->from;
-            if (Circulation::STORAGE_TYPE[$request->type] == 'Press')
+            if (Circulation::STORAGE_TYPE[$request->requastable_type] == 'Press')
                 $requestable_type = Printing::class ?? null;
-            if (Circulation::STORAGE_TYPE[$request->type] == 'Outlet')
+            if (Circulation::STORAGE_TYPE[$request->requastable_type] == 'Outlet')
                 $requestable_type = ProductRequest::class ?? null;
             $requestable_id =  $request->request_id ?? null;
         } elseif (Circulation::TYPE[$request->type] == 'Out') {
@@ -177,6 +177,7 @@ class CirculationController extends Controller
                     'quantity' => $quantity,
                     'requestable_type' => $requestable_type,
                     'requestable_id' => $requestable_id,
+                    'circulation_id' => $request->circulation_id,
                     'user_id' => Auth::id(),
                 ];
                 if (Circulation::STORAGE_TYPE[$request->type] == 'Press') {
