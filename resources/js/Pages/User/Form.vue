@@ -70,7 +70,7 @@
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="h-6 w-6 cursor-pointer"
-                                    :class="{'text-blue-600': passwordShow}"
+                                    :class="{ 'text-blue-600': passwordShow }"
                                     @click="passwordShow = !passwordShow"
                                     fill="none"
                                     viewBox="0 0 24 24"
@@ -158,6 +158,26 @@
 
             <div></div>
         </div>
+        <div
+            class="w-full md:max-w-md p-4 bg-white border shadow rounded md:-mt-96"
+        >
+            <Label for="outlets" value="Outlets" />
+            <div
+                name="outlets"
+                class="mt-1 block cursor-pointer border border-gray-200 p-3"
+                :class="{
+                    'bg-blue-500': form.outlets.includes(id),
+                    'text-white': form.outlets.includes(id),
+                }"
+                v-for="(outlet, id) in data.outlets"
+                @click="outletSelect(id)"
+                :key="id"
+            >
+                {{ outlet }}
+            </div>
+
+            <div></div>
+        </div>
     </div>
 </template>
 
@@ -195,6 +215,7 @@ export default {
                 type: this.data.user.type || 0,
                 password: this.data.user.password || "",
                 roles: this.data.assignedRoles || [],
+                outlets: this.data.assignedOutlets || [],
                 active:
                     this.moduleAction == "store" ? 1 : this.data.user.active,
             }),
@@ -256,6 +277,15 @@ export default {
                 this.form.roles.splice(index, 1);
             }
         },
+        outletSelect(id) {
+            if (!this.form.outlets.includes(id)) {
+                this.form.outlets.push(id);
+                this.swalTik();
+            } else {
+                let index = this.form.outlets.indexOf(id);
+                this.form.outlets.splice(index, 1);
+            }
+        },
         swalTik() {
             Swal.fire({
                 icon: "success",
@@ -263,10 +293,6 @@ export default {
                 showConfirmButton: false,
                 timer: 1000,
             });
-            document.querySelector(".check-icon").style.display = "none";
-            setTimeout(() => {
-                document.querySelector(".check-icon").style.display = "";
-            }, 1000);
         },
     },
 };

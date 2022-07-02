@@ -96,6 +96,7 @@ class UserController extends Controller
     {
         $user->load('roles:id','outlets:id');
         $assignedRoles = [];
+        $assignedOutlets = [];
         foreach ($user->roles as $key => $value) {
             $assignedRoles[] = (string) $value->id;
         }
@@ -109,6 +110,7 @@ class UserController extends Controller
                 'roles'         => Outlet::pluck('name', 'id'),
                 // 'assignedRoles' => $assignedRoles,
                 'assignedRoles' => $user->outlets->pluck('id'),
+
             ]
         ]);
     }
