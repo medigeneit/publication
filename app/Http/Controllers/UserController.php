@@ -56,6 +56,7 @@ class UserController extends Controller
                 'user'      => new User(),
                 'userType'  => User::getTypes(),
                 'roles'     => Role::pluck('name', 'id'),
+                'outlets'     => Outlet::pluck('name', 'id'),
             ]
         ]);
     }
@@ -67,6 +68,9 @@ class UserController extends Controller
         ]);
 
         // $user->assignRole($user, $request->roles);
+
+        $user->outlets()->sync($request->outlets);
+
         if (($request->roles == 1 && Auth::user()->hasRole('Super Admin')) || $request->roles != 1
         ) {
             $user->syncRoles($request->roles);
@@ -79,7 +83,8 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user->load('roles');
+        // return
+        $user->load('roles','outlets');
         UserResource::withoutWrapping();
 
         return Inertia::render('User/Show', [
@@ -89,21 +94,23 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $user->load('roles:id');
+        $user->load('roles:id','outlets:id');
         $assignedRoles = [];
         $assignedOutlets = [];
         foreach ($user->roles as $key => $value) {
             $assignedRoles[] = (string) $value->id;
         }
-        foreach ($user->outlets as $key => $value) {
-            $assignedOutlets[] = (string) $value->id;
-        }
+        // return $user->roles->pluck('id');
+        // return $user->outlets->pluck('id');
         return Inertia::render('User/Edit', [
             "data" => [
-                'user'              => $user,
-                'userType'          => User::getTypes(),
-                'roles'             => Role::pluck('name', 'id'),
-                'assignedRoles'     => $assignedRoles,
+                'user'          => $user,
+                'userType'      => User::getTypes(),
+                'roles'         => Role::pluck('name', 'id'),
+                'roles'         => Outlet::pluck('name', 'id'),
+                // 'assignedRoles' => $assignedRoles,
+                'assignedRoles' => $user->outlets->pluck('id'),
+
             ]
         ]);
     }
@@ -113,6 +120,10 @@ class UserController extends Controller
         $user->update($this->validateData($request, $user->id) + [
             'password'  => Hash::make($request->password),
         ]);
+
+        // $user->outlets()->sync([1]);
+        $user->outlets()->sync($request->outlets);
+
         // $user->assignRole($user,$request->roles);
         if (($request->roles == 1 && Auth::user()->hasRole('Super Admin')) || $request->roles != 1
         ) {
@@ -152,7 +163,7 @@ class UserController extends Controller
             'active' => User::getActiveProperties(),
         ];
     }
-    
+
     private function validateData($request, $id = '')
     {
         return $request->validate([
