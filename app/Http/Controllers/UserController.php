@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Outlet;
 use App\Models\User;
 use App\Traits\ActiveFilter;
 use App\Traits\ActiveTrait;
@@ -90,15 +91,19 @@ class UserController extends Controller
     {
         $user->load('roles:id');
         $assignedRoles = [];
+        $assignedOutlets = [];
         foreach ($user->roles as $key => $value) {
             $assignedRoles[] = (string) $value->id;
         }
+        foreach ($user->outlets as $key => $value) {
+            $assignedOutlets[] = (string) $value->id;
+        }
         return Inertia::render('User/Edit', [
             "data" => [
-                'user'          => $user,
-                'userType'      => User::getTypes(),
-                'roles'         => Role::pluck('name', 'id'),
-                'assignedRoles' => $assignedRoles,
+                'user'              => $user,
+                'userType'          => User::getTypes(),
+                'roles'             => Role::pluck('name', 'id'),
+                'assignedRoles'     => $assignedRoles,
             ]
         ]);
     }

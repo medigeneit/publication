@@ -46,9 +46,16 @@
                 <div class="mb-3 text-sm">
                     {{ item.type_name }}
                     <span class="text-sm font-extrabold"
-                        >{{ item.product_quantity }} pcs </span
+                        >{{ item.product_quantity }} pcs
+                    </span>
+                    to
+                    <span class="font-extrabold">
+                        {{
+                            item.requested_to.length
+                                ? item.requested_to.name
+                                : "all"
+                        }}</span
                     >
-                    to <span class="font-extrabold"> {{ item.requested_to.length ? item.requested_to.name : 'all'  }}</span>
                 </div>
                 <div class="mb-3">
                     <p class="font-extrabold text-sm unde">Expected Date:</p>
@@ -82,7 +89,23 @@
                 <div class="bg-white rounded border shadow z-50">
                     <div class="p-3 grid grid-cols-12 gap-2">
                         <div class="col-span-6 border-r-2">
-                            <h1 class="underline font-extrabold">On The Way</h1>
+                            <div class="flex justify-between">
+                                <h1 class="underline font-extrabold">
+                                    On The Way
+                                </h1>
+                                <div class="">
+                                    <span
+                                        class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
+                                        v-if="
+                                            productRequest.button_access.includes(
+                                                'stock_out'
+                                            )
+                                        "
+                                    >
+                                        Send
+                                    </span>
+                                </div>
+                            </div>
                             <div
                                 v-for="circulation in productRequest.circulations"
                                 :key="circulation"
@@ -90,67 +113,44 @@
                                 <span class="text-sm">
                                     {{ circulation.circulationDate }}
                                 </span>
-                                <div>
-                                    <!-- {{ circulation }} -->
-                                    <span class="font-extrabold">
-                                        {{ circulation.circulation_of }}
-                                    </span>
-                                    <span>
-                                        <!-- {{
-                                            $page.url.includes(
-                                                `outlet_id=${circulation.circulation_of_id}`
-                                            )
-                                                ? " sends "
-                                                : " recieved "
-                                        }} -->
-                                        {{
-                                            circulation.quantity < 0
-                                                ? " sends "
-                                                : " recieved "
-                                        }}
-                                    </span>
-                                    <span class="font-extrabold">
-                                        {{ Math.abs(circulation.quantity) }} pcs
-                                    </span>
-                                    <span>
-                                        <!-- {{
-                                            $page.url.includes(
-                                                `outlet_id=${circulation.circulation_of_id}`
-                                            )
-                                                ? " to "
-                                                : " from "
-                                        }} -->
-                                        {{
-                                            circulation.quantity < 0
-                                                ? " to "
-                                                : " from "
-                                        }}
-                                    </span>
-                                    <span class="font-extrabold">
-                                        {{ circulation.destination }}
-                                    </span>
-
-                                        <!-- v-for="button_access in productRequest.button_access"
-                                        :key="button_access" -->
-                                    <div
-                                        class="float-right"
-                                    >
-                                        <!-- {{ button_access }} -->
+                                <div class="flex justify-between">
+                                    <div>
+                                        <!-- {{ circulation }} -->
+                                        <span class="font-extrabold">
+                                            {{ circulation.circulation_of }}
+                                        </span>
+                                        <span>
+                                            {{
+                                                circulation.quantity < 0
+                                                    ? " sends "
+                                                    : " recieved "
+                                            }}
+                                        </span>
+                                        <span class="font-extrabold">
+                                            {{ Math.abs(circulation.quantity) }}
+                                            pcs
+                                        </span>
+                                        <span>
+                                            {{
+                                                circulation.quantity < 0
+                                                    ? " to "
+                                                    : " from "
+                                            }}
+                                        </span>
+                                        <span class="font-extrabold">
+                                            {{ circulation.destination }}
+                                        </span>
+                                    </div>
+                                    <div class="">
                                         <div
                                             class="px-2 mr-2 bg-gray-500 text-white rounded"
                                         >
                                             <span
                                                 class="cursor-pointer"
                                                 v-if="
-                                                    productRequest.button_access.includes('stock_out')
-                                                "
-                                            >
-                                                Send
-                                            </span>
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    productRequest.button_access.includes('stock_in')
+                                                    productRequest.button_access.includes(
+                                                        'stock_in'
+                                                    )
                                                 "
                                             >
                                                 Recieve
@@ -159,88 +159,101 @@
                                     </div>
                                 </div>
                                 <div
-                                class="ml-5"
-                                v-for="circulation in circulation.circulations"
-                                :key="circulation"
-                            >
-                                <span class="text-sm">
-                                    {{ circulation.circulationDate }}
-                                </span>
-                                <div>
-                                    <!-- {{ circulation }} -->
-                                    <span class="font-extrabold">
-                                        {{ circulation.circulation_of }}
+                                    class="ml-5"
+                                    v-for="circulation in circulation.circulations"
+                                    :key="circulation"
+                                >
+                                    <span class="text-sm">
+                                        {{ circulation.circulationDate }}
                                     </span>
-                                    <span>
-                                        <!-- {{
-                                            $page.url.includes(
-                                                `outlet_id=${circulation.circulation_of_id}`
-                                            )
-                                                ? " sends "
-                                                : " recieved "
-                                        }} -->
-                                        {{
-                                            circulation.quantity < 0
-                                                ? " sends "
-                                                : " recieved "
-                                        }}
-                                    </span>
-                                    <span class="font-extrabold">
-                                        {{ Math.abs(circulation.quantity) }} pcs
-                                    </span>
-                                    <span>
-                                        <!-- {{
-                                            $page.url.includes(
-                                                `outlet_id=${circulation.circulation_of_id}`
-                                            )
-                                                ? " to "
-                                                : " from "
-                                        }} -->
-                                        {{
-                                            circulation.quantity < 0
-                                                ? " to "
-                                                : " from "
-                                        }}
-                                    </span>
-                                    <span class="font-extrabold">
-                                        {{ circulation.destination }}
-                                    </span>
-                                    <div
-                                        class="float-right"
-                                        v-for="button_access in productRequest.button_access"
-                                        :key="button_access"
-                                    >
-                                        <!-- {{ button_access }} -->
-                                        <!-- <div
-                                            class="px-2 mr-2 bg-gray-500 text-white rounded"
-                                        >
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access == 'stock_out'
-                                                "
-                                            >
-                                                Send
-                                            </span>
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access == 'stock_in'
-                                                "
-                                            >
-                                                Recieve
-                                            </span>
-                                        </div> -->
+                                    <div>
+                                        <!-- {{ circulation }} -->
+                                        <span class="font-extrabold">
+                                            {{ circulation.circulation_of }}
+                                        </span>
+                                        <span>
+                                            {{
+                                                circulation.quantity < 0
+                                                    ? " sends "
+                                                    : " recieved "
+                                            }}
+                                        </span>
+                                        <span class="font-extrabold">
+                                            {{ Math.abs(circulation.quantity) }}
+                                            pcs
+                                        </span>
+                                        <span>
+                                            {{
+                                                circulation.quantity < 0
+                                                    ? " to "
+                                                    : " from "
+                                            }}
+                                        </span>
+                                        <span class="font-extrabold">
+                                            {{ circulation.destination }}
+                                        </span>
+                                        <div
+                                            class="float-right"
+                                            v-for="button_access in productRequest.button_access"
+                                            :key="button_access"
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
-                            </div>
                         </div>
                         <div class="col-span-6">
-                            <h1 class="underline font-extrabold">Responses</h1>
+                            <div class="flex justify-between">
+                                <h1 class="underline font-extrabold">
+                                    Responses
+                                </h1>
+                                <div class="">
+                                    <span
+                                        class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
+                                        v-if="
+                                            productRequest.button_access.includes(
+                                                'request_accept'
+                                            )
+                                        "
+                                    >
+                                        Accept
+                                    </span>
 
+                                    <span
+                                        class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
+                                        v-if="
+                                            productRequest.button_access.includes(
+                                                'request_denie'
+                                            )
+                                        "
+                                    >
+                                        Deny
+                                    </span>
+
+                                    <span
+                                        class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
+                                        v-if="
+                                            productRequest.button_access.includes(
+                                                'request_edit'
+                                            )
+                                        "
+                                    >
+                                        Edit
+                                    </span>
+
+                                    <span
+                                        class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
+                                        v-if="
+                                            productRequest.button_access.includes(
+                                                'request_close'
+                                            )
+                                        "
+                                    >
+                                        Close
+                                    </span>
+                                </div>
+                            </div>
                             <div
-                            class="flex justify-between"
+                                class="flex justify-between"
                                 v-for="response in productRequest.responses"
                                 :key="response"
                             >
@@ -265,54 +278,26 @@
                                     reqeuest
                                 </div>
                                 <div class="flex">
-                                    <div
-                                        class=""
-                                        v-for="button_access in productRequest.button_access"
-                                        :key="button_access"
-                                    >
-                                        <div
-                                            class="px-2 mr-2 bg-gray-500 text-white rounded"
+                                    <!-- v-for="button_access in productRequest.button_access"
+                                        :key="button_access" -->
+                                    <div class="">
+                                        <span
+                                            class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
+                                            v-if="
+                                                button_access == 'request_edit'
+                                            "
                                         >
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access ==
-                                                    'request_accept'
-                                                "
-                                            >
-                                                Accept
-                                            </span>
+                                            Edit
+                                        </span>
 
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access ==
-                                                    'request_denie'
-                                                "
-                                            >
-                                                Deny
-                                            </span>
-
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access ==
-                                                    'request_edit'
-                                                "
-                                            >
-                                                Edit
-                                            </span>
-
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access ==
-                                                    'request_close'
-                                                "
-                                            >
-                                                Close
-                                            </span>
-                                        </div>
+                                        <span
+                                            class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
+                                            v-if="
+                                                button_access == 'request_close'
+                                            "
+                                        >
+                                            Close
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -360,6 +345,7 @@ export default {
             ],
             productRequest: "",
             circulaitonShow: false,
+            responseShow: false,
         };
     },
     methods: {
