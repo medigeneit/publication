@@ -20,9 +20,8 @@
                     aria-current="page"
                     class="inline-block p-2 text-gray-600 bg-gray-300 rounded-t-lg hover:bg-gray-500 hover:text-gray-200"
                     :class="{
-                        'font-extrabold bg-gray-500 text-gray-200': $page.url.includes(
-                            `outlet_id=${outlet_id}`
-                        ),
+                        'font-extrabold bg-gray-500 text-gray-200':
+                            $page.url.includes(`outlet_id=${outlet_id}`),
                     }"
                     >{{ outlet }}</Link
                 >
@@ -47,8 +46,9 @@
                 <div class="mb-3 text-sm">
                     {{ item.type_name }}
                     <span class="text-sm font-extrabold"
-                        >{{ item.product_quantity }} pcs</span
+                        >{{ item.product_quantity }} pcs </span
                     >
+                    to <span class="font-extrabold"> {{ item.requested_to.length ? item.requested_to.name : 'all'  }}</span>
                 </div>
                 <div class="mb-3">
                     <p class="font-extrabold text-sm unde">Expected Date:</p>
@@ -141,37 +141,10 @@
                                             <span
                                                 class="cursor-pointer"
                                                 v-if="
-                                                    button_access ==
-                                                    'request_accept'
-                                                "
-                                            >
-                                                Accept
-                                            </span>
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access ==
-                                                    'request_denie'
-                                                "
-                                            >
-                                                Deny
-                                            </span>
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access ==
-                                                    'request_close'
-                                                "
-                                            >
-                                                Close
-                                            </span>
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
                                                     button_access == 'stock_out'
                                                 "
                                             >
-                                                Stock Out
+                                                Send
                                             </span>
                                             <span
                                                 class="cursor-pointer"
@@ -179,16 +152,7 @@
                                                     button_access == 'stock_in'
                                                 "
                                             >
-                                                Stock In
-                                            </span>
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    button_access ==
-                                                    'request_edit'
-                                                "
-                                            >
-                                                Edit
+                                                Recieve
                                             </span>
                                         </div>
                                     </div>
@@ -197,7 +161,9 @@
                         </div>
                         <div class="col-span-6">
                             <h1 class="underline font-extrabold">Responses</h1>
+
                             <div
+                            class="flex justify-between"
                                 v-for="response in productRequest.responses"
                                 :key="response"
                             >
@@ -207,12 +173,70 @@
                                         {{ `${response.outlet_name} ` }}
                                     </span>
                                     <span>
-                                        {{ `${response.status_name} ` }}
+                                        {{
+                                            `${
+                                                response.status_name
+                                                    .charAt(0)
+                                                    .toLowerCase() +
+                                                response.status_name.slice(1)
+                                            } `
+                                        }}
                                     </span>
                                     <span class="font-extrabold">
                                         {{ response.quantity }} pcs
                                     </span>
                                     reqeuest
+                                </div>
+                                <div class="flex">
+                                    <div
+                                        class=""
+                                        v-for="button_access in productRequest.button_access"
+                                        :key="button_access"
+                                    >
+                                        <div
+                                            class="px-2 mr-2 bg-gray-500 text-white rounded"
+                                        >
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access ==
+                                                    'request_accept'
+                                                "
+                                            >
+                                                Accept
+                                            </span>
+
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access ==
+                                                    'request_denie'
+                                                "
+                                            >
+                                                Deny
+                                            </span>
+
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access ==
+                                                    'request_edit'
+                                                "
+                                            >
+                                                Edit
+                                            </span>
+
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    button_access ==
+                                                    'request_close'
+                                                "
+                                            >
+                                                Close
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
