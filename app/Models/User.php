@@ -89,6 +89,7 @@ class User extends Authenticatable
 
     public function outlets()
     {
-        return $this->hasManyThrough(Outlet::class,UserOutlet::class,'user_id','id','id','outlet_id');
+        // return $this->hasManyThrough(Outlet::class,UserOutlet::class,'user_id','id','id','outlet_id');
+        return $this->belongsToMany(Outlet::class,'user_outlets');
     }
 }
