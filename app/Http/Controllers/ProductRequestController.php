@@ -116,6 +116,7 @@ class ProductRequestController extends Controller
             );
             $request->storage_id = $storage->id;
         }
+         
 
         // return $request;
         $productRequest = ProductRequest::create([
