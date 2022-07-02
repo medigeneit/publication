@@ -88,7 +88,83 @@
                                 :key="circulation"
                             >
                                 <span class="text-sm">
-                                    {{ productRequest.expected_date }}
+                                    {{ circulation.circulationDate }}
+                                </span>
+                                <div>
+                                    <!-- {{ circulation }} -->
+                                    <span class="font-extrabold">
+                                        {{ circulation.circulation_of }}
+                                    </span>
+                                    <span>
+                                        <!-- {{
+                                            $page.url.includes(
+                                                `outlet_id=${circulation.circulation_of_id}`
+                                            )
+                                                ? " sends "
+                                                : " recieved "
+                                        }} -->
+                                        {{
+                                            circulation.quantity < 0
+                                                ? " sends "
+                                                : " recieved "
+                                        }}
+                                    </span>
+                                    <span class="font-extrabold">
+                                        {{ Math.abs(circulation.quantity) }} pcs
+                                    </span>
+                                    <span>
+                                        <!-- {{
+                                            $page.url.includes(
+                                                `outlet_id=${circulation.circulation_of_id}`
+                                            )
+                                                ? " to "
+                                                : " from "
+                                        }} -->
+                                        {{
+                                            circulation.quantity < 0
+                                                ? " to "
+                                                : " from "
+                                        }}
+                                    </span>
+                                    <span class="font-extrabold">
+                                        {{ circulation.destination }}
+                                    </span>
+
+                                        <!-- v-for="button_access in productRequest.button_access"
+                                        :key="button_access" -->
+                                    <div
+                                        class="float-right"
+                                    >
+                                        <!-- {{ button_access }} -->
+                                        <div
+                                            class="px-2 mr-2 bg-gray-500 text-white rounded"
+                                        >
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    productRequest.button_access.includes('stock_out')
+                                                "
+                                            >
+                                                Send
+                                            </span>
+                                            <span
+                                                class="cursor-pointer"
+                                                v-if="
+                                                    productRequest.button_access.includes('stock_in')
+                                                "
+                                            >
+                                                Recieve
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                class="ml-5"
+                                v-for="circulation in circulation.circulations"
+                                :key="circulation"
+                            >
+                                <span class="text-sm">
+                                    {{ circulation.circulationDate }}
                                 </span>
                                 <div>
                                     <!-- {{ circulation }} -->
@@ -135,7 +211,7 @@
                                         :key="button_access"
                                     >
                                         <!-- {{ button_access }} -->
-                                        <div
+                                        <!-- <div
                                             class="px-2 mr-2 bg-gray-500 text-white rounded"
                                         >
                                             <span
@@ -154,9 +230,10 @@
                                             >
                                                 Recieve
                                             </span>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         </div>
                         <div class="col-span-6">
