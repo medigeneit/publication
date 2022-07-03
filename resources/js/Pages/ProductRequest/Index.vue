@@ -259,7 +259,7 @@
                                                 >
                                                     <div
                                                         class="w-full h-full"
-                                                        @click="closeModal"
+                                                        @click="recieveShow = false"
                                                     ></div>
                                                 </div>
                                             </div>
