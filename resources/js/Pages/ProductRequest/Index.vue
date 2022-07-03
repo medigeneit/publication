@@ -86,7 +86,7 @@
                     </svg>
                 </div>
             </div>
-            <!-- v-if="circulaitonShow" -->
+
             <div class="col-span-12" v-if="circulaitonShow">
                 <div class="bg-white rounded border shadow z-50">
                     <div class="p-3 grid grid-cols-12 gap-2">
@@ -95,19 +95,18 @@
                                 <h1 class="underline font-extrabold">
                                     On The Way
                                 </h1>
-                                <div class="" @click="sendShow = !sendShow">
-                                    <span
-                                        class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
-                                        v-if="
-                                            productRequest.button_access.includes(
-                                                'stock_out'
-                                            )
-                                        "
-                                    >
-                                        Send
-                                    </span>
+                                <div
+                                    class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
+                                    v-if="
+                                        productRequest.button_access.includes(
+                                            'stock_out'
+                                        )
+                                    "
+                                    @click="modalHandler"
+                                >
+                                    Send
                                 </div>
-                                <div v-if="sendShow" class="fixed inset-0 z-50">
+                                <div class="fixed inset-0 z-50 hidden">
                                     <div
                                         class="relative w-full h-full flex justify-center items-center"
                                     >
@@ -149,14 +148,18 @@
                                         >
                                             <div
                                                 class="w-full h-full"
-                                                @click="sendShow = false"
+                                                @click="closeModal"
                                             ></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div
-                                v-for="circulation in productRequest.circulations"
+                                class="border-2 shadow rounded-md px-2 my-2 mr-2"
+                                v-for="(
+                                    circulation, index
+                                ) in productRequest.circulations"
                                 :key="circulation"
                             >
                                 <span class="text-sm">
@@ -190,30 +193,23 @@
                                             {{ circulation.destination }}
                                         </span>
                                     </div>
-                                    <div class="">
+                                    <div class="pb-2">
                                         <div
-                                            class="px-2 mr-2 bg-gray-500 text-white rounded"
+                                            class="px-2 mr-2 bg-gray-500 text-white rounded cursor-pointer"
+                                            v-if="
+                                                productRequest.button_access.includes(
+                                                    'stock_in'
+                                                )
+                                            "
                                             @click="
                                                 form.circulation_id =
                                                     circulation.id;
-                                                recieveShow = !recieveShow;
+                                                modalHandler($event);
                                             "
                                         >
-                                            <span
-                                                class="cursor-pointer"
-                                                v-if="
-                                                    productRequest.button_access.includes(
-                                                        'stock_in'
-                                                    )
-                                                "
-                                            >
-                                                Recieve
-                                            </span>
+                                            Recieve
                                         </div>
-                                        <div
-                                            v-if="recieveShow"
-                                            class="fixed inset-0 z-50"
-                                        >
+                                        <div class="fixed inset-0 z-50 hidden">
                                             <div
                                                 class="relative w-full h-full flex justify-center items-center"
                                             >
@@ -223,7 +219,16 @@
                                                     <div
                                                         class="text-lg font-bold text-center"
                                                     >
-                                                        Recieve
+                                                        {{
+                                                            `${
+                                                                circulation.quantity <
+                                                                0
+                                                                    ? " Sends "
+                                                                    : " Recieved "
+                                                            } ${Math.abs(
+                                                                circulation.quantity
+                                                            )} pcs`
+                                                        }}
                                                     </div>
                                                     <hr class="my-1" />
                                                     <div class="p-3">
@@ -259,7 +264,7 @@
                                                 >
                                                     <div
                                                         class="w-full h-full"
-                                                        @click="recieveShow = false"
+                                                        @click="closeModal"
                                                     ></div>
                                                 </div>
                                             </div>
@@ -361,7 +366,7 @@
                                 </div>
                             </div>
                             <div
-                                class="flex justify-between"
+                                class="flex justify-between border-2 shadow rounded-md px-2 py-1 my-2 mr-2"
                                 v-for="response in productRequest.responses"
                                 :key="response"
                             >
@@ -443,15 +448,13 @@ export default {
                 to: "",
                 request_id: "",
                 circulation_id: "",
-                quantity: 0,
+                quantity: "",
                 type: "",
-                requastable_type: ""
+                requastable_type: "",
             }),
             productRequest: "",
             circulaitonShow: false,
-            responseShow: false,
-            sendShow: false,
-            recieveShow: false,
+            circulation: "",
         };
     },
     methods: {
@@ -473,7 +476,23 @@ export default {
 
             return [year, month, day].join("-");
         },
-    
+        modalHandler(event) {
+            console.log(event.target.nextElementSibling);
+            event.target.nextElementSibling.classList.toggle("hidden");
+        },
+
+        closeModal(event) {
+            this.emptyValue();
+            event.target.parentElement.parentElement.parentElement.classList.add(
+                "hidden"
+            );
+        },
+        emptyValue() {
+            this.form.from = "";
+            this.form.to = "";
+            this.form.quantity = "";
+            this.form.type = "";
+        },
         send(event) {
             this.form.type = 2;
             console.log(this.form);

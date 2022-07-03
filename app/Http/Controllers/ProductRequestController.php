@@ -58,9 +58,6 @@ class ProductRequestController extends Controller
                         },
                     ]);
                 },
-                'storage.product.storages'=>function($query) use($request){
-                    $query->where('outlet_id',$request->outlet_id);
-                },
                 'outlet',
                 'responses.user',
                 'responses.outlet',
@@ -76,12 +73,12 @@ class ProductRequestController extends Controller
         ProductRequestResource::withoutWrapping();
 
         ProductRequestResource::$YourOutlet = $request->outlet_id;
-        return
-        [
-            'your_outlets' =>  $outlets,
-            'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
-            'filters' => $this->getFilterProperty(),
-        ];
+        // return
+        // [
+        //     'your_outlets' =>  $outlets,
+        //     'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+        //     'filters' => $this->getFilterProperty(),
+        // ];
         return Inertia::render('ProductRequest/Index', [
             'your_outlets' =>  in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id'),
             'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -119,7 +116,7 @@ class ProductRequestController extends Controller
             );
             $request->storage_id = $storage->id;
         }
-
+         
 
         // return $request;
         $productRequest = ProductRequest::create([
