@@ -383,30 +383,10 @@
                                     <span class="font-extrabold">
                                         {{ response.quantity }} pcs
                                     </span>
-                                    reqeuest
-                                </div>
-                                <div class="flex">
-                                    <!-- v-for="button_access in productRequest.button_access"
-                                        :key="button_access" -->
-                                    <!-- <div class="">
-                                        <span
-                                            class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
-                                            v-if="
-                                                button_access == 'request_edit'
-                                            "
-                                        >
-                                            Edit
-                                        </span>
-
-                                        <span
-                                            class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
-                                            v-if="
-                                                button_access == 'request_close'
-                                            "
-                                        >
-                                            Close
-                                        </span>
-                                    </div> -->
+                                    reqeuest by
+                                    <span class="font-extrabold">
+                                        {{ response.user_name }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
