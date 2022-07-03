@@ -17,6 +17,7 @@
                             outlet_id: outlet_id,
                         })
                     "
+                    @click="form.from = outlet_id"
                     aria-current="page"
                     class="inline-block p-2 text-gray-600 bg-gray-300 rounded-t-lg hover:bg-gray-500 hover:text-gray-200"
                     :class="{
@@ -67,6 +68,7 @@
                     @click="
                         circulaitonShow = !circulaitonShow;
                         productRequest = item;
+                        form.request_id = item.id;
                     "
                 >
                     See
@@ -93,7 +95,7 @@
                                 <h1 class="underline font-extrabold">
                                     On The Way
                                 </h1>
-                                <div class="">
+                                <div class="" @click="sendShow = !sendShow">
                                     <span
                                         class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
                                         v-if="
@@ -104,6 +106,53 @@
                                     >
                                         Send
                                     </span>
+                                </div>
+                                <div v-if="sendShow" class="fixed inset-0 z-50">
+                                    <div
+                                        class="relative w-full h-full flex justify-center items-center"
+                                    >
+                                        <div
+                                            class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50"
+                                        >
+                                            <div
+                                                class="text-lg font-bold text-center"
+                                            >
+                                                Send
+                                            </div>
+                                            <hr class="my-1" />
+                                            <div class="p-3">
+                                                <form
+                                                    @submit.prevent="send"
+                                                    class=""
+                                                >
+                                                    <Label
+                                                        value="Send Quantity"
+                                                    />
+                                                    <input
+                                                        type="number"
+                                                        class="mt-1 block w-full"
+                                                        placeholder="Quantity"
+                                                        v-model="form.quantity"
+                                                        required
+                                                    />
+                                                    <Button
+                                                        type="submit"
+                                                        class="bg-gray-600 text-white px-2 py-1 rounded mt-2"
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40"
+                                        >
+                                            <div
+                                                class="w-full h-full"
+                                                @click="sendShow = false"
+                                            ></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div
@@ -144,6 +193,11 @@
                                     <div class="">
                                         <div
                                             class="px-2 mr-2 bg-gray-500 text-white rounded"
+                                            @click="
+                                                form.circulation_id =
+                                                    circulation.id;
+                                                recieveShow = !recieveShow;
+                                            "
                                         >
                                             <span
                                                 class="cursor-pointer"
@@ -155,6 +209,60 @@
                                             >
                                                 Recieve
                                             </span>
+                                        </div>
+                                        <div
+                                            v-if="recieveShow"
+                                            class="fixed inset-0 z-50"
+                                        >
+                                            <div
+                                                class="relative w-full h-full flex justify-center items-center"
+                                            >
+                                                <div
+                                                    class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50"
+                                                >
+                                                    <div
+                                                        class="text-lg font-bold text-center"
+                                                    >
+                                                        Recieve
+                                                    </div>
+                                                    <hr class="my-1" />
+                                                    <div class="p-3">
+                                                        <form
+                                                            @submit.prevent="
+                                                                recieve
+                                                            "
+                                                            class=""
+                                                        >
+                                                            <Label
+                                                                value="Send Quantity"
+                                                            />
+                                                            <input
+                                                                type="number"
+                                                                class="mt-1 block w-full"
+                                                                placeholder="Quantity"
+                                                                v-model="
+                                                                    form.quantity
+                                                                "
+                                                                required
+                                                            />
+                                                            <Button
+                                                                type="submit"
+                                                                class="bg-gray-600 text-white px-2 py-1 rounded mt-2"
+                                                            >
+                                                                Submit
+                                                            </Button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40"
+                                                >
+                                                    <div
+                                                        class="w-full h-full"
+                                                        @click="closeModal"
+                                                    ></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -192,11 +300,11 @@
                                         <span class="font-extrabold">
                                             {{ circulation.destination }}
                                         </span>
-                                        <div
+                                        <!-- <div
                                             class="float-right"
                                             v-for="button_access in productRequest.button_access"
                                             :key="button_access"
-                                        ></div>
+                                        ></div> -->
                                     </div>
                                 </div>
                             </div>
@@ -280,7 +388,7 @@
                                 <div class="flex">
                                     <!-- v-for="button_access in productRequest.button_access"
                                         :key="button_access" -->
-                                    <div class="">
+                                    <!-- <div class="">
                                         <span
                                             class="cursor-pointer px-2 mr-2 bg-gray-500 text-white rounded"
                                             v-if="
@@ -298,7 +406,7 @@
                                         >
                                             Close
                                         </span>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -315,6 +423,7 @@ import ActionButtonShow from "@/Components/ActionButtonShow.vue";
 import AddNewButton from "@/Components/AddNewButton.vue";
 import Button from "@/Components/Button.vue";
 import DataTable from "@/Components/DataTable.vue";
+import Label from "@/Components/Label.vue";
 import AppLayout from "@/Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 
@@ -328,11 +437,17 @@ export default {
         ActionButtonEdit,
         AddNewButton,
         Button,
+        Label,
     },
     props: {
         productRequests: { type: Object, default: {} },
         your_outlets: { type: Object, default: {} },
         filters: { type: Object, default: {} },
+    },
+    created() {
+        this.form.from = this.$page.url.includes("outlet_id=")
+            ? this.$page.url.split("?")[1].split("=")[1]
+            : "";
     },
     data() {
         return {
@@ -343,9 +458,20 @@ export default {
                 { title: "Status", align: "center" },
                 { title: "Action", align: "center" },
             ],
+            form: this.$inertia.form({
+                from: "",
+                to: "",
+                request_id: "",
+                circulation_id: "",
+                quantity: 0,
+                type: "",
+                requastable_type: ""
+            }),
             productRequest: "",
             circulaitonShow: false,
             responseShow: false,
+            sendShow: false,
+            recieveShow: false,
         };
     },
     methods: {
@@ -367,15 +493,18 @@ export default {
 
             return [year, month, day].join("-");
         },
-        modalShow(event, index) {
-            console.log(event.target.nextElementSibling);
-            event.target.nextElementSibling.classList.toggle("hidden");
-            console.log(this.items[index]);
+    
+        send(event) {
+            this.form.type = 2;
+            console.log(this.form);
+            return this.form.post(this.route("circulations.store"));
         },
-        closeModal(event) {
-            event.target.parentElement.parentElement.parentElement.classList.add(
-                "hidden"
-            );
+        recieve(event) {
+            this.form.type = 1;
+            this.form.from = "";
+            this.form.requastable_type = 2;
+            console.log(this.form);
+            return this.form.post(this.route("circulations.store"));
         },
     },
 };

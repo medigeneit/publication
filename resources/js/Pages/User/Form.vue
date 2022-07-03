@@ -146,8 +146,8 @@
                 name="roles"
                 class="mt-1 block cursor-pointer border border-gray-200 p-3"
                 :class="{
-                    'bg-blue-500': form.roles.includes(id),
-                    'text-white': form.roles.includes(id),
+                    'bg-blue-500': form.roles.includes(parseInt(id)),
+                    'text-white': form.roles.includes(parseInt(id)),
                 }"
                 v-for="(role, id) in data.roles"
                 @click="roleSelect(id)"
@@ -166,8 +166,8 @@
                 name="outlets"
                 class="mt-1 block cursor-pointer border border-gray-200 p-3"
                 :class="{
-                    'bg-blue-500': form.outlets.includes(id),
-                    'text-white': form.outlets.includes(id),
+                    'bg-blue-500': form.outlets.includes(parseInt(id)),
+                    'text-white': form.outlets.includes(parseInt(id)),
                 }"
                 v-for="(outlet, id) in data.outlets"
                 @click="outletSelect(id)"
@@ -269,20 +269,20 @@ export default {
             }
         },
         roleSelect(id) {
-            if (!this.form.roles.includes(id)) {
-                this.form.roles.push(id);
+            if (!this.form.roles.includes(parseInt(id))) {
+                this.form.roles.push(parseInt(id));
                 this.swalTik();
             } else {
-                let index = this.form.roles.indexOf(id);
+                let index = this.form.roles.indexOf(parseInt(id));
                 this.form.roles.splice(index, 1);
             }
         },
         outletSelect(id) {
-            if (!this.form.outlets.includes(id)) {
-                this.form.outlets.push(id);
+            if (!this.form.outlets.includes(parseInt(id))) {
+                this.form.outlets.push(parseInt(id));
                 this.swalTik();
             } else {
-                let index = this.form.outlets.indexOf(id);
+                let index = this.form.outlets.indexOf(parseInt(id));
                 this.form.outlets.splice(index, 1);
             }
         },

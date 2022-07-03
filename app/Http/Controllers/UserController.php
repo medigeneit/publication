@@ -95,11 +95,10 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $user->load('roles:id','outlets:id');
-        $assignedRoles = [];
-        $assignedOutlets = [];
-        foreach ($user->roles as $key => $value) {
-            $assignedRoles[] = (string) $value->id;
-        }
+        // $assignedRoles = [];
+        // foreach ($user->roles as $key => $value) {
+        //     $assignedRoles[] = (string) $value->id;
+        // }
         // return $user->roles->pluck('id');
         // return $user->outlets->pluck('id');
         return Inertia::render('User/Edit', [
@@ -107,9 +106,10 @@ class UserController extends Controller
                 'user'          => $user,
                 'userType'      => User::getTypes(),
                 'roles'         => Role::pluck('name', 'id'),
-                'roles'         => Outlet::pluck('name', 'id'),
+                'outlets'         => Outlet::pluck('name', 'id'),
                 // 'assignedRoles' => $assignedRoles,
-                'assignedRoles' => $user->outlets->pluck('id'),
+                'assignedRoles' => $user->roles->pluck('id') ?? [],
+                'assignedOutlets' => $user->outlets->pluck('id') ?? [],
 
             ]
         ]);

@@ -19,9 +19,16 @@
                 <show-table-row heading="Phone">{{ user.phone }}</show-table-row>
 
                 <show-table-row heading="Role">
-                    <div v-for=" role in user.roles" :key="role">
+                    <!-- <div v-for=" role in user.roles" :key="role">
                         {{ role }}
-                    </div>
+                    </div> -->
+                    {{ Object.values(user.roles).join(', ') }}
+                </show-table-row>
+                <show-table-row heading="Outlets">
+                    <!-- <span v-for=" outlet in user.outlets" :key="outlet">
+                        {{ outlet }} {{ Object.values(user.outlets).join(',') }}
+                    </span> -->
+                    {{ Object.values(user.outlets).join(', ') || "All Outlets" }}
                 </show-table-row>
 
                 <show-table-row heading="Type">{{ user.typeName }}</show-table-row>

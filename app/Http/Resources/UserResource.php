@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'password'      => (string) ($this->password ?? ''),
             'typeName'      => (string) ($this->value_of_type ?? ''),
             'roles'         => (object) ($this->roles->pluck('name', 'id') ?? []),
+            'outlets'       => (object) ($this->outlets->pluck('name', 'id') ?? []),
             'active'        => (int) ($this->active ?? 0),
             'activeValue'   => (string) ($this->value_of_active ?? 0),
             'emailVerified' => (string) ($this->email_verified ?? ''),
