@@ -43,6 +43,8 @@ class ProductRequestResource extends JsonResource
         $data['status']            = (int)  $status;
         $data['status_name']       = (string)  $status == 1 ? 'Closed' : 'Pending';
         // $data['responses2']       = (object) $this->responses ?? [];
+        $data['current_storage']       =  $this->storage->product->storages->first()->quantity ?? 0;
+        // $data['currentStorage']       = (object) $this->product->storages->quantity ?? 0;
         $data['responses']       = (object) RequestResponseResource::collection($this->responses) ?? [];
 
         if (($data['requested_by']['id'] ?? 0) == self::$YourOutlet){

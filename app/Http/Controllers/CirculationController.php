@@ -60,55 +60,6 @@ class CirculationController extends Controller
         ]);
     }
 
-    // public function requestable(Request $request)
-    // {
-    //     // $from = $request->from;
-    //     // $to = $request->to;
-    //     // $type = $request->from;
-    //     // $storage_type = $request->storage_type;
-    //     // $product_id = $request->product_id;
-    //     $product_id = 8;
-    //     $storage_outlet_id = 3;
-    //     return
-    //     Storage::where('product_id',$product_id)->where('outlet_id',$storage_outlet_id)->first()->productRequests->where('is_canceled',0)->load('circulations')->mapWithKeys(function($productRequest, $key){
-    //         $data = [];
-    //         $data['request_quantity'] = $productRequest->request_quantity;
-    //         $data['expected_date'] = $productRequest->expected_date;
-    //         $data['pending'] = $productRequest->request_quantity- $productRequest->circulations->sum('quantity');
-    //         return [$productRequest->id => $data] ;
-    //     });;
-
-
-    //     if (Circulation::TYPE[$request->type] == 'In') {
-    //         // return 'in';
-    //         // $quantity = $request->quantity;
-    //         $storage_outlet_id = $request->to;
-    //         $destination = $request->from;
-    //         $destination = $request->from;
-    //         if (Circulation::STORAGE_TYPE[$request->storage_type] == 'Press') {
-    //             // $requestable_type = Printing::class ?? null;
-
-    //             $printings = Product::find($product_id)->productable->printings->load('circulations')->mapWithKeys(function($printing, $key){
-    //                 $data = [];
-    //                 $data['order_quantity'] = $printing->copy_quantity;
-    //                 $data['order_date'] = $printing->order_date;
-    //                 $data['pending'] = $printing->copy_quantity- $printing->circulations->sum('quantity');
-    //                 return [$printing->id => $data] ;
-    //             });
-    //         }
-    //         if (Circulation::STORAGE_TYPE[$request->type] == 'Outlet') {
-
-    //             // $requestable_type = ProductRequest::class ?? null;
-    //         }
-    //         $requestable_id =  $request->request_id ?? null;
-    //     } elseif (Circulation::TYPE[$request->type] == 'Out') {
-    //         $quantity = $request->quantity * -1;
-    //         $storage_outlet_id = $request->from;
-    //         $destination = $request->to;
-    //         $requestable_type = ProductRequest::class ?? null;
-    //         $requestable_id =  $request->request_id ?? null;
-    //     }
-    // }
 
     public function store(Request $request)
     {
@@ -125,16 +76,16 @@ class CirculationController extends Controller
             // return
             $product_id = ProductRequest::find($request->request_id)->storage->product_id;
             $request_storage = ProductRequest::find($request->request_id)->storage;
-            
+
         }
-        
+
         // if (!in_array($request->type, array_keys(Circulation::TYPE)) && !in_array($request->type, array_values(Circulation::TYPE))) {
             //     return redirect()
             //         ->route($redirect_location)
             //         ->with('status', 'Unsuccessfull attempt, because of wrong type.');
             // }
             // return array_values(Circulation::TYPE);
-            
+
             // return Circulation::TYPE[$request->type] == 'In';
             if (Circulation::TYPE[$request->type] == 'In') {
                 // return 'in';
@@ -165,7 +116,7 @@ class CirculationController extends Controller
                 'outlet_id' => $storage_outlet_id,
                 'product_id' => $request->product_id ?? $product_id,
                 ])->first();
-                
+
                 if (Circulation::TYPE[$request->type] == 'In' &&  !$storage) {
                     $storage = new Storage;
                     $storage->user_id  = Auth::id();
@@ -177,11 +128,11 @@ class CirculationController extends Controller
                     $updated_quantity = $storage->quantity + $quantity;
                 }
                 // return [$storage, $updated_quantity];
-                
+
                 if ($updated_quantity >= 0) {
                     $storage->quantity = $updated_quantity;
                     $updated = $storage->save();
-                    
+
                     if ($updated) {
                 $data = [
                     'storage_id' => $storage->id,
