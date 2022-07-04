@@ -83,6 +83,8 @@ class ProductRequestController extends Controller
             'your_outlets' =>  in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id'),
             'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
+            'types' => ProductRequest::$Type,
+            'outlets' => Outlet::where('id','!=',$request->outlet_id)->pluck('name','id'),
         ]);
     }
 
@@ -145,7 +147,7 @@ class ProductRequestController extends Controller
         return back();
 
         return redirect()
-            ->route('collections.show', $productRequest->id)
+            ->route('product-requests.index')
             ->with('status', 'The record has been added successfully.');
     }
 
@@ -186,6 +188,9 @@ class ProductRequestController extends Controller
 
     public function update(Request $request, ProductRequest $productRequest)
     {
+        // return
+        $responce_outlet = $productRequest->load('storage');
+        // return $request;
         // $productRequest->update($this->validateData($request, $productRequest->id));
         $note = '';
         if ($productRequest->request_quantity != $request->request_quantity) {
@@ -197,12 +202,12 @@ class ProductRequestController extends Controller
             }
             $note .= "<b>Expected Date</b> From <b>" . $productRequest->expected_date . "</b> to <b>" . $request->expected_date . "</b>";
         }
-        if ($productRequest->outlet_id != $request->outlet_id) {
+        if ($productRequest->requested_to != $request->requested_to) {
             if ($note != '') {
                 $note .= ' and ';
             }
-            $outlet_before = $productRequest->outlet_id ?  $productRequest->outlet->name : 'All';
-            $outlet_after = $request->outlet_id ? Outlet::find($request->outlet_id)->name : 'All';
+            $outlet_before = $productRequest->requested_to ?  $productRequest->outlet->name : 'All';
+            $outlet_after = $request->requested_to ? Outlet::find($request->requested_to)->name : 'All';
             $note .= "<b>Outlet</b> From <b>" . $outlet_before . "</b> to <b>" . $outlet_after . "</b>";
         }
 
@@ -213,6 +218,13 @@ class ProductRequestController extends Controller
             $type_before = ProductRequest::$Type[$productRequest->type];
             $type_after = ProductRequest::$Type[$request->type];
             $note .= "<b>Type</b> From <b>" . $type_before . "</b> to <b>" . $type_after . "</b>";
+            // $note .= "<b>Date</b> From <b>" . $productRequest->expected_date. "</b> to <b>".$request->expected_date."</b>";
+        }
+        if ($request->note ) {
+            if ($note != '') {
+                $note .= ' with a note, ';
+            }
+            $note .= "\"" . $request->note . "\"";
             // $note .= "<b>Date</b> From <b>" . $productRequest->expected_date. "</b> to <b>".$request->expected_date."</b>";
         }
 
@@ -229,19 +241,22 @@ class ProductRequestController extends Controller
         // return $productRequest;
 
 
-        $responce_outlet = Storage::find($request->storage_id)->outlet;
         if ($productRequest) {
-            RequestResponse::create([
+            $RequestResponse = RequestResponse::create([
                 'product_request_id' => $productRequest->id,
                 'status' => 2,
                 'note' =>  $note ?? null,
                 'quantity' => $request->request_quantity ?? 0,
                 'user_id' => Auth::user()->id,
-                'outlet_id' =>  $responce_outlet,
+                'outlet_id' =>  $responce_outlet->storage->outlet_id,
             ]);
         }
 
-        return back();
+        // return back();
+        // return[
+        //     '$productRequest'=>$productRequest,
+        //     '$RequestResponse'=>$RequestResponse
+        // ];
 
         return redirect()
             ->route('collections.show', $productRequest->id)
@@ -280,7 +295,7 @@ class ProductRequestController extends Controller
             ->route('collections.show', $productRequest->id)
             ->with('status', 'The record has been update successfully.');
     }
-    public function accept_responce(Request $request, ProductRequest $productRequest)
+    public function accept_response(Request $request, ProductRequest $productRequest)
     {
         // $productRequest->update($this->validateData($request, $productRequest->id));
         // $note = '';
@@ -294,7 +309,7 @@ class ProductRequestController extends Controller
                 'note' =>  $request->note ?? null,
                 'quantity' => $request->accept_quantity ?? 0,
                 'user_id' => Auth::user()->id,
-                'outlet_id' =>  $request->outlet_id,
+                'outlet_id' =>  $request->from,
             ]);
         }
 
@@ -304,7 +319,7 @@ class ProductRequestController extends Controller
             ->route('collections.show', $productRequest->id)
             ->with('status', 'The record has been update successfully.');
     }
-    public function denie_responce(Request $request, ProductRequest $productRequest)
+    public function deny_response(Request $request, ProductRequest $productRequest)
     {
         // $productRequest->update($this->validateData($request, $productRequest->id));
         // $note = '';
@@ -318,7 +333,7 @@ class ProductRequestController extends Controller
                 'note' =>  $request->note ?? null,
                 'quantity' => 0,
                 'user_id' => Auth::user()->id,
-                'outlet_id' =>  $request->outlet_id,
+                'outlet_id' =>  $request->from,
             ]);
         }
 
