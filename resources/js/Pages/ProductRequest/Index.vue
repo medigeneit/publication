@@ -157,9 +157,12 @@
 
                             <div
                                 class="border-2 shadow rounded-md px-2 my-2 mr-2"
-                                v-for="(
-                                    circulation, index
-                                ) in productRequest.circulations"
+                                :class="{
+                                    'bg-green-200':
+                                        Math.abs(circulation.quantity) ==
+                                        circulation.total_received,
+                                }"
+                                v-for="circulation in productRequest.circulations"
                                 :key="circulation"
                             >
                                 <span class="text-sm">
@@ -167,7 +170,6 @@
                                 </span>
                                 <div class="flex justify-between">
                                     <div>
-                                        <!-- {{ circulation }} -->
                                         <span class="font-extrabold">
                                             {{ circulation.circulation_of }}
                                         </span>
@@ -199,7 +201,10 @@
                                             v-if="
                                                 productRequest.button_access.includes(
                                                     'stock_in'
-                                                )
+                                                ) &&
+                                                Math.abs(
+                                                    circulation.quantity
+                                                ) != circulation.total_received
                                             "
                                             @click="
                                                 form.circulation_id =
@@ -217,18 +222,30 @@
                                                     class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50"
                                                 >
                                                     <div
-                                                        class="text-lg font-bold text-center"
+                                                        class="text-sm text-center"
                                                     >
                                                         {{
-                                                            `${
-                                                                circulation.quantity <
-                                                                0
-                                                                    ? " Sends "
-                                                                    : " Recieved "
-                                                            } ${Math.abs(
-                                                                circulation.quantity
-                                                            )} pcs`
+                                                            circulation.quantity <
+                                                            0
+                                                                ? " Sends "
+                                                                : " Recieved "
                                                         }}
+                                                        <span class="font-bold">
+                                                            {{
+                                                                Math.abs(
+                                                                    circulation.quantity
+                                                                )
+                                                            }}
+                                                            pcs
+                                                        </span>
+
+                                                        and Recieved
+                                                        <span class="font-bold">
+                                                            {{
+                                                                circulation.total_received
+                                                            }}
+                                                            pcs
+                                                        </span>
                                                     </div>
                                                     <hr class="my-1" />
                                                     <div class="p-3">
@@ -273,6 +290,7 @@
                                 </div>
                                 <div
                                     class="ml-5"
+                                    
                                     v-for="circulation in circulation.circulations"
                                     :key="circulation"
                                 >
