@@ -25,8 +25,20 @@ class StorageController extends Controller
 {
     use DateFilter;
 
-    public function index()
+    public function index(Request $request)
     {
+
+        $roles =  Auth::user()->getRoleNames()->toArray();
+
+        $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
+
+        if ( $request->outlet_id && !in_array($request->outlet_id, array_keys($outlets->toArray())) ) {
+            return [
+                'message' => 'You are not allowed',
+                'success' => false,
+            ];
+        }
+
         $storages = Storage::query()
             // ->with('package_products.product.storages')
             ->with(['product.productable' => function (MorphTo $morphTo) {
@@ -50,11 +62,16 @@ class StorageController extends Controller
                     },
                 ]);
             }, 'outlet', 'user'])
+            ->whereIn('outlet_id',$outlets->keys())
+            ->when($request->outlet_id,function($query) use($request){
+                $query->where('outlet_id',$request->outlet_id);
+            })
             ->filter()
             ->dateFilter()
             ->search(request()->search)
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
+        // return $outlets->keys();
         // return $storages->get();
         // return $this->product->productable->package_products->pluck('product_id');
         // return StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));

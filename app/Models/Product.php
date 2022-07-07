@@ -53,7 +53,7 @@ class Product extends Model
     //             ]);
     //         }]);
     // }
-    
+
 
     // public function scopeWithMorphTo($query, $relation, array $constrains)
     // {
