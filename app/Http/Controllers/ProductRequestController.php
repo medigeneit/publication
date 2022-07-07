@@ -70,19 +70,19 @@ class ProductRequestController extends Controller
                     $query->whereNull('circulation_id')->with('circulations');
                 }
             ])
-            ->when(request()->product, function($query) {
-                $query->whereHas('storage.product' , function($query) {
-                    $query->where('id', request()->product);
+            ->when(request()->product, function($query) use($request){
+                $query->whereHas('storage.product' , function($query) use($request) {
+                    $query->where('id', $request->product);
                 });
             })
             ->orderBy('expected_date', 'desc');
         // ->search()->filter();
 
         // return $roles->toArray();
-        // return $productRequests->get();
         ProductRequestResource::withoutWrapping();
-
+        // return $productRequests->get();
         ProductRequestResource::$YourOutlet = $request->outlet_id;
+        // return ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100));
 
         // return
         // [

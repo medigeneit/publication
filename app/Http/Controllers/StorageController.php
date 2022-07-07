@@ -10,6 +10,7 @@ use App\Models\Package;
 use App\Models\Press;
 use App\Models\PriceCategory;
 use App\Models\Product;
+use App\Models\ProductRequest;
 use App\Models\Storage;
 use App\Models\User;
 use App\Models\Version;
@@ -81,6 +82,8 @@ class StorageController extends Controller
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'outlets' => Outlet::pluck('name', 'id'),
             'presses' => Press::pluck('name', 'id'),
+            'types' => ProductRequest::$Type,
+            'outlets' => Outlet::where('id','!=',request()->outlet_id)->pluck('name','id'),
             'filters' => $this->getFilterProperty(),
         ]);
     }

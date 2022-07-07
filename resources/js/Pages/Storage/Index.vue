@@ -33,6 +33,71 @@
                                         </div>
 
                                         <div class="mb-2 text-left">
+                                            <Label value="Request Type" />
+                                            <Select
+                                                class="mt-1 block w-full"
+                                                name=""
+                                                id=""
+                                                v-model="
+                                                    form.request_type
+                                                "
+                                            >
+                                            <option value="">Request Type</option>
+                                                <option
+                                                    v-for="(
+                                                        type,
+                                                        index
+                                                    ) in types"
+                                                    :key="
+                                                        index
+                                                    "
+                                                    :value="
+                                                        index
+                                                    "
+                                                >
+                                                    {{
+                                                        type
+                                                    }}
+                                                </option>
+                                            </Select>
+                                        </div>
+
+                                        <div class="mb-2 text-left">
+                                            <Label value="Requested To" />                                                    
+                                            <Select
+                                                class="mt-1 block w-full"
+                                                name=""
+                                                id=""
+                                                v-model="
+                                                    form.requested_to
+                                                "
+                                            >
+                                                <option
+                                                    value=""
+                                                >
+                                                    To
+                                                    All
+                                                </option>
+                                                <option
+                                                    v-for="(
+                                                        outlet,
+                                                        index
+                                                    ) in outlets"
+                                                    :key="
+                                                        index
+                                                    "
+                                                    :value="
+                                                        index
+                                                    "
+                                                >
+                                                    {{
+                                                        outlet
+                                                    }}
+                                                </option>
+                                            </Select>
+                                        </div>
+
+                                        <div class="mb-2 text-left">
                                             <Label value="Expected Date" />
                                            <Input type="date" class="mt-1 block w-full" placeholder="Quantity" v-model="form.expected_date" required/>
                                         </div>
@@ -135,16 +200,16 @@
 </template>
 
 <script>
+import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
+import ActionButtonShow from "@/Components/ActionButtonShow.vue";
+import AddNewButton from '@/Components/AddNewButton.vue';
+import Button from '@/Components/Button.vue';
+import DataTable from "@/Components/DataTable.vue";
+import Input from '@/Components/Input.vue';
+import Label from '@/Components/Label.vue';
+import Select from '@/Components/Select.vue';
 import AppLayout from "@/Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import DataTable from "@/Components/DataTable.vue";
-import ActionButtonShow from "@/Components/ActionButtonShow.vue";
-import ActionButtonEdit from "@/Components/ActionButtonEdit.vue";
-import AddNewButton from '@/Components/AddNewButton.vue';
-import Label from '@/Components/Label.vue';
-import Input from '@/Components/Input.vue';
-import Button from '@/Components/Button.vue';
-import Select from '@/Components/Select.vue';
 
 export default {
     components: {
@@ -164,6 +229,8 @@ export default {
         storages: { type: Object, default: {} },
         outlets: { type: Object, default: {} },
         presses: { type: Object, default: {} },
+        types: { type: Object, default: {} },
+        outlets: { type: Object, default: {} },
         filters: { type: Object, default: {} },
     },
     data() {
@@ -187,6 +254,8 @@ export default {
                 storage_id: '',
                 request_quantity: '',
                 expected_date:'',
+                request_type: '',
+                requested_to: '',
             }),
 
             // outlet_id: this.storages.data[0].outletId,
@@ -278,6 +347,7 @@ export default {
 
             if(type === 'Request')
             {
+                this.form.type = 2;
                 this.form.post(this.route('product-requests.store'));
                 setTimeout(()=> {
                 document.querySelectorAll('.circulationWrapper').forEach(element => {
@@ -293,13 +363,15 @@ export default {
             this.message = '';
             this.form.from = '';
             this.form.to = '';
-            this.form.quantity= '',
-            this.form.type= '',
-            this.form.product_id= ''
+            this.form.quantity= '';
+            this.form.type= '';
+            this.form.product_id= '';
             this.fromDisabled = false;
             this.toDisabled = false;
             this.pressDisabled = false;
             this.ouletDisabled = false;
+            this.form.request_type= '';
+            this.form.requested_to= '';
         }
     }
 };
