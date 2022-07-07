@@ -58,8 +58,8 @@ class ProductRequestController extends Controller
                         },
                     ]);
                 },
-                'storage.product.storages'=>function($query) use($request){
-                    $query->where('outlet_id',$request->outlet_id);
+                'storage.product.storages' => function ($query) use ($request) {
+                    $query->where('outlet_id', $request->outlet_id);
                 },
                 'outlet',
                 'responses.user',
@@ -77,11 +77,11 @@ class ProductRequestController extends Controller
 
         ProductRequestResource::$YourOutlet = $request->outlet_id;
         return
-        [
-            'your_outlets' =>  $outlets,
-            'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
-            'filters' => $this->getFilterProperty(),
-        ];
+            [
+                'your_outlets' =>  $outlets,
+                'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+                'filters' => $this->getFilterProperty(),
+            ];
         return Inertia::render('ProductRequest/Index', [
             'your_outlets' =>  in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id'),
             'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
@@ -106,10 +106,19 @@ class ProductRequestController extends Controller
     {
         if (!$request->storage_id) {
 
+            if ($request->type == 1) {
+                $product_id = $request->product_id;
+                $outlet_id = $request->request_from;
+            }
+            elseif ($request->type == 2) {
+                $product_id = $request->product_id;
+                $outlet_id = $request->request_to;
+            }
+
             $storage = Storage::firstOrCreate(
                 [
-                    'product_id' => $request->product_id,
-                    'outlet_id' => $request->outlet_id,
+                    'product_id' => $product_id,
+                    'outlet_id' => $outlet_id,
                 ],
                 [
                     'quantity' => 0,
@@ -126,7 +135,7 @@ class ProductRequestController extends Controller
             'storage_id' => $request->storage_id,
             'request_quantity' => $request->request_quantity,
             'expected_date' => $request->expected_date,
-            'type' => $request->type ?? 1,
+            'type' => $request->request_type ?? 1,
             'is_closed' => 0,
             'outlet_id' => $request->request_to ?? null,
             // 'user_id'     => Auth::user()->id
@@ -148,12 +157,12 @@ class ProductRequestController extends Controller
         return back();
 
         return redirect()
-            ->route('collections.show', $productRequest->id)
-            ->with('status', 'The record has been added successfully.');
-    }
+                ->route('collections.show', $productRequest->id)
+                ->with('status', 'The record has been added successfully.');
+        }
 
-    public function show(ProductRequest $productRequest)
-    {
+        public function show(ProductRequest $productRequest)
+        {
         // return
         // $productRequestShow = ProductRequest::query()
         //     ->with(['storage.outlet', 'storage.user:id,name', 'circulations.storage.outlet', 'circulations.destinationable', 'circulations.storage.product.productable' => function (MorphTo $morphTo) {
