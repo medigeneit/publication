@@ -75,7 +75,7 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/printing-cost-categories/{version}', [PrintingCostController::class, 'createWithVerion'])->name('printing-cost-categories');
-    Route::get('/request-close/{productRequest}', [ProductRequestController::class, 'close'])->name('close');
+    Route::post('/request-close/{productRequest}', [ProductRequestController::class, 'close'])->name('close');
     Route::post('/accept-response/{productRequest}', [ProductRequestController::class, 'accept_response'])->name('accept');
     Route::post('/deny-response/{productRequest}', [ProductRequestController::class, 'deny_response'])->name('deny');
     Route::resources([

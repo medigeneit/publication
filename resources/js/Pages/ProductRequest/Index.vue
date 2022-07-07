@@ -30,13 +30,23 @@
         </ul>
         <div class="grid grid-cols-12 gap-2">
             <div
-                class="col-span-6 md:col-span-4 lg:col-span-2 p-6 bg-white rounded-lg border border-white-200 shadow-md"
-                :class="{
-                    'bg-orange-200': item.requested_by.name == 'Your Outlet',
-                }"
+                class="relative overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 p-6 bg-white rounded-lg border border-white-200 shadow-md"
                 v-for="(item, index) in productRequests.data"
                 :key="index"
             >
+                <div class="absolute right-0 top-0 h-16 w-16">
+                    <div
+                        class="absolute transform rotate-45 text-center text-sm text-white font-bold left-[-66px] top-[30px] w-[170px]"
+                        :class="{
+                            'bg-gradient-to-r from-cyan-500 to-rose-500':
+                                item.type == 1,
+                            'bg-gradient-to-r from-green-400 to-blue-500':
+                                item.type == 2,
+                        }"
+                    >
+                        {{ item.type_name }}
+                    </div>
+                </div>
                 <a href="#">
                     <h5
                         class="mb-2 text-2xl font-bold tracking-tight text-white-900"
@@ -45,7 +55,20 @@
                     </h5>
                 </a>
                 <div class="mb-3 font-extrabold">
-                    {{ item.product_info.product_name }}
+                    <!-- route('product-requests.index', {
+                                outlet_id: form.from,
+                                product: item.product_info.id,
+                            }) -->
+                    <a
+                        :href="
+                            route('product-requests.index', {
+                                product: item.product_info.id,
+                            }) 
+                        "
+                    > 
+                    {{ form.from }}
+                        {{ item.product_info.product_name }}
+                    </a>
                 </div>
                 <div class="mb-3 text-sm">
                     {{ item.type_name }}
@@ -54,12 +77,8 @@
                     </span>
                     to
                     <span class="font-extrabold">
-                        {{
-                            item.requested_to.length
-                                ? item.requested_to.name
-                                : "all"
-                        }}</span
-                    >
+                        {{ item.requested_to.name ?? "all" }}
+                    </span>
                 </div>
                 <div class="mb-3">
                     <p class="font-extrabold text-sm unde">Expected Date:</p>
@@ -487,7 +506,6 @@
                                                                             v-model="
                                                                                 form.note
                                                                             "
-                                                                            required
                                                                         />
                                                                         <Button
                                                                             type="submit"
@@ -559,7 +577,6 @@
                                                                             v-model="
                                                                                 form.note
                                                                             "
-                                                                            required
                                                                         />
                                                                         <Button
                                                                             type="submit"
@@ -651,7 +668,7 @@
                                                                             "
                                                                             required
                                                                         />
-                                                                       
+
                                                                         <Select
                                                                             class="mt-1 block w-full"
                                                                             name=""
@@ -661,10 +678,20 @@
                                                                             "
                                                                         >
                                                                             <option
-                                                                            v-for="(type, index) in types" :key="index"
-                                                                                :value="index"
+                                                                                v-for="(
+                                                                                    type,
+                                                                                    index
+                                                                                ) in types"
+                                                                                :key="
+                                                                                    index
+                                                                                "
+                                                                                :value="
+                                                                                    index
+                                                                                "
                                                                             >
-                                                                                {{ type }}
+                                                                                {{
+                                                                                    type
+                                                                                }}
                                                                             </option>
                                                                         </Select>
                                                                         <Select
@@ -675,22 +702,36 @@
                                                                                 form.requested_to
                                                                             "
                                                                         >
-                                                                        <option value="">To All</option>
                                                                             <option
-                                                                            v-for="(outlet, index) in outlets" :key="index"
-                                                                                :value="index"
+                                                                                value=""
                                                                             >
-                                                                                {{ outlet }}
+                                                                                To
+                                                                                All
+                                                                            </option>
+                                                                            <option
+                                                                                v-for="(
+                                                                                    outlet,
+                                                                                    index
+                                                                                ) in outlets"
+                                                                                :key="
+                                                                                    index
+                                                                                "
+                                                                                :value="
+                                                                                    index
+                                                                                "
+                                                                            >
+                                                                                {{
+                                                                                    outlet
+                                                                                }}
                                                                             </option>
                                                                         </Select>
-                                                                         <input
+                                                                        <input
                                                                             type="text"
                                                                             class="mt-1 block w-full"
                                                                             placeholder="Note"
                                                                             v-model="
                                                                                 form.note
                                                                             "
-                                                                            required
                                                                         />
                                                                         <Button
                                                                             type="submit"
@@ -720,9 +761,70 @@
                                                                 'request_close'
                                                             )
                                                         "
+                                                        @click="
+                                                            modalHandler(
+                                                                $event
+                                                            );
+                                                            form.request_id =
+                                                                item.id;
+                                                        "
                                                     >
                                                         Close
                                                     </span>
+                                                    <div
+                                                        class="fixed inset-0 z-50 hidden"
+                                                    >
+                                                        <div
+                                                            class="relative w-full h-full flex justify-center items-center"
+                                                        >
+                                                            <div
+                                                                class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50"
+                                                            >
+                                                                <div
+                                                                    class="text-sm text-center"
+                                                                >
+                                                                    Close
+                                                                </div>
+                                                                <hr
+                                                                    class="my-1"
+                                                                />
+                                                                <div
+                                                                    class="p-3"
+                                                                >
+                                                                    <form
+                                                                        @submit.prevent="
+                                                                            close
+                                                                        "
+                                                                    >
+                                                                        <input
+                                                                            type="text"
+                                                                            class="mt-1 block w-full"
+                                                                            placeholder="Note"
+                                                                            v-model="
+                                                                                form.note
+                                                                            "
+                                                                        />
+                                                                        <Button
+                                                                            type="submit"
+                                                                            class="bg-gray-600 text-white px-2 py-1 rounded mt-2"
+                                                                        >
+                                                                            Submit
+                                                                        </Button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40"
+                                                            >
+                                                                <div
+                                                                    class="w-full h-full"
+                                                                    @click="
+                                                                        closeModal
+                                                                    "
+                                                                ></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div
@@ -826,6 +928,12 @@ export default {
         this.form.from = this.$page.url.includes("outlet_id=")
             ? this.$page.url.split("?")[1].split("=")[1]
             : "";
+        this.productRequests.data.forEach((item, index) => {
+            // console.log(id);
+            item.responses.forEach((res) => {
+                this.isClosed[index] = res.status == 5;
+            });
+        });
     },
     data() {
         return {
@@ -849,17 +957,12 @@ export default {
                 outlet_id: "",
                 expected_date: "",
                 requested_to: "",
-                request_quantity: ""
+                request_quantity: "",
             }),
             productRequest: "",
             circulaitonShow: false,
             circulation: "",
-            positions: {
-                clientX: undefined,
-                clientY: undefined,
-                movementX: 0,
-                movementY: 0,
-            },
+            isClosed: [],
         };
     },
     methods: {
@@ -929,6 +1032,10 @@ export default {
             return this.form.put(
                 this.route("product-requests.update", this.form.request_id)
             );
+        },
+        close(event) {
+            console.log(this.form);
+            return this.form.post(this.route("close", this.form.request_id));
         },
         divShow(event, id) {
             console.log(event.target.nextElementSibling);

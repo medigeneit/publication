@@ -22,7 +22,6 @@ class ProductRequestController extends Controller
 
     public function index(Request $request)
     {
-
         $roles =  Auth::user()->getRoleNames()->toArray();
 
         $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
@@ -65,6 +64,11 @@ class ProductRequestController extends Controller
                     $query->whereNull('circulation_id')->with('circulations');
                 }
             ])
+            ->when(request()->product, function($query) {
+                $query->whereHas('storage.product' , function($query) {
+                    $query->where('id', request()->product);
+                });
+            })
             ->orderBy('expected_date', 'desc');
         // ->search()->filter();
 
@@ -188,7 +192,7 @@ class ProductRequestController extends Controller
 
     public function update(Request $request, ProductRequest $productRequest)
     {
-        // return
+        // return $request;
         $responce_outlet = $productRequest->load('storage');
         // return $request;
         // $productRequest->update($this->validateData($request, $productRequest->id));
@@ -235,7 +239,7 @@ class ProductRequestController extends Controller
             'expected_date' => $request->expected_date,
             'type' => $request->type ?? 1,
             'is_closed' => 0,
-            'outlet_id' => $request->request_to ?? null,
+            'outlet_id' => $request->requested_to ?? null,
             // 'user_id'     => Auth::user()->id
         ]);
         // return $productRequest;
@@ -259,7 +263,7 @@ class ProductRequestController extends Controller
         // ];
 
         return redirect()
-            ->route('collections.show', $productRequest->id)
+            ->route('product-requests.index', $productRequest->id)
             ->with('status', 'The record has been update successfully.');
     }
 
@@ -277,7 +281,8 @@ class ProductRequestController extends Controller
         // return $productRequest;
 
 
-        $responce_outlet = Storage::find($request->storage_id)->outlet;
+        $responce_outlet = $productRequest->load('storage');
+
         if ($productRequest) {
             RequestResponse::create([
                 'product_request_id' => $productRequest->id,
@@ -285,9 +290,12 @@ class ProductRequestController extends Controller
                 'note' =>  $request->note ?? null,
                 'quantity' => $request->request_quantity ?? 0,
                 'user_id' => Auth::user()->id,
-                'outlet_id' =>  $responce_outlet,
+                'outlet_id' =>  $responce_outlet->storage->outlet_id,
             ]);
         }
+        $responce_outlet->update([
+            'is_closed'=>1
+        ]);
 
         return back();
 
