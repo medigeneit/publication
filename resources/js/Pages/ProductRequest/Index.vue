@@ -38,9 +38,9 @@
                     <div
                         class="absolute transform rotate-45 text-center text-sm text-white font-bold left-[-66px] top-[30px] w-[170px]"
                         :class="{
-                            'bg-gradient-to-r from-cyan-500 to-rose-500':
+                            'bg-gradient-to-r from-blue-500 to-rose-500':
                                 item.type == 1,
-                            'bg-gradient-to-r from-green-400 to-blue-500':
+                            'bg-gradient-to-r from-sky-400 to-blue-500':
                                 item.type == 2,
                         }"
                     >
@@ -66,7 +66,6 @@
                             }) 
                         "
                     > 
-                    {{ form.from }}
                         {{ item.product_info.product_name }}
                     </a>
                 </div>
