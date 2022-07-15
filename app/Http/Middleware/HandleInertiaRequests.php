@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Outlet;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -33,10 +34,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+        $roles =  $request->user()->getRoleNames()->toArray();
+
+        $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : $request->user()->outlets->pluck('name', 'id');
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
             ],
+            'outlet_id' => $outlets->keys()->first(),
             'request' => $request,
             'permissions' => auth()->user()
                 ? json_encode($request->user()->allPermissions, true)

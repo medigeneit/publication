@@ -143,7 +143,12 @@
     </nav-link-wrapper>
 
     <nav-link
-        :href="route('product-requests.index')"
+        v-if="$page.props.outlet_id"
+        :href="
+            route('product-requests.index', {
+                outlet_id: $page.props.outlet_id,
+            })
+        "
         :active="route().current('product-requests.*')"
     >
         <div class="flex items-center gap-2">

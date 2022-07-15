@@ -48,6 +48,7 @@
                     </div>
                 </div>
                 <a href="#">
+                    <div class="font-bold text-sm">Sl: {{ item.id }}</div>
                     <h5
                         class="mb-2 text-2xl font-bold tracking-tight text-white-900"
                     >
@@ -63,9 +64,9 @@
                         :href="
                             route('product-requests.index', {
                                 product: item.product_info.id,
-                            }) 
+                            })
                         "
-                    > 
+                    >
                         {{ item.product_info.product_name }}
                     </a>
                 </div>
@@ -103,6 +104,9 @@
                             class="relative p-2 w-full max-w-7xl bg-white rounded border shadow z-50"
                         >
                             <div class="text-center">
+                                <div class="font-bold text-sm">
+                                    Sl: {{ item.id }}
+                                </div>
                                 <div class="font-bold text-lg">
                                     {{ item.requested_by.name }}
                                 </div>
