@@ -34,15 +34,19 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
-        $roles =  $request->user()->getRoleNames()->toArray();
-
-        $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : $request->user()->outlets->pluck('name', 'id');
+        $roles = [];
+        $outlets = [];
+        if ($request->user()) {
+            $roles =  $request->user()->getRoleNames()->toArray() ?? [];
+    
+            $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : $request->user()->outlets->pluck('name', 'id');
+        }
 
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
             ],
-            'outlet_id' => $outlets->keys()->first(),
+            'outlet_id' => count($outlets) > 0 ? $outlets->keys()->first() : [],
             'request' => $request,
             'permissions' => auth()->user()
                 ? json_encode($request->user()->allPermissions, true)

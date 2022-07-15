@@ -109,17 +109,32 @@
                                 </div>
                                 <div class="font-bold text-lg">
                                     {{ item.requested_by.name }}
+                                    {{
+                                        item.requested_by.name == "Your Outlet"
+                                            ? `(${your_outlets[form.from]})`
+                                            : ""
+                                    }}
                                 </div>
-                                <div class="font-bold text-sm">
+                                <div class="font-extrabold text-base">
                                     {{ item.product_info.product_name }}
                                 </div>
-                                <div class="text-sm">
-                                    {{ item.type_name }}
-                                    <span class="font-bold"
+                                <div>
+                                    <span
+                                    class="px-2 rounded-sm font-extrabold"
+                                        :class="{
+                                            'text-blue-500':
+                                                item.type == 1,
+                                            'text-red-500':
+                                                item.type == 2,
+                                        }"
+                                    >
+                                        {{ item.type_name }}
+                                    </span>
+                                    <span class="font-bold text-base"
                                         >{{ item.product_quantity }} pcs</span
                                     >
                                     to
-                                    <span class="font-extrabold">
+                                    <span class="font-extrabold text-base">
                                         {{
                                             item.requested_to.length
                                                 ? item.requested_to.name
@@ -128,7 +143,7 @@
                                     >
                                     <div class="text-sm">
                                         Expected Date:
-                                        <span class="font-bold">{{
+                                        <span class="font-extrabold text-base">{{
                                             item.expected_date
                                         }}</span>
                                     </div>
