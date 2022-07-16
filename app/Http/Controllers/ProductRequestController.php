@@ -14,7 +14,6 @@ use App\Traits\WithProductRelations;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProductRequestController extends Controller
@@ -23,7 +22,6 @@ class ProductRequestController extends Controller
 
     public function index(Request $request)
     {
-        DB::connection()->enableQueryLog();
         $roles =  Auth::user()->getRoleNames()->toArray();
 
         $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
@@ -69,12 +67,7 @@ class ProductRequestController extends Controller
                 'responses.user',
                 'responses.outlet',
                 'circulations' => function ($query) {
-                    $query->whereNull('circulation_id')->with([
-                        'circulations.storage.outlet',
-                        'circulations.destinationable',
-                        'storage.outlet',
-                        'destinationable'
-                    ]);
+                    $query->whereNull('circulation_id')->with('circulations');
                 }
             ])
             ->when(request()->product, function($query) use($request){
@@ -87,24 +80,20 @@ class ProductRequestController extends Controller
 
         // return $roles->toArray();
         ProductRequestResource::withoutWrapping();
-        // $productRequests->get();
-        // dd(DB::getQueryLog());
+        // return $productRequests->get();
         ProductRequestResource::$YourOutlet = $request->outlet_id;
         // return ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100));
 
-        return
-        [
-            'your_outlets' =>  $outlets,
-            'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
-            'filters' => $this->getFilterProperty(),
-        ];
-
-        // $product_requests = ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
+        // return
+        // [
+        //     'your_outlets' =>  $outlets,
+        //     'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+        //     'filters' => $this->getFilterProperty(),
+        // ];
 
         return Inertia::render('ProductRequest/Index', [
-            'your_outlets' =>  $outlets,
-            // 'productRequests' => $product_requests,
-            'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)),
+            'your_outlets' =>  in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id'),
+            'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
             'types' => ProductRequest::$Type,
             'outlets' => Outlet::where('id','!=',$request->outlet_id)->pluck('name','id'),
@@ -150,7 +139,7 @@ class ProductRequestController extends Controller
             );
             $request->storage_id = $storage->id;
         }
-
+         
 
         // return $request;
         $productRequest = ProductRequest::create([
@@ -183,7 +172,7 @@ class ProductRequestController extends Controller
             ->route('product-requests.index')
             ->with('status', 'The record has been added successfully.');
     }
-
+    
         public function show(ProductRequest $productRequest)
         {
         // return

@@ -26,8 +26,8 @@ class Storage extends Model
     public function scopeFilter($query)
     {
         return $query
-            ->when(isset(request()->your_outlet), function ($query) {
-                $query->where('outlet_id', request()->your_outlet);
+            ->when(isset(request()->active), function ($query) {
+                $query->where('active', request()->active);
             });
     }
 

@@ -63,32 +63,29 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        return
-        $request;
+        // return $request;
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {
             $redirect_location = 'products.index';
-            $parameters = [];
         }
         if ($request->has('request_id')) {
             $redirect_location = 'product-requests.index';
-            $parameters= ["outlet_id=$request->from"];
         }
         $product_id = 0;
         if ($request->has('request_id')) {
             // return
+            $product_id = ProductRequest::find($request->request_id)->storage->product_id;
             $request_storage = ProductRequest::find($request->request_id)->storage;
-            $product_id = $request_storage->product_id;
-            
+
         }
-        
+
         // if (!in_array($request->type, array_keys(Circulation::TYPE)) && !in_array($request->type, array_values(Circulation::TYPE))) {
             //     return redirect()
             //         ->route($redirect_location)
             //         ->with('status', 'Unsuccessfull attempt, because of wrong type.');
             // }
             // return array_values(Circulation::TYPE);
-            
+
             // return Circulation::TYPE[$request->type] == 'In';
             if (Circulation::TYPE[$request->type] == 'In') {
                 // return 'in';
@@ -107,7 +104,6 @@ class CirculationController extends Controller
                 // return $requestable_type;
                 $requestable_id =  $request->request_id ?? null;
             } elseif (Circulation::TYPE[$request->type] == 'Out') {
-                $request->requastable_type = 2;
                 $quantity = $request->quantity * -1;
                 $storage_outlet_id = $request->from;
                 $destination = $request->to ?? $request_storage->outlet_id;
@@ -120,7 +116,7 @@ class CirculationController extends Controller
                 'outlet_id' => $storage_outlet_id,
                 'product_id' => $request->product_id ?? $product_id,
                 ])->first();
-                
+
                 if (Circulation::TYPE[$request->type] == 'In' &&  !$storage) {
                     $storage = new Storage;
                     $storage->user_id  = Auth::id();
@@ -129,40 +125,39 @@ class CirculationController extends Controller
                     $storage->alert_quantity = $request->alert_quantity;
                     $updated_quantity = $quantity;
                 } else {
-                    // return 
                     $updated_quantity = $storage->quantity + $quantity;
                 }
                 // return [$storage, $updated_quantity];
-                
+
                 if ($updated_quantity >= 0) {
                     $storage->quantity = $updated_quantity;
                     $updated = $storage->save();
-                    
+
                     if ($updated) {
-                        $data = [
-                            'storage_id' => $storage->id,
-                            'quantity' => $quantity,
-                            'requestable_type' => $requestable_type,
-                            'requestable_id' => $requestable_id,
-                            'circulation_id' => $request->circulation_id,
-                            'user_id' => Auth::id(),
-                        ];
-                        if (Circulation::STORAGE_TYPE[$request->requastable_type] == 'Press') {
-                            $press = Press::findOrFail($destination);
-                            $press->circulations()->create($data);
-                        } elseif (Circulation::STORAGE_TYPE[$request->requastable_type] == 'Outlet') {
-                            $outlet = Outlet::findOrFail($destination);
-                            $outlet->circulations()->create($data);
-                        }
-                    }
-                } else {
-                    $data = [
-                        'message' => 'Sory, you dont have enough quantity'
-                    ];
+                $data = [
+                    'storage_id' => $storage->id,
+                    'quantity' => $quantity,
+                    'requestable_type' => $requestable_type,
+                    'requestable_id' => $requestable_id,
+                    'circulation_id' => $request->circulation_id,
+                    'user_id' => Auth::id(),
+                ];
+                if (Circulation::STORAGE_TYPE[$request->requastable_type] == 'Press') {
+                    $press = Press::findOrFail($destination);
+                    $press->circulations()->create($data);
+                } elseif (Circulation::STORAGE_TYPE[$request->requastable_type] == 'Outlet') {
+                    $outlet = Outlet::findOrFail($destination);
+                    $outlet->circulations()->create($data);
                 }
+            }
+        } else {
+            $data = [
+                'message' => 'Sory, you dont have enough quantity'
+            ];
+        }
 
         return redirect()
-            ->route($redirect_location,$parameters)
+            ->route($redirect_location)
             ->with('status', 'The record has been added successfully.');
     }
 
