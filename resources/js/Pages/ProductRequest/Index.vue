@@ -138,6 +138,7 @@ export default {
             this.clickHandler(item.id);
 
             this.selectedItem = item;
+            
             this.modalShow = true;
         },
 
