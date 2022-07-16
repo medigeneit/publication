@@ -1,11 +1,12 @@
 <template>
     <div
         v-if="!isClosed"
-        class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 border border-white-200 shadow-md relative transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg p-6 hover:z-50"
+        class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 border border-white-200 shadow-md relative transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg p-6 hover:z-50 cursor-pointer"
         :class="{
             'border border-green-600 bg-gradient-to-r from-gray-400 via-gray-200 to-white':
                 clicked,
         }"
+        @click="itemClicked"
     >
         <div class="">
             <div
@@ -26,25 +27,22 @@
 
             <a href="#">
                 <div class="font-bold text-sm">Sl: {{ item.id }}</div>
-                <h5
-                    class="mb-2 text-2xl font-bold tracking-tight text-white-900"
+                <div
+                    class="mb-2 -ml-6 text-2xl font-bold tracking-tight text-white-900"
+                    :class="{'bg-gradient-to-r from-orange-300 to-amber-200': item.requested_by.name == 'Your Outlet'}"
                 >
-                    {{ item.requested_by.name }}
-                </h5>
+                    <div class="ml-6">{{ item.requested_by.name }}</div>
+                </div>
             </a>
             <div class="mb-3 font-extrabold">
                 <!-- route('product-requests.index', {
-                        outlet_id: form.from,
-                        product: item.product_info.id,
-                    }) -->
-                <a
-                    :href="
-                        route('product-requests.index', {
                             product: item.product_info.id,
-                        })
+                        }) -->
+                <a
+                    href="#
                     "
                 >
-                    {{ item.product_info.product_name }} {{ typeof clicked }}
+                    {{ item.product_info.product_name }}
                 </a>
             </div>
             <div class="mb-3 text-sm">
@@ -72,12 +70,12 @@
                     divShow($event, item.id);
                 " -->
 
-            <div
+            <!-- <div
                 class="inline-flex ite-ms-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 cursor-pointer"
                 @click="itemClicked"
             >
                 Details
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

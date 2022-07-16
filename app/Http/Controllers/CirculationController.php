@@ -74,8 +74,8 @@ class CirculationController extends Controller
         $product_id = 0;
         if ($request->has('request_id')) {
             // return
-            $product_id = ProductRequest::find($request->request_id)->storage->product_id;
             $request_storage = ProductRequest::find($request->request_id)->storage;
+            $product_id = $request_storage->product_id;
 
         }
 

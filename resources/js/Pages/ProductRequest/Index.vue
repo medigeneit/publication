@@ -52,7 +52,6 @@
             :filters="filters"
             :from="from"
         ></product-request-modal>
-        
     </app-layout>
 </template>
 
@@ -66,6 +65,7 @@ import Label from "@/Components/Label.vue";
 import Select from "@/Components/Select.vue";
 import AppLayout from "@/Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
+import Swal from "sweetalert2";
 import ProductRequestItem from "./ProductRequestItem.vue";
 import ProductRequestModal from "./ProductRequestModal.vue";
 
@@ -119,6 +119,17 @@ export default {
     },
     methods: {
         itemClicked({ item }) {
+            if (!this.from) {
+                //    return alert("please select outlet")
+                return Swal.fire({
+                    icon: "error",
+                    html: "<b>Please Select The Outlet</b>",
+                    width: 300,
+                    height: 5,
+                    showConfirmButton: true,
+                    // timer: 1000,
+                });
+            }
             this.circulaitonShow = !this.circulaitonShow;
             this.productRequest = this.item;
 
