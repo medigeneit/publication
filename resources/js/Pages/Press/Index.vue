@@ -24,7 +24,7 @@
                             'bg-red-500': !press.active,
                         }"
                     >
-                        {{ press.active }}
+                        {{ press.active? "Yes" : "No" }}
                     </span>
                 </td>
                 <td class="py-2.5 px-2">
