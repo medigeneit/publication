@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use phpDocumentor\Reflection\Types\Null_;
 
 class ProductRequestController extends Controller
 {
@@ -76,6 +77,12 @@ class ProductRequestController extends Controller
                     ]);
                 }
             ])
+            ->where('is_closed',0)
+            ->whereHas('storage.outlet' , function($query) use($request) {
+                $query->where('id', $request->outlet_id);
+            })
+            ->orWhere('outlet_id',Null)
+            ->orWhere('outlet_id',$request->outlet_id)
             ->when(request()->product, function($query) use($request){
                 $query->whereHas('storage.product' , function($query) use($request) {
                     $query->where('id', $request->product);
@@ -125,17 +132,20 @@ class ProductRequestController extends Controller
 
     public function store(Request $request)
     {
+        // return $request;
+        #~~~~~~~~~~~~~~~~~~~ Make request from Product list ~~~~~~~~~~~~~~~~~~~~~
         if (!$request->storage_id) {
 
             if ($request->type == 1) {
                 $product_id = $request->product_id;
-                $outlet_id = $request->request_from;
+                $outlet_id = $request->requested_to;
             }
             elseif ($request->type == 2) {
                 $product_id = $request->product_id;
-                $outlet_id = $request->request_to;
+                $outlet_id = $request->requested_to;
             }
 
+            // return [$product_id , $outlet_id];
             $storage = Storage::firstOrCreate(
                 [
                     'product_id' => $product_id,
@@ -152,18 +162,20 @@ class ProductRequestController extends Controller
 
 
         // return $request;
-        $productRequest = ProductRequest::create([
+        $data = [
             'storage_id' => $request->storage_id,
             'request_quantity' => $request->request_quantity,
             'expected_date' => $request->expected_date,
             'type' => $request->request_type ?? 1,
             'is_closed' => 0,
-            'outlet_id' => $request->request_to ?? null,
+            'outlet_id' => $request->requested_to,
             // 'user_id'     => Auth::user()->id
-        ]);
+        ];
+        // return $request;
+        $productRequest = ProductRequest::create($data );
         // return $productRequest;
 
-        $responce_outlet = Storage::find($request->storage_id)->outlet;
+        $response_outlet = Storage::find($request->storage_id)->outlet;
         if ($productRequest) {
             RequestResponse::create([
                 'product_request_id' => $productRequest->id,
@@ -171,7 +183,7 @@ class ProductRequestController extends Controller
                 'note' => $request->note ?? null,
                 'quantity' => $request->request_quantity ?? 0,
                 'user_id' => Auth::user()->id,
-                'outlet_id' =>  $responce_outlet->id,
+                'outlet_id' =>  $response_outlet->id,
             ]);
         }
 
