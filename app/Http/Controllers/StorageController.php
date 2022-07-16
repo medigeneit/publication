@@ -28,7 +28,6 @@ class StorageController extends Controller
 
     public function index(Request $request)
     {
-
         $roles =  Auth::user()->getRoleNames()->toArray();
 
         $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
@@ -195,8 +194,10 @@ class StorageController extends Controller
 
     protected function getFilterProperty()
     {
+        $roles = request()->user()->roles->pluck('name')->toArray();
+        $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
         return [
-            //
+            'your_outlet' => $outlets ?? [],
         ];
     }
 
