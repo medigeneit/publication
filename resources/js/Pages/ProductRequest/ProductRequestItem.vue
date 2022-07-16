@@ -44,7 +44,7 @@
                         })
                     "
                 >
-                    {{ item.product_info.product_name }}
+                    {{ item.product_info.product_name }} {{ typeof clicked }}
                 </a>
             </div>
             <div class="mb-3 text-sm">

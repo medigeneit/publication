@@ -36,10 +36,10 @@
                 :item="item"
                 :class="{
                     'border border-green-600 bg-gradient-to-r from-gray-400 via-gray-200 to-white':
-                        clicked[index],
+                        clicked[item.id],
                 }"
                 @clicked="itemClicked"
-                :clicked="clicked[index]"
+                :clicked="clicked[item.id]"
             ></product-request-item>
         </div>
 
@@ -174,6 +174,7 @@ export default {
             event.target.nextElementSibling.classList.toggle("hidden");
         },
         clickHandler(index) {
+            console.log("clicked", this.clicked);
             if (this.clicked.length) {
                 this.clicked.length = 0;
             }

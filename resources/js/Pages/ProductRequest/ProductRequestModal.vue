@@ -19,7 +19,7 @@
                         }}
                     </div>
 
-                    <div>Show: {{ show }}</div>
+                    <!-- <div>Show: {{ show }}</div> -->
                     <div
                         class="font-extrabold text-base"
                         v-if="item.product_info"
@@ -72,7 +72,7 @@
                                         v-if="
                                             button_access.includes('stock_out')
                                         "
-                                        @click="modalHandler"
+                                        @click="enableSending"
                                     >
                                         Send
                                     </div>
@@ -689,6 +689,10 @@
 </template>
 
 <script>
+import Button from "@/Components/Button.vue";
+import Label from "@/Components/Label.vue";
+import Select from "@/Components/Select.vue";
+
 export default {
     name: "product-request-modal",
     props: [
@@ -700,6 +704,11 @@ export default {
         "filters",
         "your_outlets",
     ],
+    components: {
+        Label,
+        Select,
+        Button,
+    },
     data() {
         return {
             form: this.$inertia.form({
@@ -753,6 +762,13 @@ export default {
             this.form.expected_date = "";
             this.form.requested_to = "";
         },
+        enableSending(event) {
+            this.modalHandler(event);
+            this.form.request_id = this.item.id;
+            this.form.to = this.item.requested_by.id;
+            this.form.type = 2;
+            // this.form.requastable_type = 2;
+        },
         enableEditing(event) {
             this.modalHandler(event);
             this.form.request_id = this.item.id;
@@ -770,7 +786,6 @@ export default {
             return this.form.post(this.route("close", this.form.request_id));
         },
         send() {
-            this.form.type = 2;
             console.log(this.form);
             return this.form.post(this.route("circulations.store"));
         },
@@ -793,5 +808,6 @@ export default {
             // return this.form.post(this.route("accept", this.form.request_id));
         },
     },
+    components: { Label, Button, Select },
 };
 </script>
