@@ -149,7 +149,7 @@ class ProductRequestController extends Controller
             );
             $request->storage_id = $storage->id;
         }
-         
+
 
         // return $request;
         $productRequest = ProductRequest::create([
@@ -182,7 +182,7 @@ class ProductRequestController extends Controller
             ->route('product-requests.index')
             ->with('status', 'The record has been added successfully.');
     }
-    
+
         public function show(ProductRequest $productRequest)
         {
         // return
