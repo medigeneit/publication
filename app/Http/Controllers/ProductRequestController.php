@@ -92,12 +92,12 @@ class ProductRequestController extends Controller
         ProductRequestResource::$YourOutlet = $request->outlet_id;
         // return ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100));
 
-        return
-        [
-            'your_outlets' =>  $outlets,
-            'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
-            'filters' => $this->getFilterProperty(),
-        ];
+        // return
+        // [
+        //     'your_outlets' =>  $outlets,
+        //     'productRequests' => ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+        //     'filters' => $this->getFilterProperty(),
+        // ];
 
         // $product_requests = ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
 

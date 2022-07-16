@@ -52,9 +52,21 @@ class ProductRequestResource extends JsonResource
 
         if (($data['requested_by']['id'] ?? 0) == self::$YourOutlet){
             $data['requested_by']['name'] = 'Your Outlet';
-            $data['button_access'] = ['request_edit','request_close','stock_in'];
+            $data['button_access'] = ['request_edit','request_close'];
+            if($this->type == 2){
+                $data['button_access'][] = 'stock_out';
+            }
+            else{
+                $data['button_access'][] = 'stock_in';
+            }
         }else{
-            $data['button_access'] = ['request_accept','request_deny','stock_out'];
+            $data['button_access'] = ['request_accept','request_deny'];
+            if($this->type == 2){
+                $data['button_access'][] = 'stock_in';
+            }
+            else{
+                $data['button_access'][] = 'stock_out';
+            }
         }
         if (($data['requested_to']['id'] ?? 0) == self::$YourOutlet){
             $data['requested_to']['name'] = 'Your Outlet';
