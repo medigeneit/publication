@@ -186,7 +186,7 @@
                                                 @click="
                                                     form.circulation_id =
                                                         circulation.id;
-                                                    modalHandler($event);
+                                                    enableRecieve($event);
                                                 "
                                             >
                                                 Recieve
@@ -240,7 +240,7 @@
                                                                 class=""
                                                             >
                                                                 <Label
-                                                                    value="Send Quantity"
+                                                                    value="Recieve Quantity"
                                                                 />
                                                                 <input
                                                                     type="number"
@@ -769,6 +769,13 @@ export default {
             this.form.type = 2;
             // this.form.requastable_type = 2;
         },
+        enableRecieve(event) {
+            this.modalHandler(event);
+            this.form.requastable_type = 2;
+            this.form.request_id = this.item.id;
+            this.form.to = this.item.requested_by.id;
+            this.form.type = 1;
+        },
         enableEditing(event) {
             this.modalHandler(event);
             this.form.request_id = this.item.id;
@@ -790,10 +797,6 @@ export default {
             return this.form.post(this.route("circulations.store"));
         },
         recieve() {
-            this.form.type = 1;
-            this.form.from = "";
-            this.form.requastable_type = 2;
-            console.log(this.form);
             return this.form.post(this.route("circulations.store"));
         },
         accept() {

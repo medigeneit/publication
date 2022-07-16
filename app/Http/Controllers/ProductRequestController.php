@@ -23,7 +23,6 @@ class ProductRequestController extends Controller
 
     public function index(Request $request)
     {
-        DB::connection()->enableQueryLog();
         $roles =  Auth::user()->getRoleNames()->toArray();
 
         $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
