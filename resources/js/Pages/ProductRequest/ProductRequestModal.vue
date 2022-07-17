@@ -26,6 +26,12 @@
                     >
                         {{ item.product_info.product_name }}
                     </div>
+                    <div
+                        class="text-base"
+                        v-if="item.current_storage"
+                    >
+                       Current Storage: <span class="font-extrabold">{{ item.current_storage }} pcs</span>
+                    </div>
                     <div>
                         <span
                             class="px-2 rounded-sm font-extrabold"
@@ -86,7 +92,12 @@
                                                 <div
                                                     class="text-lg font-bold text-center"
                                                 >
-                                                    Send
+                                                    Send 
+                                                </div>
+                                                <div
+                                                    class="text-center text-red-500"
+                                                >
+                                                    Currrent Storage : <span class="font-bold">{{ item.current_storage }} pcs</span>
                                                 </div>
                                                 <hr class="my-1" />
                                                 <div class="p-3">
@@ -811,9 +822,6 @@ export default {
                 request_quantity: "",
             }),
         };
-    },
-    created() {
-        console.log("INERTIA FORM: ", this.$inertia, this.form);
     },
     computed: {
         circulations() {
