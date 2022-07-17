@@ -24,7 +24,6 @@ class ProductRequestController extends Controller
 
     public function index(Request $request)
     {
-        DB::connection()->enableQueryLog();
         $roles =  Auth::user()->getRoleNames()->toArray();
 
         $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
@@ -302,7 +301,7 @@ class ProductRequestController extends Controller
         //     '$productRequest'=>$productRequest,
         //     '$RequestResponse'=>$RequestResponse
         // ];
-
+            return back()->with('status', 'The record has been update successfully.');
         return redirect()
             ->route('product-requests.index', $productRequest->id)
             ->with('status', 'The record has been update successfully.');
