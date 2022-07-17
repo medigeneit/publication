@@ -188,7 +188,7 @@
                                     class="border-2 shadow rounded-md px-2 my-2 mr-2"
                                     :class="{
                                         'bg-green-200':
-                                            Math.abs(circulation.quantity) ==
+                                            Math.abs(circulation.quantity) <=
                                             circulation.total_received,
                                     }"
                                     v-for="circulation in circulations"
@@ -237,7 +237,7 @@
                                                     ) &&
                                                     Math.abs(
                                                         circulation.quantity
-                                                    ) !=
+                                                    ) >=
                                                         circulation.total_received
                                                 "
                                                 @click="
