@@ -301,7 +301,7 @@ class ProductRequestController extends Controller
         //     '$productRequest'=>$productRequest,
         //     '$RequestResponse'=>$RequestResponse
         // ];
-
+            return back()->with('status', 'The record has been update successfully.');
         return redirect()
             ->route('product-requests.index', $productRequest->id)
             ->with('status', 'The record has been update successfully.');

@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <hr class="my-1" />
-                <div class="p-3">
+                <div class="p-3 overflow-scroll h-96">
                     <div class="bg-white rounded border shadow z-50">
                         <div class="p-3 grid grid-cols-12 gap-2">
                             <div class="col-span-6 border-r-2">
@@ -106,6 +106,52 @@
                                                             "
                                                             required
                                                         />
+                                                        <Select
+                                                            v-if="
+                                                                item.type ==
+                                                                    2 &&
+                                                                !item
+                                                                    .requested_to
+                                                                    .id
+                                                            "
+                                                            class="mt-1 block w-full"
+                                                            name=""
+                                                            id=""
+                                                            v-model="
+                                                                form.requested_to
+                                                            "
+                                                            required
+                                                        >
+                                                            <option value="">
+                                                                Select
+                                                            </option>
+                                                            <option
+                                                                v-for="(
+                                                                    outlet,
+                                                                    index
+                                                                ) in outlets"
+                                                                :key="index"
+                                                                :value="index"
+                                                            >
+                                                                {{ outlet }}
+                                                            </option>
+                                                        </Select>
+                                                        <div
+                                                            v-if="
+                                                                item.type ==
+                                                                    2 &&
+                                                                item
+                                                                    .requested_to
+                                                                    .id
+                                                            "
+                                                        >
+                                                            Send to
+                                                            {{
+                                                                item
+                                                                    .requested_to
+                                                                    .name
+                                                            }}
+                                                        </div>
                                                         <Button
                                                             type="submit"
                                                             class="bg-gray-600 text-white px-2 py-1 rounded mt-2"
@@ -640,7 +686,7 @@
                                 </div>
                                 <div
                                     class="flex justify-between border-2 shadow rounded-md px-2 py-1 my-2 mr-2"
-                                    v-for="response in item.responses"
+                                    v-for="(response, index) in item.responses"
                                     :key="response"
                                 >
                                     <div>
@@ -668,6 +714,39 @@
                                         <span class="font-extrabold">
                                             {{ response.user_name }}
                                         </span>
+
+                                        <div
+                                            class="overflow-auto hidden"
+                                            v-if="response.note"
+                                            :id="`noteShow${index}`"
+                                        >
+                                          <span class="text-sm font-bold">Note:</span>  <span v-html="response.note"></span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        title="Details"
+                                        @click="
+                                            modalHandler(
+                                                $event,
+                                                `noteShow${index}`
+                                            )
+                                        "
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="h-6 w-6 cursor-pointer"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            v-if="response.note"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
@@ -690,6 +769,7 @@
 
 <script>
 import Button from "@/Components/Button.vue";
+import Input from "@/Components/Input.vue";
 import Label from "@/Components/Label.vue";
 import Select from "@/Components/Select.vue";
 
@@ -708,6 +788,7 @@ export default {
         Label,
         Select,
         Button,
+        Input,
     },
     data() {
         return {
@@ -726,6 +807,7 @@ export default {
                 requested_to: "",
                 request_quantity: "",
             }),
+            noteShow: false,
         };
     },
     computed: {
@@ -744,7 +826,13 @@ export default {
         closeMainModal() {
             this.$emit("update:modelValue", false);
         },
-        modalHandler(event) {
+        modalHandler(event, id = null) {
+            if (id) {
+                // return console.log(id);
+                return document
+                    .getElementById(`${id}`)
+                    .classList.toggle("hidden");
+            }
             event.target.nextElementSibling.classList.toggle("hidden");
         },
         closeSubModal(event) {
@@ -766,6 +854,7 @@ export default {
             this.modalHandler(event);
             this.form.request_id = this.item.id;
             this.form.to = this.item.requested_by.id;
+            this.form.requested_to = this.item.requested_to.id || "";
             this.form.type = 2;
             // this.form.requastable_type = 2;
         },
@@ -781,8 +870,9 @@ export default {
             this.form.request_id = this.item.id;
             this.form.expected_date = this.item.expected_date;
             this.form.type = this.item.type;
+            this.form.requested_to = this.item.requested_to.id;
             this.form.request_quantity = this.item.product_quantity;
-            this.form.note = this.item.note;
+            // this.form.note = this.item.responses[0].note;
         },
         edit() {
             return this.form.put(
