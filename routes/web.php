@@ -22,6 +22,7 @@ use App\Http\Controllers\PriceCategoryController;
 use App\Http\Controllers\PrintingCostController;
 use App\Http\Controllers\PrintingDetailsCategoryValueController;
 use App\Http\Controllers\PrintingDetailsController;
+use App\Http\Controllers\PrintingOrdersController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\ProductRequestController;
@@ -88,6 +89,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'printing-detail-categories' => PrintingDetailsCategoryValueController::class,
         'cost-categories'           => CostCategoryController::class,
         'product-requests'           => ProductRequestController::class,
+        'printing-orders'           => PrintingOrdersController::class,
         'binding-types'             => BindingTypeController::class,
         'versions'                  => VersionController::class,
         'printing-costs'            => PrintingCostController::class,
