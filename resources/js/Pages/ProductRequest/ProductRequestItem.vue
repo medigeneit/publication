@@ -2,10 +2,13 @@
     <div
         v-if="!isClosed"
         class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 border border-white-200 shadow-md relative transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg p-6 hover:z-50 cursor-pointer"
+        
         :class="{
-            'border border-green-600 bg-gradient-to-r from-gray-400 via-gray-200 to-white':
-                clicked,
-        }"
+                        'border-2 border-blue-500':
+                            item.type == 1 && clicked,
+                        'border-2 border-rose-500':
+                            item.type == 2 && clicked,
+                    }"
         @click="itemClicked"
     >
         <div class="">

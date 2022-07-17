@@ -29,15 +29,12 @@
             </li>
         </ul>
 
-        <div class="grid grid-cols-12 gap-2">
+        <div class="grid grid-cols-12 gap-3">
             <product-request-item
                 v-for="item in productRequestsList"
                 :key="item.id"
                 :item="item"
-                :class="{
-                    'border border-green-600 bg-gradient-to-r from-gray-400 via-gray-200 to-white':
-                        clicked[item.id],
-                }"
+                
                 @clicked="itemClicked"
                 :clicked="clicked[item.id]"
             ></product-request-item>
