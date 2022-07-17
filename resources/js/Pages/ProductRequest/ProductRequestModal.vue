@@ -720,7 +720,10 @@
                                             v-if="response.note"
                                             :id="`noteShow${index}`"
                                         >
-                                          <span class="text-sm font-bold">Note:</span>  <span v-html="response.note"></span>
+                                            <span class="text-sm font-bold"
+                                                >Note:</span
+                                            >
+                                            <span v-html="response.note"></span>
                                         </div>
                                     </div>
                                     <div
@@ -807,8 +810,10 @@ export default {
                 requested_to: "",
                 request_quantity: "",
             }),
-            noteShow: false,
         };
+    },
+    created() {
+        console.log("INERTIA FORM: ", this.$inertia, this.form);
     },
     computed: {
         circulations() {
@@ -880,7 +885,12 @@ export default {
             );
         },
         close() {
-            return this.form.post(this.route("close", this.form.request_id));
+            return this.form.post(this.route("close", this.form.request_id), {
+                onSuccess: (data) => {
+                    console.log("OK", data);
+                    this.closeMainModal();
+                },
+            });
         },
         send() {
             console.log(this.form);

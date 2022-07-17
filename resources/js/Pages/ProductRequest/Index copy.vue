@@ -31,7 +31,7 @@
         <div class="grid grid-cols-12 gap-2">
             <!-- hover:shadow-xl hover:shadow-gray-500 -->
             <div
-                class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 p-6 transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg"
+                class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 p-6 bg-white rounded-lg"
                 v-for="(item, index) in productRequests.data"
                 :key="index"
                 :class="{
@@ -42,7 +42,7 @@
                 <div class="border border-white-200 shadow-md relative"></div>
 
                 <div
-                    class="absolute right-0 top-0 h-16 w-16 hover:z-40 transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300"
+                    class="absolute right-0 top-0 h-16 w-16"
                 >
                     <div
                         class="absolute transform rotate-45 text-center text-sm text-white font-bold left-[-66px] top-[30px] w-[170px]"

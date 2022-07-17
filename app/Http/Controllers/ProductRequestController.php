@@ -107,6 +107,7 @@ class ProductRequestController extends Controller
 
         // $product_requests = ProductRequestResource::collection($productRequests->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
 
+
         return Inertia::render('ProductRequest/Index', [
             'your_outlets' =>  $outlets,
             // 'productRequests' => $product_requests,
@@ -319,7 +320,7 @@ class ProductRequestController extends Controller
             // 'user_id'     => Auth::user()->id
         ]);
         // return $productRequest;
-
+        $parameters= ["outlet_id=$request->from"];
 
         $responce_outlet = $productRequest->load('storage');
 
@@ -336,13 +337,12 @@ class ProductRequestController extends Controller
         $responce_outlet->update([
             'is_closed'=>1
         ]);
-
-        return back();
-
+        
         return redirect()
-            ->route('collections.show', $productRequest->id)
-            ->with('status', 'The record has been update successfully.');
+            ->route('product-requests.index',$parameters)
+            ->with('status', 'The record has been added successfully.');
     }
+    
     public function accept_response(Request $request, ProductRequest $productRequest)
     {
         // $productRequest->update($this->validateData($request, $productRequest->id));

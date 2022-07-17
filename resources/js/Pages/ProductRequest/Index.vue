@@ -29,9 +29,9 @@
             </li>
         </ul>
 
-        <div class="grid grid-cols-12 gap-2" v-if="productRequests.data">
+        <div class="grid grid-cols-12 gap-2">
             <product-request-item
-                v-for="item in productRequests.data"
+                v-for="item in productRequestsList"
                 :key="item.id"
                 :item="item"
                 :class="{
@@ -108,14 +108,28 @@ export default {
     data() {
         return {
             from: "",
-            productRequest: "",
             circulaitonShow: false,
             circulation: "",
             isClosed: [],
             clicked: [],
             modalShow: false,
-            selectedItem: {},
+            selectedId: null,
         };
+    },
+    computed: {
+        productRequestsList() {
+            return Array.isArray(this.productRequests?.data)
+                ? this.productRequests?.data
+                : [];
+        },
+
+        selectedItem() {
+            const filtered = this.productRequestsList.filter(
+                (requestItem) => this.selectedId == requestItem.id
+            );
+
+            return typeof filtered[0] == "object" ? filtered[0] : {};
+        },
     },
     methods: {
         itemClicked({ item }) {
@@ -130,6 +144,7 @@ export default {
                     // timer: 1000,
                 });
             }
+
             this.circulaitonShow = !this.circulaitonShow;
             this.productRequest = this.item;
 
@@ -137,8 +152,10 @@ export default {
 
             this.clickHandler(item.id);
 
-            this.selectedItem = item;
-            
+            //this.selectedItem = item;
+
+            this.selectedId = item.id;
+
             this.modalShow = true;
         },
 
@@ -164,7 +181,6 @@ export default {
             console.log(event.target.nextElementSibling);
             event.target.nextElementSibling.classList.toggle("hidden");
         },
-
         closeModal(event) {
             this.emptyValue();
             event.target.parentElement.parentElement.parentElement.classList.add(
@@ -180,7 +196,6 @@ export default {
             this.form.expected_date = "";
             this.form.requested_to = "";
         },
-
         divShow(event, id) {
             console.log(event.target.nextElementSibling);
             event.target.nextElementSibling.classList.toggle("hidden");
