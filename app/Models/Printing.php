@@ -14,6 +14,10 @@ class Printing extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'order_date' => 'date',
+    ];
+
     public function plate_store()
     {
         return $this->belongsTo(PrintingContributor::class);
