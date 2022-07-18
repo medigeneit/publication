@@ -1,14 +1,10 @@
 <template>
     <div
         v-if="!isClosed"
-        class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 border border-white-200 shadow-md relative transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg p-6 hover:z-50 cursor-pointer"
-        
+        class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 border border-white-200 shadow-md relative transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg p-6 hover:z-50 cursor-pointer hover:bg-gradient-to-br hover:from-white hover:to-gray-300 "
         :class="{
-                        'border-2 border-blue-500':
-                            item.type == 1 && clicked,
-                        'border-2 border-rose-500':
-                            item.type == 2 && clicked,
-                    }"
+            'border-2 border-blue-500 bg-gradient-to-br from-white to-blue-200': clicked,
+        }"
         @click="itemClicked"
     >
         <div class="">
@@ -30,8 +26,8 @@
 
             <a href="#">
                 <div class="font-bold text-sm">Sl: {{ item.id }}</div>
-                
-                    <!-- :class="{'bg-gradient-to-r from-orange-300 to-amber-200': item.requested_by.name == 'Your Outlet'}" -->
+
+                <!-- :class="{'bg-gradient-to-r from-orange-300 to-amber-200': item.requested_by.name == 'Your Outlet'}" -->
                 <div
                     class="mb-2 -ml-6 text-2xl font-bold tracking-tight text-white-900"
                 >
@@ -103,7 +99,6 @@ export default {
         // this.form.from = this.$page.url.includes("outlet_id=")
         //     ? this.$page.url.split("?")[1].split("=")[1]
         //     : "";
-        
         // this.item.responses.forEach((res) => {
         //     this.isClosed = res.status == 5;
         // });

@@ -242,7 +242,7 @@
                                                     ) &&
                                                     Math.abs(
                                                         circulation.quantity
-                                                    ) >=
+                                                    ) >
                                                         circulation.total_received
                                                 "
                                                 @click="

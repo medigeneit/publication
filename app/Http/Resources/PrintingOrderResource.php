@@ -31,6 +31,7 @@ class PrintingOrderResource extends JsonResource
             'page_amount'            => (int) ($this->page_amount ?? ''),
             // 'stored_at'             => (object) ($this->stored_at ?? ''),
             'press'                  => (string) ($this->press->name ?? ''),
+            'press_id'                  => (string) ($this->press->id ?? ''),
             // 'circulations'           => (object) ($this->circulations ?? []),
             'total_received'           => $this->circulations->sum('quantity'),
             'circulations'           => (object) (RequestCirculationResource::collection($this->circulations) ?? []),

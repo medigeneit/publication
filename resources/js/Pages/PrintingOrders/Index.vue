@@ -3,52 +3,26 @@
 
     <app-layout class="">
         <template #header> Request </template>
-        <!-- <ul
-            class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 p-2"
-        >
-            <li
-                class="mr-2"
-                v-for="(outlet, outlet_id) in your_outlets"
-                :key="outlet_id"
-            >
-                <Link
-                    :href="
-                        route('product-requests.index', {
-                            outlet_id: outlet_id,
-                        })
-                    "
-                    @click="from = outlet_id"
-                    aria-current="page"
-                    class="inline-block p-2 text-gray-600 bg-gray-300 rounded-t-lg hover:bg-gray-500 hover:text-gray-200"
-                    :class="{
-                        'font-extrabold bg-blue-500 text-gray-200':
-                            $page.url.includes(`outlet_id=${outlet_id}`),
-                    }"
-                    >{{ outlet }}
-                </Link>
-            </li>
-        </ul> -->
-
+        
         <div class="grid grid-cols-12 gap-3">
-            <product-request-item
+            <product-recieve-item
                 v-for="item in printingOrdersList"
                 :key="item.id"
                 :item="item"
                 
                 @clicked="itemClicked"
                 :clicked="clicked[item.id]"
-            ></product-request-item>
+            ></product-recieve-item>
         </div>
 
-        <product-request-modal
+        <product-recieve-modal
             v-model="modalShow"
             :item="selectedItem"
-            :your_outlets="your_outlets"
             :types="types"
             :outlets="outlets"
             :filters="filters"
             :from="from"
-        ></product-request-modal>
+        ></product-recieve-modal>
     </app-layout>
 </template>
 
@@ -63,8 +37,8 @@ import Select from "@/Components/Select.vue";
 import AppLayout from "@/Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Swal from "sweetalert2";
-import ProductRequestItem from "./ProductRequestItem.vue";
-import ProductRequestModal from "./ProductRequestModal.vue";
+import ProductRecieveItem from "./ProductRecieveItem.vue";
+import ProductRecieveModal from "./ProductRecieveModal.vue";
 
 export default {
     components: {
@@ -78,12 +52,11 @@ export default {
         Button,
         Label,
         Select,
-        ProductRequestItem,
-        ProductRequestModal,
+        ProductRecieveItem,
+        ProductRecieveModal,
     },
     props: {
         printingOrders: { type: Object, default: {} },
-        // your_outlets: { type: Object, default: {} },
         types: { type: Object, default: {} },
         outlets: { type: Object, default: {} },
         filters: { type: Object, default: {} },

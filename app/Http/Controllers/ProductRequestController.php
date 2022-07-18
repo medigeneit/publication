@@ -71,9 +71,11 @@ class ProductRequestController extends Controller
                 'circulations' => function ($query) {
                     $query->whereNull('circulation_id')->with([
                         'circulations.storage.outlet',
+                        'circulations.user',
                         'circulations.destinationable',
                         'storage.outlet',
-                        'destinationable'
+                        'destinationable',
+                        'user'
                     ]);
                 }
             ])

@@ -26,6 +26,7 @@ class PrintingOrdersController extends Controller
         $printing_orders = $this->setQuery(Printing::query()
         ->with([
             'circulations.storage.outlet',
+            'circulations.user',
             'version.volumes',
             'version.production',
             'press',

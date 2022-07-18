@@ -63,7 +63,8 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
+        // return $request->request_id ?? ($request->print_order_id ?? null); 
+        // return $request; 
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {
             $redirect_location = 'products.index';
@@ -73,8 +74,12 @@ class CirculationController extends Controller
             $redirect_location = 'product-requests.index';
             $parameters= ["outlet_id=$request->from"];
         }
+        if ($request->has('print_order_id')) {
+            $redirect_location = 'printing-orders.index';
+            $parameters= [];
+        }
         $product_id = 0;
-        if ($request->has('request_id')) {
+        if ($request->has('request_id') && $request->request_id) {
             // return
             $request_storage = ProductRequest::find($request->request_id)->storage;
             $product_id = $request_storage->product_id;
@@ -90,8 +95,8 @@ class CirculationController extends Controller
             
             // return Circulation::TYPE[$request->type] == 'In';
             if (Circulation::TYPE[$request->type] == 'In') {
-                // return 'in';
-                $circulation = Circulation::find($request->circulation_id)->load('storage');
+                // return $request;
+                $circulation = $request->circulation_id ? Circulation::find($request->circulation_id)->load('storage') : null;
                 $quantity = $request->quantity;
                 $storage_outlet_id = $request->to ?? $request_storage->outlet_id;
                 $destination = $request->from ?? $circulation->storage->outlet_id;
@@ -103,8 +108,8 @@ class CirculationController extends Controller
                 {
                     $requestable_type = ProductRequest::class ?? null;
                 }
+                $requestable_id =  $request->request_id ?? ($request->print_order_id ?? null);
                 // return $requestable_type;
-                $requestable_id =  $request->request_id ?? null;
             } elseif (Circulation::TYPE[$request->type] == 'Out') {
                 $request->requastable_type = 2;
                 $quantity = $request->quantity * -1;
