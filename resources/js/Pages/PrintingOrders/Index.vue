@@ -3,52 +3,26 @@
 
     <app-layout class="">
         <template #header> Request </template>
-        <ul
-            class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 p-2"
-        >
-            <li
-                class="mr-2"
-                v-for="(outlet, outlet_id) in your_outlets"
-                :key="outlet_id"
-            >
-                <Link
-                    :href="
-                        route('product-requests.index', {
-                            outlet_id: outlet_id,
-                        })
-                    "
-                    @click="from = outlet_id"
-                    aria-current="page"
-                    class="inline-block p-2 text-gray-600 bg-gray-300 rounded-t-lg hover:bg-gray-500 hover:text-gray-200"
-                    :class="{
-                        'font-extrabold bg-blue-500 text-gray-200':
-                            $page.url.includes(`outlet_id=${outlet_id}`),
-                    }"
-                    >{{ outlet }}
-                </Link>
-            </li>
-        </ul>
-
+        
         <div class="grid grid-cols-12 gap-3">
-            <product-request-item
-                v-for="item in productRequestsList"
+            <product-recieve-item
+                v-for="item in printingOrdersList"
                 :key="item.id"
                 :item="item"
                 
                 @clicked="itemClicked"
                 :clicked="clicked[item.id]"
-            ></product-request-item>
+            ></product-recieve-item>
         </div>
 
-        <product-request-modal
+        <product-recieve-modal
             v-model="modalShow"
             :item="selectedItem"
-            :your_outlets="your_outlets"
             :types="types"
             :outlets="outlets"
             :filters="filters"
             :from="from"
-        ></product-request-modal>
+        ></product-recieve-modal>
     </app-layout>
 </template>
 
@@ -63,8 +37,8 @@ import Select from "@/Components/Select.vue";
 import AppLayout from "@/Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Swal from "sweetalert2";
-import ProductRequestItem from "./ProductRequestItem.vue";
-import ProductRequestModal from "./ProductRequestModal.vue";
+import ProductRecieveItem from "./ProductRecieveItem.vue";
+import ProductRecieveModal from "./ProductRecieveModal.vue";
 
 export default {
     components: {
@@ -78,29 +52,28 @@ export default {
         Button,
         Label,
         Select,
-        ProductRequestItem,
-        ProductRequestModal,
+        ProductRecieveItem,
+        ProductRecieveModal,
     },
     props: {
-        productRequests: { type: Object, default: {} },
-        your_outlets: { type: Object, default: {} },
+        printingOrders: { type: Object, default: {} },
         types: { type: Object, default: {} },
         outlets: { type: Object, default: {} },
         filters: { type: Object, default: {} },
     },
     created() {
-        this.from = this.$page.url.includes("outlet_id=")
-            ? this.$page.url.split("?")[1].split("=")[1]
-            : "";
+        // this.from = this.$page.url.includes("outlet_id=")
+        //     ? this.$page.url.split("?")[1].split("=")[1]
+        //     : "";
 
         // console.log("FROM", s);
 
-        this.productRequests.data.forEach((item, index) => {
-            // console.log(id);
-            item.responses.forEach((res) => {
-                this.isClosed[index] = res.status == 5;
-            });
-        });
+        // this.printingOrders.data.forEach((item, index) => {
+        //     // console.log(id);
+        //     item.responses.forEach((res) => {
+        //         this.isClosed[index] = res.status == 5;
+        //     });
+        // });
     },
     data() {
         return {
@@ -114,14 +87,14 @@ export default {
         };
     },
     computed: {
-        productRequestsList() {
-            return Array.isArray(this.productRequests?.data)
-                ? this.productRequests?.data
+        printingOrdersList() {
+            return Array.isArray(this.printingOrders?.data)
+                ? this.printingOrders?.data
                 : [];
         },
 
         selectedItem() {
-            const filtered = this.productRequestsList.filter(
+            const filtered = this.printingOrdersList.filter(
                 (requestItem) => this.selectedId == requestItem.id
             );
 
@@ -130,17 +103,17 @@ export default {
     },
     methods: {
         itemClicked({ item }) {
-            if (!this.from) {
-                //    return alert("please select outlet")
-                return Swal.fire({
-                    icon: "error",
-                    html: "<b>Please Select The Outlet</b>",
-                    width: 300,
-                    height: 5,
-                    showConfirmButton: true,
-                    // timer: 1000,
-                });
-            }
+            // if (!this.from) {
+            //     //    return alert("please select outlet")
+            //     return Swal.fire({
+            //         icon: "error",
+            //         html: "<b>Please Select The Outlet</b>",
+            //         width: 300,
+            //         height: 5,
+            //         showConfirmButton: true,
+            //         // timer: 1000,
+            //     });
+            // }
 
             this.circulaitonShow = !this.circulaitonShow;
             this.productRequest = this.item;
@@ -148,7 +121,7 @@ export default {
             this.clicked[item.id] = true;
 
             this.clickHandler(item.id);
-
+            this.from = 1
             //this.selectedItem = item;
 
             this.selectedId = item.id;

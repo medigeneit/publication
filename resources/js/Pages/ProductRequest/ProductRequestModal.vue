@@ -26,11 +26,11 @@
                     >
                         {{ item.product_info.product_name }}
                     </div>
-                    <div
-                        class="text-base"
-                        v-if="item.current_storage"
-                    >
-                       Current Storage: <span class="font-extrabold">{{ item.current_storage }} pcs</span>
+                    <div class="text-base" v-if="item.current_storage">
+                        Current Storage:
+                        <span class="font-extrabold"
+                            >{{ item.current_storage }} pcs</span
+                        >
                     </div>
                     <div>
                         <span
@@ -50,11 +50,7 @@
                             class="font-extrabold text-base"
                             v-if="item.requested_to"
                         >
-                            {{
-                                item.requested_to.length
-                                    ? item.requested_to.name
-                                    : "all"
-                            }}</span
+                            {{ item.requested_to.name ?? "all" }}</span
                         >
                         <div class="text-sm">
                             Expected Date:
@@ -92,12 +88,18 @@
                                                 <div
                                                     class="text-lg font-bold text-center"
                                                 >
-                                                    Send 
+                                                    Send
                                                 </div>
                                                 <div
                                                     class="text-center text-red-500"
                                                 >
-                                                    Currrent Storage : <span class="font-bold">{{ item.current_storage }} pcs</span>
+                                                    Currrent Storage :
+                                                    <span class="font-bold"
+                                                        >{{
+                                                            item.current_storage
+                                                        }}
+                                                        pcs</span
+                                                    >
                                                 </div>
                                                 <hr class="my-1" />
                                                 <div class="p-3">
@@ -128,9 +130,7 @@
                                                             class="mt-1 block w-full"
                                                             name=""
                                                             id=""
-                                                            v-model="
-                                                                form.requested_to
-                                                            "
+                                                            v-model="form.to"
                                                             required
                                                         >
                                                             <option value="">
@@ -162,6 +162,11 @@
                                                                     .requested_to
                                                                     .name
                                                             }}
+                                                            {{
+                                                                item
+                                                                    .requested_to
+                                                                    .id
+                                                            }}
                                                         </div>
                                                         <Button
                                                             type="submit"
@@ -188,7 +193,7 @@
                                     class="border-2 shadow rounded-md px-2 my-2 mr-2"
                                     :class="{
                                         'bg-green-200':
-                                            Math.abs(circulation.quantity) ==
+                                            Math.abs(circulation.quantity) <=
                                             circulation.total_received,
                                     }"
                                     v-for="circulation in circulations"
@@ -237,7 +242,7 @@
                                                     ) &&
                                                     Math.abs(
                                                         circulation.quantity
-                                                    ) !=
+                                                    ) >
                                                         circulation.total_received
                                                 "
                                                 @click="
@@ -864,10 +869,11 @@ export default {
             this.form.requested_to = "";
         },
         enableSending(event) {
+            console.log(this.item.requested_to.id);
             this.modalHandler(event);
             this.form.request_id = this.item.id;
-            this.form.to = this.item.requested_by.id;
-            this.form.requested_to = this.item.requested_to.id || "";
+            this.form.to = this.item.requested_to.id;
+            // this.form.requested_to = this.item.requested_to.id ;
             this.form.type = 2;
             // this.form.requastable_type = 2;
         },
@@ -901,7 +907,7 @@ export default {
             });
         },
         send() {
-            console.log(this.form);
+            console.log(this.form.to);
             return this.form.post(this.route("circulations.store"));
         },
         recieve() {

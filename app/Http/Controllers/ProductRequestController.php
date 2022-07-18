@@ -71,9 +71,11 @@ class ProductRequestController extends Controller
                 'circulations' => function ($query) {
                     $query->whereNull('circulation_id')->with([
                         'circulations.storage.outlet',
+                        'circulations.user',
                         'circulations.destinationable',
                         'storage.outlet',
-                        'destinationable'
+                        'destinationable',
+                        'user'
                     ]);
                 }
             ])
@@ -187,12 +189,10 @@ class ProductRequestController extends Controller
                 'outlet_id' =>  $response_outlet->id,
             ]);
         }
-
-        return back();
+        $parameters= ["outlet_id=$request->from"];
 
         return redirect()
-
-            ->route('product-requests.index')
+            ->route('product-requests.index', $parameters)
             ->with('status', 'The record has been added successfully.');
     }
 
@@ -302,9 +302,9 @@ class ProductRequestController extends Controller
         //     '$productRequest'=>$productRequest,
         //     '$RequestResponse'=>$RequestResponse
         // ];
-            return back()->with('status', 'The record has been update successfully.');
+        $parameters= ["outlet_id=$request->from"];
         return redirect()
-            ->route('product-requests.index', $productRequest->id)
+            ->route('product-requests.index', $parameters)
             ->with('status', 'The record has been update successfully.');
     }
 
