@@ -1,6 +1,6 @@
 <template>
     <div
-        v-if="!isClosed"
+        v-if="item.active"
         class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 border border-white-200 shadow-md relative transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg p-6 hover:z-50 cursor-pointer hover:bg-gradient-to-br hover:from-white hover:to-gray-300 "
         :class="{
             'border-2 border-blue-500 bg-gradient-to-br from-white to-blue-200': clicked,
@@ -12,15 +12,10 @@
                 class="absolute right-0 top-0 h-16 w-16 hover:z-40 transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300"
             >
                 <div
-                    class="absolute transform rotate-45 text-center text-sm text-white font-bold left-[-66px] top-[30px] w-[170px]"
-                    :class="{
-                        'bg-gradient-to-r from-sky-400 to-blue-500':
-                            item.type == 1,
-                        'bg-gradient-to-r from-rose-400 to-rose-500':
-                            item.type == 2,
-                    }"
+                    class="absolute transform rotate-45 text-center text-sm text-white font-bold left-[-66px] top-[30px] w-[170px] bg-gradient-to-r from-orange-400 to-amber-500"
+                   
                 >
-                    {{ item.type_name }}
+                    Printing {{ item.active }}
                 </div>
             </div>
 

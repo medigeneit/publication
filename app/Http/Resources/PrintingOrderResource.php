@@ -29,6 +29,7 @@ class PrintingOrderResource extends JsonResource
             'order_date'             => (int) ($this->order_date ?? ''),
             'copy_quantity'          => (int) ($this->copy_quantity ?? ''),
             'page_amount'            => (int) ($this->page_amount ?? ''),
+            'active'                 => (int) ($this->active ?? ''),
             // 'stored_at'             => (object) ($this->stored_at ?? ''),
             'press'                  => (string) ($this->press->name ?? ''),
             'press_id'                  => (string) ($this->press->id ?? ''),

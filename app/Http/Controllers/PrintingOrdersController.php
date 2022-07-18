@@ -23,7 +23,7 @@ class PrintingOrdersController extends Controller
 
         $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
 
-        $printing_orders = $this->setQuery(Printing::query()
+        $printing_orders = Printing::query()
         ->with([
             'circulations.storage.outlet',
             'circulations.user',
@@ -32,14 +32,8 @@ class PrintingOrdersController extends Controller
             'press',
 
         ])
-        ->when($request->active, function($query) use($request){
-            $query->where('active',($request->active ?? 1));
-        })
-
-        )
-        ->search()->filter()
-        //->dateFilter()
-        ->getQuery();
+        ->search(['id'])
+        ->filter();
 
         // $printing_orders = $printing_orders->get();
         // return
@@ -112,7 +106,7 @@ class PrintingOrdersController extends Controller
         ]);
 
         return redirect()
-            ->route('product-requests.index')
+            ->route('printing-orders.index')
             ->with('status', 'The record has been delete successfully.');
     }
 

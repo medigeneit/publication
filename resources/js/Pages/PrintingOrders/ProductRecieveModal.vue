@@ -251,8 +251,8 @@ export default {
             this.form.type = 1;
         },
         close() {
-            return console.log(this.item.id)
-            return this.form.post(this.route("close", this.item.id), {
+            // return console.log(this.item.id)
+            return this.form.post(this.route("printing-close", this.item.id), {
                 onSuccess: (data) => {
                     console.log("OK", data);
                     this.closeMainModal();

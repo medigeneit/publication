@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\ScopeDateFilter;
+use App\Traits\ScopeSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Printing extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ScopeSearch, ScopeDateFilter;
 
     protected $guarded = [];
 
@@ -16,6 +18,14 @@ class Printing extends Model
     {
         return $this->belongsTo(PrintingContributor::class);
     }
+    public function scopeFilter($query)
+    {
+        return $query
+            ->when(request()->active, function($query) {
+            $query->where('active',(request()->active ?? 1));
+        });
+    }
+
     public function press()
     {
         return $this->hasOne(Press::class, 'id', 'press_id');

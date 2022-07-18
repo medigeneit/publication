@@ -444,7 +444,7 @@ export default {
                 category_value_id:
                     this.data.printing_details_category_keys.id || "",
 
-                version_id: this.data.version,
+                version_id: this.data.version.id,
 
                 name: "",
 
