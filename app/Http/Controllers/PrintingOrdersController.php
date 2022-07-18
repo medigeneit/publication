@@ -23,7 +23,7 @@ class PrintingOrdersController extends Controller
 
         $outlets = in_array("Super Admin", $roles) ? Outlet::pluck('name', 'id') : Auth::user()->outlets->pluck('name', 'id');
 
-        $collections = $this->setQuery(Printing::query()
+        $printing_orders = $this->setQuery(Printing::query()
         ->with([
             'circulations.storage.outlet',
             'version.volumes',
@@ -36,23 +36,23 @@ class PrintingOrdersController extends Controller
         ->search()->filter()
         //->dateFilter()
         ->getQuery();
-        $collections = $collections->get();
-        return
-        PrintingOrderResource::collection($collections);
+        // $printing_orders = $printing_orders->get();
+        // return
+        // PrintingOrderResource::collection($printing_orders);
 
             // PrintingResource::collection($collections->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()))
 
-        return Inertia::render('Printing/Index', [
-            'your_outlets' =>  $outlets,
+        return Inertia::render('PrintingOrders/Index', [
+            // 'your_outlets' =>  $outlets,
 
-            'collections' => PrintingOrderResource::collection($collections->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+            'printingOrders' => PrintingOrderResource::collection($printing_orders->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('Printing/Create', [
+        return Inertia::render('PrintingOrders/Create', [
             'printing' => new Printing(),
         ]);
     }
@@ -70,14 +70,14 @@ class PrintingOrdersController extends Controller
     {
         PrintingResource::withoutWrapping();
 
-        return Inertia::render('Printing/Show', [
+        return Inertia::render('PrintingOrders/Show', [
             'printing' => new PrintingResource($printing),
         ]);
     }
 
     public function edit(Printing $printing)
     {
-        return Inertia::render('Printing/Edit', [
+        return Inertia::render('PrintingOrders/Edit', [
             'printing' => $printing,
         ]);
     }
