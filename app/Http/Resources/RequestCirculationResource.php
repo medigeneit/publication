@@ -33,7 +33,7 @@ class RequestCirculationResource extends JsonResource
             // 'productName' => (string) ($this->storage->product->product_name ?? ''),
             'quantity'  => (int) ($this->quantity ?? 0),
             'circulationDate'  => (string) ($this->created_at->format('d-M-Y') ?? 0),
-            'userName'  => (string) ($this->user->name ?? 0),
+            'userName'  => (string) ($this->user->name ?? 'Anonymous'),
             'total_received' => $this->whenLoaded('circulations', function(){
                 return $this->circulations->sum('quantity');
             }),
