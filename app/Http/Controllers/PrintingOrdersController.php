@@ -16,7 +16,7 @@ class PrintingOrdersController extends Controller
 {
     use DateFilter;
 
-    public function index()
+    public function index(Request $request)
     {
 
         $roles =  Auth::user()->getRoleNames()->toArray();
@@ -32,14 +32,19 @@ class PrintingOrdersController extends Controller
             'press',
 
         ])
+        ->when($request->active, function($query) use($request){
+            $query->where('active',($request->active ?? 1));
+        })
 
         )
         ->search()->filter()
         //->dateFilter()
         ->getQuery();
+
         // $printing_orders = $printing_orders->get();
         // return
         // PrintingOrderResource::collection($printing_orders);
+
 
             // PrintingResource::collection($collections->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()))
 
@@ -98,6 +103,16 @@ class PrintingOrdersController extends Controller
 
         return redirect()
             ->route('collections.index')
+            ->with('status', 'The record has been delete successfully.');
+    }
+    public function close (Printing $printing)
+    {
+        $printing->update([
+            'active' => 0
+        ]);
+
+        return redirect()
+            ->route('product-requests.index')
             ->with('status', 'The record has been delete successfully.');
     }
 
