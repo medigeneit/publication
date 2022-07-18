@@ -48,7 +48,7 @@ class PrintingCostController extends Controller
             'authors'                          => Author::pluck('name', 'id'),
             'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
             'bindingTypes'                     => BindingType::get(),
-            'version'                          => $version
+            'version'                          => $version->load('moderators')
         ]);
     }
 
@@ -158,10 +158,11 @@ class PrintingCostController extends Controller
             'version_cost',
             'printing_details:id,name,printing_details_category_key_id',
             'printing_contributors',
-            'version:id,alert_quantity'
+            'version:id,alert_quantity',
+            'version.moderators'
         ])->find($id);
         // return $printing->printing_details->printing_details_category_key_id;
-
+        $version = $printing->version->load('moderators');
         $printing_details_category_keys = PrintingDetailsCategoryValue::with([
             'values' => function ($q) {
                 $q->where('active', 1);
@@ -176,7 +177,8 @@ class PrintingCostController extends Controller
                 'presses'                          => Press::where('active', 1)->get(),
                 'authors'                          => Author::pluck('name', 'id'),
                 'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
-                'bindingTypes'                     => BindingType::get()
+                'bindingTypes'                     => BindingType::get(),
+                'version'                          =>$version
 
             ]
         ]);

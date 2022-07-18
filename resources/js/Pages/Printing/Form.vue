@@ -74,56 +74,7 @@
                             <h3 class="text-lg text-gray-600 font-bold">
                                 Printing Details
                             </h3>
-                            <!-- <div class="w-full text-right mb-2">
-                                <Button @click="modalHandler" type="button" class="btn-danger border-4">
-                                + Add Filed
-                            </Button>
-                                <div class="fixed inset-0 hidden z-50">
-                                    <div class="relative w-full h-full flex justify-center items-center">
-                                        <div class="relative p-2 w-full mx-auto max-w-lg bg-white rounded border shadow z-50">
-                                            <div class="text-lg font-bold text-center">Printing key and value added</div>
-                                            <hr class="my-1">
-                                            <div class="p-3">
-                                                <div class="py-1.5 flex gap-2 mr-10">
-                                                    <div class="w-full max-w-7xl space-y-4">
-                                                        <div class="text-left">
-                                                            <Label value="Key" />
-                                                            <Input
-                                                                    type="text"
-                                                                    class="mt-1 block w-full"
-                                                                    v-model="form.key"
-                                                                />
-                                                        </div>
-                                                        <div class="text-left p-2">
-                                                            <Label value="Value"/>
-                                                            <div class="block"  v-for="(value, index) in form.values" :key="index">
-                                                                <Input
-                                                                        type="text"
-                                                                        class="mt-1 py-1 block w-full !text-sm"
-                                                                        v-model="form.values[index]"
-                                                                    />
-                                                            </div>
-                                                                <Button
-                                                                type="button"
-                                                                class="mt-2 btn-danger border-4"
-                                                                @click="addPrintingValue()"
-                                                            >
-                                                                (+) Add
-                                                            </Button>
-                                                        </div>
-
-                                                        <Button type="submit">Submit</Button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40" @click="closeModal">&times;</div>
-                                        </div>
-                                        <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
-                                            <div class="w-full h-full" @click="closeModal"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
+                            
                             <div class="w-full bg-white gap-4 p-4">
                                 <table class="w-full min-w-max">
                                     <tbody>
@@ -252,6 +203,24 @@
                                                                 costDetail.amount
                                                             "
                                                             @input="checkTotal"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="totalHonorarium">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td class="text-right">
+                                                        লেখক রয়্যালিটি :
+                                                    </td>
+                                                    <td>
+                                                        <Input
+                                                            type="number"
+                                                            class="mt-1 py-1 block w-full"
+                                                            :value="totalHonorarium"
+                                                            v-model="
+                                                                form.totalHonorarium
+                                                            "
+                                                            
                                                         />
                                                     </td>
                                                 </tr>
@@ -493,10 +462,27 @@ export default {
                         ? 1
                         : this.data.printing.active,
                 moduleAction: this.moduleAction,
+                totalHonorarium: ""
             }),
             storigngAtVisibility: false,
             value: "",
+            totalHonorarium: "",
         };
+    },
+    computed: {
+        totalHonorarium() {
+            let totalHonorarium = 0;
+            if (this.data.version) {
+                
+                this.data.version.moderators.forEach((data) => {
+                    if (data.honorarium_type == 1) {
+                        totalHonorarium += parseInt(data.honorarium);
+                    }
+                    // console.log("totalHonorarium", totalHonorarium);
+                });
+            }
+            return totalHonorarium;
+        },
     },
     created() {
         Object.entries(this.data.costCategories).forEach((cost_category) => {
@@ -590,6 +576,8 @@ export default {
                 sum += parseInt(cost.amount) || 0;
             });
             sum += parseInt(this.form.others) || 0;
+            sum += parseInt(this.form.totalHonorarium) || 0;
+            console.log(this.form.totalHonorarium);
             this.form.sum = sum;
         },
 
