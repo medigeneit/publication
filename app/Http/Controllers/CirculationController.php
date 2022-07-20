@@ -64,7 +64,8 @@ class CirculationController extends Controller
     public function store(Request $request)
     {
         // return $request->request_id ?? ($request->print_order_id ?? null); 
-        // return $request; 
+        $product_id = 0;
+       
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {
             $redirect_location = 'products.index';
@@ -76,16 +77,15 @@ class CirculationController extends Controller
         }
         if ($request->has('print_order_id')) {
             $redirect_location = 'printing-orders.index';
-            $parameters= [];
+            $parameters = [];
+            $product_id = Printing::find($request->print_order_id)->version->product->id;
         }
-        $product_id = 0;
         if ($request->has('request_id') && $request->request_id) {
             // return
             $request_storage = ProductRequest::find($request->request_id)->storage;
             $product_id = $request_storage->product_id;
             
         }
-        
         // if (!in_array($request->type, array_keys(Circulation::TYPE)) && !in_array($request->type, array_values(Circulation::TYPE))) {
             //     return redirect()
             //         ->route($redirect_location)

@@ -256,6 +256,7 @@ export default {
                 expected_date:'',
                 request_type: '',
                 requested_to: '',
+                requastable_type: ''
             }),
 
             // outlet_id: this.storages.data[0].outletId,
@@ -307,8 +308,7 @@ export default {
         changePress(event, id) {
             let value = event.target.value;
             console.log(value);
-            this.form.type = value;
-            console.log(this.form.type = value)
+            this.form.requastable_type = value;
             if (value == 1) {
                 this.form.from = '';
                 this.fromDisabled = false

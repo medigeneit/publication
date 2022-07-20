@@ -1,9 +1,11 @@
 <template>
     <div
         v-if="item.active"
-        class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 border border-white-200 shadow-md relative transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg p-6 hover:z-50 cursor-pointer hover:bg-gradient-to-br hover:from-white hover:to-gray-300 "
+        class="overflow-hidden col-span-6 md:col-span-4 lg:col-span-2 border border-white-200 shadow-md relative transition ease-in-out delay-100 hover:translate-y-1 hover:scale-110 duration-300 bg-white rounded-lg p-6 hover:z-50 cursor-pointer hover:bg-gradient-to-br hover:from-white hover:to-gray-300"
         :class="{
-            'border-2 border-blue-500 bg-gradient-to-br from-white to-blue-200': clicked,
+            'border-2 border-blue-500 bg-gradient-to-br from-white to-blue-200':
+                clicked,
+            'bg-green-300': item.copy_quantity == item.total_recieved,
         }"
         @click="itemClicked"
     >
@@ -13,7 +15,6 @@
             >
                 <div
                     class="absolute transform rotate-45 text-center text-sm text-white font-bold left-[-66px] top-[30px] w-[170px] bg-gradient-to-r from-orange-400 to-amber-500"
-                   
                 >
                     Printing {{ item.active }}
                 </div>
@@ -51,7 +52,7 @@
                 </span>
             </div>
             <div class="mb-3">
-                <p class="font-extrabold text-sm unde">Order Date:</p>
+                <p class="font-extrabold text-sm">Order Date:</p>
                 {{ item.order_date }}
             </div>
 

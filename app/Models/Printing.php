@@ -22,7 +22,7 @@ class Printing extends Model
     {
         return $this->belongsTo(PrintingContributor::class);
     }
-    public function scopeFilter($query)
+    public function scopeFilter($query) 
     {
         return $query
             ->when(request()->active, function($query) {

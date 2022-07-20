@@ -66,6 +66,10 @@ class Version extends Model
     {
         return $this->morphMany(Product::class, 'productable');
     }
+    public function product()
+    {
+        return $this->morphOne(Product::class, 'productable');
+    }
 
     public function printings()
     {

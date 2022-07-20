@@ -76,7 +76,7 @@ class StorageController extends Controller
         // return $this->product->productable->package_products->pluck('product_id');
         // return StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
             // return StorageResource::collection($storages ->get());
-
+            // return 313;
         return Inertia::render('Storage/Index', [
             'storages' => StorageResource::collection($storages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'outlets' => Outlet::pluck('name', 'id'),

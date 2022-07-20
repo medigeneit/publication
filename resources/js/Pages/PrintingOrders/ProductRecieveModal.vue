@@ -33,9 +33,15 @@
                             {{ item.press }}</span
                         >
                         <div class="text-sm">
+                            Pending:
+                            <span class="font-extrabold text-base">{{
+                                item.copy_quantity - item.total_received
+                            }}</span>
+                        </div>
+                        <div class="text-sm">
                             Order Date:
                             <span class="font-extrabold text-base">{{
-                                item.expected_date
+                                item.order_date
                             }}</span>
                         </div>
                     </div>
@@ -44,6 +50,7 @@
                     <span
                         class="px-2 mr-2 bg-gray-500 text-white rounded cursor-pointer"
                         @click="enableRecieve($event)"
+                        v-if="item.copy_quantity != item.total_received"
                     >
                         Recieve
                     </span>
@@ -54,11 +61,16 @@
                             <div
                                 class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50"
                             >
-                                <div class="text-sm text-center">Recieve</div>
+                                <div class="text-base text-center">
+                                    Recieved
+                                    <span class="font-extrabold">{{
+                                        item.total_received ?? 0
+                                    }}</span>
+                                    pcs
+                                </div>
                                 <hr class="my-1" />
                                 <div class="p-3">
                                     <form @submit.prevent="recieve" class="">
-                                        <Label value="Recieve Quantity" />
                                         <input
                                             type="number"
                                             class="mt-1 block w-full"
@@ -142,7 +154,9 @@
                                             </span>
                                             in
                                             <span class="font-extrabold">
-                                                {{ circulation.circulationDate }}
+                                                {{
+                                                    circulation.circulationDate
+                                                }}
                                             </span>
                                             by
                                             <span class="font-extrabold">
@@ -177,14 +191,7 @@ import Select from "@/Components/Select.vue";
 
 export default {
     name: "product-request-modal",
-    props: [
-        "item",
-        "modelValue",
-        "from",
-        "types",
-        "outlets",
-        "filters",
-    ],
+    props: ["item", "modelValue", "from", "types", "outlets", "filters"],
     components: {
         Label,
         Select,

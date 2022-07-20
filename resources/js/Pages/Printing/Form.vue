@@ -74,7 +74,7 @@
                             <h3 class="text-lg text-gray-600 font-bold">
                                 Printing Details
                             </h3>
-                            
+
                             <div class="w-full bg-white gap-4 p-4">
                                 <table class="w-full min-w-max">
                                     <tbody>
@@ -206,7 +206,7 @@
                                                         />
                                                     </td>
                                                 </tr>
-                                                <tr v-if="totalHonorarium">
+                                                <tr v-if="form.totalHonorarium">
                                                     <td></td>
                                                     <td></td>
                                                     <td class="text-right">
@@ -216,11 +216,10 @@
                                                         <Input
                                                             type="number"
                                                             class="mt-1 py-1 block w-full"
-                                                            :value="totalHonorarium"
+                                                            @input="checkTotal"
                                                             v-model="
                                                                 form.totalHonorarium
                                                             "
-                                                            
                                                         />
                                                     </td>
                                                 </tr>
@@ -462,18 +461,17 @@ export default {
                         ? 1
                         : this.data.printing.active,
                 moduleAction: this.moduleAction,
-                totalHonorarium: ""
+                totalHonorarium: "",
             }),
             storigngAtVisibility: false,
             value: "",
-            totalHonorarium: "",
+            versionData: {},
         };
     },
-    computed: {
-        totalHonorarium() {
+    watch: {
+        versionData() {
             let totalHonorarium = 0;
             if (this.data.version) {
-                
                 this.data.version.moderators.forEach((data) => {
                     if (data.honorarium_type == 1) {
                         totalHonorarium += parseInt(data.honorarium);
@@ -481,7 +479,7 @@ export default {
                     // console.log("totalHonorarium", totalHonorarium);
                 });
             }
-            return totalHonorarium;
+            this.form.totalHonorarium = totalHonorarium;
         },
     },
     created() {
@@ -557,6 +555,7 @@ export default {
                 ? this.data.printing.printing_contributors[index]
                 : "";
         }
+        this.versionData = this.data.version;
 
         this.checkTotal();
     },
@@ -577,7 +576,7 @@ export default {
             });
             sum += parseInt(this.form.others) || 0;
             sum += parseInt(this.form.totalHonorarium) || 0;
-            console.log(this.form.totalHonorarium);
+            console.log("dddswsx", this.form.totalHonorarium);
             this.form.sum = sum;
         },
 
