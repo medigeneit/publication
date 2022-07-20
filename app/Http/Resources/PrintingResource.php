@@ -17,7 +17,7 @@ class PrintingResource extends JsonResource
 
         return [
             'id'                     => (int) $this->id,
-            'order_date'             => (int) ($this->order_date ?? ''),
+            'order_date'             => (string) ($this->order_date->format('d-M-Y') ?? ''),
             'copy_quantity'          => (int) ($this->copy_quantity ?? ''),
             'page_amount'            => (int) ($this->page_amount ?? ''),
             'stored_at'              => (object) ($this->stored_at ?? ''),
