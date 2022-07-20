@@ -201,6 +201,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        return $request;
         $product->update($this->validateData($request, $product->id));
 
         if (is_array($request->amounts)) {

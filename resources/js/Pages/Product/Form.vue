@@ -10,6 +10,21 @@
                            {{ data.product.product_name }}
                        </b>
                 </div>
+                <div class="">
+                    <Label value="Image" />
+                     <img
+                        v-if="data.product.img && !imagePreview"
+                        :src="'/' + data.product.img"
+                        class="w-10 h-30 transform scale-75 md:scale-90 imageHolder"
+                    />
+                    <img
+                        v-else
+                        :src="'/images/book.png'"
+                        class="w-10 h-30 transform scale-75 md:scale-90 imageHolder"
+                    />
+                    <img id="imagePreview" class="w-10 h-30 transform scale-75 md:scale-90" />
+                    <input class="block w-full" accept="image/*" ref="fileInput" type="file" @change="pickFile">
+                </div>
                  <!-- <div class="mb-4 flex justify-center text-center">
                     <div class="">
                         <Label value="Image" />
@@ -249,6 +264,7 @@ export default {
                 amounts: {},
                 active: this.moduleAction == 'store' ? 0 : this.data.product.active,
                 category_ids: this.data.category_ids || [],
+                image: ''
             }),
             categoryShow: true,
             productShow: false,
@@ -291,13 +307,33 @@ export default {
             }
         },
 
+        pickFile (event) {;
+            // console.log(document.getElementById('imagePreview'));
+            // const files = event.target.files || event.dataTransfer.files;
+            // document.getElementById('imagePreview').src = window.URL.createObjectURL(files[0])
+            // document.querySelectorAll('.imageHolder').forEach((el)=> {
+            //     el.style.display = 'none'
+            // })
+
+            // if (!files.length) {
+            //     return this.form.image = null;
+            // }
+            console.log(this.$refs.fileInput.files[0].toString());
+            if (this.$refs.fileInput) {
+                this.form.image = this.$refs.fileInput.files[0].toString();
+            }
+            // return this.form.image = files[0];
+        },
+
         submit() {
+            // return console.log(this.form.image);
             if(this.moduleAction == 'store') {
                 // return console.log(this.form.amounts)
                 return this.form.post(this.route('products.store'));
             }
 
-            if(this.moduleAction == 'update') {
+            if (this.moduleAction == 'update') {
+                
                 return this.form.put(this.route('products.update', this.data.product.id));
             }
         },
