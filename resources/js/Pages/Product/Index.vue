@@ -21,48 +21,62 @@
                 </td>
                 <td class="py-3 px-2 text-left"
                     :class="{ 'bg-red-200': product.total_storage <= product.alert_quantity }">{{ product.id }}</td>
-                <td class="py-3 px-2 text-left"
+                <td class="py-3 px-2 text-left flex"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
-                    <div class="font-extrabold" v-if="product.type !== 1">
-                        <p>
-
-                        {{ product.name }}
-                        </p>
+                    <div class="p-2">
+                        <img
+                            v-if="product.img"
+                            :src="'/' + product.img"
+                            class="w-12 h-1w-12 transform scale-75 md:scale-90 imageHolder"
+                        />
+                        <img
+                            v-else
+                            :src="'/images/book.png'"
+                            class="w-12 h-1w-12 transform scale-75 md:scale-90 imageHolder"
+                        />
                     </div>
-                    <!-- onclick="this.nextElementSibling.classList.toggle('hidden')" -->
-                    
-                    <div v-else class="border px-2 bg-indigo-500 text-white py-0.5 rounded cursor-pointer font-extrabold"
-                    @click="modalHandler"
-                        >
-                        {{ product.name }} ( {{ product.package_product_names.length }} )
-                    </div>
 
-                    <div v-if="product.package_product_names.length" class="fixed inset-0 hidden z-50">
-                        <div class="relative w-full h-full flex justify-center items-center">
-                            <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
-                                <div class="text-lg font-bold text-center">Products</div>
-                                <hr class="my-1">
-                                <div class="p-3">
-                                    <div class="py-1.5 flex gap-2" v-for="(pro, index) in product.package_product_names"
-                                        :key="index">
-                                        <span>{{ index + 1 }}.</span>
-                                        <Link class="underline hover:text-blue-500"
-                                            :href="route('products.show', product.package_product_ids[index])">
-                                        {{ pro[0] }}
-                                        </Link>
+                    <div class="py-5">
+                        <div class="font-extrabold" v-if="product.type !== 1">
+                            <p>
+                                {{ product.name }}
+                            </p>
+                        </div>
+                        
+                        <div v-else class="border px-2 bg-indigo-500 text-white py-0.5 rounded cursor-pointer font-extrabold"
+                        @click="modalHandler"
+                            >
+                            {{ product.name }} ( {{ product.package_product_names.length }} )
+                        </div>
+
+                        <div v-if="product.package_product_names.length" class="fixed inset-0 hidden z-50">
+                            <div class="relative w-full h-full flex justify-center items-center">
+                                <div class="relative p-2 w-full mx-auto max-w-xs bg-white rounded border shadow z-50">
+                                    <div class="text-lg font-bold text-center">Products</div>
+                                    <hr class="my-1">
+                                    <div class="p-3">
+                                        <div class="py-1.5 flex gap-2" v-for="(pro, index) in product.package_product_names"
+                                            :key="index">
+                                            <span>{{ index + 1 }}.</span>
+                                            <Link class="underline hover:text-blue-500"
+                                                :href="route('products.show', product.package_product_ids[index])">
+                                            {{ pro[0] }}
+                                            </Link>
+                                        </div>
                                     </div>
+                                    <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40"
+                                        @click="closeModal">&times;</div>
                                 </div>
-                                <div class="absolute right-2 top-0 p-1 cursor-pointer text-red-500 text-3xl z-40"
-                                    @click="closeModal">&times;</div>
-                            </div>
-                            <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
-                                <div class="w-full h-full" @click="closeModal"></div>
+                                <div class="absolute inset-0 bg-gray-500 bg-opacity-50 z-40">
+                                    <div class="w-full h-full" @click="closeModal"></div>
+                                </div>
                             </div>
                         </div>
+                        <i class="font-bold">
+                            {{ product.typeName }}
+                        </i>
                     </div>
-                    <i class="font-bold">
-                        {{ product.typeName }}
-                    </i>
+                    
                 </td>
                 <td class="py-3 px-2 text-left"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">

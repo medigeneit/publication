@@ -23,7 +23,6 @@
                             :src="'/images/book.png'"
                             class="w-20 h-28 transform scale-75 md:scale-90 imageHolder"
                         />
-                        <img id="imagePreview" class="w-20 h-28 transform scale-75 md:scale-90 hidden" />
                     </div>
                      <div class="flex">
                         <div class="mx-auto">
@@ -234,7 +233,14 @@ export default {
             var formData = new FormData();
             var imagefile = document.querySelector('#file');
             formData.append("image", imagefile.files[0]);
-            axios.post(this.route('upload-image', this.data.product.id), formData, {
+            if (confirm("Do want to change image?")) {
+                let url = this.route('upload-image', this.data.product.id);
+                 this.axiosRequest(url, formData)
+            }
+            
+        },
+        axiosRequest(url, data) {
+            axios.post(url, data, {
                 headers: {
                 'Content-Type': 'multipart/form-data'
                 }

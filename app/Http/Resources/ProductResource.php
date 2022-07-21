@@ -91,7 +91,7 @@ class ProductResource extends JsonResource
             'package_product_ids'   => (array) ($product_ids ?? []),
             'package_product_names' => (array) ($product_names ?? []),
             'pacakge_id'            => (int) ($pacakge_id ?? 0),
-            'img'                   => (string) ($pacakge_id ?? 0),
+            'img'                   => (string) ($this->img ?? ''),
             // 'wholesalePrice'        => (float) ($this->prices->amount ?? 0),
             // 'retailPrice'           => (float) ($this->retail_price ?? 0),
             // 'distributePrice'       => (float) ($this->distribute_price ?? 0),
