@@ -10,40 +10,28 @@
                            {{ data.product.product_name }}
                        </b>
                 </div>
-                <div class="">
-                    <Label value="Image" />
-                     <img
-                        v-if="data.product.img && !imagePreview"
-                        :src="'/' + data.product.img"
-                        class="w-10 h-30 transform scale-75 md:scale-90 imageHolder"
-                    />
-                    <img
-                        v-else
-                        :src="'/images/book.png'"
-                        class="w-10 h-30 transform scale-75 md:scale-90 imageHolder"
-                    />
-                    <img id="imagePreview" class="w-10 h-30 transform scale-75 md:scale-90" />
-                    <input class="block w-full" accept="image/*" ref="fileInput" type="file" @change="pickFile">
-                </div>
-                 <!-- <div class="mb-4 flex justify-center text-center">
-                    <div class="">
-                        <Label value="Image" />
-                        <div class="w-20 h-30 m-auto">
-                             <img
-                            v-if="data.product.image && !imagePreview"
-                            :src="'/' + data.product.image"
-                                class="transform scale-75 md:scale-90 imageHolder"
-                            />
-                            <img
-                                v-else
-                                :src="'/images/book.png'"
-                                class="transform scale-75 md:scale-90 imageHolder"
-                            />
-                            <img id="imagePreview" class="transform scale-75 md:scale-90" />
-                        </div>
-                        <input class="mt-1 block w-full" accept="image/*" ref="fileInput" type="file" @change="pickFile">
+                <div class="mb-4">
+                    <!-- <Label value="Image" /> -->
+                    <div class="flex justify-center">
+                        <img
+                            v-if="data.product.img && !imagePreview"
+                            :src="'/' + data.product.img"
+                            class="w-20 h-28 transform scale-75 md:scale-90 imageHolder"
+                        />
+                        <img
+                            v-else
+                            :src="'/images/book.png'"
+                            class="w-20 h-28 transform scale-75 md:scale-90 imageHolder"
+                        />
+                        <img id="imagePreview" class="w-20 h-28 transform scale-75 md:scale-90 hidden" />
                     </div>
-                </div> -->
+                     <div class="flex">
+                        <div class="mx-auto">
+                            <input class="text-center" accept="image/*" id="file" ref="fileInput" type="file" @change="pickFile">
+                        </div>
+                     </div>
+                </div>
+                
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4">
                     <div class="mb-4 col-span-2">
                         <Label for="soft" value="Soft Copy" />
@@ -60,67 +48,8 @@
                             <option value="0">No</option>
                         </Select>
                     </div>
-
-                    <!-- <div class="mb-4 col-span-2">
-                        <Label for="name" value="Status" />
-                        <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
-                    </div> -->
-
-                    <!-- <div class="mb-4 col-span-2" id="publisherWrapper" :class="{'hidden' : form.type === 1}">
-                        <Label for="publisher_id" value="Publisher Name" />
-                        <Select id="publisher_id" class="mt-1 block w-full" v-model="form.publisher_id">
-                            <option value=""> -- Select Publisher -- </option>
-                            <option :value="publisherId" v-for="(publisherName, publisherId) in data.publisherList" :key="publisherId">
-                                {{ publisherName }}
-                            </option>
-                        </Select>
-                    </div>
-
-                    <div class="mb-4 col-span-2" id="productWrapper" :class="{'hidden' : form.type !== 1}">
-                        <Label for="product_id" value="Product Name" />
-                        <button type="button" class="mt-1 block w-full px-3 py-2 border rounded bg-gray-600 text-white" @click="productShow = !productShow">
-                            {{ form.product_ids.length || 0 }} selected | Show Products
-                        </button>
-                    </div>
-
-                    <div class="mb-4 col-span-2">
-                        <Label for="category_id" value="Category" />
-                        <button type="button" class="mt-1 block w-full px-3 py-2 border rounded bg-gray-600 text-white" @click="categoryShow = !categoryShow">
-                            {{ form.category_ids.length || 0 }} selected | Show Categories
-                        </button>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <Label for="alert_quantity" value="Alert Quantity" />
-                        <Input id="alert_quantity" name="alert_quantity" type="number" class="mt-1 block w-full" v-model="form.alert_quantity" required />
-                    </div>
-
-
-                    <div class="mb-4 col-start-1">
-                        <Label for="edition" value="Edition" />
-                        <Input id="edition" name="edition" type="text" step="0.01" class="mt-1 block w-full" v-model="form.edition" />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="isbn" value="ISBN" />
-                        <Input id="isbn" name="isbn" type="text" step="0.01" class="mt-1 block w-full" v-model="form.isbn" />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="crl" value="Crl" />
-                        <Input id="crl" name="crl" type="text" step="0.01" class="mt-1 block w-full" v-model="form.crl" />
-                    </div>
-
-                    <div class="mb-4">
-                        <Label for="production_cost" value="Production Cost" />
-                        <Input id="production_cost" name="production_cost" type="number" step="0.01" class="mt-1 block w-full" v-model="form.production_cost" required />
-                    </div>
-
-                    <div class="mb-4 col-start-1">
-                        <Label for="mrp" value="MRP ." />
-                        <Input id="mrp" name="mrp" type="number" step="0.01" class="mt-1 block w-full" v-model="form.mrp" required />
-                    </div> -->
                 </div>
+                
                 <hr class="w-full my-4">
                 <h3 class="text-lg text-gray-600 font-bold">Price Section</h3>
                 <div class="w-full grid grid-cols-2 md:grid-cols-3 bg-white border rounded gap-4 p-4">
@@ -228,11 +157,12 @@
 
 <script>
 import Button from '@/Components/Button.vue';
+import GoToList from '@/Components/GoToList.vue';
 import Input from '@/Components/Input.vue';
 import Label from '@/Components/Label.vue';
-import ValidationErrors from '@/Components/ValidationErrors.vue';
-import GoToList from '@/Components/GoToList.vue';
 import Select from '@/Components/Select.vue';
+import ValidationErrors from '@/Components/ValidationErrors.vue';
+import axios from 'axios';
 
 export default {
     components: {
@@ -268,6 +198,7 @@ export default {
             }),
             categoryShow: true,
             productShow: false,
+            imagePreview: false
         }
     },
 
@@ -278,20 +209,6 @@ export default {
     },
 
     methods: {
-
-        pickFile (event) {;
-            console.log(document.getElementById('imagePreview'));
-            const files = event.target.files || event.dataTransfer.files;
-            document.getElementById('imagePreview').src = window.URL.createObjectURL(files[0])
-            document.querySelectorAll('.imageHolder').forEach((el)=> {
-                el.style.display = 'none'
-            })
-            
-            if (!files.length) {
-                return this.form.image = null;
-            }
-            return this.form.image = files[0];
-        },
 
         typeChange(type) {
             console.log(this.data.product.type === 1)
@@ -307,22 +224,27 @@ export default {
             }
         },
 
-        pickFile (event) {;
-            // console.log(document.getElementById('imagePreview'));
-            // const files = event.target.files || event.dataTransfer.files;
-            // document.getElementById('imagePreview').src = window.URL.createObjectURL(files[0])
-            // document.querySelectorAll('.imageHolder').forEach((el)=> {
-            //     el.style.display = 'none'
-            // })
-
-            // if (!files.length) {
-            //     return this.form.image = null;
-            // }
-            console.log(this.$refs.fileInput.files[0].toString());
-            if (this.$refs.fileInput) {
-                this.form.image = this.$refs.fileInput.files[0].toString();
-            }
-            // return this.form.image = files[0];
+        pickFile(event) {
+            const files = event.target.files || event.dataTransfer.files;
+            document.getElementById('imagePreview').classList.remove('hidden')
+            document.getElementById('imagePreview').src = window.URL.createObjectURL(files[0])
+            document.querySelectorAll('.imageHolder').forEach((el)=> {
+                el.style.display = 'none'
+            })
+            var formData = new FormData();
+            var imagefile = document.querySelector('#file');
+            formData.append("image", imagefile.files[0]);
+            axios.post(this.route('upload-image', this.data.product.id), formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then((res) => {
+                console.log("res",res);
+            })
+                .catch((err) => {
+                console.log("err",err);
+            })
         },
 
         submit() {
@@ -333,8 +255,11 @@ export default {
             }
 
             if (this.moduleAction == 'update') {
-                
-                return this.form.put(this.route('products.update', this.data.product.id));
+                console.log(this.route('products.update', this.data.product.id))
+                this.form.image = this.image
+                return this.form.put(this.route('products.update', this.data.product.id), {
+                    _method: 'put',
+                });
             }
         },
 

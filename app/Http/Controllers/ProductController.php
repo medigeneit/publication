@@ -22,7 +22,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-// use Romans\Filter\IntToRoman;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic;
+use Illuminate\Support\Str;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -201,9 +203,28 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        return $request;
+        
         $product->update($this->validateData($request, $product->id));
 
+        if ($request->image && $request->file('image')) {
+            $image = request()->file('image');
+            $extention = strtolower($image->getClientOriginalExtension());
+            $name = 'product_' . strtolower(Str::random(4));
+            $fileName = $name . time() . '.' . $extention;
+            $path = 'products/';
+
+            $finalImage = ImageManagerStatic::make($image->getRealPath())
+                ->resize(260, 360)
+                ->encode($extention);
+
+            Storage::put('public/' . $path . $fileName, $finalImage->__toString());
+
+            $finalImage = 'storage/' . $path . $fileName;
+
+            $product->update([
+                'img' => $finalImage
+            ]);
+        }
         if (is_array($request->amounts)) {
 
             foreach ($request->amounts as $index => $amount) {

@@ -80,6 +80,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/printing-orders-close/{printing}', [PrintingOrdersController::class, 'close'])->name('printing-close');
     Route::post('/accept-response/{productRequest}', [ProductRequestController::class, 'accept_response'])->name('accept');
     Route::post('/deny-response/{productRequest}', [ProductRequestController::class, 'deny_response'])->name('deny');
+    Route::post('/upload-image/{product}', [ProductController::class, 'update'])->name('upload-image');
     Route::resources([
         'users'                     => UserController::class,
         'roles'                     => RoleController::class,
