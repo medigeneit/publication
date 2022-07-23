@@ -64,7 +64,21 @@ class Storage extends Model
                         $query
                             ->where(function ($query) use ($search_by_name) {
                                 $query
-                                    ->whereHasMorph('productable', Version::class, function ($query) use ($search_by_name) {
+                                    ->WhereHasMorph('productable', Package::class, function ($query) use ($search_by_name) {
+                                        $query->where('name', 'like', "%{$search_by_name}%")
+                                            ->orWhereHas('package_products.product', function ($query) use ($search_by_name) {
+                                                $query->WhereHasMorph('productable', Version::class, function ($query) use ($search_by_name) {
+                                                    $query->whereHas('production', function ($query) use ($search_by_name) {
+                                                        $query->where('name', 'like', "%{$search_by_name}%");
+                                                    });
+                                                })->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_name) {
+                                                    $query->WhereHas('version.production', function ($query) use ($search_by_name) {
+                                                        $query->where('name', 'like', "%{$search_by_name}%");
+                                                    });
+                                                });
+                                            });
+                                    })
+                                    ->orWhereHasMorph('productable', Version::class, function ($query) use ($search_by_name) {
                                         $query
                                             ->whereHas('production', function ($query) use ($search_by_name) {
                                                 $query->where('name', 'like', "%{$search_by_name}%");
@@ -76,17 +90,19 @@ class Storage extends Model
                                         });
                                     });
                             })
-                            ->where(function ($query) use ($search_by_edition) {
-                                $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_edition) {
-                                    $query
-                                        ->Where('edition', 'regexp',   $search_by_edition);
-                                })
-                                    ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_edition) {
+                            ->when($search_by_edition != '', function ($query) use ($search_by_edition) {
+                                $query->where(function ($query) use ($search_by_edition) {
+                                    $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_edition) {
                                         $query
-                                            ->WhereHas('version', function ($query) use ($search_by_edition) {
-                                                $query->where('edition', 'regexp',   $search_by_edition);
-                                            });
-                                    });
+                                            ->Where('edition', 'regexp',   $search_by_edition);
+                                    })
+                                        ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_edition) {
+                                            $query
+                                                ->WhereHas('version', function ($query) use ($search_by_edition) {
+                                                    $query->where('edition', 'regexp',   $search_by_edition);
+                                                });
+                                        });
+                                });
                             })
                             ->when($search_by_vol != '', function ($query) use ($search_by_vol) {
 
