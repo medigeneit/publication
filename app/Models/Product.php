@@ -87,6 +87,52 @@ class Product extends Model
         }
     }
 
+    private function productSearchForVersion(&$query, $search_by_edition)
+    {
+        $query->where(function ($query) use ($search_by_edition) {
+            $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_edition) {
+                $query
+                    ->Where('edition', 'regexp',   $search_by_edition);
+            })
+                ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_edition) {
+                    $query
+                        ->WhereHas('version', function ($query) use ($search_by_edition) {
+                            $query->where('edition', 'regexp',   $search_by_edition);
+                        });
+                });
+        });
+    }
+    private function editionSearch(&$query, $search_by_edition)
+    {
+        $query->where(function ($query) use ($search_by_edition) {
+            $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_edition) {
+                $query
+                    ->Where('edition', 'regexp',   $search_by_edition);
+            })
+                ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_edition) {
+                    $query
+                        ->WhereHas('version', function ($query) use ($search_by_edition) {
+                            $query->where('edition', 'regexp',   $search_by_edition);
+                        });
+                });
+        });
+    }
+    private function volSearch(&$query, $search_by_vol)
+    {
+        $query->where(function ($query) use ($search_by_vol) {
+            $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_vol) {
+                $query
+                    ->whereHas('volumes', function ($query) use ($search_by_vol) {
+                        $query->where('name', 'like', "%{$search_by_vol}%");
+                    });
+            })
+                ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_vol) {
+                    $query
+                        ->Where('name', 'regexp',   $search_by_vol);
+                });
+        });
+    }
+
     public function scopeSearch($query, $req_search)
     {
 
@@ -103,11 +149,11 @@ class Product extends Model
                 $query
                     ->where(function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
                         $query
-                            ->where(function ($query) use ($search_by_name) {
-                                $query
-                                    ->WhereHasMorph('productable', Package::class, function ($query) use ($search_by_name) {
-                                        $query->where('name', 'like', "%{$search_by_name}%")
-                                            ->orWhereHas('package_products.product', function ($query) use ($search_by_name) {
+                            ->WhereHasMorph('productable', Package::class, function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
+                                $query->where('name', 'like', "%{$search_by_name}%")
+                                    ->orWhere(function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
+                                        $query->WhereHas('package_products.product', function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
+                                            $query->where(function ($query) use ($search_by_name) {
                                                 $query->WhereHasMorph('productable', Version::class, function ($query) use ($search_by_name) {
                                                     $query->whereHas('production', function ($query) use ($search_by_name) {
                                                         $query->where('name', 'like', "%{$search_by_name}%");
@@ -117,7 +163,14 @@ class Product extends Model
                                                         $query->where('name', 'like', "%{$search_by_name}%");
                                                     });
                                                 });
-                                            });
+                                            })
+                                                ->when($search_by_edition != '', function ($query) use ($search_by_edition) {
+                                                    $this->editionSearch($query, $search_by_edition);
+                                                })
+                                                ->when($search_by_vol != '', function ($query) use ($search_by_vol) {
+                                                    $this->volSearch($query, $search_by_vol);
+                                                });
+                                        });
                                     })
                                     ->orWhereHasMorph('productable', Version::class, function ($query) use ($search_by_name) {
                                         $query
@@ -136,38 +189,30 @@ class Product extends Model
                                     ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_name) {
                                         $query->WhereHas('version.production', function ($query) use ($search_by_name) {
                                             $query->where('name', 'like', "%{$search_by_name}%");
-                                        });
+                                        })
+                                            ->orWhereHas('version.production.publisher', function ($query) use ($search_by_name) {
+                                                $query->where('name', 'like', "%{$search_by_name}%");
+                                            })
+                                            ->orWhereHas('version.moderators', function ($query) use ($search_by_name) {
+                                                $query->WhereHas('author', function ($query) use ($search_by_name) {
+                                                    $query->where('name', 'like', "%{$search_by_name}%");
+                                                });
+                                            });
                                     });
                             })
-                            ->when($search_by_edition != '', function ($query) use ($search_by_edition) {
-                                $query->where(function ($query) use ($search_by_edition) {
-                                    $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_edition) {
-                                        $query
-                                            ->Where('edition', 'regexp',   $search_by_edition);
-                                    })
-                                        ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_edition) {
-                                            $query
-                                                ->WhereHas('version', function ($query) use ($search_by_edition) {
-                                                    $query->where('edition', 'regexp',   $search_by_edition);
-                                                });
-                                        });
-                                });
-                            })
-                            ->when($search_by_vol != '', function ($query) use ($search_by_vol) {
 
-                                $query->where(function ($query) use ($search_by_vol) {
-                                    $query->whereHasMorph('productable', Version::class, function ($query) use ($search_by_vol) {
-                                        $query
-                                            ->whereHas('volumes', function ($query) use ($search_by_vol) {
-                                                $query->where('name', 'like', "%{$search_by_vol}%");
-                                            });
-                                    })
-                                        ->orWhereHasMorph('productable', Volume::class, function ($query) use ($search_by_vol) {
-                                            $query
-                                                ->Where('name', 'regexp',   $search_by_vol);
-                                        });
-                                });
+
+                            ->when($search_by_edition != '', function ($query) use ($search_by_edition) {
+                                $this->editionSearch($query, $search_by_edition);
+                            })
+                            // ->when($search_by_edition != '', function ($query) use ($search_by_edition) {
+                            //     $this->editionSearch($query, $search_by_edition);
+                            // })
+                            ->when($search_by_vol != '', function ($query) use ($search_by_vol) {
+                                $this->volSearch($query, $search_by_vol);
                             });
+
+                        // $this->EditionSearch($query, $search_by_edition);
                     })
                     ->orWhereHas('categories', function ($query) use ($search_by_name) {
                         $query
