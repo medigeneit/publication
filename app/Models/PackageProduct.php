@@ -10,7 +10,7 @@ class PackageProduct extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // protected $table = "package_product";
+    protected $table = "package_product";
 
     public $timestamps = false; 
 

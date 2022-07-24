@@ -2,6 +2,7 @@
     <Head title="Product" />
 
     <app-layout>
+        {{ $page.status }}
         <template #header>
             {{ product.name }}
         </template>

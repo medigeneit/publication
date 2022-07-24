@@ -23,6 +23,9 @@
                             :src="'/images/book.png'"
                             class="w-20 h-28 transform scale-75 md:scale-90 imageHolder"
                         />
+                        <img
+                            class="w-20 h-28 transform scale-75 md:scale-90 hidden" id="imagePreview"
+                        />
                     </div>
                      <div class="flex">
                         <div class="mx-auto">

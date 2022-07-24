@@ -29,7 +29,7 @@ class PackageController extends Controller
         // DB::enableQueryLog();
 
         $packages = Package::query()
-            // ->with('package_products.product.storages','products')
+            ->with('package_products.product.storages','product')
             ->withMorphTo('package_products.product.productable', [
                 Volume::class => [
                     'version.production'
@@ -43,7 +43,7 @@ class PackageController extends Controller
             // return $pack_product;
 
             // return
-            // $storages = $packages->get()[0];
+            // $storages = $packages->get();
 
         // return PackageResource::collection($packages->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input()));
         return Inertia::render('Package/Index', [
@@ -83,6 +83,8 @@ class PackageController extends Controller
         PackageResource::withoutWrapping();
         $proPackage = new Package();
         $proPackage->package_products = [];
+        // return PackageProductListResource::collection($product_list);
+
         // return  [
         return Inertia::render('Package/Create', [
             'proPackage'        => $proPackage,
@@ -118,13 +120,13 @@ class PackageController extends Controller
             $package_products = PackageProduct::insert($products_list);
         }
         if ($package_products) {
-            $product = $package->products()->updateorCreate(
+            $product = Product::updateorCreate(
                 [
                     'productable_type'  => Package::class,
                     'productable_id'    => $package->id
                 ],
                 [
-                    'active' => 0
+                    'active' => $request->active
                 ]
             );
         }

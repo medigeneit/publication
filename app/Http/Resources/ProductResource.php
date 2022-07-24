@@ -24,7 +24,7 @@ class ProductResource extends JsonResource
     {
 
         $product_type = $this->productable_type == Volume::class ? $this->productable->version->type : ($this->productable_type == Version::class ? $this->productable->type : ($this->productable_type == Package::class ? 4 : 1));
-        $type = ($product_type == 1 || $product_type == 3) ? 2 : ($product_type == 2 ? 3 : ($product_type == 4 ? 1 : 2));;
+        $type = ($product_type == 1 || $product_type == 3) ? 2 : ($product_type == 2 ? 3 : ($product_type == 4 ? 1 : 2));
         // $type = $product_type == 3 ? 2 : ($product_type == 2 ? 3 : ($product_type == 1 ? 1: 2));
 
         $cost = $this->productable_type == Volume::class ? (string)($this->productable->version->last_printing->cost_per_unit ?? 0 . '/' . $this->productable->version->volumes->count()) : ($this->productable_type == Version::class ? $this->productable->last_printing->cost_per_unit ?? 0 : ($this->productable_type == Package::class ? $this->productable->total_cost : 0));

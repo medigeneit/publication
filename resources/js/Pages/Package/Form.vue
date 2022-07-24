@@ -37,7 +37,7 @@
                             <tbody class="text-gray-600 text-sm font-light bg-white">
                                 <tr class="border bg-green-200 border-white"
                                     v-for="(product, productId) in selectedProducts" :key="productId">
-                                    <td class="text-left">{{ product.productId + product.name }}</td>
+                                    <td class="text-left">{{ product.name }}</td>
                                     <td class="text-left">{{ product.cost }}</td>
                                     <td class="text-left">
                                         <div class="py-1.5 flex gap-2 mr-10"
@@ -228,7 +228,8 @@
                         <tbody class="text-gray-600 text-sm font-light bg-white">
                             <tr class="border" v-for="(product, productId) in data.productList" :key="productId"
                                 :class="{'hidden' : form.product_ids.includes(parseInt(productId))}">
-                                <td class="w-40">{{ product.id + product.name }}</td>
+                                <td class="w-40">{{ product.name }}
+                                </td>
                                 <td><Input type="checkbox" class="cursor-pointer checkbox"
                                         @change="productSelectHandler(productId)" :checked="product.checked" /></td>
                             </tr>
@@ -401,7 +402,7 @@
                             window[this.data.priceCategories[priceCategoryId]].push(product.prices[priceCategoryId] ?
                                 product.prices[priceCategoryId] : 0)
 
-                        teotal = window[this.data.priceCategories[priceCategoryId]].reduce((a, b) => parseFloat(a) +
+                        total = window[this.data.priceCategories[priceCategoryId]].reduce((a, b) => parseFloat(a) +
                             parseFloat(b));
 
                         this.totalObj[this.data.priceCategories[priceCategoryId]] = total

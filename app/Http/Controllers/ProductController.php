@@ -21,6 +21,7 @@ use App\Traits\DateFilter;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic;
@@ -224,6 +225,7 @@ class ProductController extends Controller
             $product->update([
                 'img' => $finalImage
             ]);
+            Session::flash('status', 'This is a message!'); 
         }
         if (is_array($request->amounts)) {
 

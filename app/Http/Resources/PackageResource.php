@@ -18,7 +18,7 @@ class PackageResource extends JsonResource
         $product_names = [];
         $product_ids = [];
 
-        $prices = $this->product->prices->pluck('amount', 'price_category_id');
+        $prices = $this->product->prices->pluck('amount', 'price_category_id') ?? [];
         $package_prices = [];
         $price_categories = PriceCategory::pluck('name', 'id');
 
