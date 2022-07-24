@@ -54,7 +54,7 @@
                     >
                         Recieve
                     </span>
-                    <div class="fixed inset-0 z-50 hidden">
+                    <div class="fixed inset-0 z-50 hidden recieveModal">
                         <div
                             class="relative w-full h-full flex justify-center items-center"
                         >
@@ -76,6 +76,7 @@
                                             class="mt-1 block w-full"
                                             placeholder="Quantity"
                                             v-model="form.quantity"
+                                            @input="recieveQuantiy"
                                             required
                                         />
                                         <Button
@@ -235,8 +236,14 @@ export default {
             }
             event.target.nextElementSibling.classList.toggle("hidden");
         },
-        closeSubModal(event) {
+        closeSubModal(event, el) {
             this.emptyValue();
+            if (el) {
+                document.querySelectorAll(`${el}`).forEach((element) => {
+                    element.classList.add('hidden')
+                });
+                return console.log(el)
+            }
             event.target.parentElement.parentElement.parentElement.classList.add(
                 "hidden"
             );
@@ -249,6 +256,12 @@ export default {
             this.form.to = "";
             this.form.quantity = "";
         },
+        recieveQuantiy() {
+            let pending =
+                parseInt(this.item.copy_quantity) -
+                parseInt(this.item.total_received);
+            this.form.quantity > pending ? (this.form.quantity = pending) : "";
+        },
         enableRecieve(event) {
             this.modalHandler(event);
             this.form.print_order_id = this.item.id;
@@ -259,15 +272,22 @@ export default {
         },
         close() {
             // return console.log(this.item.id)
-            return this.form.post(this.route("printing-close", this.item.id), {
-                onSuccess: (data) => {
-                    console.log("OK", data);
-                    this.closeMainModal();
-                },
-            });
+            if (confirm("Are you want to close?")) {
+                return this.form.post(
+                    this.route("printing-close", this.item.id),
+                    {
+                        onSuccess: (data) => {
+                            console.log("OK", data);
+                            this.closeMainModal();
+                        },
+                    }
+                );
+            }
+            return;
         },
         recieve() {
-            return this.form.post(this.route("circulations.store"));
+            this.form.post(this.route("circulations.store"));
+            return this.closeSubModal(null , ".recieveModal")
         },
     },
     components: { Label, Button, Select },

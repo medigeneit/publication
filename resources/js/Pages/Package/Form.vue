@@ -228,7 +228,7 @@
                         <tbody class="text-gray-600 text-sm font-light bg-white">
                             <tr class="border" v-for="(product, productId) in data.productList" :key="productId"
                                 :class="{'hidden' : form.product_ids.includes(parseInt(productId))}">
-                                <td class="w-40">{{ product.name }}
+                                <td class="w-40">{{ product.name }} <span v-if="product.type_name == 'Package'" class="text-red-500">(Package)</span>
                                 </td>
                                 <td><Input type="checkbox" class="cursor-pointer checkbox"
                                         @change="productSelectHandler(productId)" :checked="product.checked" /></td>

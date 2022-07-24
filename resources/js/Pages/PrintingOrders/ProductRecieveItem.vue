@@ -16,7 +16,7 @@
                 <div
                     class="absolute transform rotate-45 text-center text-sm text-white font-bold left-[-66px] top-[30px] w-[170px] bg-gradient-to-r from-orange-400 to-amber-500"
                 >
-                    Printing {{ item.active }}
+                    Printing
                 </div>
             </div>
 

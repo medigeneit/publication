@@ -853,8 +853,14 @@ export default {
             }
             event.target.nextElementSibling.classList.toggle("hidden");
         },
-        closeSubModal(event) {
+        closeSubModal(event, el) {
             this.emptyValue();
+            if (el) {
+                document.querySelectorAll(`${el}`).forEach((element) => {
+                    element.classList.add('hidden')
+                });
+                return console.log(el)
+            }
             event.target.parentElement.parentElement.parentElement.classList.add(
                 "hidden"
             );

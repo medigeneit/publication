@@ -7,7 +7,7 @@
             Product List
         </template>
 
-        <!-- <add-new-button :href="route('products.create')" /> -->
+        <!-- <add-new-button :href="route('products.create')" /> -->    
 
         <data-table :collections="products" :filters="filters" :top-links="true" :columns="columns" :latest="true">
             <template #default="{ item: product }">

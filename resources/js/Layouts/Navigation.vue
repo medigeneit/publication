@@ -158,9 +158,8 @@
     </nav-link>
 
     <nav-link
-        v-if="$page.props.outlet_id"
         :href="route('printing-orders.index')"
-        :active="route().current('product-requests.*')"
+        :active="route().current('printing-orders.*')"
     >
         <div class="flex items-center">
             <printing-icon/>

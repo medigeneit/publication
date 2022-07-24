@@ -129,7 +129,7 @@ class CirculationController extends Controller
                     $storage = new Storage;
                     $storage->user_id  = Auth::id();
                     $storage->outlet_id  = $storage_outlet_id;
-                    $storage->product_id = $request->product_id;
+                    $storage->product_id = $request->product_id ?? $product_id;
                     $storage->alert_quantity = $request->alert_quantity;
                     $updated_quantity = $quantity;
                 } else {

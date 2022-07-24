@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Package;
 use App\Models\Product;
 use App\Models\Version;
 use App\Models\Volume;

@@ -26,7 +26,7 @@
         </div>
 
         <div class="mb-4">
-            <Label value="Moderator Type" />
+            <Label value="Contributor Type" />
             <Select
                 class="mt-1 block w-full"
                 v-model="form.moderators[index].moderator_type"
