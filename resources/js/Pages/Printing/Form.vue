@@ -471,7 +471,8 @@ export default {
     watch: {
         versionData() {
             let totalHonorarium = 0;
-            if (this.data.version) {
+            
+            if (this.data.version && !this.data.version.first_printing ) {
                 this.data.version.moderators.forEach((data) => {
                     if (data.honorarium_type == 1) {
                         totalHonorarium += parseInt(data.honorarium);

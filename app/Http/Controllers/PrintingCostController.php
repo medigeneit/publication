@@ -48,7 +48,7 @@ class PrintingCostController extends Controller
             'authors'                          => Author::pluck('name', 'id'),
             'moderatorTypes'                   => ModeratorType::pluck('name', 'id'),
             'bindingTypes'                     => BindingType::get(),
-            'version'                          => $version->load('moderators')
+            'version'                          => $version->load('moderators', 'first_printing')
         ]);
     }
 
