@@ -200,50 +200,38 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-
-            <div class="max-w-md mx-28 mb-28 print:max-w-full">
+            <div class="max-w-md -mt-16 print:max-w-md">
                 <table
                     class="w-4/6 table table-auto border border-b-0 border-black text-black"
                 >
                     <tbody>
                         <tr
                             class=""
-                            v-for="(
-                                print_notes, index
-                            ) in printing_cost.printing_contributors"
-                            :key="index"
+                           
                         >
                             <td
                                 scope="row"
                                 class="text-left px-2 py-1 border-b border-black"
                             >
-                                {{ print_notes.contribution.name }}
+                                প্রতি কপি খরচ
                             </td>
                             <td
                                 class="text-left text-sm print:text-md px-2 py-1 border-b border-l border-black"
                             >
-                                {{ print_notes.contributor.name }}
+                                {{ parseFloat(sum + others ) / parseFloat(printing_cost.copy_quantity) }}
                             </td>
                         </tr>
-                        <tr class="">
+                        <!-- <tr class="">
                             <td
                                 scope="row"
                                 class="text-left px-2 py-1 border-b border-black"
                             >
-                                প্লেট সংরক্ষন করা হবে কিনা
+                                প্রতি কপি লাভ
                             </td>
                             <td
-                                v-if="printing_cost.stored_at.id"
                                 class="text-left text-sm print:text-md px-3 py-2 border-b border-l border-black"
                             >
-                                Yes
-                            </td>
-                            <td
-                                class="text-left text-sm print:text-md px-2 py-1 border-b border-l border-black"
-                                v-else
-                            >
-                                No
+
                             </td>
                         </tr>
                         <tr class="">
@@ -271,10 +259,12 @@
                             >
                                 {{ printing_cost.press }}
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
+            </div>
+
             <div class="max-w-2xl mx-auto print:max-w-full">
                 <Label value="নোট" />
                 <table
@@ -349,12 +339,26 @@
                     </tbody>
                 </table>
             </div>
-            <div
+            <!-- <div
                 class="max-w-2xl print:max-w-full mx-auto flex justify-between items-center pt-4 pb-4"
             >
                 <div>Prepared By</div>
                 <div>Coordinator(Publication)</div>
                 <div>Director(Publication)</div>
+            </div> -->
+            <div
+                class="max-w-2xl print:max-w-full mx-auto flex justify-between items-center pt-6 pb-4"
+            >
+                <div>Author</div>
+                <div>Coordinator(Publication)</div>
+                <div>Director(Publication)</div>
+            </div>
+            <div
+                class="max-w-2xl print:max-w-full mx-auto flex justify-between items-center pt-4 pb-4"
+            >
+                <div>Prepared By</div>
+                <div>Director(Finance)</div>
+                <div>Managing Director</div>
             </div>
         </div>
     </app-layout>
