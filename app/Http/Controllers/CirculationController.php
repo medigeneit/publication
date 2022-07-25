@@ -63,9 +63,9 @@ class CirculationController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->request_id ?? ($request->print_order_id ?? null); 
+        // return $request->request_id ?? ($request->print_order_id ?? null);
         $product_id = 0;
-       
+
         $redirect_location = 'storages.index';
         if ($request->has('alert_quantity')) {
             $redirect_location = 'products.index';
@@ -84,7 +84,8 @@ class CirculationController extends Controller
             // return
             $request_storage = ProductRequest::find($request->request_id)->storage;
             $product_id = $request_storage->product_id;
-            
+            $request->to = Outlet::where('type',1)->first()->id;
+
         }
         // if (!in_array($request->type, array_keys(Circulation::TYPE)) && !in_array($request->type, array_values(Circulation::TYPE))) {
             //     return redirect()
@@ -92,7 +93,7 @@ class CirculationController extends Controller
             //         ->with('status', 'Unsuccessfull attempt, because of wrong type.');
             // }
             // return array_values(Circulation::TYPE);
-            
+
             // return Circulation::TYPE[$request->type] == 'In';
             if (Circulation::TYPE[$request->type] == 'In') {
                 // return $request;
@@ -124,7 +125,7 @@ class CirculationController extends Controller
                 'outlet_id' => $storage_outlet_id,
                 'product_id' => $request->product_id ?? $product_id,
                 ])->first();
-                
+
                 if (Circulation::TYPE[$request->type] == 'In' &&  !$storage) {
                     $storage = new Storage;
                     $storage->user_id  = Auth::id();
@@ -133,15 +134,15 @@ class CirculationController extends Controller
                     $storage->alert_quantity = $request->alert_quantity;
                     $updated_quantity = $quantity;
                 } else {
-                    // return 
+                    // return
                     $updated_quantity = $storage->quantity + $quantity;
                 }
                 // return [$storage, $updated_quantity];
-                
+
                 if ($updated_quantity >= 0) {
                     $storage->quantity = $updated_quantity;
                     $updated = $storage->save();
-                    
+
                     if ($updated) {
                         $data = [
                             'storage_id' => $storage->id,
