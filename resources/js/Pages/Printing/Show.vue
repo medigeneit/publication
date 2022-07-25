@@ -202,6 +202,79 @@
                 </table>
             </div>
 
+            <div class="max-w-md mx-28 mb-28 print:max-w-full">
+                <table
+                    class="w-4/6 table table-auto border border-b-0 border-black text-black"
+                >
+                    <tbody>
+                        <tr
+                            class=""
+                            v-for="(
+                                print_notes, index
+                            ) in printing_cost.printing_contributors"
+                            :key="index"
+                        >
+                            <td
+                                scope="row"
+                                class="text-left px-2 py-1 border-b border-black"
+                            >
+                                {{ print_notes.contribution.name }}
+                            </td>
+                            <td
+                                class="text-left text-sm print:text-md px-2 py-1 border-b border-l border-black"
+                            >
+                                {{ print_notes.contributor.name }}
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td
+                                scope="row"
+                                class="text-left px-2 py-1 border-b border-black"
+                            >
+                                প্লেট সংরক্ষন করা হবে কিনা
+                            </td>
+                            <td
+                                v-if="printing_cost.stored_at.id"
+                                class="text-left text-sm print:text-md px-3 py-2 border-b border-l border-black"
+                            >
+                                Yes
+                            </td>
+                            <td
+                                class="text-left text-sm print:text-md px-2 py-1 border-b border-l border-black"
+                                v-else
+                            >
+                                No
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td
+                                scope="row"
+                                class="text-left px-2 py-1 border-b border-black"
+                            >
+                                কোথায় সংরক্ষন করা হবে
+                            </td>
+                            <td
+                                class="text-left text-sm print:text-md px-2 py-1 border-b border-l border-black"
+                            >
+                                {{ printing_cost.stored_at.name }}
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td
+                                scope="row"
+                                class="text-left px-2 py-1 border-b border-black"
+                            >
+                                ছাপাখানার নাম
+                            </td>
+                            <td
+                                class="text-left text-sm print:text-md px-2 py-1 border-b border-l border-black"
+                            >
+                                {{ printing_cost.press }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="max-w-2xl mx-auto print:max-w-full">
                 <Label value="নোট" />
                 <table
