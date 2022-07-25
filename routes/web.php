@@ -11,7 +11,7 @@ use App\Http\Controllers\CirculationController;
 use App\Http\Controllers\CostCategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DistributionController;
+use App\Http\Controllers\DistributorController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ModeratorController;
@@ -81,36 +81,37 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/accept-response/{productRequest}', [ProductRequestController::class, 'accept_response'])->name('accept');
     Route::post('/deny-response/{productRequest}', [ProductRequestController::class, 'deny_response'])->name('deny');
     Route::post('/upload-image/{product}', [ProductController::class, 'update'])->name('upload-image');
+    Route::post('user-list', [UserController::class, 'user_list'])->name('user-list');
     Route::resources([
-        'users'                     => UserController::class,
-        'roles'                     => RoleController::class,
-        'publishers'                => PublisherController::class,
-        'productions'               => ProductionController::class,
-        'presses'                   => PressController::class,
-        'version-variables'         => VersionVariableController::class,
-        'printing-detail-categories' => PrintingDetailsCategoryValueController::class,
-        'cost-categories'           => CostCategoryController::class,
-        'product-requests'           => ProductRequestController::class,
-        'printing-orders'           => PrintingOrdersController::class,
-        'binding-types'             => BindingTypeController::class,
-        'versions'                  => VersionController::class,
-        'printing-costs'            => PrintingCostController::class,
-        'categories'                => CategoryController::class,
-        'authors'                   => AuthorController::class,
-        'products'                  => ProductController::class,
-        'packages'                  => PackageController::class,
-        'sales'                     => SaleController::class,
-        'outlets'                   => OutletController::class,
-        'distributions'             => DistributionController::class,
-        'storages'                  => StorageController::class,
-        'account-categories'        => AccountCategoryController::class,
-        'accounts'                  => AccountController::class,
-        'incomes'                   => IncomeController::class,
-        'expenses'                  => ExpenseController::class,
-        'price-categories'          => PriceCategoryController::class,
-        'moderator-types'           => ModeratorTypeController::class,
-        'circulations'              => CirculationController::class,
-        'moderators'                => ModeratorController::class,
-        'customers'                 => CustomerController::class,
+        'users'                         => UserController::class,
+        'roles'                         => RoleController::class,
+        'publishers'                    => PublisherController::class,
+        'productions'                   => ProductionController::class,
+        'presses'                       => PressController::class,
+        'version-variables'             => VersionVariableController::class,
+        'printing-detail-categories'    => PrintingDetailsCategoryValueController::class,
+        'cost-categories'               => CostCategoryController::class,
+        'product-requests'              => ProductRequestController::class,
+        'printing-orders'               => PrintingOrdersController::class,
+        'binding-types'                 => BindingTypeController::class,
+        'versions'                      => VersionController::class,
+        'printing-costs'                => PrintingCostController::class,
+        'categories'                    => CategoryController::class,
+        'authors'                       => AuthorController::class,
+        'products'                      => ProductController::class,
+        'packages'                      => PackageController::class,
+        'sales'                         => SaleController::class,
+        'outlets'                       => OutletController::class,
+        'distributors'                  => DistributorController::class,
+        'storages'                      => StorageController::class,
+        'account-categories'            => AccountCategoryController::class,
+        'accounts'                      => AccountController::class,
+        'incomes'                       => IncomeController::class,
+        'expenses'                      => ExpenseController::class,
+        'price-categories'              => PriceCategoryController::class,
+        'moderator-types'               => ModeratorTypeController::class,
+        'circulations'                  => CirculationController::class,
+        'moderators'                    => ModeratorController::class,
+        'customers'                     => CustomerController::class,
     ]);
 });

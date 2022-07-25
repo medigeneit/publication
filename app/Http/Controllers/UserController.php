@@ -201,4 +201,12 @@ class UserController extends Controller
             $admin->syncRoles($role);
         }
     }
+    
+    public function user_list(Request $request)
+    {
+        return 
+        User::query()
+        ->where('phone', 'regexp', $request->phone)
+        ->get();
+    }
 }

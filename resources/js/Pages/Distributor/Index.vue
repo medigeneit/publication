@@ -6,25 +6,25 @@
             Distributor List
         </template>
 
-        <add-new-button :href="route('distributions.create')" />
+        <add-new-button :href="route('distributors.create')" />
 
-        <data-table :collections="distributions" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
-            <template #default="{ item: distribution }">
-                <td class="py-3 px-2 text-left">{{ distribution.id }}</td>
-                <td class="py-3 px-2 text-left">{{ distribution.name }}</td>
-                <td class="py-3 px-2 text-center">{{ distribution.address }}</td>
-                <td class="py-3 px-2 text-center">{{ distribution.phone }}</td>
-                <td class="py-3 px-2 text-center">{{ distribution.email }}</td>
-                <td class="py-3 px-2 text-center">{{ distribution.typeName }}</td>
+        <data-table :collections="distributors" :filters="filters" :dateFilter="true" :top-links="true" :columns="columns" :latest="true">
+            <template #default="{ item: distributor }">
+                <td class="py-3 px-2 text-left">{{ distributor.id }}</td>
+                <td class="py-3 px-2 text-left">{{ distributor.name }}</td>
+                <td class="py-3 px-2 text-center">{{ distributor.address }}</td>
+                <td class="py-3 px-2 text-center">{{ distributor.phone }}</td>
+                <td class="py-3 px-2 text-center">{{ distributor.email }}</td>
+                <td class="py-3 px-2 text-center">{{ distributor.typeName }}</td>
                 <td class="py-3 px-2 text-center">
-                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': distribution.active, 'bg-red-500': !distribution.active }">
-                        {{ distribution.activeValue }}
+                    <span class="py-1 px-3 rounded-full text-white font-bold" :class="{ 'bg-green-500': distributor.active, 'bg-red-500': !distributor.active }">
+                        {{ distributor.activeValue }}
                     </span>
                 </td>
                 <td class="py-2.5 px-2"> 
                     <div class="flex justify-center items-center gap-1 md:gap-2">
-                        <action-button-show :href="route('distributions.show', distribution.id)" />
-                        <action-button-edit :href="route('distributions.edit', distribution.id)" />
+                        <action-button-show :href="route('distributors.show', distributor.id)" />
+                        <action-button-edit :href="route('distributors.edit', distributor.id)" />
                     </div>
                 </td>
             </template>
@@ -51,7 +51,7 @@ export default {
         AddNewButton,
     },
     props: {
-        distributions: { type: Object, default: {} },
+        distributors: { type: Object, default: {} },
         filters: { type: Object, default: {} },
     },
     data() {

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\Author;
 use App\Models\Category;
-use App\Models\Distribution;
+use App\Models\Distributor;
 use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\Publisher;
@@ -28,7 +28,7 @@ class DashboardController extends Controller
             'publisherCount' => Publisher::count(),
             'productCount' => Product::count(),
             'outletCount' => Outlet::count(),
-            'distributorCount' => Distribution::count(),
+            'distributorCount' => Distributor::count(),
             'saleCount' => Sale::count(),
             'storageCount' => Storage::count(),
             'accountCount' => Account::count(),

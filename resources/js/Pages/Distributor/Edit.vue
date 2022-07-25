@@ -6,7 +6,7 @@
             Edit Distributor
         </template>
         
-        <form-component :data="{ distribution, distributionType }" module-action="update" />
+        <form-component :data="{ distributor, distributorType }" module-action="update" />
     </app-layout>
 </template>
 
@@ -24,8 +24,8 @@ export default {
     },
 
     props: {
-        distribution: { type: Object, default: {} },
-        distributionType : {type: Object, default: {}},
+        distributor: { type: Object, default: {} },
+        distributorType : {type: Object, default: {}},
     },
 };
 </script>

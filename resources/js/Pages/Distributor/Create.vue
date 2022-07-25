@@ -6,7 +6,7 @@
             Create Distributor
         </template>
         
-        <form-component :data="{distribution, distributionType}"  module-action="store" />
+        <form-component :data="data"  module-action="store" />
     </app-layout>
 </template>
 
@@ -23,8 +23,7 @@ export default {
         FormComponent,
     },
     props: {
-        distribution: { type: Object, default: {} },
-        distributionType : {type: Object, default: {}},
+        data: { type: Object, default: {} },
     },
 };
 </script>

@@ -181,7 +181,7 @@
             Outlets
         </nav-link>
         <nav-link
-            :href="route('distributions.index')"
+            :href="route('distributors.index')"
             :active="route().current('distributions.*')"
         >
             Distributor
