@@ -79,4 +79,8 @@ class Version extends Model
     {
         return $this->hasOne(Printing::class)->orderBy('id','desc');
     }
+    public function first_printing()
+    {
+        return $this->hasOne(Printing::class)->orderBy('id','asc');
+    }
 }
