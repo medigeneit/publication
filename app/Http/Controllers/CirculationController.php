@@ -14,6 +14,7 @@ use App\Models\Storage;
 use App\Models\Version;
 use App\Models\Volume;
 use App\Traits\DateFilter;
+use GuzzleHttp\Psr7\Message;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,13 +80,17 @@ class CirculationController extends Controller
             $redirect_location = 'printing-orders.index';
             $parameters = [];
             $product_id = Printing::find($request->print_order_id)->version->product->id;
+            $request->to = Outlet::where('type',1)->first()->id;
+            if(!$request->to){
+                return[
+                    'message' => "please declare an outlet as \"Godown\""
+                ];
+            }
         }
         if ($request->has('request_id') && $request->request_id) {
             // return
             $request_storage = ProductRequest::find($request->request_id)->storage;
             $product_id = $request_storage->product_id;
-            $request->to = Outlet::where('type',1)->first()->id;
-
         }
         // if (!in_array($request->type, array_keys(Circulation::TYPE)) && !in_array($request->type, array_values(Circulation::TYPE))) {
             //     return redirect()
