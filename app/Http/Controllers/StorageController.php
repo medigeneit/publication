@@ -68,7 +68,8 @@ class StorageController extends Controller
             })
             ->filter()
             ->dateFilter()
-            ->search(request()->search)
+            ->search(['id'],['outlet:name'])
+            ->orProductSearch(request()->search)
             ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
         // return $outlets->keys();
