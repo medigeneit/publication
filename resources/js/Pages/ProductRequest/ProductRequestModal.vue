@@ -78,7 +78,7 @@
                                     >
                                         Send
                                     </div>
-                                    <div class="fixed inset-0 z-50 hidden">
+                                    <div class="fixed inset-0 z-50 hidden sendModal">
                                         <div
                                             class="relative w-full h-full flex justify-center items-center"
                                         >
@@ -255,7 +255,7 @@
                                             </div>
 
                                             <div
-                                                class="fixed inset-0 z-50 hidden"
+                                                class="fixed inset-0 z-50 hidden recieveModal"
                                             >
                                                 <div
                                                     class="relative w-full h-full flex justify-center items-center"
@@ -398,7 +398,7 @@
                                         >
                                             Accept
                                         </span>
-                                        <div class="fixed inset-0 z-50 hidden">
+                                        <div class="fixed inset-0 z-50 hidden acceptModal">
                                             <div
                                                 class="relative w-full h-full flex justify-center items-center"
                                             >
@@ -468,7 +468,7 @@
                                         >
                                             Deny
                                         </span>
-                                        <div class="fixed inset-0 z-50 hidden">
+                                        <div class="fixed inset-0 z-50 hidden denyModal">
                                             <div
                                                 class="relative w-full h-full flex justify-center items-center"
                                             >
@@ -526,7 +526,7 @@
                                         >
                                             Edit
                                         </span>
-                                        <div class="fixed inset-0 z-50 hidden">
+                                        <div class="fixed inset-0 z-50 hidden editModal">
                                             <div
                                                 class="relative w-full h-full flex justify-center items-center"
                                             >
@@ -652,7 +652,7 @@
                                         >
                                             Close
                                         </span>
-                                        <div class="fixed inset-0 z-50 hidden">
+                                        <div class="fixed inset-0 z-50 hidden closeModal">
                                             <div
                                                 class="relative w-full h-full flex justify-center items-center"
                                             >
@@ -905,27 +905,35 @@ export default {
             );
         },
         close() {
-            return this.form.post(this.route("close", this.form.request_id), {
+             this.form.post(this.route("close", this.form.request_id), {
                 onSuccess: (data) => {
-                    console.log("OK", data);
+                    console.log("OK", data);I
                     this.closeMainModal();
                 },
-            });
+             });
+            return this.closeSubModal(null , '.closeModal')
         },
         send() {
             console.log(this.form.to);
-            return this.form.post(this.route("circulations.store"));
+            this.form.post(this.route("circulations.store"));
+            return this.closeSubModal(null , '.sendModal')
+             
         },
         recieve() {
-            return this.form.post(this.route("circulations.store"));
+            this.form.post(this.route("circulations.store"));
+            return this.closeSubModal(null , '.recieveModal')
+
         },
         accept() {
             console.log(this.form);
-            return this.form.post(this.route("accept", this.form.request_id));
+            this.form.post(this.route("accept", this.form.request_id));
+            return this.closeSubModal(null , '.acceptModal')
         },
         deny() {
             if (confirm("Are You sure to deny")) {
-                return this.form.post(this.route("deny", this.form.request_id));
+                this.form.post(this.route("deny", this.form.request_id));
+                return this.closeSubModal(null , '.denyModal')
+
             }
             return;
             // return this.form.post(this.route("accept", this.form.request_id));
