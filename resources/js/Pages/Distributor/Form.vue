@@ -34,6 +34,11 @@
                     </button>
                 </div>
             </div>
+
+            <div class="text-center font-bold text-xl underline">
+                Client Details
+            </div>
+
             <div class="flex justify-center items-center mb-4 mt-4">
                 <div>
                     <ul
@@ -105,7 +110,7 @@
                         <option value="0">No</option>
                     </Select>
                 </div>
-                
+
                 <div class="mb-4">
                     <Label for="address" value="Address" />
                     <Textarea
@@ -116,33 +121,48 @@
                     />
                 </div>
                 <div class="flex gap-2 items-end mb-4">
-                        <Select
-                            class="block w-full"
-                            v-model="form.district_id"
-                             @input="selectDistrict"
+                    <Select
+                        class="block w-full"
+                        v-model="form.district_id"
+                        @input="selectDistrict"
+                    >
+                        <option value="">-- District --</option>
+                        <optgroup
+                            :label="division.name"
+                            v-for="division in data.divisions"
+                            :key="division.id"
                         >
-                            <option value="">-- District --</option>
-                            <optgroup :label="division.name" v-for="division in divisions" :key="division.id">
-                                <option :value="district.id" v-for="district in division.districts" :key="district.id">
-                                    {{ district.name }}
-                                </option>
-                            </optgroup>
-                        </Select>
-                        <!-- {{ divisions }} -->
-                        <Select
-                            class="block w-full"
-                            v-model="form.area_id"
-                        >
-                            <option value="">-- Area --</option>
-
-                            <option :value="area.id" v-for="area in customAreas" :key="area.id">
-                                {{ area.name }}
+                            <option
+                                :value="district.id"
+                                v-for="district in division.districts"
+                                :key="district.id"
+                            >
+                                {{ district.name }}
                             </option>
-                        </Select>
-                    </div>
+                        </optgroup>
+                    </Select>
+                </div>
+                <!-- {{ divisions }} -->
+                <div class="flex gap-2 items-end mb-4">
+                    <Select class="block w-full" v-model="form.area_id">
+                        <option value="">-- Area --</option>
+
+                        <option
+                            :value="area.id"
+                            v-for="area in customAreas"
+                            :key="area.id"
+                        >
+                            {{ area.name }}
+                        </option>
+                    </Select>
+                </div>
             </div>
 
             <hr class="w-full my-4" />
+
+            <div>
+                
+            </div>
 
             <div class="flex items-center justify-between">
                 <div class="">
@@ -166,20 +186,20 @@ import GoToList from "@/Components/GoToList.vue";
 import Input from "@/Components/Input.vue";
 import Label from "@/Components/Label.vue";
 import Select from "@/Components/Select.vue";
+import Textarea from "@/Components/Textarea.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 import axios from "axios";
-import Textarea from "@/Components/Textarea.vue";
 
 export default {
     components: {
-    Button,
-    Input,
-    Label,
-    ValidationErrors,
-    GoToList,
-    Select,
-    Textarea
-},
+        Button,
+        Input,
+        Label,
+        ValidationErrors,
+        GoToList,
+        Select,
+        Textarea,
+    },
 
     props: {
         data: { type: Object, default: {} },
@@ -195,13 +215,19 @@ export default {
                 phone: this.data.distributor.phone,
                 email: this.data.distributor.email,
                 type: this.data.distributor.type || 0,
+                area_id: "",
                 active:
                     this.moduleAction == "store"
                         ? 1
                         : this.data.distributor.active,
             }),
             userList: {},
+            customAreas: {},
         };
+    },
+
+    created() {
+        this.customAreas = this.data.areas;
     },
 
     methods: {
@@ -219,12 +245,31 @@ export default {
                     console.log(error);
                 });
         },
+
+        selectDistrict(event) {
+            this.form.area_id = "";
+            if (!event.target.value) {
+                return (this.customAreas = this.areas);
+            }
+            let customDistricts = Object.values(this.data.divisions).find(
+                (division) =>
+                    Object.values(division.districts).find(
+                        (district) => district.id == event.target.value
+                    )
+            ).districts;
+
+            return (this.customAreas = Object.values(customDistricts).find(
+                (district) => district.id == event.target.value
+            ).areas);
+        },
+
         clientInfo(user) {
             this.form.name = user.name;
             this.form.phone = user.phone;
             this.form.email = user.email;
             this.userList = "";
         },
+
         submit() {
             if (this.moduleAction == "store") {
                 return this.form.post(this.route("distributors.store"));

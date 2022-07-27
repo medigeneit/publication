@@ -621,15 +621,6 @@ export default {
         GoToList,
         Textarea,
     },
-    created() {
-        this.saleableProducts.forEach((saleableProduct) => {
-            this.products[saleableProduct.productId] = {
-                name: "",
-                quantity: saleableProduct.quantity,
-                unitPrice: saleableProduct.unitPrice,
-            };
-        });
-    },
     props: {
         buttonValue: {
             type: String,
@@ -708,7 +699,14 @@ export default {
             modalShow: false,
         };
     },
-    created(){
+    created() {
+        this.saleableProducts.forEach((saleableProduct) => {
+            this.products[saleableProduct.productId] = {
+                name: "",
+                quantity: saleableProduct.quantity,
+                unitPrice: saleableProduct.unitPrice,
+            };
+        });
         this.customAreas = this.areas;
         this.priceTypes = Object.values(this.price_types).filter((priceType) => priceType.is_special == 0);
     },

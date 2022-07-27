@@ -4,20 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductRequestResource;
-use App\Models\Circulation;
 use App\Models\Outlet;
 use App\Models\ProductRequest;
 use App\Models\RequestResponse;
 use App\Models\Storage;
 use App\Traits\DateFilter;
-use App\Traits\WithProductRelations;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use phpDocumentor\Reflection\Types\Null_;
-
 class ProductRequestController extends Controller
 {
     use DateFilter;
