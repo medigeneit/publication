@@ -5,7 +5,7 @@
             <ValidationErrors class="mb-4" />
 
             <form @submit.prevent="submit">
-                <div class="mb-4">
+                <div class="mb-4" v-if="this.moduleAction == 'update'">
                     <div class="flex justify-center">
                         <img
                             v-if="data.proPackage.product && data.proPackage.product.img && !imagePreview"
