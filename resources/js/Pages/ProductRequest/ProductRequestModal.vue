@@ -909,9 +909,10 @@ export default {
         },
 
         edit() {
-            return this.form.put(
+            this.form.put(
                 this.route("product-requests.update", this.form.request_id)
             );
+            return this.closeSubModal(null, '.editModal')
         },
 
         close() {
@@ -955,7 +956,7 @@ export default {
             this.form.post(this.route("accept", this.form.request_id));
             return this.closeSubModal(null , '.acceptModal')
         },
-        
+
         deny() {
             if (confirm("Are You sure to deny")) {
                 this.form.post(this.route("deny", this.form.request_id));
