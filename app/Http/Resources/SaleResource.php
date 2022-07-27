@@ -45,7 +45,7 @@ class SaleResource extends JsonResource
             'outletId'          => (int) ($this->outlet_id ?? ''),
             'outletName'        => (string) ($this->outlet->name ?? ''),
             'customerName'      => (string) ($this->customer->name ?? ''),
-            'customerPhone'     => (int) ($this->customer->phone ?? ''),
+            'customerPhone'     => (string) ($this->customer->phone ?? ''),
             'customerEmail'     => (string) ($this->customer->email ?? ''),
             'payable'           => (float) ($this->payable ?? ''),
             'discount'          => (float) ($this->discount ?? ''),

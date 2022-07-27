@@ -117,6 +117,7 @@
                                                             v-model="
                                                                 form.quantity
                                                             "
+                                                            @input="sendQuantity(item.current_storage)"
                                                             required
                                                         />
                                                         <Select
@@ -311,6 +312,7 @@
                                                                     v-model="
                                                                         form.quantity
                                                                     "
+                                                                    @input="recieveQuantiy(circulation.quantity, circulation.total_received)"
                                                                     required
                                                                 />
                                                                 <Button
@@ -844,6 +846,7 @@ export default {
         closeMainModal() {
             this.$emit("update:modelValue", false);
         },
+
         modalHandler(event, id = null) {
             if (id) {
                 // return console.log(id);
@@ -853,6 +856,7 @@ export default {
             }
             event.target.nextElementSibling.classList.toggle("hidden");
         },
+
         closeSubModal(event, el) {
             this.emptyValue();
             if (el) {
@@ -865,6 +869,7 @@ export default {
                 "hidden"
             );
         },
+
         emptyValue() {
             // this.form.from = "";
             this.form.to = "";
@@ -874,6 +879,7 @@ export default {
             this.form.expected_date = "";
             this.form.requested_to = "";
         },
+
         enableSending(event) {
             console.log(this.item.requested_to.id);
             this.modalHandler(event);
@@ -883,6 +889,7 @@ export default {
             this.form.type = 2;
             // this.form.requastable_type = 2;
         },
+
         enableRecieve(event) {
             this.modalHandler(event);
             this.form.requastable_type = 2;
@@ -890,6 +897,7 @@ export default {
             this.form.to = this.item.requested_by.id;
             this.form.type = 1;
         },
+
         enableEditing(event) {
             this.modalHandler(event);
             this.form.request_id = this.item.id;
@@ -899,11 +907,13 @@ export default {
             this.form.request_quantity = this.item.product_quantity;
             // this.form.note = this.item.responses[0].note;
         },
+
         edit() {
             return this.form.put(
                 this.route("product-requests.update", this.form.request_id)
             );
         },
+
         close() {
              this.form.post(this.route("close", this.form.request_id), {
                 onSuccess: (data) => {
@@ -913,22 +923,39 @@ export default {
              });
             return this.closeSubModal(null , '.closeModal')
         },
+
+        sendQuantity(currentStorage) {
+            
+            this.form.quantity > currentStorage ? (this.form.quantity = currentStorage) : "";
+        },
+
         send() {
             console.log(this.form.to);
             this.form.post(this.route("circulations.store"));
             return this.closeSubModal(null , '.sendModal')
              
         },
+
+        recieveQuantiy(circulationQuantity, totalReceived) {
+            console.log(Math.abs(circulationQuantity) , Math.abs(totalReceived));
+            let pending =
+                Math.abs(circulationQuantity) -
+                Math.abs(totalReceived);
+            this.form.quantity > pending ? (this.form.quantity = pending) : "";
+        },
+        
         recieve() {
             this.form.post(this.route("circulations.store"));
             return this.closeSubModal(null , '.recieveModal')
 
         },
+
         accept() {
             console.log(this.form);
             this.form.post(this.route("accept", this.form.request_id));
             return this.closeSubModal(null , '.acceptModal')
         },
+        
         deny() {
             if (confirm("Are You sure to deny")) {
                 this.form.post(this.route("deny", this.form.request_id));

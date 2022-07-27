@@ -86,7 +86,7 @@
                             <label for="address">Phone</label>
                             <input
                                 id="address"
-                                type="email"
+                                type="text"
                                 :value="sale.customerPhone"
                                 class="
                                     border-0
@@ -150,7 +150,7 @@
                 </div>
 
                 <div class="overflow-auto">
-                    <table class="w-full min-w-max">
+                    <table class="w-full">
                         <thead>
                             <tr class="border-t border-b bg-gray-50">
                                 <th

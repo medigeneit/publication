@@ -47,7 +47,7 @@
             title="Publication Prerequisite"
             :active="
                 route().current(
-                    '(categories|price-categories|packages|authors|publishers|moderator-types|presses|version-variables).*'
+                    '(categories|price-categories|authors|publishers|moderator-types|presses|version-variables).*'
                 )
             "
             v-if="
@@ -93,12 +93,6 @@
                 Contributor Types
             </nav-link>
             <nav-link
-                :href="route('packages.index')"
-                :active="route().current('packages.*')"
-            >
-                Packages
-            </nav-link>
-            <nav-link
                 :href="route('version-variables.index')"
                 :active="route().current('version-variables.*')"
             >
@@ -140,32 +134,44 @@
         >
             Products
         </nav-link>
+
+        <nav-link
+            :href="route('packages.index')"
+            :active="route().current('packages.*')"
+        >
+            Packages
+        </nav-link>
     </nav-link-wrapper>
-
-    <nav-link
-        v-if="$page.props.outlet_id"
-        :href="
-            route('product-requests.index', {
-                outlet_id: $page.props.outlet_id,
-            })
-        "
-        :active="route().current('product-requests.*')"
+    
+    <nav-link-wrapper
+        title="Request & Orders"
+        :active="route().current('(product-requests|printing-orders).*')"
     >
-        <div class="flex items-center gap-2">
-            <product-request-icon/>
-            Product Request
-        </div>
-    </nav-link>
+        <nav-link
+            v-if="$page.props.outlet_id"
+            :href="
+                route('product-requests.index', {
+                    outlet_id: $page.props.outlet_id,
+                })
+            "
+            :active="route().current('product-requests.*')"
+        >
+            <div class="flex items-center gap-2">
+                <product-request-icon />
+                Product Request
+            </div>
+        </nav-link>
 
-    <nav-link
-        :href="route('printing-orders.index')"
-        :active="route().current('printing-orders.*')"
-    >
-        <div class="flex items-center">
-            <printing-icon/>
-            Printing Orders
-        </div>
-    </nav-link>
+        <nav-link
+            :href="route('printing-orders.index')"
+            :active="route().current('printing-orders.*')"
+        >
+            <div class="flex items-center">
+                <printing-icon />
+                Printing Orders
+            </div>
+        </nav-link>
+    </nav-link-wrapper>
 
     <nav-link-wrapper
         title="Stock & Circulation"
