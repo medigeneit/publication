@@ -209,7 +209,7 @@
                         </div>
                     </div>
                 </td>
-                <td class="py-3 px-2 text-center"
+                <!-- <td class="py-3 px-2 text-center"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer"
                         v-if="product.storages.length" @click="modalHandler">
@@ -237,7 +237,6 @@
                                 <div class="p-3">
                                     <div class="text-green-600">{{ message }}</div>
                                     <form @submit.prevent="submit('Circulation')" class="">
-                                        <!-- <Input id="from" type="number" class="mt-1 block w-full" placeholder="From" v-model="form.from"/> -->
                                         <div class="mb-2 text-left">
                                             <Label value="From" />
                                             <Select id="outlet_id" class="mt-1 block w-full" v-model="form.from"
@@ -273,9 +272,9 @@
                             </div>
                         </div>
                     </div>
-                </td>
+                </td> -->
 
-                <td class="text-center" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
+                <!-- <td class="text-center" :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div class="text-center border bg-gray-500 text-white px-2 py-0.5 rounded cursor-pointer"
                         v-if="product.storages.length" @click="modalHandler">
                         Pending Request
@@ -375,10 +374,10 @@
                             </div>
                         </div>
                     </div>
-                </td>
+                </td> -->
 
 
-                <td class="py-3 px-2 text-center"
+                <!-- <td class="py-3 px-2 text-center"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     <div v-if="product.packageProductCount" @click="modalHandler"
                         class="text-center border bg-yellow-600 text-white px-2 py-0.5 rounded cursor-pointer">
@@ -407,11 +406,11 @@
                             </div>
                         </div>
                     </div>
-                </td>
-                <td class="py-3 px-2 text-right"
+                </td> -->
+                <!-- <td class="py-3 px-2 text-right"
                     :class="{'bg-red-200' : product.total_storage <= product.alert_quantity }">
                     {{ product.alertQuantity }}
-                </td>
+                </td> -->
             </template>
         </data-table>
     </app-layout>
@@ -462,9 +461,9 @@ export default {
                     {title: 'Categrories<br><hr>Moderators', align: 'center'},
                     {title: 'Cost/Unit<br><hr>Prices', align: 'right'},
                     {title: 'Storages', align: 'right'},
-                    {title: 'Circulation', align: 'right'},
-                    {title: 'Requested Product', align: 'right'},
-                    {title: 'Alert', align: 'right', sortable: 'alert_quantity'},
+                    // {title: 'Circulation', align: 'right'},
+                    // {title: 'Requested Product', align: 'right'},
+                    // {title: 'Alert', align: 'right', sortable: 'alert_quantity'},
                 ],
 
             form: this.$inertia.form({
