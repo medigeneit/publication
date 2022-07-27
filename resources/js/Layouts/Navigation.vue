@@ -142,7 +142,7 @@
             Packages
         </nav-link>
     </nav-link-wrapper>
-    
+
     <nav-link-wrapper
         title="Request & Orders"
         :active="route().current('(product-requests|printing-orders).*')"
@@ -176,7 +176,7 @@
     <nav-link-wrapper
         title="Stock & Circulation"
         :active="
-            route().current('(outlets|distributions|storages|circulations).*')
+            route().current('(outlets|distributors|storages|circulations).*')
         "
         v-if="$can('')"
     >
@@ -188,7 +188,7 @@
         </nav-link>
         <nav-link
             :href="route('distributors.index')"
-            :active="route().current('distributions.*')"
+            :active="route().current('distributors.*')"
         >
             Distributor
         </nav-link>
