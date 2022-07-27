@@ -208,6 +208,7 @@ class ProductController extends Controller
         $product->update($this->validateData($request, $product->id));
 
         if ($request->image && $request->file('image')) {
+            
             $image = request()->file('image');
             $extention = strtolower($image->getClientOriginalExtension());
             $name = 'product_' . strtolower(Str::random(4));
@@ -221,7 +222,6 @@ class ProductController extends Controller
             Storage::put('public/' . $path . $fileName, $finalImage->__toString());
 
             $finalImage = 'storage/' . $path . $fileName;
-
             $product->update([
                 'img' => $finalImage
             ]);

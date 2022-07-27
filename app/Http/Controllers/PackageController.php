@@ -17,7 +17,6 @@ use App\Traits\DateFilter;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class PackageController extends Controller
@@ -87,7 +86,7 @@ class PackageController extends Controller
 
         // return  [
         return Inertia::render('Package/Create', [
-            'proPackage'        => $proPackage,
+            'proPackage'        => $proPackage->load('product'),
             'priceCategories'   => $price_categories,
             'total_costs'       => [],
             'productList'       => PackageProductListResource::collection($product_list),

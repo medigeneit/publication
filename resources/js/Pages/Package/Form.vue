@@ -5,13 +5,35 @@
             <ValidationErrors class="mb-4" />
 
             <form @submit.prevent="submit">
+                <div class="mb-4">
+                    <div class="flex justify-center">
+                        <img
+                            v-if="data.proPackage.product && data.proPackage.product.img && !imagePreview"
+                            :src="'/' + data.proPackage.product.img"
+                            class="w-20 h-28 transform scale-75 md:scale-90 imageHolder"
+                        />
+                        <img
+                            v-else
+                            :src="'/images/book.png'"
+                            class="w-20 h-28 transform scale-75 md:scale-90 imageHolder"
+                        />
+                        <img
+                            class="w-20 h-28 transform scale-75 md:scale-90 hidden" id="imagePreview"
+                        />
+                    </div>
+                     <div class="flex">
+                        <div class="mx-auto">
+                            <input class="text-center" accept="image/*" id="file" ref="fileInput" type="file" @change="pickFile">
+                        </div>
+                     </div>
+                </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4">
 
                     <div class="mb-4 col-span-2">
                         <Label for="name" value="Name" />
                         <Input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
                     </div>
-
+                
                     <div class="mb-4">
                         <Label for="active" value="Active" />
                         <Select id="active" name="active" class="mt-1 block w-full" v-model="form.active">
@@ -236,7 +258,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
@@ -244,11 +265,12 @@
 
 <script>
     import Button from '@/Components/Button.vue';
-    import Input from '@/Components/Input.vue';
-    import Label from '@/Components/Label.vue';
-    import ValidationErrors from '@/Components/ValidationErrors.vue';
-    import GoToList from '@/Components/GoToList.vue';
-    import Select from '@/Components/Select.vue';
+import GoToList from '@/Components/GoToList.vue';
+import Input from '@/Components/Input.vue';
+import Label from '@/Components/Label.vue';
+import Select from '@/Components/Select.vue';
+import ValidationErrors from '@/Components/ValidationErrors.vue';
+import axios from 'axios';
 
     export default {
         components: {
@@ -319,7 +341,8 @@
                 totalObj: {},
                 costs: [],
                 totalCost: '',
-                categoryShow: true
+                categoryShow: true,
+                imagePreview: false
             }
         },
 
@@ -342,6 +365,36 @@
                 if (this.moduleAction == 'update') {
                     return this.form.put(this.route('packages.update', this.data.proPackage.id));
                 }
+            },
+
+            pickFile(event) {
+                const files = event.target.files || event.dataTransfer.files;
+                document.getElementById('imagePreview').classList.remove('hidden')
+                document.getElementById('imagePreview').src = window.URL.createObjectURL(files[0])
+                document.querySelectorAll('.imageHolder').forEach((el)=> {
+                    el.style.display = 'none'
+                })
+                var formData = new FormData();
+                var imagefile = document.querySelector('#file');
+                formData.append("image", imagefile.files[0]);
+                if (confirm("Do want to change image?")) {
+                    let url = this.route('upload-image', this.data.proPackage.product.id);
+                    this.axiosRequest(url, formData)
+                }
+                
+            },
+            axiosRequest(url, data) {
+                axios.post(url, data, {
+                    headers: {
+                    'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then((res) => {
+                    console.log("res",res);
+                })
+                    .catch((err) => {
+                    console.log("err",err);
+                })
             },
 
             itemClickHandler(event) {
