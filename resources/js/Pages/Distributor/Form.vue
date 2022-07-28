@@ -34,6 +34,11 @@
                     </button>
                 </div>
             </div>
+
+            <div class="text-center font-bold text-xl underline">
+                Client Details
+            </div>
+
             <div class="flex justify-center items-center mb-4 mt-4">
                 <div>
                     <ul
@@ -105,7 +110,7 @@
                         <option value="0">No</option>
                     </Select>
                 </div>
-                
+
                 <div class="mb-4">
                     <Label for="address" value="Address" />
                     <Textarea
@@ -116,33 +121,131 @@
                     />
                 </div>
                 <div class="flex gap-2 items-end mb-4">
-                        <Select
-                            class="block w-full"
-                            v-model="form.district_id"
-                             @input="selectDistrict"
+                    <Select
+                        class="block w-full"
+                        v-model="form.district_id"
+                        @input="selectDistrict"
+                    >
+                        <option value="">-- District --</option>
+                        <optgroup
+                            :label="division.name"
+                            v-for="division in data.divisions"
+                            :key="division.id"
                         >
-                            <option value="">-- District --</option>
-                            <optgroup :label="division.name" v-for="division in divisions" :key="division.id">
-                                <option :value="district.id" v-for="district in division.districts" :key="district.id">
-                                    {{ district.name }}
-                                </option>
-                            </optgroup>
-                        </Select>
-                        <!-- {{ divisions }} -->
-                        <Select
-                            class="block w-full"
-                            v-model="form.area_id"
-                        >
-                            <option value="">-- Area --</option>
-
-                            <option :value="area.id" v-for="area in customAreas" :key="area.id">
-                                {{ area.name }}
+                            <option
+                                :value="district.id"
+                                v-for="district in division.districts"
+                                :key="district.id"
+                            >
+                                {{ district.name }}
                             </option>
-                        </Select>
+                        </optgroup>
+                    </Select>
+                </div>
+                <!-- {{ divisions }} -->
+                <div class="flex gap-2 items-end mb-4">
+                    <Select class="block w-full" v-model="form.area_id">
+                        <option value="">-- Area --</option>
+
+                        <option
+                            :value="area.id"
+                            v-for="area in customAreas"
+                            :key="area.id"
+                        >
+                            {{ area.name }}
+                        </option>
+                    </Select>
+                </div>
+
+                <!-- <div class="flex gap-2 items-end mb-4">
+                    <div class="flex">
+                        <div class="w-full">
+                            <Input
+                                id="password"
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.client_id"
+                                placeholder="Client ID"
+                            />
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                class="px-2 py-2 ml-2 border rounded-md mt-1 bg-green-600 text-white border-gray-500"
+                                @click="clientIdGenerate"
+                            >
+                                Generate
+                            </button>
+                        </div>
                     </div>
+                </div> -->
             </div>
 
             <hr class="w-full my-4" />
+
+            <!-- ~~~~~~~price type card start~~~~~~~~  -->
+            <div class="grid grid-cols-4 gap-2 mb-4">
+                <div
+                    class="border-2 p-2"
+                    v-for="(priceType, index) in form.price_type_infos"
+                    :key="index"
+                >
+                    <Select
+                        id="active"
+                        name="active"
+                        class="mt-1 block w-full"
+                        v-model="form.price_type_infos[index].id"
+                    >
+                        <option value="">--Price Type--</option>
+                        <option
+                            v-for="(priceType, index) of data.priceCategories"
+                            :key="index"
+                        >
+                            {{ priceType }}
+                        </option>
+                    </Select>
+                    <div class="p-2 overflow-scroll h-56">
+                        <ul
+                            class="fixed md:static inset-0 overflow-auto w-full max-w-sm rounded border bg-white p-4 z-30"
+                        >
+                            <li>
+                                <input
+                                    placeholder="Search..."
+                                    @input="searchProduct"
+                                    class="px-2 py-2 w-full rounded border border-gray-500 focus:outline-none focus:ring-0"
+                                />
+                            </li>
+                            <li
+                                class="w-full p-2 border-b cursor-pointer flex justify-between"
+                                v-for="(product, productId) in data.productList"
+                                :key="productId"
+                                :class="{
+                                    'bg-green-400':
+                                        form.price_type_infos[
+                                            index
+                                        ].product_ids.includes(productId),
+                                }"
+                                @click="selectProductHandler(index, productId)"
+                            >
+                                <div class="w-full">
+                                    {{ product.name }}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="my-auto">
+                    <Button
+                        type="button"
+                        class="btn-danger border-4 px-2"
+                        @click="addPriceTypeInfo"
+                    >
+                        (+)
+                    </Button>
+                </div>
+            </div>
+            <!-- ~~~~~~~price type card end~~~~~~~~  -->
 
             <div class="flex items-center justify-between">
                 <div class="">
@@ -166,20 +269,20 @@ import GoToList from "@/Components/GoToList.vue";
 import Input from "@/Components/Input.vue";
 import Label from "@/Components/Label.vue";
 import Select from "@/Components/Select.vue";
+import Textarea from "@/Components/Textarea.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 import axios from "axios";
-import Textarea from "@/Components/Textarea.vue";
 
 export default {
     components: {
-    Button,
-    Input,
-    Label,
-    ValidationErrors,
-    GoToList,
-    Select,
-    Textarea
-},
+        Button,
+        Input,
+        Label,
+        ValidationErrors,
+        GoToList,
+        Select,
+        Textarea,
+    },
 
     props: {
         data: { type: Object, default: {} },
@@ -195,13 +298,27 @@ export default {
                 phone: this.data.distributor.phone,
                 email: this.data.distributor.email,
                 type: this.data.distributor.type || 0,
+                area_id: "",
+                client_id: "",
+                price_type_infos: [
+                    {
+                        id: "",
+                        product_ids: [],
+                    },
+                ],
                 active:
                     this.moduleAction == "store"
                         ? 1
                         : this.data.distributor.active,
             }),
             userList: {},
+            customAreas: {},
+            selected: [],
         };
+    },
+
+    created() {
+        this.customAreas = this.data.areas;
     },
 
     methods: {
@@ -219,12 +336,69 @@ export default {
                     console.log(error);
                 });
         },
+
+        selectDistrict(event) {
+            this.form.area_id = "";
+            if (!event.target.value) {
+                return (this.customAreas = this.areas);
+            }
+            let customDistricts = Object.values(this.data.divisions).find(
+                (division) =>
+                    Object.values(division.districts).find(
+                        (district) => district.id == event.target.value
+                    )
+            ).districts;
+
+            return (this.customAreas = Object.values(customDistricts).find(
+                (district) => district.id == event.target.value
+            ).areas);
+        },
+
         clientInfo(user) {
             this.form.name = user.name;
             this.form.phone = user.phone;
             this.form.email = user.email;
             this.userList = "";
         },
+
+        addPriceTypeInfo() {
+            this.form.price_type_infos.push({
+                id: "",
+                product_id: [],
+            });
+        },
+
+        selectProductHandler(index, productId) {
+            let form = this.form.price_type_infos[index];
+
+            if (form.product_ids.includes(productId)) {
+                let index = form.product_ids.indexOf(productId);
+                return form.product_ids.splice(index, 1);
+            }
+
+            return form.product_ids.push(productId);
+        },
+
+        searchProduct(event) {
+            let url = this.route(this.routeName || this.route().current(), {
+                selected: this.selected.toString(),
+                search: !event.target.value.includes("\\")
+                    ? event.target.value
+                    : "",
+            });
+
+            this.$inertia.get(url, {}, { preserveState: true });
+        },
+        // clientIdGenerate() {
+        //     axios.get(this.route('client-id-generate'))
+        //         .then((res) => {
+        //             this.form.client_id = res.data;
+        //         })
+        //         .catch((err) => {
+        //             console.log(err)
+        //         })
+        // },
+
         submit() {
             if (this.moduleAction == "store") {
                 return this.form.post(this.route("distributors.store"));
