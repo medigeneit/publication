@@ -93,6 +93,7 @@ class DistributorController extends Controller
 
     public function store(Request $request)
     {
+        return $request;
         $distributor = Distributor::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);

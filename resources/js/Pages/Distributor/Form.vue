@@ -204,35 +204,12 @@
                             {{ priceType }}
                         </option>
                     </Select>
-                    <div class="p-2 overflow-scroll h-56">
-                        <ul
-                            class="fixed md:static inset-0 overflow-auto w-full max-w-sm rounded border bg-white p-4 z-30"
-                        >
-                            <li>
-                                <input
-                                    placeholder="Search..."
-                                    @input="searchProduct"
-                                    class="px-2 py-2 w-full rounded border border-gray-500 focus:outline-none focus:ring-0"
-                                />
-                            </li>
-                            <li
-                                class="w-full p-2 border-b cursor-pointer flex justify-between"
-                                v-for="(product, productId) in data.productList"
-                                :key="productId"
-                                :class="{
-                                    'bg-green-400':
-                                        form.price_type_infos[
-                                            index
-                                        ].product_ids.includes(productId),
-                                }"
-                                @click="selectProductHandler(index, productId)"
-                            >
-                                <div class="w-full">
-                                    {{ product.name }}
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <product-list
+                        :products="data.productList"
+                        :index="index"
+                        :form="form"
+                        @productSelected="selectProductHandler"
+                    />
                 </div>
 
                 <div class="my-auto">
@@ -268,6 +245,7 @@ import Button from "@/Components/Button.vue";
 import GoToList from "@/Components/GoToList.vue";
 import Input from "@/Components/Input.vue";
 import Label from "@/Components/Label.vue";
+import ProductList from "@/Components/ProductList.vue";
 import Select from "@/Components/Select.vue";
 import Textarea from "@/Components/Textarea.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
@@ -282,6 +260,7 @@ export default {
         GoToList,
         Select,
         Textarea,
+        ProductList,
     },
 
     props: {
@@ -300,6 +279,9 @@ export default {
                 type: this.data.distributor.type || 0,
                 area_id: "",
                 client_id: "",
+                address: "",
+                district_id: "",
+                area_id: "",
                 price_type_infos: [
                     {
                         id: "",
@@ -354,6 +336,10 @@ export default {
             ).areas);
         },
 
+        selectProductHandler(data) {
+            this.form.price_type_infos[data.index].product_ids = data.selected;
+        },
+
         clientInfo(user) {
             this.form.name = user.name;
             this.form.phone = user.phone;
@@ -364,19 +350,8 @@ export default {
         addPriceTypeInfo() {
             this.form.price_type_infos.push({
                 id: "",
-                product_id: [],
+                product_ids: [],
             });
-        },
-
-        selectProductHandler(index, productId) {
-            let form = this.form.price_type_infos[index];
-
-            if (form.product_ids.includes(productId)) {
-                let index = form.product_ids.indexOf(productId);
-                return form.product_ids.splice(index, 1);
-            }
-
-            return form.product_ids.push(productId);
         },
 
         searchProduct(event) {
