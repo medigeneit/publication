@@ -6,10 +6,15 @@ use App\Models\Package;
 use App\Models\Version;
 use App\Models\Volume;
 
+
 trait ProductSearch
 {
+    static $scope_search = false; 
+
+    
     public function scopeSearch($query, array $columns, array $relations = [], $operator = 'regexp')
     {
+        self::$scope_search = true;
         $search = preg_replace('/ /', '%', request()->search);
         // return
         $search = request()->search ? explode(',', $search) : NULL;
@@ -46,6 +51,9 @@ trait ProductSearch
     public function scopeOrProductSearch($query, $req_search)
     {
 
+        // $relation = 'product';
+        $relation = null;
+
         $search = preg_replace('/ /', '%', $req_search);
         // return
         $search = $req_search ? explode(',', $search) : NULL;
@@ -55,9 +63,9 @@ trait ProductSearch
 
         return $query
 
-            ->when($req_search, function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
+            ->when($req_search, function ($query) use ($search_by_name, $search_by_edition, $search_by_vol, $relation) {
                 $query
-                    ->OrWhereHas('product', function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
+                    ->OrWhereHas($relation, function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
                         $query
                             ->where(function ($query) use ($search_by_name) {
                                 $query
@@ -127,6 +135,8 @@ trait ProductSearch
     public function scopeProductSearch($query, $req_search)
     {
 
+        // $relation = 'product';
+        $relation = null;
         $search = preg_replace('/ /', '%', $req_search);
         // return
         $search = $req_search ? explode(',', $search) : NULL;
@@ -136,9 +146,9 @@ trait ProductSearch
 
         return $query
 
-            ->when($req_search, function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
+            ->when($req_search, function ($query) use ($search_by_name, $search_by_edition, $search_by_vol, $relation) {
                 $query
-                    ->WhereHas('product', function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
+                    ->WhereHas($relation, function ($query) use ($search_by_name, $search_by_edition, $search_by_vol) {
                         $query
                             ->where(function ($query) use ($search_by_name) {
                                 $query

@@ -77,7 +77,9 @@ class PackageController extends Controller
                     },
                 ]);
             }
-        ])->get();
+        ])
+        ->productSearch(request()->search)
+        ->get();
 
         PackageResource::withoutWrapping();
         $proPackage = new Package();

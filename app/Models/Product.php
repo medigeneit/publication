@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\ActiveProperty;
+use App\Traits\ProductSearch;
 use App\Traits\ScopeDateFilter;
 use App\Traits\ScopeSearch;
 use App\Traits\ScopeSort;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes, ActiveProperty, TypeProperty, ScopeDateFilter, ScopeSort, WithProductRelations;
+    use HasFactory, SoftDeletes, ActiveProperty, TypeProperty, ScopeDateFilter, ScopeSort, WithProductRelations, ProductSearch;
 
     protected $guarded = [];
 

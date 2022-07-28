@@ -527,10 +527,10 @@ import axios from 'axios';
             },
             searchProduct(event) {
 
-                let url = this.route(this.routeName || this.route().current(), {
+                let url = this.route( this.route().current(), {
                     selected: this.selected.toString(),
                     search: !event.target.value.includes('\\') ? event.target.value : '',
-                    id: this.data.product.id
+                    // id: this.data.proProduct.id || ''
                 });
 
                 this.$inertia.get(url, {}, {
