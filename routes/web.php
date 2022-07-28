@@ -34,6 +34,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VersionController;
 use App\Http\Controllers\VersionVariableController;
 use App\Models\BindingType;
+use App\Models\Distributor;
 use App\Models\PrintingDetailsCategoryValue;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/deny-response/{productRequest}', [ProductRequestController::class, 'deny_response'])->name('deny');
     Route::post('/upload-image/{product}', [ProductController::class, 'update'])->name('upload-image');
     Route::post('user-list', [UserController::class, 'user_list'])->name('user-list');
+    Route::get('client-id-generate', [DistributorController::class, 'client_id_generate'])->name('client-id-generate');
     Route::resources([
         'users'                         => UserController::class,
         'roles'                         => RoleController::class,

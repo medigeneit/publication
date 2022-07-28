@@ -156,13 +156,96 @@
                         </option>
                     </Select>
                 </div>
+
+                <!-- <div class="flex gap-2 items-end mb-4">
+                    <div class="flex">
+                        <div class="w-full">
+                            <Input
+                                id="password"
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.client_id"
+                                placeholder="Client ID"
+                            />
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                class="px-2 py-2 ml-2 border rounded-md mt-1 bg-green-600 text-white border-gray-500"
+                                @click="clientIdGenerate"
+                            >
+                                Generate
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
             </div>
 
             <hr class="w-full my-4" />
 
-            <div>
-                
+            <!-- ~~~~~~~price type card start~~~~~~~~  -->
+            <div class="grid grid-cols-4 gap-2 mb-4">
+                <div
+                    class="border-2 p-2"
+                    v-for="(priceType, index) in form.price_type_infos"
+                    :key="index"
+                >
+                    <Select
+                        id="active"
+                        name="active"
+                        class="mt-1 block w-full"
+                        v-model="form.price_type_infos[index].id"
+                    >
+                        <option value="">--Price Type--</option>
+                        <option
+                            v-for="(priceType, index) of data.priceCategories"
+                            :key="index"
+                        >
+                            {{ priceType }}
+                        </option>
+                    </Select>
+                    <div class="p-2 overflow-scroll h-56">
+                        <ul
+                            class="fixed md:static inset-0 overflow-auto w-full max-w-sm rounded border bg-white p-4 z-30"
+                        >
+                            <li>
+                                <input
+                                    placeholder="Search..."
+                                    @input="searchProduct"
+                                    class="px-2 py-2 w-full rounded border border-gray-500 focus:outline-none focus:ring-0"
+                                />
+                            </li>
+                            <li
+                                class="w-full p-2 border-b cursor-pointer flex justify-between"
+                                v-for="(product, productId) in data.productList"
+                                :key="productId"
+                                :class="{
+                                    'bg-green-400':
+                                        form.price_type_infos[
+                                            index
+                                        ].product_ids.includes(productId),
+                                }"
+                                @click="selectProductHandler(index, productId)"
+                            >
+                                <div class="w-full">
+                                    {{ product.name }}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="my-auto">
+                    <Button
+                        type="button"
+                        class="btn-danger border-4 px-2"
+                        @click="addPriceTypeInfo"
+                    >
+                        (+)
+                    </Button>
+                </div>
             </div>
+            <!-- ~~~~~~~price type card end~~~~~~~~  -->
 
             <div class="flex items-center justify-between">
                 <div class="">
@@ -216,6 +299,13 @@ export default {
                 email: this.data.distributor.email,
                 type: this.data.distributor.type || 0,
                 area_id: "",
+                client_id: "",
+                price_type_infos: [
+                    {
+                        id: "",
+                        product_ids: [],
+                    },
+                ],
                 active:
                     this.moduleAction == "store"
                         ? 1
@@ -223,6 +313,7 @@ export default {
             }),
             userList: {},
             customAreas: {},
+            selected: [],
         };
     },
 
@@ -269,6 +360,44 @@ export default {
             this.form.email = user.email;
             this.userList = "";
         },
+
+        addPriceTypeInfo() {
+            this.form.price_type_infos.push({
+                id: "",
+                product_id: [],
+            });
+        },
+
+        selectProductHandler(index, productId) {
+            let form = this.form.price_type_infos[index];
+
+            if (form.product_ids.includes(productId)) {
+                let index = form.product_ids.indexOf(productId);
+                return form.product_ids.splice(index, 1);
+            }
+
+            return form.product_ids.push(productId);
+        },
+
+        searchProduct(event) {
+            let url = this.route(this.routeName || this.route().current(), {
+                selected: this.selected.toString(),
+                search: !event.target.value.includes("\\")
+                    ? event.target.value
+                    : "",
+            });
+
+            this.$inertia.get(url, {}, { preserveState: true });
+        },
+        // clientIdGenerate() {
+        //     axios.get(this.route('client-id-generate'))
+        //         .then((res) => {
+        //             this.form.client_id = res.data;
+        //         })
+        //         .catch((err) => {
+        //             console.log(err)
+        //         })
+        // },
 
         submit() {
             if (this.moduleAction == "store") {

@@ -8,7 +8,12 @@ use App\Models\Area;
 use App\Models\Distributor;
 use App\Models\District;
 use App\Models\Division;
+use App\Models\PriceCategory;
+use App\Models\Product;
+use App\Models\Volume;
+use App\Models\Version;
 use App\Traits\DateFilter;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -33,6 +38,46 @@ class DistributorController extends Controller
 
     public function create()
     {
+        $productList = [];
+
+        // return
+        $products = Product::query()
+            ->with(['categories',  'prices.price_categroy', 'storages.outlet', 'productable' => function (MorphTo $morphTo) {
+                $morphTo->constrain([
+                    Volume::class => function ($query) {
+                        $query->with([
+                            'version.production.publisher:id,name',
+                            'version.volumes:id,version_id',
+                            'version.moderators:id,author_id,moderator_type,version_id',
+                            'version.moderators.moderators_type:id,name',
+                            'version.moderators.author:id,name'
+                        ]);
+                    },
+                    Version::class => function ($query) {
+                        $query->with([
+                            'moderators:id,author_id,moderator_type,version_id',
+                            'moderators.moderators_type:id,name',
+                            'moderators.author:id,name',
+                            'volumes',
+                            'production.publisher:id,name'
+                        ]);
+                    },
+                ]);
+            }])
+            ->productSearch(request()->search)
+            // ->orderBy('name')
+            ->get();
+
+        foreach ($products as $product) {
+
+            $property = (object)[
+                'id'    => (int) ($product->id ?? 0),
+                'name'  => (string) ($product->product_name ?? ''),
+
+            ];
+
+            $productList[$product->id] = $property;
+        }
         return Inertia::render('Distributor/Create', [
             "data" => [
                 'distributor' => new Distributor(),
@@ -40,6 +85,8 @@ class DistributorController extends Controller
                 'areas' => Area::get(),
                 'divisions' => Division::with('districts.areas')->get(),
                 'districts' => District::pluck('name', 'id'),
+                "priceCategories" => PriceCategory::pluck('name', 'id'),
+                "productList" => $productList
             ]
         ]);
     }
@@ -134,5 +181,27 @@ class DistributorController extends Controller
             'active'    => ['required'],
         ]);
     }
+
+    // public function client_id_generate($client_id_list = [])
+    // {
+    //     // return 313;
+    //     if (!$client_id_list) {
+    //         # code...
+    //         $client_id_list = Distributor::pluck('client_id')->toArray();
+    //     }
+    //     $chars = "ABCDEFGHOTKLMNOPQRSTUVWXYZ";
+    //     $nums = "0123456789";
+    //     $generated_id = substr(str_shuffle($chars),0, 1) . substr(str_shuffle($nums),0, 6);
+    //     // return $generated_id;
+    //     // $generated_id = 'O914078';
+        
+
+    //     if(!in_array($generated_id, $client_id_list)) {
+    //         return $generated_id;
+    //     } else {
+    //         $this->client_id_generate($client_id_list);
+    //         // return $generated_id;
+    //     }
+    // }
 
 }
