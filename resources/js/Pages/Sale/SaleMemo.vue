@@ -792,9 +792,10 @@ export default {
             this.form.email = data.email;
             this.form.course = data.course ? data.course : ''
             this.form.batch = data.batch ? data.batch : ''
-            this.form.customer_address = data.address ? data.address : ''
-            this.form.district_id = district_id;
-            this.form.area_id = area_id;
+            this.form.customer_address = data.address.address ? data.address.address : data.address
+            this.form.district_id = district_id || data.address.area.district_id;
+            this.form.area_id = area_id || data.address.area_id;
+            this.form.district_id = user.address.area.district_id;
             this.form.batch_id = data.batch_id ? data.batch_id : '';
             // let customer = document.getElementById('customers');
             // customer.innerHTML = '';

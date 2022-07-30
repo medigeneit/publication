@@ -31,6 +31,7 @@ class PriceCategoryController extends Controller
     {
         return Inertia::render('PriceCategory/Create', [
             'priceCategory'  => new PriceCategory(),
+            'types'  => PriceCategory::$Types,
         ]);
     }
 
@@ -57,6 +58,7 @@ class PriceCategoryController extends Controller
     {
         return Inertia::render('PriceCategory/Edit', [
             'priceCategory' => $priceCategory,
+            'types'  => PriceCategory::$Types,
         ]);
     }
 
@@ -108,7 +110,7 @@ class PriceCategoryController extends Controller
     {
         return $request->validate([
             'name'       => ['required'],
-            'is_special' => [],
+            'type' => [],
         ]);
     }
 }

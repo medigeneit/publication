@@ -1,12 +1,12 @@
 <template>
-    <Head title="Distributor" />
+    <Head title="Client" />
 
     <app-layout>
         <template #header>
-            Create Distributor
+            Edit Client
         </template>
         
-        <form-component :data="data"  module-action="store" />
+        <form-component :data="{ client, clientType }" module-action="update" />
     </app-layout>
 </template>
 
@@ -22,8 +22,10 @@ export default {
         Link,
         FormComponent,
     },
+
     props: {
-        data: { type: Object, default: {} },
+        client: { type: Object, default: {} },
+        clientType : {type: Object, default: {}},
     },
 };
 </script>

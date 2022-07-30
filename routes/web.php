@@ -11,7 +11,7 @@ use App\Http\Controllers\CirculationController;
 use App\Http\Controllers\CostCategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DistributorController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ModeratorController;
@@ -34,7 +34,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VersionController;
 use App\Http\Controllers\VersionVariableController;
 use App\Models\BindingType;
-use App\Models\Distributor;
+use App\Models\Client;
 use App\Models\PrintingDetailsCategoryValue;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -82,8 +82,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/accept-response/{productRequest}', [ProductRequestController::class, 'accept_response'])->name('accept');
     Route::post('/deny-response/{productRequest}', [ProductRequestController::class, 'deny_response'])->name('deny');
     Route::post('/upload-image/{product}', [ProductController::class, 'update'])->name('upload-image');
-    Route::post('user-list', [UserController::class, 'user_list'])->name('user-list');
-    Route::get('client-id-generate', [DistributorController::class, 'client_id_generate'])->name('client-id-generate');
+    // Route::post('user-list', [UserController::class, 'user_list'])->name('user-list');
+    Route::get('user-list', [UserController::class, 'user_list'])->name('user-list');
+    Route::get('client-id-generate', [ClientController::class, 'client_id_generate'])->name('client-id-generate');
     Route::resources([
         'users'                         => UserController::class,
         'roles'                         => RoleController::class,
@@ -104,7 +105,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'packages'                      => PackageController::class,
         'sales'                         => SaleController::class,
         'outlets'                       => OutletController::class,
-        'distributors'                  => DistributorController::class,
+        'clients'                       => ClientController::class,
         'storages'                      => StorageController::class,
         'account-categories'            => AccountCategoryController::class,
         'accounts'                      => AccountController::class,

@@ -6,6 +6,7 @@ import { InertiaProgress } from "@inertiajs/progress";
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
+const _  = require('lodash')
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -48,6 +49,7 @@ createInertiaApp({
                     },
                 },
             })
+            .use(_)
             .mount(el);
     },
 });

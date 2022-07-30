@@ -14,15 +14,15 @@
             </div>
 
             <div class="mb-4">
-                <Label for="is_special" value="Special Price" />
+                <Label for="type" value="Type" />
                 <Select
-                    id="is_special"
-                    name="is_special"
+                    id="type"
+                    name="type"
                     class="mt-1 block w-full"
-                    v-model="form.is_special"
+                    v-model="form.type"
                 >
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
+                    <option value="">Select Type</option> 
+                    <option :value="type" v-for="(typeName, type) in data.types" :key="type">{{ typeName }}</option>
                 </Select>
             </div>
 
@@ -48,8 +48,8 @@
 import Button from "@/Components/Button.vue";
 import GoToList from "@/Components/GoToList.vue";
 import Input from "@/Components/Input.vue";
-import Select from "@/Components/Select.vue";
 import Label from "@/Components/Label.vue";
+import Select from "@/Components/Select.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 
 export default {
@@ -78,7 +78,7 @@ export default {
         return {
             form: this.$inertia.form({
                 name: this.data.priceCategory.name,
-                is_special: this.data.priceCategory.is_special,
+                type: this.data.priceCategory.type || '',
             }),
         };
     },

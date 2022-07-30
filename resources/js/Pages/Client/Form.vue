@@ -80,25 +80,6 @@
                 </div>
 
                 <div class="mb-4">
-                    <Label for="type" value="Type" />
-                    <Select
-                        name="type"
-                        class="mt-1 block w-full"
-                        v-model="form.type"
-                        required
-                    >
-                        <option value="0">--Select Type--</option>
-                        <option
-                            :value="type"
-                            v-for="(typeName, type) in data.distributorType"
-                            :key="type"
-                        >
-                            {{ typeName }}
-                        </option>
-                    </Select>
-                </div>
-
-                <div class="mb-4">
                     <Label for="active" value="Active" />
                     <Select
                         id="active"
@@ -198,8 +179,9 @@
                     >
                         <option value="">--Price Type--</option>
                         <option
-                            v-for="(priceType, index) of data.priceCategories"
-                            :key="index"
+                            v-for="(priceType, priceId) of data.priceCategories"
+                            :value="priceId"
+                            :key="priceId"
                         >
                             {{ priceType }}
                         </option>
@@ -226,7 +208,7 @@
 
             <div class="flex items-center justify-between">
                 <div class="">
-                    <go-to-list :href="route('distributors.index')" />
+                    <go-to-list :href="route('clients.index')" />
                 </div>
                 <Button
                     class=""
@@ -272,11 +254,10 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                name: this.data.distributor.name,
-                address: this.data.distributor.address,
-                phone: this.data.distributor.phone,
-                email: this.data.distributor.email,
-                type: this.data.distributor.type || 0,
+                name: this.data.client.name,
+                address: this.data.client.address,
+                phone: this.data.client.phone,
+                email: this.data.client.email,
                 area_id: "",
                 client_id: "",
                 address: "",
@@ -289,9 +270,7 @@ export default {
                     },
                 ],
                 active:
-                    this.moduleAction == "store"
-                        ? 1
-                        : this.data.distributor.active,
+                    this.moduleAction == "store" ? 1 : this.data.client.active,
             }),
             userList: {},
             customAreas: {},
@@ -307,11 +286,13 @@ export default {
         customerSearch() {
             console.log(this.form.phone);
             axios
-                .post(this.route("user-list"), {
-                    phone: this.form.phone,
+                .get(this.route("customer-list"), {
+                    params: {
+                     phone: this.form.phone
+                   },
                 })
                 .then((response) => {
-                    console.log(response.data);
+                    console.log(response.data.address);
                     this.userList = response.data;
                 })
                 .catch((error) => {
@@ -344,6 +325,9 @@ export default {
             this.form.name = user.name;
             this.form.phone = user.phone;
             this.form.email = user.email;
+            this.form.area_id = user.address.area_id;
+            this.form.district_id = user.address.area.district_id;
+            this.form.address = user.address.address;
             this.userList = "";
         },
 
@@ -376,12 +360,12 @@ export default {
 
         submit() {
             if (this.moduleAction == "store") {
-                return this.form.post(this.route("distributors.store"));
+                return this.form.post(this.route("clients.store"));
             }
 
             if (this.moduleAction == "update") {
                 return this.form.put(
-                    this.route("distributors.update", this.data.distributor.id)
+                    this.route("clients.update", this.data.client.id)
                 );
             }
         },

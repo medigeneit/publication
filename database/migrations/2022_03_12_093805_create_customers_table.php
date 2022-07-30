@@ -18,7 +18,7 @@ class CreateCustomersTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('email')->nullable();
-            $table->bigInteger('type')->nullable()->comment("1 = doctor, 2 = inside Dhaka, 3 = outside Dhaka, 4 = e-commerce distributors,");
+            $table->bigInteger('type')->nullable()->comment("1 = doctor, 2 = inside Dhaka, 3 = outside Dhaka, 4 = e-commerce clients,");
             $table->bigInteger('user_id');
             $table->softDeletes();
             $table->timestamps();

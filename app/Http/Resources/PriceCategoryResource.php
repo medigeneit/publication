@@ -17,7 +17,7 @@ class PriceCategoryResource extends JsonResource
         return [
             'id'            => (int) $this->id,
             'name'          => (string) ($this->name ?? ''),
-            'is_special'    => (string) ($this->is_special ?? ''),
+            'type'    => (string) ($this->type ?? ''),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Customer;
 use App\Models\Outlet;
 use App\Models\User;
 use App\Traits\ActiveFilter;
@@ -201,12 +202,5 @@ class UserController extends Controller
             $admin->syncRoles($role);
         }
     }
-    
-    public function user_list(Request $request)
-    {
-        return 
-        User::query()
-        ->where('phone', 'regexp', $request->phone)
-        ->get();
-    }
+
 }

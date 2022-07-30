@@ -176,7 +176,7 @@
     <nav-link-wrapper
         title="Stock & Circulation"
         :active="
-            route().current('(outlets|distributors|storages|circulations).*')
+            route().current('(outlets|clients|storages|circulations).*')
         "
         v-if="$can('')"
     >
@@ -187,10 +187,10 @@
             Outlets
         </nav-link>
         <nav-link
-            :href="route('distributors.index')"
-            :active="route().current('distributors.*')"
+            :href="route('clients.index')"
+            :active="route().current('clients.*')"
         >
-            Distributor
+            Clients
         </nav-link>
         <nav-link
             :href="route('storages.index')"

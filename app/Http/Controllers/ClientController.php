@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DistributorResource;
+use App\Http\Resources\ClientResource;
+use App\Models\AddressesOf;
 use App\Models\Area;
-use App\Models\Distributor;
+use App\Models\Client;
+use App\Models\Customer;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\PriceCategory;
@@ -18,20 +20,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class DistributorController extends Controller
+class ClientController extends Controller
 {
     use DateFilter;
 
     public function index()
     {
-        $distributors = Distributor::query()
+        $clients = Client::query()
                 ->filter()
                 ->dateFilter()
                 ->search(['id', 'name', 'address', 'phone'])
                 ->sort(request()->sort ?? 'created_at', request()->order ?? 'desc');
 
-        return Inertia::render('Distributor/Index', [
-            'distributors' => DistributorResource::collection($distributors->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
+        return Inertia::render('Client/Index', [
+            'clients' => ClientResource::collection($clients->paginate(request()->perpage ?? 100)->onEachSide(1)->appends(request()->input())),
             'filters' => $this->getFilterProperty(),
         ]);
     }
@@ -78,10 +80,10 @@ class DistributorController extends Controller
 
             $productList[$product->id] = $property;
         }
-        return Inertia::render('Distributor/Create', [
+        return Inertia::render('Client/Create', [
             "data" => [
-                'distributor' => new Distributor(),
-                'distributorType'  => Distributor::getTypes(),
+                'client' => new Client(),
+                'clientType'  => Client::getTypes(),
                 'areas' => Area::get(),
                 'divisions' => Division::with('districts.areas')->get(),
                 'districts' => District::pluck('name', 'id'),
@@ -93,48 +95,77 @@ class DistributorController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
-        $distributor = Distributor::create($this->validateData($request) + [
+        // return $request;
+        if (is_array($request->price_type_infos)) {
+            foreach ($request->price_type_infos as $type_property) {
+                return [$type_property['id'], $type_property['product_ids']];
+            }
+        }
+        $client = Client::create($this->validateData($request) + [
             'user_id' => Auth::id()
         ]);
 
+        $customer = Customer::updateOrCreate(
+            [
+                'phone'     => $request->customer_phone,
+            ],
+            [
+                'name'      => $request->customer_name,
+                'email'     => $request->email,
+                'user_id'   => Auth::user()->id
+            ]
+        );
+
+        if ($request->customer_address) {
+            $adress = AddressesOf::updateOrCreate(
+                [
+                    'customer_id'     => $customer->id,
+                ],
+                [
+                    'area_id'      => $request->area_id,
+                    'address'     => $request->customer_address,
+                ]
+            );
+        }
+
         return redirect()
-            ->route('distributors.show', $distributor->id)
+            ->route('clients.show', $client->id)
             ->with('status', 'The record has been added successfully.');
     }
 
-    public function show(Distributor $distributor)
+    public function show(Client $client)
     {
-        DistributorResource::withoutWrapping();
+        // return $client;
+        ClientResource::withoutWrapping();
 
-        return Inertia::render('Distributor/Show', [
-            'distributor' => new DistributorResource($distributor),
+        return Inertia::render('Client/Show', [
+            'client' => new ClientResource($client),
         ]);
     }
 
-    public function edit(Distributor $distributor)
+    public function edit(Client $client)
     {
-        return Inertia::render('Distributor/Edit', [
-            'distributor' => $distributor,
-            'distributorType'  => Distributor::getTypes(),
+        return Inertia::render('Client/Edit', [
+            'client' => $client,
+            'clientType'  => Client::getTypes(),
         ]);
     }
 
-    public function update(Request $request, Distributor $distributor)
+    public function update(Request $request, Client $client)
     {
-        $distributor->update($this->validateData($request, $distributor->id));
+        $client->update($this->validateData($request, $client->id));
 
         return redirect()
-            ->route('distributors.show', $distributor->id)
+            ->route('clients.show', $client->id)
             ->with('status', 'The record has been update successfully.');
     }
 
-    public function destroy(Distributor $distributor)
+    public function destroy(Client $client)
     {
-        $distributor->delete();
+        $client->delete();
 
         return redirect()
-            ->route('distributors.index')
+            ->route('clients.index')
             ->with('status', 'The record has been delete successfully.');
     }
 
@@ -166,8 +197,8 @@ class DistributorController extends Controller
     protected function getFilterProperty()
     {
         return [
-            'type'      => Distributor::getTypes(),
-            'active'    => Distributor::getActiveProperties(),
+            'type'      => Client::getTypes(),
+            'active'    => Client::getActiveProperties(),
         ];
     }
 
@@ -178,7 +209,6 @@ class DistributorController extends Controller
             'address'   => '',
             'phone'     => '',
             'email'     => '',
-            'type'     => ['required'],
             'active'    => ['required'],
         ]);
     }
@@ -188,7 +218,7 @@ class DistributorController extends Controller
     //     // return 313;
     //     if (!$client_id_list) {
     //         # code...
-    //         $client_id_list = Distributor::pluck('client_id')->toArray();
+    //         $client_id_list = Client::pluck('client_id')->toArray();
     //     }
     //     $chars = "ABCDEFGHOTKLMNOPQRSTUVWXYZ";
     //     $nums = "0123456789";

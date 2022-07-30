@@ -15,6 +15,12 @@ class PriceCategory extends Model
 
     protected $guarded = [];
 
+    static $Types  = [
+        0 => "Doctor",
+        1 => "Special",
+        2 => "Client",
+    ];
+
     public function pricings()
     {
         return $this->hasMany(Pricing::class);

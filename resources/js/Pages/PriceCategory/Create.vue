@@ -3,7 +3,7 @@
 
     <app-layout>
         <template #header>
-            Create Price Category
+            Create Price Category 
         </template>
         
         <form-component :data="data" module-action="store" />
@@ -27,6 +27,7 @@ export default {
         return {
             data: {
                 priceCategory: this.priceCategory,
+                types: this.types,
             }
         }
     },
@@ -35,6 +36,10 @@ export default {
         priceCategory: { 
             type: Object,
             default: {}
+        },
+        types: { 
+            type: Array,
+            default: []
         }
     },
 };

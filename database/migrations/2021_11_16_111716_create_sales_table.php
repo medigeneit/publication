@@ -21,7 +21,7 @@ class CreateSalesTable extends Migration
             // $table->string('address')->nullable();
             // $table->bigInteger('phone')->unique();
             // $table->string('email')->nullable();
-            // $table->tinyInteger('price_type')->nullable()->comment('1= Retail, 2 = Distributor, 3 = Wholesale, 4 =Special');
+            // $table->tinyInteger('price_type')->nullable()->comment('1= Retail, 2 = Client, 3 = Wholesale, 4 =Special');
             // $table->float('subtotal')->nullable();
             $table->float('discount')->nullable();
             $table->text('discount_purpose')->nullable();

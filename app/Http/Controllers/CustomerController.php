@@ -96,12 +96,15 @@ class CustomerController extends Controller
             return Http::get('https://api.genesisedu.info/publication/doctor-course-info?reg_no='. $request->text);
         }
 
-        return
-        Customer::query()
+        // return
+        $customers = Customer::query()
+        ->with('address', 'address.area')
         ->when($request->text, function($query) use($request) {
             $query->where('phone', 'regexp', $request->text);
         })
         ->get();
+        CustomerResource::withoutWrapping();
+        return CustomerResource::collection($customers);
     }
 
     protected function filter()
